@@ -1,0 +1,825 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AE2B10EDBEC5D260B2193BB3 /* Pods_BlackFireIM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2921CE68A675940BC0E65139 /* Pods_BlackFireIM.framework */; };
+		F011D57E25E736BD0061F9D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D57D25E736BD0061F9D6 /* AppDelegate.m */; };
+		F011D58425E736BD0061F9D6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D58325E736BD0061F9D6 /* ViewController.m */; };
+		F011D58925E736C10061F9D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F011D58825E736C10061F9D6 /* Assets.xcassets */; };
+		F011D58C25E736C10061F9D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F011D58A25E736C10061F9D6 /* LaunchScreen.storyboard */; };
+		F011D58F25E736C10061F9D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D58E25E736C10061F9D6 /* main.m */; };
+		F011D59925E736C10061F9D6 /* BlackFireIMTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D59825E736C10061F9D6 /* BlackFireIMTests.m */; };
+		F011D5A425E736C10061F9D6 /* BlackFireIMUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */; };
+		F011D5F225E751650061F9D6 /* BFAsyncSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D5F125E751650061F9D6 /* BFAsyncSocketManager.m */; };
+		F011D61325E755FD0061F9D6 /* NSData+zlib.mm in Sources */ = {isa = PBXBuildFile; fileRef = F011D61125E755FD0061F9D6 /* NSData+zlib.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F011D62225E767B10061F9D6 /* IMSDKConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D62125E767B10061F9D6 /* IMSDKConfig.m */; };
+		F011D62825E768530061F9D6 /* BFIMManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D62725E768530061F9D6 /* BFIMManager.m */; };
+		F011D63125E774AB0061F9D6 /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D63025E774AB0061F9D6 /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F011D65425E8C8410061F9D6 /* BFIMTools.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D65325E8C8410061F9D6 /* BFIMTools.m */; };
+		F011D66025E8DC4D0061F9D6 /* BFIMElem.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D65F25E8DC4D0061F9D6 /* BFIMElem.m */; };
+		F011D66925E8E7240061F9D6 /* BFIMManager+Message.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D66825E8E7240061F9D6 /* BFIMManager+Message.m */; };
+		F052EC8825EDD9E300F35D74 /* BFDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F052EC8725EDD9E300F35D74 /* BFDBManager.m */; };
+		F052EC8E25EDDAE300F35D74 /* NSFileManager+filePath.m in Sources */ = {isa = PBXBuildFile; fileRef = F052EC8D25EDDAE300F35D74 /* NSFileManager+filePath.m */; };
+		F052EC9425EDDE2C00F35D74 /* BFDBMessageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F052EC9325EDDE2C00F35D74 /* BFDBMessageStore.m */; };
+		F052ECA925EE1DB700F35D74 /* NSString+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = F052ECA725EE1DB700F35D74 /* NSString+AES.m */; };
+		F056711225EF631F00782F9C /* NSString+Ext.m in Sources */ = {isa = PBXBuildFile; fileRef = F056711125EF631F00782F9C /* NSString+Ext.m */; };
+		F056711B25EF694A00782F9C /* BFDBConversationStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F056711A25EF694A00782F9C /* BFDBConversationStore.m */; };
+		F056712125EF69AC00782F9C /* BFConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = F056712025EF69AC00782F9C /* BFConversation.m */; };
+		F056712A25EF919600782F9C /* BFInputBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F056712925EF919600782F9C /* BFInputBarView.m */; };
+		F056713325F06E1000782F9C /* BFResponderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = F056713225F06E1000782F9C /* BFResponderTextView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F011D59525E736C10061F9D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F011D57125E736BD0061F9D6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F011D57825E736BD0061F9D6;
+			remoteInfo = BlackFireIM;
+		};
+		F011D5A025E736C10061F9D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F011D57125E736BD0061F9D6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F011D57825E736BD0061F9D6;
+			remoteInfo = BlackFireIM;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2921CE68A675940BC0E65139 /* Pods_BlackFireIM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BlackFireIM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		368F05822409585B0BB7B5F4 /* Pods-BlackFireIM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlackFireIM.release.xcconfig"; path = "Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM.release.xcconfig"; sourceTree = "<group>"; };
+		AFE98E3FCC613BB998667C88 /* Pods-BlackFireIM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlackFireIM.debug.xcconfig"; path = "Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM.debug.xcconfig"; sourceTree = "<group>"; };
+		F011D57925E736BD0061F9D6 /* BlackFireIM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlackFireIM.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F011D57C25E736BD0061F9D6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F011D57D25E736BD0061F9D6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F011D58225E736BD0061F9D6 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		F011D58325E736BD0061F9D6 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		F011D58825E736C10061F9D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F011D58B25E736C10061F9D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F011D58D25E736C10061F9D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F011D58E25E736C10061F9D6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F011D59425E736C10061F9D6 /* BlackFireIMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackFireIMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F011D59825E736C10061F9D6 /* BlackFireIMTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlackFireIMTests.m; sourceTree = "<group>"; };
+		F011D59A25E736C10061F9D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F011D59F25E736C10061F9D6 /* BlackFireIMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackFireIMUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlackFireIMUITests.m; sourceTree = "<group>"; };
+		F011D5A525E736C10061F9D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F011D5F025E751650061F9D6 /* BFAsyncSocketManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFAsyncSocketManager.h; sourceTree = "<group>"; };
+		F011D5F125E751650061F9D6 /* BFAsyncSocketManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFAsyncSocketManager.m; sourceTree = "<group>"; };
+		F011D61125E755FD0061F9D6 /* NSData+zlib.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+zlib.mm"; sourceTree = "<group>"; };
+		F011D61225E755FD0061F9D6 /* NSData+zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+zlib.h"; sourceTree = "<group>"; };
+		F011D62025E767B10061F9D6 /* IMSDKConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMSDKConfig.h; sourceTree = "<group>"; };
+		F011D62125E767B10061F9D6 /* IMSDKConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMSDKConfig.m; sourceTree = "<group>"; };
+		F011D62625E768530061F9D6 /* BFIMManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFIMManager.h; sourceTree = "<group>"; };
+		F011D62725E768530061F9D6 /* BFIMManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFIMManager.m; sourceTree = "<group>"; };
+		F011D62F25E774AB0061F9D6 /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
+		F011D63025E774AB0061F9D6 /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
+		F011D64425E7991A0061F9D6 /* BFIMConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFIMConst.h; sourceTree = "<group>"; };
+		F011D65225E8C8410061F9D6 /* BFIMTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFIMTools.h; sourceTree = "<group>"; };
+		F011D65325E8C8410061F9D6 /* BFIMTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFIMTools.m; sourceTree = "<group>"; };
+		F011D65E25E8DC4D0061F9D6 /* BFIMElem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFIMElem.h; sourceTree = "<group>"; };
+		F011D65F25E8DC4D0061F9D6 /* BFIMElem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFIMElem.m; sourceTree = "<group>"; };
+		F011D66725E8E7240061F9D6 /* BFIMManager+Message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BFIMManager+Message.h"; sourceTree = "<group>"; };
+		F011D66825E8E7240061F9D6 /* BFIMManager+Message.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "BFIMManager+Message.m"; sourceTree = "<group>"; };
+		F052EC8625EDD9E300F35D74 /* BFDBManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFDBManager.h; sourceTree = "<group>"; };
+		F052EC8725EDD9E300F35D74 /* BFDBManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDBManager.m; sourceTree = "<group>"; };
+		F052EC8C25EDDAE300F35D74 /* NSFileManager+filePath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+filePath.h"; sourceTree = "<group>"; };
+		F052EC8D25EDDAE300F35D74 /* NSFileManager+filePath.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+filePath.m"; sourceTree = "<group>"; };
+		F052EC9225EDDE2C00F35D74 /* BFDBMessageStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFDBMessageStore.h; sourceTree = "<group>"; };
+		F052EC9325EDDE2C00F35D74 /* BFDBMessageStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDBMessageStore.m; sourceTree = "<group>"; };
+		F052ECA725EE1DB700F35D74 /* NSString+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+AES.m"; sourceTree = "<group>"; };
+		F052ECA825EE1DB700F35D74 /* NSString+AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+AES.h"; sourceTree = "<group>"; };
+		F052ECAD25EE3B6E00F35D74 /* BFIMManagerListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFIMManagerListener.h; sourceTree = "<group>"; };
+		F052ECDC25EF214000F35D74 /* BFIMErrorCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFIMErrorCode.h; sourceTree = "<group>"; };
+		F056711025EF631F00782F9C /* NSString+Ext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Ext.h"; sourceTree = "<group>"; };
+		F056711125EF631F00782F9C /* NSString+Ext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Ext.m"; sourceTree = "<group>"; };
+		F056711925EF694A00782F9C /* BFDBConversationStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFDBConversationStore.h; sourceTree = "<group>"; };
+		F056711A25EF694A00782F9C /* BFDBConversationStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDBConversationStore.m; sourceTree = "<group>"; };
+		F056711F25EF69AC00782F9C /* BFConversation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFConversation.h; sourceTree = "<group>"; };
+		F056712025EF69AC00782F9C /* BFConversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFConversation.m; sourceTree = "<group>"; };
+		F056712825EF919600782F9C /* BFInputBarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFInputBarView.h; sourceTree = "<group>"; };
+		F056712925EF919600782F9C /* BFInputBarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFInputBarView.m; sourceTree = "<group>"; };
+		F056713125F06E1000782F9C /* BFResponderTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFResponderTextView.h; sourceTree = "<group>"; };
+		F056713225F06E1000782F9C /* BFResponderTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFResponderTextView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F011D57625E736BD0061F9D6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE2B10EDBEC5D260B2193BB3 /* Pods_BlackFireIM.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F011D59125E736C10061F9D6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F011D59C25E736C10061F9D6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		58C6A1C5E2696F3BD4F296A6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AFE98E3FCC613BB998667C88 /* Pods-BlackFireIM.debug.xcconfig */,
+				368F05822409585B0BB7B5F4 /* Pods-BlackFireIM.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		C5D1D59B6C7F5335D1808BAC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2921CE68A675940BC0E65139 /* Pods_BlackFireIM.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F011D57025E736BD0061F9D6 = {
+			isa = PBXGroup;
+			children = (
+				F011D57B25E736BD0061F9D6 /* BlackFireIM */,
+				F011D59725E736C10061F9D6 /* BlackFireIMTests */,
+				F011D5A225E736C10061F9D6 /* BlackFireIMUITests */,
+				F011D57A25E736BD0061F9D6 /* Products */,
+				58C6A1C5E2696F3BD4F296A6 /* Pods */,
+				C5D1D59B6C7F5335D1808BAC /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F011D57A25E736BD0061F9D6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F011D57925E736BD0061F9D6 /* BlackFireIM.app */,
+				F011D59425E736C10061F9D6 /* BlackFireIMTests.xctest */,
+				F011D59F25E736C10061F9D6 /* BlackFireIMUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F011D57B25E736BD0061F9D6 /* BlackFireIM */ = {
+			isa = PBXGroup;
+			children = (
+				F056712525EF916800782F9C /* Example */,
+				F052ECDB25EF210500F35D74 /* IMSDK */,
+				F011D57C25E736BD0061F9D6 /* AppDelegate.h */,
+				F011D57D25E736BD0061F9D6 /* AppDelegate.m */,
+				F011D58225E736BD0061F9D6 /* ViewController.h */,
+				F011D58325E736BD0061F9D6 /* ViewController.m */,
+				F011D58825E736C10061F9D6 /* Assets.xcassets */,
+				F011D58A25E736C10061F9D6 /* LaunchScreen.storyboard */,
+				F011D58D25E736C10061F9D6 /* Info.plist */,
+				F011D58E25E736C10061F9D6 /* main.m */,
+			);
+			path = BlackFireIM;
+			sourceTree = "<group>";
+		};
+		F011D59725E736C10061F9D6 /* BlackFireIMTests */ = {
+			isa = PBXGroup;
+			children = (
+				F011D59825E736C10061F9D6 /* BlackFireIMTests.m */,
+				F011D59A25E736C10061F9D6 /* Info.plist */,
+			);
+			path = BlackFireIMTests;
+			sourceTree = "<group>";
+		};
+		F011D5A225E736C10061F9D6 /* BlackFireIMUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */,
+				F011D5A525E736C10061F9D6 /* Info.plist */,
+			);
+			path = BlackFireIMUITests;
+			sourceTree = "<group>";
+		};
+		F011D61025E755ED0061F9D6 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				F056711025EF631F00782F9C /* NSString+Ext.h */,
+				F056711125EF631F00782F9C /* NSString+Ext.m */,
+				F052ECA825EE1DB700F35D74 /* NSString+AES.h */,
+				F052ECA725EE1DB700F35D74 /* NSString+AES.m */,
+				F011D61225E755FD0061F9D6 /* NSData+zlib.h */,
+				F011D61125E755FD0061F9D6 /* NSData+zlib.mm */,
+				F052EC8C25EDDAE300F35D74 /* NSFileManager+filePath.h */,
+				F052EC8D25EDDAE300F35D74 /* NSFileManager+filePath.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		F052EC7B25ECD2B800F35D74 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				F011D62F25E774AB0061F9D6 /* ChatProtobuf.pbobjc.h */,
+				F011D63025E774AB0061F9D6 /* ChatProtobuf.pbobjc.m */,
+				F052ECAD25EE3B6E00F35D74 /* BFIMManagerListener.h */,
+				F011D5F025E751650061F9D6 /* BFAsyncSocketManager.h */,
+				F011D5F125E751650061F9D6 /* BFAsyncSocketManager.m */,
+				F011D62025E767B10061F9D6 /* IMSDKConfig.h */,
+				F011D62125E767B10061F9D6 /* IMSDKConfig.m */,
+				F052ECDC25EF214000F35D74 /* BFIMErrorCode.h */,
+				F011D62625E768530061F9D6 /* BFIMManager.h */,
+				F011D62725E768530061F9D6 /* BFIMManager.m */,
+				F011D66725E8E7240061F9D6 /* BFIMManager+Message.h */,
+				F011D66825E8E7240061F9D6 /* BFIMManager+Message.m */,
+				F011D65E25E8DC4D0061F9D6 /* BFIMElem.h */,
+				F011D65F25E8DC4D0061F9D6 /* BFIMElem.m */,
+				F056711F25EF69AC00782F9C /* BFConversation.h */,
+				F056712025EF69AC00782F9C /* BFConversation.m */,
+				F011D65225E8C8410061F9D6 /* BFIMTools.h */,
+				F011D65325E8C8410061F9D6 /* BFIMTools.m */,
+				F011D64425E7991A0061F9D6 /* BFIMConst.h */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		F052EC7C25ECD2D100F35D74 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				F052EC8625EDD9E300F35D74 /* BFDBManager.h */,
+				F052EC8725EDD9E300F35D74 /* BFDBManager.m */,
+				F052EC9225EDDE2C00F35D74 /* BFDBMessageStore.h */,
+				F052EC9325EDDE2C00F35D74 /* BFDBMessageStore.m */,
+				F056711925EF694A00782F9C /* BFDBConversationStore.h */,
+				F056711A25EF694A00782F9C /* BFDBConversationStore.m */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		F052ECDB25EF210500F35D74 /* IMSDK */ = {
+			isa = PBXGroup;
+			children = (
+				F052EC7B25ECD2B800F35D74 /* Core */,
+				F052EC7C25ECD2D100F35D74 /* Database */,
+				F011D61025E755ED0061F9D6 /* Category */,
+			);
+			path = IMSDK;
+			sourceTree = "<group>";
+		};
+		F056712525EF916800782F9C /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				F056712725EF917E00782F9C /* View */,
+				F056712625EF917700782F9C /* Controller */,
+			);
+			path = Example;
+			sourceTree = "<group>";
+		};
+		F056712625EF917700782F9C /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F056712725EF917E00782F9C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F056712825EF919600782F9C /* BFInputBarView.h */,
+				F056712925EF919600782F9C /* BFInputBarView.m */,
+				F056713125F06E1000782F9C /* BFResponderTextView.h */,
+				F056713225F06E1000782F9C /* BFResponderTextView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F011D57825E736BD0061F9D6 /* BlackFireIM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F011D5A825E736C10061F9D6 /* Build configuration list for PBXNativeTarget "BlackFireIM" */;
+			buildPhases = (
+				A314BAD49F9E5992DB9E8A9D /* [CP] Check Pods Manifest.lock */,
+				F011D57525E736BD0061F9D6 /* Sources */,
+				F011D57625E736BD0061F9D6 /* Frameworks */,
+				F011D57725E736BD0061F9D6 /* Resources */,
+				518F1225A1266639F7375D11 /* [CP] Embed Pods Frameworks */,
+				94DF8D908B0C6216D59F54F7 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BlackFireIM;
+			productName = BlackFireIM;
+			productReference = F011D57925E736BD0061F9D6 /* BlackFireIM.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F011D59325E736C10061F9D6 /* BlackFireIMTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F011D5AB25E736C10061F9D6 /* Build configuration list for PBXNativeTarget "BlackFireIMTests" */;
+			buildPhases = (
+				F011D59025E736C10061F9D6 /* Sources */,
+				F011D59125E736C10061F9D6 /* Frameworks */,
+				F011D59225E736C10061F9D6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F011D59625E736C10061F9D6 /* PBXTargetDependency */,
+			);
+			name = BlackFireIMTests;
+			productName = BlackFireIMTests;
+			productReference = F011D59425E736C10061F9D6 /* BlackFireIMTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F011D59E25E736C10061F9D6 /* BlackFireIMUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F011D5AE25E736C10061F9D6 /* Build configuration list for PBXNativeTarget "BlackFireIMUITests" */;
+			buildPhases = (
+				F011D59B25E736C10061F9D6 /* Sources */,
+				F011D59C25E736C10061F9D6 /* Frameworks */,
+				F011D59D25E736C10061F9D6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F011D5A125E736C10061F9D6 /* PBXTargetDependency */,
+			);
+			name = BlackFireIMUITests;
+			productName = BlackFireIMUITests;
+			productReference = F011D59F25E736C10061F9D6 /* BlackFireIMUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F011D57125E736BD0061F9D6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					F011D57825E736BD0061F9D6 = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					F011D59325E736C10061F9D6 = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = F011D57825E736BD0061F9D6;
+					};
+					F011D59E25E736C10061F9D6 = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = F011D57825E736BD0061F9D6;
+					};
+				};
+			};
+			buildConfigurationList = F011D57425E736BD0061F9D6 /* Build configuration list for PBXProject "BlackFireIM" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F011D57025E736BD0061F9D6;
+			productRefGroup = F011D57A25E736BD0061F9D6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F011D57825E736BD0061F9D6 /* BlackFireIM */,
+				F011D59325E736C10061F9D6 /* BlackFireIMTests */,
+				F011D59E25E736C10061F9D6 /* BlackFireIMUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F011D57725E736BD0061F9D6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F011D58C25E736C10061F9D6 /* LaunchScreen.storyboard in Resources */,
+				F011D58925E736C10061F9D6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F011D59225E736C10061F9D6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F011D59D25E736C10061F9D6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		518F1225A1266639F7375D11 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		94DF8D908B0C6216D59F54F7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A314BAD49F9E5992DB9E8A9D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BlackFireIM-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F011D57525E736BD0061F9D6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F011D58425E736BD0061F9D6 /* ViewController.m in Sources */,
+				F011D65425E8C8410061F9D6 /* BFIMTools.m in Sources */,
+				F011D57E25E736BD0061F9D6 /* AppDelegate.m in Sources */,
+				F056711B25EF694A00782F9C /* BFDBConversationStore.m in Sources */,
+				F011D58F25E736C10061F9D6 /* main.m in Sources */,
+				F011D62825E768530061F9D6 /* BFIMManager.m in Sources */,
+				F052EC8E25EDDAE300F35D74 /* NSFileManager+filePath.m in Sources */,
+				F011D66925E8E7240061F9D6 /* BFIMManager+Message.m in Sources */,
+				F052ECA925EE1DB700F35D74 /* NSString+AES.m in Sources */,
+				F056712A25EF919600782F9C /* BFInputBarView.m in Sources */,
+				F011D5F225E751650061F9D6 /* BFAsyncSocketManager.m in Sources */,
+				F056712125EF69AC00782F9C /* BFConversation.m in Sources */,
+				F011D62225E767B10061F9D6 /* IMSDKConfig.m in Sources */,
+				F052EC9425EDDE2C00F35D74 /* BFDBMessageStore.m in Sources */,
+				F011D63125E774AB0061F9D6 /* ChatProtobuf.pbobjc.m in Sources */,
+				F011D66025E8DC4D0061F9D6 /* BFIMElem.m in Sources */,
+				F056711225EF631F00782F9C /* NSString+Ext.m in Sources */,
+				F052EC8825EDD9E300F35D74 /* BFDBManager.m in Sources */,
+				F011D61325E755FD0061F9D6 /* NSData+zlib.mm in Sources */,
+				F056713325F06E1000782F9C /* BFResponderTextView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F011D59025E736C10061F9D6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F011D59925E736C10061F9D6 /* BlackFireIMTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F011D59B25E736C10061F9D6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F011D5A425E736C10061F9D6 /* BlackFireIMUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F011D59625E736C10061F9D6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F011D57825E736BD0061F9D6 /* BlackFireIM */;
+			targetProxy = F011D59525E736C10061F9D6 /* PBXContainerItemProxy */;
+		};
+		F011D5A125E736C10061F9D6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F011D57825E736BD0061F9D6 /* BlackFireIM */;
+			targetProxy = F011D5A025E736C10061F9D6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F011D58A25E736C10061F9D6 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F011D58B25E736C10061F9D6 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F011D5A625E736C10061F9D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F011D5A725E736C10061F9D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F011D5A925E736C10061F9D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFE98E3FCC613BB998667C88 /* Pods-BlackFireIM.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6GJL8T85T5;
+				INFOPLIST_FILE = BlackFireIM/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.BlackFireIM;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		F011D5AA25E736C10061F9D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 368F05822409585B0BB7B5F4 /* Pods-BlackFireIM.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6GJL8T85T5;
+				INFOPLIST_FILE = BlackFireIM/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.BlackFireIM;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		F011D5AC25E736C10061F9D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = BlackFireIMTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.BlackFireIMTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlackFireIM.app/BlackFireIM";
+			};
+			name = Debug;
+		};
+		F011D5AD25E736C10061F9D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = BlackFireIMTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.BlackFireIMTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlackFireIM.app/BlackFireIM";
+			};
+			name = Release;
+		};
+		F011D5AF25E736C10061F9D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = BlackFireIMUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.BlackFireIMUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BlackFireIM;
+			};
+			name = Debug;
+		};
+		F011D5B025E736C10061F9D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = BlackFireIMUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.BlackFireIMUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BlackFireIM;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F011D57425E736BD0061F9D6 /* Build configuration list for PBXProject "BlackFireIM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F011D5A625E736C10061F9D6 /* Debug */,
+				F011D5A725E736C10061F9D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F011D5A825E736C10061F9D6 /* Build configuration list for PBXNativeTarget "BlackFireIM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F011D5A925E736C10061F9D6 /* Debug */,
+				F011D5AA25E736C10061F9D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F011D5AB25E736C10061F9D6 /* Build configuration list for PBXNativeTarget "BlackFireIMTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F011D5AC25E736C10061F9D6 /* Debug */,
+				F011D5AD25E736C10061F9D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F011D5AE25E736C10061F9D6 /* Build configuration list for PBXNativeTarget "BlackFireIMUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F011D5AF25E736C10061F9D6 /* Debug */,
+				F011D5B025E736C10061F9D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F011D57125E736BD0061F9D6 /* Project object */;
+}

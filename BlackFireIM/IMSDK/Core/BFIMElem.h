@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BFIMElem : NSObject
+@interface BFIMElem : NSObject<NSCopying>
 
 /** 消息类型*/
 @property(nonatomic,assign) BFIMMessageType type;

@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class BFIMConversation;
-@protocol BFIMConnectListener <NSObject>
+@protocol BFIMManagerListener <NSObject>
 
 @optional
 

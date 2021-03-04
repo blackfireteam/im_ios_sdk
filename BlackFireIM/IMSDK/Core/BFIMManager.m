@@ -125,9 +125,10 @@ static BFIMManager *_manager;
             if((_bodyLength+4) <= _buffer.length) {//如果数据包没有超过缓冲区的大小
                 @try {
                     NSData *data = [_buffer subdataWithRange:NSMakeRange(4, _bodyLength)];
-//                    if(data != nil && isSecrect) {//先解密
-//                        data = [NSData encryptAES:data key:nil];
-//                    }
+                    if(data != nil && isSecrect) {//先解密
+                        NSString *encryStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+                        data = [[NSString decryptAES:encryStr key:nil]dataUsingEncoding:NSUTF8StringEncoding];
+                    }
                     if(data != nil && isZip) {//先解压
                         data = [NSData dataByDecompressingData:data];
                     }

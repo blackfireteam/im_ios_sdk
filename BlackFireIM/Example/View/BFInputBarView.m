@@ -9,4 +9,5 @@
 
 @implementation BFInputBarView
 
+
 @end

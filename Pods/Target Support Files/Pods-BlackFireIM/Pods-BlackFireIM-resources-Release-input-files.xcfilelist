@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources.sh
+${PODS_ROOT}/TXIMSDK_TUIKit_iOS/TUIKit/Resources/TUIKitFace.bundle
+${PODS_ROOT}/TXIMSDK_TUIKit_iOS/TUIKit/Resources/TUIKitResource.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/TXIMSDK_TUIKit_iOS/TUIKitLocalizable.bundle

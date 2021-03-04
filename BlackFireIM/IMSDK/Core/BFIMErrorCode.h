@@ -8,5 +8,33 @@
 #ifndef BFIMErrorCode_h
 #define BFIMErrorCode_h
 
+enum ERROR_CODE {
+    /////////////////////////////////////////////////////////////////////////////////
+    //
+    //                      （一）IM SDK 的错误码
+    //
+    /////////////////////////////////////////////////////////////////////////////////
+    
+    // 通用错误码
+    ERR_SUCC                                    = 0,///< 无错误。
+    ERR_IO_OPERATION_FAILED                     = 6022,    ///< 操作本地 IO 错误，检查是否有读写权限，磁盘是否已满。
+    ERR_PARSE_RESPONSE_FAILED                   = 6001,    ///< PB 解析失败，内部错误
+    ERR_SERIALIZE_REQ_FAILED                    = 6002,    ///< PB 序列化失败，内部错误
+    ERR_SDK_NOT_INITIALIZED                     = 6013,    ///< IM SDK 未初始化，初始化成功回调之后重试
+    ERR_LOADMSG_FAILED                          = 6005,    ///< 加载本地数据库操作失败，可能存储文件有损坏
+    ERR_SDK_COMM_FILE_NOT_FOUND                 = 7004,    ///< 文件不存在，请检查文件路径是否正确
+    ERR_SDK_NOT_LOGGED_IN                       = 6014,    ///< IM SDK 未登录，请先登录，成功回调之后重试，或者已被踢下线，可使用 TIMManager getLoginUser 检查当前是否在线。
+    ERR_NO_PREVIOUS_LOGIN                       = 6026,    ///< 自动登录时，并没有登录过该用户，这时候请调用 login 接口重新登录。
+    ERR_USER_SIG_EXPIRED                        = 6206,    ///< UserSig 过期，请重新获取有效的 UserSig 后再重新登录。
+    ERR_LOGIN_KICKED_OFF_BY_OTHER               = 6208,    ///< 其他终端登录同一个帐号，引起已登录的帐号被踢，需重新登录。
+    ERR_SDK_ACCOUNT_LOGIN_IN_PROCESS            = 7501,    ///< 登录正在执行中，例如，第一次 login 或 autoLogin 操作在回调前，后续的 login 或 autoLogin 操作会返回该错误码。
+    ERR_SDK_ACCOUNT_LOGOUT_IN_PROCESS           = 7502,    ///< 登出正在执行中，例如，第一次 logout 操作在回调前，后续的 logout 操作会返回该错误码
+    
+    
+    
+    
+    
+    
+}
 
 #endif /* BFIMErrorCode_h */

@@ -9,17 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "IMSDKConfig.h"
 #import "BFIMConst.h"
+#import "BFIMManagerListener.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^TCPBlock)(NSInteger code, id _Nullable response, NSString * _Nullable error);
-@protocol BFIMManagerListener <NSObject>
-
-- (void)onConnecting;
-- (void)onConnectSuccess;
-- (void)onConnectFailed:(int)code err:(NSString *)errString;
-
-@end
 
 @interface BFIMManager : NSObject
 

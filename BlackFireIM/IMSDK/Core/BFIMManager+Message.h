@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BFIMImageElem *)prepareImageMessage:(BFIMImageElem *)elem toUid:(NSInteger)to_uid;
 
-/// 发送单聊普通文本消息（最大支持 8KB
+/// 发送单聊普通文本消息（最大支持 8KB）
 /// @param elem 文本消息
 /// @param success 发送成功，返回消息的唯一标识ID
 /// @param failed 发送失败

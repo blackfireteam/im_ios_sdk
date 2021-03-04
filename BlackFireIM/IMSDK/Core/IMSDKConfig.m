@@ -20,7 +20,7 @@
     return config;
 }
 
-//进行写入保护
+//写入保护
 - (void)setHeartDuration:(NSInteger)heartDuration
 {
     _heartDuration = MAX(heartDuration, 5);

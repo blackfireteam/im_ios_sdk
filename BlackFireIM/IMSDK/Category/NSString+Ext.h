@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSString (Ext)
 
+- (NSDictionary *)el_convertToDictionary;
+
 @end
 
 NS_ASSUME_NONNULL_END
