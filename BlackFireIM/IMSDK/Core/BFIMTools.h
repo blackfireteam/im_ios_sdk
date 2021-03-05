@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 
-@property(nonatomic,assign) NSInteger user_id;
+@property(nonatomic,copy) NSString *user_id;
 
 @property(nonatomic,assign,readonly) NSInteger currentLocalTimeInterval;
 

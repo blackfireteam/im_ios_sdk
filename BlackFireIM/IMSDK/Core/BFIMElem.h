@@ -17,10 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) BFIMMessageType type;
 
 /** 消息发送方ID*/
-@property(nonatomic,assign) NSInteger fromUid;
+@property(nonatomic,copy) NSString *fromUid;
 
 /** 消息接收方ID*/
-@property(nonatomic,assign) NSInteger toUid;
+@property(nonatomic,copy) NSString *toUid;
 
 /** 服务器返回的消息的唯一标识ID，消息未发送时没有值*/
 @property(nonatomic,assign) NSInteger msg_id;

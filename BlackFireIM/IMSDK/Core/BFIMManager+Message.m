@@ -13,7 +13,7 @@
 @implementation BFIMManager (Message)
 
 /** 创建文本消息*/
-- (BFIMTextElem *)prepareTextMessage:(NSString *)text toUid:(NSInteger)to_uid
+- (BFIMTextElem *)prepareTextMessage:(NSString *)text toUid:(NSString *)to_uid
 {
     BFIMTextElem *elem = [[BFIMTextElem alloc]init];
     elem.text = text;
@@ -29,7 +29,7 @@
 /** 创建图片消息（图片文件最大支持 28 MB）
     如果是系统相册拿的图片，需要先把图片导入 APP 的目录下
  */
-- (BFIMImageElem *)prepareImageMessage:(BFIMImageElem *)elem toUid:(NSInteger)to_uid
+- (BFIMImageElem *)prepareImageMessage:(BFIMImageElem *)elem toUid:(NSString *)to_uid
 {
     elem.type = BFIMMessageTypeImage;
     elem.fromUid = [BFIMTools sharedInstance].user_id;
@@ -106,6 +106,21 @@
                 break;
         }
     }
+}
+
+/**
+ *  获取单聊历史消息
+ *
+ *  @param count 拉取消息的个数，不宜太多，会影响消息拉取的速度，这里建议一次拉取 20 个
+ *  @param lastMsgSign 获取消息的起始消息，如果传 0，起始消息为会话的最新消息
+ */
+- (void)getC2CHistoryMessageList:(NSString *)userID count:(int)count lastMsg:(NSInteger)lastMsgSign succ:(BFIMMessageListSucc)succ fail:(BFIMFail)fail
+{
+    [self.messageStore messageByPartnerID:userID last_msg_sign:lastMsgSign count:count complete:^(NSArray<BFIMElem *> * _Nonnull data, BOOL hasMore) {
+        if (succ) {
+            succ(data);
+        }
+    }];
 }
 
 @end

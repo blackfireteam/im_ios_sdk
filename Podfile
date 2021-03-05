@@ -9,6 +9,6 @@ pod 'CocoaAsyncSocket'
 pod 'Protobuf'
 pod 'FMDB'
 pod 'UICKeyChainStore'
-pod 'TXIMSDK_TUIKit_iOS'
+pod 'SDWebImage'
 
 end

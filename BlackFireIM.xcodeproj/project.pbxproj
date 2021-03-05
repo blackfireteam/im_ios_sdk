@@ -32,6 +32,26 @@
 		F056712125EF69AC00782F9C /* BFConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = F056712025EF69AC00782F9C /* BFConversation.m */; };
 		F056712A25EF919600782F9C /* BFInputBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F056712925EF919600782F9C /* BFInputBarView.m */; };
 		F056713325F06E1000782F9C /* BFResponderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = F056713225F06E1000782F9C /* BFResponderTextView.m */; };
+		F056713E25F077B700782F9C /* UIColor+BFDarkMode.m in Sources */ = {isa = PBXBuildFile; fileRef = F056713D25F077B700782F9C /* UIColor+BFDarkMode.m */; };
+		F056714725F07A0C00782F9C /* UIImage+BFDarkMode.m in Sources */ = {isa = PBXBuildFile; fileRef = F056714625F07A0C00782F9C /* UIImage+BFDarkMode.m */; };
+		F056714E25F07AF800782F9C /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F056714C25F07AF700782F9C /* TUIKitFace.bundle */; };
+		F056714F25F07AF800782F9C /* TUIKitResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F056714D25F07AF700782F9C /* TUIKitResource.bundle */; };
+		F056715525F07BE500782F9C /* UIImage+BFKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F056715425F07BE500782F9C /* UIImage+BFKit.m */; };
+		F056716025F07F1600782F9C /* NSBundle+BFKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F056715F25F07F1600782F9C /* NSBundle+BFKit.m */; };
+		F056716625F087D200782F9C /* UIView+BFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = F056716525F087D200782F9C /* UIView+BFExtension.m */; };
+		F056717625F08F6A00782F9C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F056717825F08F6A00782F9C /* Localizable.strings */; };
+		F056718425F0A7AE00782F9C /* BFInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F056718325F0A7AE00782F9C /* BFInputViewController.m */; };
+		F056718A25F0ACC600782F9C /* BFMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = F056718925F0ACC600782F9C /* BFMessageController.m */; };
+		F056719925F0DDF600782F9C /* BFMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F056719825F0DDF600782F9C /* BFMessageCell.m */; };
+		F05671A025F1BC6200782F9C /* BFMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F056719F25F1BC6200782F9C /* BFMessageCellData.m */; };
+		F05671A625F1BDC200782F9C /* BFMessageCellLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671A525F1BDC200782F9C /* BFMessageCellLayout.m */; };
+		F05671BD25F1D8F200782F9C /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671BC25F1D8F200782F9C /* UIView+Frame.m */; };
+		F05671C325F1DD5B00782F9C /* BFBubbleMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671C225F1DD5B00782F9C /* BFBubbleMessageCell.m */; };
+		F05671C925F1DDF200782F9C /* BFBubbleMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671C825F1DDF200782F9C /* BFBubbleMessageCellData.m */; };
+		F05671CF25F1DFD200782F9C /* BFTextMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671CE25F1DFD200782F9C /* BFTextMessageCellData.m */; };
+		F05671D525F2169E00782F9C /* BFTextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671D425F2169E00782F9C /* BFTextMessageCell.m */; };
+		F05671DB25F217ED00782F9C /* BFImageMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671DA25F217ED00782F9C /* BFImageMessageCellData.m */; };
+		F05671E125F21C1100782F9C /* BFImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671E025F21C1100782F9C /* BFImageMessageCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +127,46 @@
 		F056712925EF919600782F9C /* BFInputBarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFInputBarView.m; sourceTree = "<group>"; };
 		F056713125F06E1000782F9C /* BFResponderTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFResponderTextView.h; sourceTree = "<group>"; };
 		F056713225F06E1000782F9C /* BFResponderTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFResponderTextView.m; sourceTree = "<group>"; };
+		F056713B25F0771300782F9C /* BFHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFHeader.h; sourceTree = "<group>"; };
+		F056713C25F077B700782F9C /* UIColor+BFDarkMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+BFDarkMode.h"; sourceTree = "<group>"; };
+		F056713D25F077B700782F9C /* UIColor+BFDarkMode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+BFDarkMode.m"; sourceTree = "<group>"; };
+		F056714525F07A0C00782F9C /* UIImage+BFDarkMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+BFDarkMode.h"; sourceTree = "<group>"; };
+		F056714625F07A0C00782F9C /* UIImage+BFDarkMode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BFDarkMode.m"; sourceTree = "<group>"; };
+		F056714C25F07AF700782F9C /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TUIKitFace.bundle; path = Pods/TXIMSDK_TUIKit_iOS/TUIKit/Resources/TUIKitFace.bundle; sourceTree = SOURCE_ROOT; };
+		F056714D25F07AF700782F9C /* TUIKitResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TUIKitResource.bundle; path = Pods/TXIMSDK_TUIKit_iOS/TUIKit/Resources/TUIKitResource.bundle; sourceTree = SOURCE_ROOT; };
+		F056715325F07BE500782F9C /* UIImage+BFKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+BFKit.h"; sourceTree = "<group>"; };
+		F056715425F07BE500782F9C /* UIImage+BFKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BFKit.m"; sourceTree = "<group>"; };
+		F056715E25F07F1600782F9C /* NSBundle+BFKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBundle+BFKit.h"; sourceTree = "<group>"; };
+		F056715F25F07F1600782F9C /* NSBundle+BFKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+BFKit.m"; sourceTree = "<group>"; };
+		F056716425F087D200782F9C /* UIView+BFExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+BFExtension.h"; sourceTree = "<group>"; };
+		F056716525F087D200782F9C /* UIView+BFExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+BFExtension.m"; sourceTree = "<group>"; };
+		F056716D25F08DAF00782F9C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		F056717725F08F6A00782F9C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F056717925F08F7200782F9C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		F056718225F0A7AE00782F9C /* BFInputViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFInputViewController.h; sourceTree = "<group>"; };
+		F056718325F0A7AE00782F9C /* BFInputViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFInputViewController.m; sourceTree = "<group>"; };
+		F056718825F0ACC600782F9C /* BFMessageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFMessageController.h; sourceTree = "<group>"; };
+		F056718925F0ACC600782F9C /* BFMessageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFMessageController.m; sourceTree = "<group>"; };
+		F056719725F0DDF600782F9C /* BFMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFMessageCell.h; sourceTree = "<group>"; };
+		F056719825F0DDF600782F9C /* BFMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFMessageCell.m; sourceTree = "<group>"; };
+		F056719E25F1BC6200782F9C /* BFMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFMessageCellData.h; sourceTree = "<group>"; };
+		F056719F25F1BC6200782F9C /* BFMessageCellData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFMessageCellData.m; sourceTree = "<group>"; };
+		F05671A425F1BDC200782F9C /* BFMessageCellLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFMessageCellLayout.h; sourceTree = "<group>"; };
+		F05671A525F1BDC200782F9C /* BFMessageCellLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFMessageCellLayout.m; sourceTree = "<group>"; };
+		F05671BB25F1D8F200782F9C /* UIView+Frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
+		F05671BC25F1D8F200782F9C /* UIView+Frame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
+		F05671C125F1DD5B00782F9C /* BFBubbleMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFBubbleMessageCell.h; sourceTree = "<group>"; };
+		F05671C225F1DD5B00782F9C /* BFBubbleMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFBubbleMessageCell.m; sourceTree = "<group>"; };
+		F05671C725F1DDF200782F9C /* BFBubbleMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFBubbleMessageCellData.h; sourceTree = "<group>"; };
+		F05671C825F1DDF200782F9C /* BFBubbleMessageCellData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFBubbleMessageCellData.m; sourceTree = "<group>"; };
+		F05671CD25F1DFD200782F9C /* BFTextMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFTextMessageCellData.h; sourceTree = "<group>"; };
+		F05671CE25F1DFD200782F9C /* BFTextMessageCellData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFTextMessageCellData.m; sourceTree = "<group>"; };
+		F05671D325F2169E00782F9C /* BFTextMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFTextMessageCell.h; sourceTree = "<group>"; };
+		F05671D425F2169E00782F9C /* BFTextMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFTextMessageCell.m; sourceTree = "<group>"; };
+		F05671D925F217ED00782F9C /* BFImageMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFImageMessageCellData.h; sourceTree = "<group>"; };
+		F05671DA25F217ED00782F9C /* BFImageMessageCellData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFImageMessageCellData.m; sourceTree = "<group>"; };
+		F05671DF25F21C1100782F9C /* BFImageMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFImageMessageCell.h; sourceTree = "<group>"; };
+		F05671E025F21C1100782F9C /* BFImageMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFImageMessageCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +247,7 @@
 				F011D58A25E736C10061F9D6 /* LaunchScreen.storyboard */,
 				F011D58D25E736C10061F9D6 /* Info.plist */,
 				F011D58E25E736C10061F9D6 /* main.m */,
+				F056717825F08F6A00782F9C /* Localizable.strings */,
 			);
 			path = BlackFireIM;
 			sourceTree = "<group>";
@@ -276,6 +337,9 @@
 		F056712525EF916800782F9C /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				F056719D25F1BC4300782F9C /* Model */,
+				F056714B25F07AE400782F9C /* Resource */,
+				F056713A25F076F900782F9C /* Base */,
 				F056712725EF917E00782F9C /* View */,
 				F056712625EF917700782F9C /* Controller */,
 			);
@@ -285,6 +349,10 @@
 		F056712625EF917700782F9C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				F056718225F0A7AE00782F9C /* BFInputViewController.h */,
+				F056718325F0A7AE00782F9C /* BFInputViewController.m */,
+				F056718825F0ACC600782F9C /* BFMessageController.h */,
+				F056718925F0ACC600782F9C /* BFMessageController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -296,8 +364,62 @@
 				F056712925EF919600782F9C /* BFInputBarView.m */,
 				F056713125F06E1000782F9C /* BFResponderTextView.h */,
 				F056713225F06E1000782F9C /* BFResponderTextView.m */,
+				F056719725F0DDF600782F9C /* BFMessageCell.h */,
+				F056719825F0DDF600782F9C /* BFMessageCell.m */,
+				F05671C125F1DD5B00782F9C /* BFBubbleMessageCell.h */,
+				F05671C225F1DD5B00782F9C /* BFBubbleMessageCell.m */,
+				F05671D325F2169E00782F9C /* BFTextMessageCell.h */,
+				F05671D425F2169E00782F9C /* BFTextMessageCell.m */,
+				F05671DF25F21C1100782F9C /* BFImageMessageCell.h */,
+				F05671E025F21C1100782F9C /* BFImageMessageCell.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		F056713A25F076F900782F9C /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				F056713B25F0771300782F9C /* BFHeader.h */,
+				F056713C25F077B700782F9C /* UIColor+BFDarkMode.h */,
+				F056713D25F077B700782F9C /* UIColor+BFDarkMode.m */,
+				F056714525F07A0C00782F9C /* UIImage+BFDarkMode.h */,
+				F056714625F07A0C00782F9C /* UIImage+BFDarkMode.m */,
+				F056715325F07BE500782F9C /* UIImage+BFKit.h */,
+				F056715425F07BE500782F9C /* UIImage+BFKit.m */,
+				F05671BB25F1D8F200782F9C /* UIView+Frame.h */,
+				F05671BC25F1D8F200782F9C /* UIView+Frame.m */,
+				F056715E25F07F1600782F9C /* NSBundle+BFKit.h */,
+				F056715F25F07F1600782F9C /* NSBundle+BFKit.m */,
+				F056716425F087D200782F9C /* UIView+BFExtension.h */,
+				F056716525F087D200782F9C /* UIView+BFExtension.m */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		F056714B25F07AE400782F9C /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				F056714C25F07AF700782F9C /* TUIKitFace.bundle */,
+				F056714D25F07AF700782F9C /* TUIKitResource.bundle */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		F056719D25F1BC4300782F9C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F056719E25F1BC6200782F9C /* BFMessageCellData.h */,
+				F056719F25F1BC6200782F9C /* BFMessageCellData.m */,
+				F05671C725F1DDF200782F9C /* BFBubbleMessageCellData.h */,
+				F05671C825F1DDF200782F9C /* BFBubbleMessageCellData.m */,
+				F05671CD25F1DFD200782F9C /* BFTextMessageCellData.h */,
+				F05671CE25F1DFD200782F9C /* BFTextMessageCellData.m */,
+				F05671D925F217ED00782F9C /* BFImageMessageCellData.h */,
+				F05671DA25F217ED00782F9C /* BFImageMessageCellData.m */,
+				F05671A425F1BDC200782F9C /* BFMessageCellLayout.h */,
+				F05671A525F1BDC200782F9C /* BFMessageCellLayout.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -311,8 +433,6 @@
 				F011D57525E736BD0061F9D6 /* Sources */,
 				F011D57625E736BD0061F9D6 /* Frameworks */,
 				F011D57725E736BD0061F9D6 /* Resources */,
-				518F1225A1266639F7375D11 /* [CP] Embed Pods Frameworks */,
-				94DF8D908B0C6216D59F54F7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -387,6 +507,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = F011D57025E736BD0061F9D6;
 			productRefGroup = F011D57A25E736BD0061F9D6 /* Products */;
@@ -405,8 +526,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F056717625F08F6A00782F9C /* Localizable.strings in Resources */,
+				F056714E25F07AF800782F9C /* TUIKitFace.bundle in Resources */,
 				F011D58C25E736C10061F9D6 /* LaunchScreen.storyboard in Resources */,
 				F011D58925E736C10061F9D6 /* Assets.xcassets in Resources */,
+				F056714F25F07AF800782F9C /* TUIKitResource.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,40 +551,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		518F1225A1266639F7375D11 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		94DF8D908B0C6216D59F54F7 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		A314BAD49F9E5992DB9E8A9D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -490,26 +580,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F056714725F07A0C00782F9C /* UIImage+BFDarkMode.m in Sources */,
+				F05671BD25F1D8F200782F9C /* UIView+Frame.m in Sources */,
 				F011D58425E736BD0061F9D6 /* ViewController.m in Sources */,
+				F05671D525F2169E00782F9C /* BFTextMessageCell.m in Sources */,
 				F011D65425E8C8410061F9D6 /* BFIMTools.m in Sources */,
+				F056718425F0A7AE00782F9C /* BFInputViewController.m in Sources */,
+				F056713E25F077B700782F9C /* UIColor+BFDarkMode.m in Sources */,
 				F011D57E25E736BD0061F9D6 /* AppDelegate.m in Sources */,
 				F056711B25EF694A00782F9C /* BFDBConversationStore.m in Sources */,
+				F05671A025F1BC6200782F9C /* BFMessageCellData.m in Sources */,
+				F05671C325F1DD5B00782F9C /* BFBubbleMessageCell.m in Sources */,
+				F056719925F0DDF600782F9C /* BFMessageCell.m in Sources */,
 				F011D58F25E736C10061F9D6 /* main.m in Sources */,
 				F011D62825E768530061F9D6 /* BFIMManager.m in Sources */,
+				F05671C925F1DDF200782F9C /* BFBubbleMessageCellData.m in Sources */,
+				F05671A625F1BDC200782F9C /* BFMessageCellLayout.m in Sources */,
 				F052EC8E25EDDAE300F35D74 /* NSFileManager+filePath.m in Sources */,
+				F05671CF25F1DFD200782F9C /* BFTextMessageCellData.m in Sources */,
+				F056716025F07F1600782F9C /* NSBundle+BFKit.m in Sources */,
 				F011D66925E8E7240061F9D6 /* BFIMManager+Message.m in Sources */,
+				F056718A25F0ACC600782F9C /* BFMessageController.m in Sources */,
 				F052ECA925EE1DB700F35D74 /* NSString+AES.m in Sources */,
+				F05671E125F21C1100782F9C /* BFImageMessageCell.m in Sources */,
 				F056712A25EF919600782F9C /* BFInputBarView.m in Sources */,
 				F011D5F225E751650061F9D6 /* BFAsyncSocketManager.m in Sources */,
 				F056712125EF69AC00782F9C /* BFConversation.m in Sources */,
+				F05671DB25F217ED00782F9C /* BFImageMessageCellData.m in Sources */,
 				F011D62225E767B10061F9D6 /* IMSDKConfig.m in Sources */,
 				F052EC9425EDDE2C00F35D74 /* BFDBMessageStore.m in Sources */,
 				F011D63125E774AB0061F9D6 /* ChatProtobuf.pbobjc.m in Sources */,
+				F056716625F087D200782F9C /* UIView+BFExtension.m in Sources */,
 				F011D66025E8DC4D0061F9D6 /* BFIMElem.m in Sources */,
 				F056711225EF631F00782F9C /* NSString+Ext.m in Sources */,
 				F052EC8825EDD9E300F35D74 /* BFDBManager.m in Sources */,
 				F011D61325E755FD0061F9D6 /* NSData+zlib.mm in Sources */,
 				F056713325F06E1000782F9C /* BFResponderTextView.m in Sources */,
+				F056715525F07BE500782F9C /* UIImage+BFKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,8 +656,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				F011D58B25E736C10061F9D6 /* Base */,
+				F056716D25F08DAF00782F9C /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		F056717825F08F6A00782F9C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F056717725F08F6A00782F9C /* en */,
+				F056717925F08F7200782F9C /* zh-Hans */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -560,6 +677,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -619,6 +737,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

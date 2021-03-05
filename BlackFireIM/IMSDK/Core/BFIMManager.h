@@ -10,13 +10,22 @@
 #import "IMSDKConfig.h"
 #import "BFIMConst.h"
 #import "BFIMManagerListener.h"
+#import "BFDBMessageStore.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^TCPBlock)(NSInteger code, id _Nullable response, NSString * _Nullable error);
+/// 成功通用回调
+typedef void (^BFIMSucc)(void);
+/// 失败通用回调
+typedef void (^BFIMFail)(int code, NSString * desc);
+/// 获取历史消息成功回调
+typedef void (^BFIMMessageListSucc)(NSArray<BFIMElem *> * msgs);
 
 @interface BFIMManager : NSObject
+
+@property(nonatomic,strong) BFDBMessageStore *messageStore;
 
 + (instancetype)sharedInstance;
 

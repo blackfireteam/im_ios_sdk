@@ -112,7 +112,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BFInputBarView : NSObject
+@interface BFInputBarView : UIView
 
 /**
  *  线视图
@@ -124,7 +124,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  语音按钮
  *  即在输入条最右侧的，具有“音波”图标的按钮。
  */
-@property(nonatomic,strong) UIButton *macButton;
+@property(nonatomic,strong) UIButton *micButton;
 
 /**
  *  键盘按钮
@@ -140,6 +140,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong) UITextView *inputTextView;
 
 /**
+ *  录音按钮
+ *  在您点击了语音按钮（“声波图标”）后，原本的文本输入框会变成改按钮。
+ *  您可以引导用户点击该按钮开始语音的录制，并通过本按钮的回调函数实现声音的录制。
+ */
+@property (nonatomic, strong) UIButton *recordButton;
+
+/**
  *  表情按钮
  *  即在输入条中的“笑脸”按钮。
  *  对应回调委托中的表情按钮回调。
@@ -152,6 +159,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  对应回调委托中的“更多”按钮回调。
  */
 @property(nonatomic,strong) UIButton *moreButton;
+
+@property(nonatomic,weak) id<BFInputBarViewDelegate> delegate;
 
 /**
  *  添加表情

@@ -56,6 +56,14 @@ static BFIMManager *_manager;
     return self;
 }
 
+- (BFDBMessageStore *)messageStore
+{
+    if (!_messageStore) {
+        _messageStore = [[BFDBMessageStore alloc]init];
+    }
+    return _messageStore;
+}
+
 - (dispatch_queue_t)socketQueue
 {
     if(!_socketQueue) {
@@ -326,7 +334,7 @@ static BFIMManager *_manager;
             [self disConnectTCP];//断开链接，启动重连
         }else {
             Result *result = response;
-            [BFIMTools sharedInstance].user_id = result.uid;
+            [BFIMTools sharedInstance].user_id = [NSString stringWithFormat:@"%ld",result.uid];
             [[BFIMTools sharedInstance] updateServerTime:result.nowTime];
         }
     }];

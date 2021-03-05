@@ -10,7 +10,7 @@
 
 
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
-#define STRONG_SELF if (!weakSelf) return; \
+#define STRONG_SELF(strongSelf) if (!weakSelf) return; \
 __strong typeof(weakSelf) strongSelf = weakSelf;
 
 
