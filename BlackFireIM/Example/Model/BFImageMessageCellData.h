@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) UIImage *originImage;
 
-@property(nonatomic,strong) BFIMImageElem *imageElem;
+@property(nonatomic,strong) MSIMImageElem *imageElem;
 
 /**
  *  上传（发送）进度

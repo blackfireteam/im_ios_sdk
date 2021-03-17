@@ -8,7 +8,7 @@
 #import "BFMessageController.h"
 #import "BFHeader.h"
 #import "UIColor+BFDarkMode.h"
-#import "BFIMManager+Message.h"
+#import "MSIMManager+Message.h"
 #import "BFTextMessageCellData.h"
 #import "BFImageMessageCellData.h"
 #import "BFTextMessageCell.h"
@@ -55,8 +55,8 @@
 
 - (void)setupUI
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewMessage:) name:TUIKitNotification_TIMMessageListener object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRevokeMessage:) name:TUIKitNotification_TIMMessageRevokeListener object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewMessage:) name:BFIMNotification_onRecvNewMessage object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRevokeMessage:) name:BFIMNotification_MessageRevoke object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRecvMessageReceipts:) name:TUIKitNotification_onRecvMessageReceipts object:nil];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapViewController)];
     [self.view addGestureRecognizer:tap];
@@ -88,17 +88,17 @@
     _isLoadingMsg = YES;
     int msgCount = 20;
     
-    WS(weakSelf)
-    if (self.partner_id > 0) {
-        [[BFIMManager sharedInstance] getC2CHistoryMessageList:self.partner_id count:msgCount lastMsg:self.last_msg_sign succ:^(NSArray<BFIMElem *> * _Nonnull msgs) {
-                    STRONG_SELF(strongSelf)
-                    strongSelf.last_msg_sign = msgs.firstObject.msg_sign;
-                    strongSelf.isLoadingMsg = NO;
-                } fail:^(int code, NSString * _Nonnull desc) {
-                    STRONG_SELF(strongSelf)
-                    strongSelf.isLoadingMsg = NO;
-        }];
-    }
+//    WS(weakSelf)
+//    if (self.partner_id > 0) {
+//        [[BFIMManager sharedInstance] getC2CHistoryMessageList:self.partner_id count:msgCount lastMsg:self.last_msg_sign succ:^(NSArray<MSIMElem *> * _Nonnull msgs) {
+//                    STRONG_SELF(strongSelf)
+//                    strongSelf.last_msg_sign = msgs.firstObject.msg_sign;
+//                    strongSelf.isLoadingMsg = NO;
+//                } fail:^(int code, NSString * _Nonnull desc) {
+//                    STRONG_SELF(strongSelf)
+//                    strongSelf.isLoadingMsg = NO;
+//        }];
+//    }
 }
 
 - (void)onNewMessage:(NSNotification *)note
@@ -114,6 +114,13 @@
 - (void)didRecvMessageReceipts:(NSNotification *)note
 {
     
+}
+
+- (void)scrollToBottom:(BOOL)animate
+{
+    if (_uiMsgs.count > 0) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_uiMsgs.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animate];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

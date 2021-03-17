@@ -11,10 +11,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSFileManager (filePath)
 
-/**
- *  数据库 — 聊天
- */
+///聊天数据库
 + (NSString *)pathDBMessage;
+
+///能用数据库
++ (NSString *)pathDBCommon;
 
 @end
 

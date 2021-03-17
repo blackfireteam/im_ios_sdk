@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "BFIMElem.h"
+#import "MSIMElem.h"
 #import "BFMessageCellLayout.h"
 
 /**
@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) BOOL showName;
 
-@property(nonatomic,strong) BFIMElem *elem;
+@property(nonatomic,strong) MSIMElem *elem;
 
 @property(nonatomic,strong) BFMessageCellLayout *cellLayout;
 

@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString *partner_id;
 
+- (void)scrollToBottom:(BOOL)animate;
+
 @end
 
 NS_ASSUME_NONNULL_END

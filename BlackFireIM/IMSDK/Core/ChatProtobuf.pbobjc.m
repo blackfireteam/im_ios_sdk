@@ -26,6 +26,8 @@
 // We don't use [Foo class] because it is not a static value.
 GPBObjCClassDeclaration(ChatItem);
 GPBObjCClassDeclaration(ChatR);
+GPBObjCClassDeclaration(GetProfile);
+GPBObjCClassDeclaration(Profile);
 
 #pragma mark - ChatProtobufRoot
 
@@ -49,62 +51,6 @@ static GPBFileDescriptor *ChatProtobufRoot_FileDescriptor(void) {
   }
   return descriptor;
 }
-
-#pragma mark - ImToken
-
-@implementation ImToken
-
-@dynamic sign;
-@dynamic token;
-
-typedef struct ImToken__storage_ {
-  uint32_t _has_storage_[1];
-  NSString *token;
-  int64_t sign;
-} ImToken__storage_;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = nil;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "sign",
-        .dataTypeSpecific.clazz = Nil,
-        .number = ImToken_FieldNumber_Sign,
-        .hasIndex = 0,
-        .offset = (uint32_t)offsetof(ImToken__storage_, sign),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeInt64,
-      },
-      {
-        .name = "token",
-        .dataTypeSpecific.clazz = Nil,
-        .number = ImToken_FieldNumber_Token,
-        .hasIndex = 1,
-        .offset = (uint32_t)offsetof(ImToken__storage_, token),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeString,
-      },
-    };
-    GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[ImToken class]
-                                     rootClass:[ChatProtobufRoot class]
-                                          file:ChatProtobufRoot_FileDescriptor()
-                                        fields:fields
-                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(ImToken__storage_)
-                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
-    #if defined(DEBUG) && DEBUG
-      NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif  // DEBUG
-    descriptor = localDescriptor;
-  }
-  return descriptor;
-}
-
-@end
 
 #pragma mark - Ping
 
@@ -140,6 +86,107 @@ typedef struct Ping__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(Ping__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - ImLogin
+
+@implementation ImLogin
+
+@dynamic sign;
+@dynamic token;
+
+typedef struct ImLogin__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *token;
+  int64_t sign;
+} ImLogin__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ImLogin_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ImLogin__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "token",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ImLogin_FieldNumber_Token,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ImLogin__storage_, token),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ImLogin class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ImLogin__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - ImLogout
+
+@implementation ImLogout
+
+@dynamic sign;
+
+typedef struct ImLogout__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t sign;
+} ImLogout__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ImLogout_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ImLogout__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ImLogout class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ImLogout__storage_)
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
@@ -247,18 +294,30 @@ typedef struct Result__storage_ {
 @dynamic sign;
 @dynamic type;
 @dynamic toUid;
+@dynamic title;
 @dynamic body;
+@dynamic thumb;
 @dynamic width;
 @dynamic height;
+@dynamic duration;
+@dynamic lat;
+@dynamic lng;
+@dynamic zoom;
 
 typedef struct ChatS__storage_ {
   uint32_t _has_storage_[1];
+  NSString *title;
   NSString *body;
+  NSString *thumb;
   int64_t sign;
   int64_t type;
   int64_t toUid;
   int64_t width;
   int64_t height;
+  int64_t duration;
+  double lat;
+  double lng;
+  int64_t zoom;
 } ChatS__storage_;
 
 // This method is threadsafe because it is initially called
@@ -295,11 +354,29 @@ typedef struct ChatS__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
+        .name = "title",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatS_FieldNumber_Title,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(ChatS__storage_, title),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "body",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatS_FieldNumber_Body,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(ChatS__storage_, body),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "thumb",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatS_FieldNumber_Thumb,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(ChatS__storage_, thumb),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
@@ -307,7 +384,7 @@ typedef struct ChatS__storage_ {
         .name = "width",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatS_FieldNumber_Width,
-        .hasIndex = 4,
+        .hasIndex = 6,
         .offset = (uint32_t)offsetof(ChatS__storage_, width),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -316,8 +393,44 @@ typedef struct ChatS__storage_ {
         .name = "height",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatS_FieldNumber_Height,
-        .hasIndex = 5,
+        .hasIndex = 7,
         .offset = (uint32_t)offsetof(ChatS__storage_, height),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "duration",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatS_FieldNumber_Duration,
+        .hasIndex = 8,
+        .offset = (uint32_t)offsetof(ChatS__storage_, duration),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "lat",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatS_FieldNumber_Lat,
+        .hasIndex = 9,
+        .offset = (uint32_t)offsetof(ChatS__storage_, lat),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "lng",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatS_FieldNumber_Lng,
+        .hasIndex = 10,
+        .offset = (uint32_t)offsetof(ChatS__storage_, lng),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "zoom",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatS_FieldNumber_Zoom,
+        .hasIndex = 11,
+        .offset = (uint32_t)offsetof(ChatS__storage_, zoom),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -400,21 +513,42 @@ typedef struct ChatSR__storage_ {
 
 @implementation ChatR
 
-@dynamic msgId;
+@dynamic sign;
 @dynamic fromUid;
+@dynamic toUid;
+@dynamic msgId;
+@dynamic msgTime;
+@dynamic sput;
+@dynamic newMsg;
 @dynamic type;
+@dynamic title;
 @dynamic body;
+@dynamic thumb;
 @dynamic width;
 @dynamic height;
+@dynamic duration;
+@dynamic lat;
+@dynamic lng;
+@dynamic zoom;
 
 typedef struct ChatR__storage_ {
   uint32_t _has_storage_[1];
+  NSString *title;
   NSString *body;
-  int64_t msgId;
+  NSString *thumb;
+  int64_t sign;
   int64_t fromUid;
+  int64_t toUid;
+  int64_t msgId;
+  int64_t msgTime;
+  int64_t sput;
   int64_t type;
   int64_t width;
   int64_t height;
+  int64_t duration;
+  double lat;
+  double lng;
+  int64_t zoom;
 } ChatR__storage_;
 
 // This method is threadsafe because it is initially called
@@ -424,11 +558,11 @@ typedef struct ChatR__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
-        .name = "msgId",
+        .name = "sign",
         .dataTypeSpecific.clazz = Nil,
-        .number = ChatR_FieldNumber_MsgId,
+        .number = ChatR_FieldNumber_Sign,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(ChatR__storage_, msgId),
+        .offset = (uint32_t)offsetof(ChatR__storage_, sign),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -442,20 +576,83 @@ typedef struct ChatR__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
+        .name = "toUid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_ToUid,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(ChatR__storage_, toUid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "msgId",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_MsgId,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(ChatR__storage_, msgId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "msgTime",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_MsgTime,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(ChatR__storage_, msgTime),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "sput",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_Sput,
+        .hasIndex = 5,
+        .offset = (uint32_t)offsetof(ChatR__storage_, sput),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "newMsg",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_NewMsg,
+        .hasIndex = 6,
+        .offset = 7,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+      {
         .name = "type",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatR_FieldNumber_Type,
-        .hasIndex = 2,
+        .hasIndex = 8,
         .offset = (uint32_t)offsetof(ChatR__storage_, type),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
       {
+        .name = "title",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_Title,
+        .hasIndex = 9,
+        .offset = (uint32_t)offsetof(ChatR__storage_, title),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "body",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatR_FieldNumber_Body,
-        .hasIndex = 3,
+        .hasIndex = 10,
         .offset = (uint32_t)offsetof(ChatR__storage_, body),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "thumb",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_Thumb,
+        .hasIndex = 11,
+        .offset = (uint32_t)offsetof(ChatR__storage_, thumb),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
       },
@@ -463,7 +660,7 @@ typedef struct ChatR__storage_ {
         .name = "width",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatR_FieldNumber_Width,
-        .hasIndex = 4,
+        .hasIndex = 12,
         .offset = (uint32_t)offsetof(ChatR__storage_, width),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -472,8 +669,44 @@ typedef struct ChatR__storage_ {
         .name = "height",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatR_FieldNumber_Height,
-        .hasIndex = 5,
+        .hasIndex = 13,
         .offset = (uint32_t)offsetof(ChatR__storage_, height),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "duration",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_Duration,
+        .hasIndex = 14,
+        .offset = (uint32_t)offsetof(ChatR__storage_, duration),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "lat",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_Lat,
+        .hasIndex = 15,
+        .offset = (uint32_t)offsetof(ChatR__storage_, lat),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "lng",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_Lng,
+        .hasIndex = 16,
+        .offset = (uint32_t)offsetof(ChatR__storage_, lng),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeDouble,
+      },
+      {
+        .name = "zoom",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatR_FieldNumber_Zoom,
+        .hasIndex = 17,
+        .offset = (uint32_t)offsetof(ChatR__storage_, zoom),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -496,18 +729,18 @@ typedef struct ChatR__storage_ {
 
 @end
 
-#pragma mark - ChatRbatch
+#pragma mark - ChatRBatch
 
-@implementation ChatRbatch
+@implementation ChatRBatch
 
 @dynamic sign;
 @dynamic msgsArray, msgsArray_Count;
 
-typedef struct ChatRbatch__storage_ {
+typedef struct ChatRBatch__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *msgsArray;
   int64_t sign;
-} ChatRbatch__storage_;
+} ChatRBatch__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -518,29 +751,29 @@ typedef struct ChatRbatch__storage_ {
       {
         .name = "sign",
         .dataTypeSpecific.clazz = Nil,
-        .number = ChatRbatch_FieldNumber_Sign,
+        .number = ChatRBatch_FieldNumber_Sign,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(ChatRbatch__storage_, sign),
+        .offset = (uint32_t)offsetof(ChatRBatch__storage_, sign),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
       {
         .name = "msgsArray",
         .dataTypeSpecific.clazz = GPBObjCClass(ChatR),
-        .number = ChatRbatch_FieldNumber_MsgsArray,
+        .number = ChatRBatch_FieldNumber_MsgsArray,
         .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(ChatRbatch__storage_, msgsArray),
+        .offset = (uint32_t)offsetof(ChatRBatch__storage_, msgsArray),
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[ChatRbatch class]
+        [GPBDescriptor allocDescriptorForClass:[ChatRBatch class]
                                      rootClass:[ChatProtobufRoot class]
                                           file:ChatProtobufRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(ChatRbatch__storage_)
+                                   storageSize:sizeof(ChatRBatch__storage_)
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
@@ -558,14 +791,16 @@ typedef struct ChatRbatch__storage_ {
 
 @dynamic sign;
 @dynamic toUid;
-@dynamic msgId;
+@dynamic msgEnd;
+@dynamic msgStart;
 @dynamic offset;
 
 typedef struct GetHistory__storage_ {
   uint32_t _has_storage_[1];
   int64_t sign;
   int64_t toUid;
-  int64_t msgId;
+  int64_t msgEnd;
+  int64_t msgStart;
   int64_t offset;
 } GetHistory__storage_;
 
@@ -594,11 +829,20 @@ typedef struct GetHistory__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "msgId",
+        .name = "msgEnd",
         .dataTypeSpecific.clazz = Nil,
-        .number = GetHistory_FieldNumber_MsgId,
+        .number = GetHistory_FieldNumber_MsgEnd,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(GetHistory__storage_, msgId),
+        .offset = (uint32_t)offsetof(GetHistory__storage_, msgEnd),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "msgStart",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetHistory_FieldNumber_MsgStart,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(GetHistory__storage_, msgStart),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -606,7 +850,7 @@ typedef struct GetHistory__storage_ {
         .name = "offset",
         .dataTypeSpecific.clazz = Nil,
         .number = GetHistory_FieldNumber_Offset,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(GetHistory__storage_, offset),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -768,15 +1012,19 @@ typedef struct MsgRead__storage_ {
 
 @implementation LastReadMsg
 
+@dynamic sign;
 @dynamic fromUid;
 @dynamic msgId;
 @dynamic unread;
+@dynamic updateTime;
 
 typedef struct LastReadMsg__storage_ {
   uint32_t _has_storage_[1];
+  int64_t sign;
   int64_t fromUid;
   int64_t msgId;
   int64_t unread;
+  int64_t updateTime;
 } LastReadMsg__storage_;
 
 // This method is threadsafe because it is initially called
@@ -786,10 +1034,19 @@ typedef struct LastReadMsg__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = LastReadMsg_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(LastReadMsg__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
         .name = "fromUid",
         .dataTypeSpecific.clazz = Nil,
         .number = LastReadMsg_FieldNumber_FromUid,
-        .hasIndex = 0,
+        .hasIndex = 1,
         .offset = (uint32_t)offsetof(LastReadMsg__storage_, fromUid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -798,7 +1055,7 @@ typedef struct LastReadMsg__storage_ {
         .name = "msgId",
         .dataTypeSpecific.clazz = Nil,
         .number = LastReadMsg_FieldNumber_MsgId,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(LastReadMsg__storage_, msgId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -807,8 +1064,17 @@ typedef struct LastReadMsg__storage_ {
         .name = "unread",
         .dataTypeSpecific.clazz = Nil,
         .number = LastReadMsg_FieldNumber_Unread,
-        .hasIndex = 2,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(LastReadMsg__storage_, unread),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "updateTime",
+        .dataTypeSpecific.clazz = Nil,
+        .number = LastReadMsg_FieldNumber_UpdateTime,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(LastReadMsg__storage_, updateTime),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -837,11 +1103,13 @@ typedef struct LastReadMsg__storage_ {
 
 @dynamic sign;
 @dynamic toUid;
+@dynamic updateTime;
 
 typedef struct DelChat__storage_ {
   uint32_t _has_storage_[1];
   int64_t sign;
   int64_t toUid;
+  int64_t updateTime;
 } DelChat__storage_;
 
 // This method is threadsafe because it is initially called
@@ -865,6 +1133,15 @@ typedef struct DelChat__storage_ {
         .number = DelChat_FieldNumber_ToUid,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(DelChat__storage_, toUid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "updateTime",
+        .dataTypeSpecific.clazz = Nil,
+        .number = DelChat_FieldNumber_UpdateTime,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(DelChat__storage_, updateTime),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -892,12 +1169,12 @@ typedef struct DelChat__storage_ {
 @implementation GetChatList
 
 @dynamic sign;
-@dynamic msgId;
+@dynamic updateTime;
 
 typedef struct GetChatList__storage_ {
   uint32_t _has_storage_[1];
   int64_t sign;
-  int64_t msgId;
+  int64_t updateTime;
 } GetChatList__storage_;
 
 // This method is threadsafe because it is initially called
@@ -916,11 +1193,11 @@ typedef struct GetChatList__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "msgId",
+        .name = "updateTime",
         .dataTypeSpecific.clazz = Nil,
-        .number = GetChatList_FieldNumber_MsgId,
+        .number = GetChatList_FieldNumber_UpdateTime,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(GetChatList__storage_, msgId),
+        .offset = (uint32_t)offsetof(GetChatList__storage_, updateTime),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -950,19 +1227,25 @@ typedef struct GetChatList__storage_ {
 @dynamic uid;
 @dynamic msgStart;
 @dynamic msgEnd;
-@dynamic lastMsg;
+@dynamic msgLastRead;
+@dynamic showMsgId;
 @dynamic unread;
-@dynamic isNew;
+@dynamic matched;
+@dynamic newMsg;
 @dynamic myMove;
 @dynamic iceBreak;
 @dynamic tipFree;
+@dynamic topAlbum;
+@dynamic iBlockU;
+@dynamic connected;
 
 typedef struct ChatItem__storage_ {
   uint32_t _has_storage_[1];
-  NSString *lastMsg;
   int64_t uid;
   int64_t msgStart;
   int64_t msgEnd;
+  int64_t msgLastRead;
+  int64_t showMsgId;
   int64_t unread;
 } ChatItem__storage_;
 
@@ -1000,29 +1283,47 @@ typedef struct ChatItem__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "lastMsg",
+        .name = "msgLastRead",
         .dataTypeSpecific.clazz = Nil,
-        .number = ChatItem_FieldNumber_LastMsg,
+        .number = ChatItem_FieldNumber_MsgLastRead,
         .hasIndex = 3,
-        .offset = (uint32_t)offsetof(ChatItem__storage_, lastMsg),
+        .offset = (uint32_t)offsetof(ChatItem__storage_, msgLastRead),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "showMsgId",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatItem_FieldNumber_ShowMsgId,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(ChatItem__storage_, showMsgId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
       },
       {
         .name = "unread",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_Unread,
-        .hasIndex = 4,
+        .hasIndex = 5,
         .offset = (uint32_t)offsetof(ChatItem__storage_, unread),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
       {
-        .name = "isNew",
+        .name = "matched",
         .dataTypeSpecific.clazz = Nil,
-        .number = ChatItem_FieldNumber_IsNew,
-        .hasIndex = 5,
-        .offset = 6,  // Stored in _has_storage_ to save space.
+        .number = ChatItem_FieldNumber_Matched,
+        .hasIndex = 6,
+        .offset = 7,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "newMsg",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatItem_FieldNumber_NewMsg,
+        .hasIndex = 8,
+        .offset = 9,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1030,8 +1331,8 @@ typedef struct ChatItem__storage_ {
         .name = "myMove",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_MyMove,
-        .hasIndex = 7,
-        .offset = 8,  // Stored in _has_storage_ to save space.
+        .hasIndex = 10,
+        .offset = 11,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1039,8 +1340,8 @@ typedef struct ChatItem__storage_ {
         .name = "iceBreak",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_IceBreak,
-        .hasIndex = 9,
-        .offset = 10,  // Stored in _has_storage_ to save space.
+        .hasIndex = 12,
+        .offset = 13,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1048,8 +1349,35 @@ typedef struct ChatItem__storage_ {
         .name = "tipFree",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_TipFree,
-        .hasIndex = 11,
-        .offset = 12,  // Stored in _has_storage_ to save space.
+        .hasIndex = 14,
+        .offset = 15,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "topAlbum",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatItem_FieldNumber_TopAlbum,
+        .hasIndex = 16,
+        .offset = 17,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "iBlockU",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatItem_FieldNumber_IBlockU,
+        .hasIndex = 18,
+        .offset = 19,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "connected",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatItem_FieldNumber_Connected,
+        .hasIndex = 20,
+        .offset = 21,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1077,10 +1405,12 @@ typedef struct ChatItem__storage_ {
 @implementation ChatList
 
 @dynamic chatItemsArray, chatItemsArray_Count;
+@dynamic updateTime;
 
 typedef struct ChatList__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *chatItemsArray;
+  int64_t updateTime;
 } ChatList__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1098,6 +1428,15 @@ typedef struct ChatList__storage_ {
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeMessage,
       },
+      {
+        .name = "updateTime",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatList_FieldNumber_UpdateTime,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ChatList__storage_, updateTime),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[ChatList class]
@@ -1106,6 +1445,519 @@ typedef struct ChatList__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(ChatList__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - GetProfile
+
+@implementation GetProfile
+
+@dynamic sign;
+@dynamic uid;
+@dynamic updateTime;
+
+typedef struct GetProfile__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t sign;
+  int64_t uid;
+  int64_t updateTime;
+} GetProfile__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetProfile_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(GetProfile__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "uid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetProfile_FieldNumber_Uid,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(GetProfile__storage_, uid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "updateTime",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetProfile_FieldNumber_UpdateTime,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(GetProfile__storage_, updateTime),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[GetProfile class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(GetProfile__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - GetProfiles
+
+@implementation GetProfiles
+
+@dynamic sign;
+@dynamic getProfilesArray, getProfilesArray_Count;
+
+typedef struct GetProfiles__storage_ {
+  uint32_t _has_storage_[1];
+  NSMutableArray *getProfilesArray;
+  int64_t sign;
+} GetProfiles__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetProfiles_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(GetProfiles__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "getProfilesArray",
+        .dataTypeSpecific.clazz = GPBObjCClass(GetProfile),
+        .number = GetProfiles_FieldNumber_GetProfilesArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(GetProfiles__storage_, getProfilesArray),
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[GetProfiles class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(GetProfiles__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Profile
+
+@implementation Profile
+
+@dynamic sign;
+@dynamic uid;
+@dynamic updateTime;
+@dynamic nickName;
+@dynamic avatar;
+@dynamic gold;
+@dynamic verified;
+
+typedef struct Profile__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *nickName;
+  NSString *avatar;
+  int64_t sign;
+  int64_t uid;
+  int64_t updateTime;
+} Profile__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Profile_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(Profile__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "uid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Profile_FieldNumber_Uid,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(Profile__storage_, uid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "updateTime",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Profile_FieldNumber_UpdateTime,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(Profile__storage_, updateTime),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "nickName",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Profile_FieldNumber_NickName,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(Profile__storage_, nickName),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "avatar",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Profile_FieldNumber_Avatar,
+        .hasIndex = 4,
+        .offset = (uint32_t)offsetof(Profile__storage_, avatar),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "gold",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Profile_FieldNumber_Gold,
+        .hasIndex = 5,
+        .offset = 6,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "verified",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Profile_FieldNumber_Verified,
+        .hasIndex = 7,
+        .offset = 8,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[Profile class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(Profile__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - ProfileList
+
+@implementation ProfileList
+
+@dynamic profilesArray, profilesArray_Count;
+
+typedef struct ProfileList__storage_ {
+  uint32_t _has_storage_[1];
+  NSMutableArray *profilesArray;
+} ProfileList__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "profilesArray",
+        .dataTypeSpecific.clazz = GPBObjCClass(Profile),
+        .number = ProfileList_FieldNumber_ProfilesArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(ProfileList__storage_, profilesArray),
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProfileList class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProfileList__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - BlockU
+
+@implementation BlockU
+
+@dynamic toUid;
+
+typedef struct BlockU__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t toUid;
+} BlockU__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "toUid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = BlockU_FieldNumber_ToUid,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(BlockU__storage_, toUid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[BlockU class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(BlockU__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - UnblockU
+
+@implementation UnblockU
+
+@dynamic toUid;
+
+typedef struct UnblockU__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t toUid;
+} UnblockU__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "toUid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = UnblockU_FieldNumber_ToUid,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(UnblockU__storage_, toUid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[UnblockU class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(UnblockU__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - GetChatListOnlineUids
+
+@implementation GetChatListOnlineUids
+
+@dynamic sign;
+
+typedef struct GetChatListOnlineUids__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t sign;
+} GetChatListOnlineUids__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetChatListOnlineUids_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(GetChatListOnlineUids__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[GetChatListOnlineUids class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(GetChatListOnlineUids__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - OnlineUids
+
+@implementation OnlineUids
+
+@dynamic uidsArray, uidsArray_Count;
+
+typedef struct OnlineUids__storage_ {
+  uint32_t _has_storage_[1];
+  GPBInt64Array *uidsArray;
+} OnlineUids__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "uidsArray",
+        .dataTypeSpecific.clazz = Nil,
+        .number = OnlineUids_FieldNumber_UidsArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(OnlineUids__storage_, uidsArray),
+        .flags = (GPBFieldFlags)(GPBFieldRepeated | GPBFieldPacked),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[OnlineUids class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(OnlineUids__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - IsOnline
+
+@implementation IsOnline
+
+@dynamic sign;
+@dynamic uid;
+
+typedef struct IsOnline__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t sign;
+  int64_t uid;
+} IsOnline__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = IsOnline_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(IsOnline__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "uid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = IsOnline_FieldNumber_Uid,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(IsOnline__storage_, uid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[IsOnline class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(IsOnline__storage_)
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");

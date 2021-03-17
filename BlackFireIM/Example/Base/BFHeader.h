@@ -117,9 +117,4 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TController_Background_Color RGBA(237, 237, 237, 1.0)
 #define TController_Background_Color_Dark RGBA(25, 25, 25, 1.0)
 
-
-#define TUIKitNotification_TIMMessageListener @"TUIKitNotification_TIMMessageListener"
-#define TUIKitNotification_TIMMessageRevokeListener @"TUIKitNotification_TIMMessageRevokeListener"
-#define TUIKitNotification_onRecvMessageReceipts @"TUIKitNotification_onRecvMessageReceipts"
-
 #endif /* BFHeader_h */

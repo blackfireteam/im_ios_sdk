@@ -29,6 +29,8 @@ CF_EXTERN_C_BEGIN
 
 @class ChatItem;
 @class ChatR;
+@class GetProfile;
+@class Profile;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -47,25 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
 GPB_FINAL @interface ChatProtobufRoot : GPBRootObject
 @end
 
-#pragma mark - ImToken
-
-typedef GPB_ENUM(ImToken_FieldNumber) {
-  ImToken_FieldNumber_Sign = 1,
-  ImToken_FieldNumber_Token = 2,
-};
-
-/**
- * 0
- **/
-GPB_FINAL @interface ImToken : GPBMessage
-
-@property(nonatomic, readwrite) int64_t sign;
-
-/** 设置token */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *token;
-
-@end
-
 #pragma mark - Ping
 
 typedef GPB_ENUM(Ping_FieldNumber) {
@@ -73,11 +56,45 @@ typedef GPB_ENUM(Ping_FieldNumber) {
 };
 
 /**
- * 1
+ * 0
  **/
 GPB_FINAL @interface Ping : GPBMessage
 
 @property(nonatomic, readwrite) int64_t type;
+
+@end
+
+#pragma mark - ImLogin
+
+typedef GPB_ENUM(ImLogin_FieldNumber) {
+  ImLogin_FieldNumber_Sign = 1,
+  ImLogin_FieldNumber_Token = 2,
+};
+
+/**
+ * 1
+ **/
+GPB_FINAL @interface ImLogin : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+/** 从应用方获取的imtoken */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *token;
+
+@end
+
+#pragma mark - ImLogout
+
+typedef GPB_ENUM(ImLogout_FieldNumber) {
+  ImLogout_FieldNumber_Sign = 1,
+};
+
+/**
+ * 2
+ **/
+GPB_FINAL @interface ImLogout : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
 
 @end
 
@@ -92,7 +109,7 @@ typedef GPB_ENUM(Result_FieldNumber) {
 };
 
 /**
- * 2
+ * 3
  **/
 GPB_FINAL @interface Result : GPBMessage
 
@@ -103,7 +120,7 @@ GPB_FINAL @interface Result : GPBMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *msg;
 
-/** 当前服务器时间戳 */
+/** 当前服务器时间戳(精确到秒) */
 @property(nonatomic, readwrite) int64_t nowTime;
 
 /** 鉴权时返回的uid */
@@ -117,13 +134,19 @@ typedef GPB_ENUM(ChatS_FieldNumber) {
   ChatS_FieldNumber_Sign = 1,
   ChatS_FieldNumber_Type = 2,
   ChatS_FieldNumber_ToUid = 3,
-  ChatS_FieldNumber_Body = 4,
-  ChatS_FieldNumber_Width = 5,
-  ChatS_FieldNumber_Height = 6,
+  ChatS_FieldNumber_Title = 4,
+  ChatS_FieldNumber_Body = 5,
+  ChatS_FieldNumber_Thumb = 6,
+  ChatS_FieldNumber_Width = 7,
+  ChatS_FieldNumber_Height = 8,
+  ChatS_FieldNumber_Duration = 9,
+  ChatS_FieldNumber_Lat = 10,
+  ChatS_FieldNumber_Lng = 11,
+  ChatS_FieldNumber_Zoom = 12,
 };
 
 /**
- * 3
+ * 4
  **/
 GPB_FINAL @interface ChatS : GPBMessage
 
@@ -137,13 +160,31 @@ GPB_FINAL @interface ChatS : GPBMessage
 @property(nonatomic, readwrite) int64_t toUid;
 
 /** 消息内容 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *title;
+
+/** 消息内容 */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *body;
 
-/** 图片的宽度 */
+/** 封面图 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *thumb;
+
+/** 封面图的宽度 */
 @property(nonatomic, readwrite) int64_t width;
 
-/** 图片的高度 */
+/** 封面图的高度 */
 @property(nonatomic, readwrite) int64_t height;
+
+/** 时长 */
+@property(nonatomic, readwrite) int64_t duration;
+
+/** 纬度 */
+@property(nonatomic, readwrite) double lat;
+
+/** 经度 */
+@property(nonatomic, readwrite) double lng;
+
+/** 地图缩放层级 */
+@property(nonatomic, readwrite) int64_t zoom;
 
 @end
 
@@ -155,7 +196,7 @@ typedef GPB_ENUM(ChatSR_FieldNumber) {
 };
 
 /**
- * 4
+ * 5
  **/
 GPB_FINAL @interface ChatSR : GPBMessage
 
@@ -170,50 +211,93 @@ GPB_FINAL @interface ChatSR : GPBMessage
 #pragma mark - ChatR
 
 typedef GPB_ENUM(ChatR_FieldNumber) {
-  ChatR_FieldNumber_MsgId = 1,
+  ChatR_FieldNumber_Sign = 1,
   ChatR_FieldNumber_FromUid = 2,
-  ChatR_FieldNumber_Type = 3,
-  ChatR_FieldNumber_Body = 4,
-  ChatR_FieldNumber_Width = 5,
-  ChatR_FieldNumber_Height = 6,
-};
-
-/**
- * 5
- **/
-GPB_FINAL @interface ChatR : GPBMessage
-
-/** 消息id */
-@property(nonatomic, readwrite) int64_t msgId;
-
-/** 谁发的 */
-@property(nonatomic, readwrite) int64_t fromUid;
-
-/** 消息类型 */
-@property(nonatomic, readwrite) int64_t type;
-
-/** 消息内容 */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *body;
-
-/** 图片的宽度 */
-@property(nonatomic, readwrite) int64_t width;
-
-/** 图片的高度 */
-@property(nonatomic, readwrite) int64_t height;
-
-@end
-
-#pragma mark - ChatRbatch
-
-typedef GPB_ENUM(ChatRbatch_FieldNumber) {
-  ChatRbatch_FieldNumber_Sign = 1,
-  ChatRbatch_FieldNumber_MsgsArray = 2,
+  ChatR_FieldNumber_ToUid = 3,
+  ChatR_FieldNumber_MsgId = 4,
+  ChatR_FieldNumber_MsgTime = 5,
+  ChatR_FieldNumber_Sput = 6,
+  ChatR_FieldNumber_NewMsg = 7,
+  ChatR_FieldNumber_Type = 8,
+  ChatR_FieldNumber_Title = 9,
+  ChatR_FieldNumber_Body = 10,
+  ChatR_FieldNumber_Thumb = 11,
+  ChatR_FieldNumber_Width = 12,
+  ChatR_FieldNumber_Height = 13,
+  ChatR_FieldNumber_Duration = 14,
+  ChatR_FieldNumber_Lat = 15,
+  ChatR_FieldNumber_Lng = 16,
+  ChatR_FieldNumber_Zoom = 17,
 };
 
 /**
  * 6
  **/
-GPB_FINAL @interface ChatRbatch : GPBMessage
+GPB_FINAL @interface ChatR : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+/** 谁发的 */
+@property(nonatomic, readwrite) int64_t fromUid;
+
+/** 发给谁 */
+@property(nonatomic, readwrite) int64_t toUid;
+
+/** 消息id */
+@property(nonatomic, readwrite) int64_t msgId;
+
+/** 消息时间（以服务器为准 精确到百万分之一秒的时间戳） */
+@property(nonatomic, readwrite) int64_t msgTime;
+
+/** sender_profile_update_time 发送人的profile更新时间（精确到秒的时间戳） */
+@property(nonatomic, readwrite) int64_t sput;
+
+/** 是否显示 new message */
+@property(nonatomic, readwrite) BOOL newMsg;
+
+/** 消息类型 */
+@property(nonatomic, readwrite) int64_t type;
+
+/** 消息内容 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *title;
+
+/** 消息内容 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *body;
+
+/** 封面图 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *thumb;
+
+/** 封面图的宽度 */
+@property(nonatomic, readwrite) int64_t width;
+
+/** 封面图的高度 */
+@property(nonatomic, readwrite) int64_t height;
+
+/** 时长 */
+@property(nonatomic, readwrite) int64_t duration;
+
+/** 纬度 */
+@property(nonatomic, readwrite) double lat;
+
+/** 经度 */
+@property(nonatomic, readwrite) double lng;
+
+/** 地图缩放层级 */
+@property(nonatomic, readwrite) int64_t zoom;
+
+@end
+
+#pragma mark - ChatRBatch
+
+typedef GPB_ENUM(ChatRBatch_FieldNumber) {
+  ChatRBatch_FieldNumber_Sign = 1,
+  ChatRBatch_FieldNumber_MsgsArray = 2,
+};
+
+/**
+ * 7
+ **/
+GPB_FINAL @interface ChatRBatch : GPBMessage
 
 /** 信息标示，原路返回 */
 @property(nonatomic, readwrite) int64_t sign;
@@ -229,12 +313,14 @@ GPB_FINAL @interface ChatRbatch : GPBMessage
 typedef GPB_ENUM(GetHistory_FieldNumber) {
   GetHistory_FieldNumber_Sign = 1,
   GetHistory_FieldNumber_ToUid = 2,
-  GetHistory_FieldNumber_MsgId = 3,
-  GetHistory_FieldNumber_Offset = 4,
+  GetHistory_FieldNumber_MsgEnd = 3,
+  GetHistory_FieldNumber_MsgStart = 4,
+  GetHistory_FieldNumber_Offset = 5,
 };
 
 /**
- * 7
+ * 8 拉取历史消息，只能按时间倒序拉取，服务器会返回offset条，或者到msg_start为止
+ * msg_end  msg_start 是客户端两个连续的block中间缺失的部分
  **/
 GPB_FINAL @interface GetHistory : GPBMessage
 
@@ -244,8 +330,11 @@ GPB_FINAL @interface GetHistory : GPBMessage
 /** 和谁的聊天记录 */
 @property(nonatomic, readwrite) int64_t toUid;
 
-/** msg id 指针 */
-@property(nonatomic, readwrite) int64_t msgId;
+/** 从这条消息往前拉（不包括此条） */
+@property(nonatomic, readwrite) int64_t msgEnd;
+
+/** 最多拉到这条（不包括此条） */
+@property(nonatomic, readwrite) int64_t msgStart;
 
 /** 拉多少条，默认20，最多100 */
 @property(nonatomic, readwrite) int64_t offset;
@@ -261,7 +350,7 @@ typedef GPB_ENUM(Revoke_FieldNumber) {
 };
 
 /**
- * 8
+ * 9
  **/
 GPB_FINAL @interface Revoke : GPBMessage
 
@@ -285,7 +374,7 @@ typedef GPB_ENUM(MsgRead_FieldNumber) {
 };
 
 /**
- * 9
+ * 10
  **/
 GPB_FINAL @interface MsgRead : GPBMessage
 
@@ -303,24 +392,31 @@ GPB_FINAL @interface MsgRead : GPBMessage
 #pragma mark - LastReadMsg
 
 typedef GPB_ENUM(LastReadMsg_FieldNumber) {
-  LastReadMsg_FieldNumber_FromUid = 1,
-  LastReadMsg_FieldNumber_MsgId = 2,
-  LastReadMsg_FieldNumber_Unread = 3,
+  LastReadMsg_FieldNumber_Sign = 1,
+  LastReadMsg_FieldNumber_FromUid = 2,
+  LastReadMsg_FieldNumber_MsgId = 3,
+  LastReadMsg_FieldNumber_Unread = 4,
+  LastReadMsg_FieldNumber_UpdateTime = 5,
 };
 
 /**
- * 10 消息已读状态发生变更通知（客户端收到这个才去变更）
+ * 11 消息已读状态发生变更通知（客户端收到这个才去变更）
  **/
 GPB_FINAL @interface LastReadMsg : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
 
 /** 谁的会话 */
 @property(nonatomic, readwrite) int64_t fromUid;
 
-/** 最后一条已读消息 */
+/** 我发给对方的消息中，最后一条已读消息（被动通知 会有这个） */
 @property(nonatomic, readwrite) int64_t msgId;
 
-/** 还有多少条未读消息 */
+/** 对方发给我的消息中，还有多少条未读消息（主动调用MsgRead 一方会收到这个） */
 @property(nonatomic, readwrite) int64_t unread;
+
+/** 服务器收到已读回执的时间，用于标记会话列表的最后一次变动时间（精确到百万分之一秒的时间戳） */
+@property(nonatomic, readwrite) int64_t updateTime;
 
 @end
 
@@ -329,10 +425,11 @@ GPB_FINAL @interface LastReadMsg : GPBMessage
 typedef GPB_ENUM(DelChat_FieldNumber) {
   DelChat_FieldNumber_Sign = 1,
   DelChat_FieldNumber_ToUid = 2,
+  DelChat_FieldNumber_UpdateTime = 3,
 };
 
 /**
- * 11
+ * 12 该proto 既是请求，也是返回，返回时带update_time, 请求时不带update_time
  **/
 GPB_FINAL @interface DelChat : GPBMessage
 
@@ -342,25 +439,28 @@ GPB_FINAL @interface DelChat : GPBMessage
 /** 删除谁的 */
 @property(nonatomic, readwrite) int64_t toUid;
 
+/** 服务器删除会话的时间，用于标记会话列表的最后一次变动时间（精确到百万分之一秒的时间戳） */
+@property(nonatomic, readwrite) int64_t updateTime;
+
 @end
 
 #pragma mark - GetChatList
 
 typedef GPB_ENUM(GetChatList_FieldNumber) {
   GetChatList_FieldNumber_Sign = 1,
-  GetChatList_FieldNumber_MsgId = 2,
+  GetChatList_FieldNumber_UpdateTime = 2,
 };
 
 /**
- * 12
+ * 13
  **/
 GPB_FINAL @interface GetChatList : GPBMessage
 
 /** 客户端自定义标识，服务器会原样返回 */
 @property(nonatomic, readwrite) int64_t sign;
 
-/** 客户端本地保存的会话列表的最新一个会话的msg id */
-@property(nonatomic, readwrite) int64_t msgId;
+/** 客户端本地保存的会话列表的最新一个会话的变动时间（精确到百万分之一秒的时间戳） */
+@property(nonatomic, readwrite) int64_t updateTime;
 
 @end
 
@@ -370,16 +470,21 @@ typedef GPB_ENUM(ChatItem_FieldNumber) {
   ChatItem_FieldNumber_Uid = 1,
   ChatItem_FieldNumber_MsgStart = 2,
   ChatItem_FieldNumber_MsgEnd = 3,
-  ChatItem_FieldNumber_LastMsg = 4,
-  ChatItem_FieldNumber_Unread = 5,
-  ChatItem_FieldNumber_IsNew = 6,
-  ChatItem_FieldNumber_MyMove = 7,
-  ChatItem_FieldNumber_IceBreak = 8,
-  ChatItem_FieldNumber_TipFree = 9,
+  ChatItem_FieldNumber_MsgLastRead = 4,
+  ChatItem_FieldNumber_ShowMsgId = 5,
+  ChatItem_FieldNumber_Unread = 6,
+  ChatItem_FieldNumber_Matched = 7,
+  ChatItem_FieldNumber_NewMsg = 8,
+  ChatItem_FieldNumber_MyMove = 9,
+  ChatItem_FieldNumber_IceBreak = 10,
+  ChatItem_FieldNumber_TipFree = 11,
+  ChatItem_FieldNumber_TopAlbum = 12,
+  ChatItem_FieldNumber_IBlockU = 13,
+  ChatItem_FieldNumber_Connected = 14,
 };
 
 /**
- * 13
+ * 14
  **/
 GPB_FINAL @interface ChatItem : GPBMessage
 
@@ -389,11 +494,15 @@ GPB_FINAL @interface ChatItem : GPBMessage
 
 @property(nonatomic, readwrite) int64_t msgEnd;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *lastMsg;
+@property(nonatomic, readwrite) int64_t msgLastRead;
+
+@property(nonatomic, readwrite) int64_t showMsgId;
 
 @property(nonatomic, readwrite) int64_t unread;
 
-@property(nonatomic, readwrite) BOOL isNew;
+@property(nonatomic, readwrite) BOOL matched;
+
+@property(nonatomic, readwrite) BOOL newMsg;
 
 @property(nonatomic, readwrite) BOOL myMove;
 
@@ -401,22 +510,211 @@ GPB_FINAL @interface ChatItem : GPBMessage
 
 @property(nonatomic, readwrite) BOOL tipFree;
 
+@property(nonatomic, readwrite) BOOL topAlbum;
+
+@property(nonatomic, readwrite) BOOL iBlockU;
+
+/** 双方互发过消息了 */
+@property(nonatomic, readwrite) BOOL connected;
+
 @end
 
 #pragma mark - ChatList
 
 typedef GPB_ENUM(ChatList_FieldNumber) {
   ChatList_FieldNumber_ChatItemsArray = 1,
+  ChatList_FieldNumber_UpdateTime = 2,
 };
 
 /**
- * 14
+ * 15
  **/
 GPB_FINAL @interface ChatList : GPBMessage
 
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<ChatItem*> *chatItemsArray;
 /** The number of items in @c chatItemsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger chatItemsArray_Count;
+
+/** 有该值说明 会话列表发送完毕，且会话列表中的最新更新时间会是这个值（精确到百万分之一秒的时间戳） */
+@property(nonatomic, readwrite) int64_t updateTime;
+
+@end
+
+#pragma mark - GetProfile
+
+typedef GPB_ENUM(GetProfile_FieldNumber) {
+  GetProfile_FieldNumber_Sign = 1,
+  GetProfile_FieldNumber_Uid = 2,
+  GetProfile_FieldNumber_UpdateTime = 3,
+};
+
+/**
+ * 16
+ **/
+GPB_FINAL @interface GetProfile : GPBMessage
+
+/** 信息标示，原路返回 */
+@property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite) int64_t uid;
+
+/** profile的更新时间 精确到秒的时间戳 */
+@property(nonatomic, readwrite) int64_t updateTime;
+
+@end
+
+#pragma mark - GetProfiles
+
+typedef GPB_ENUM(GetProfiles_FieldNumber) {
+  GetProfiles_FieldNumber_Sign = 1,
+  GetProfiles_FieldNumber_GetProfilesArray = 2,
+};
+
+/**
+ * 17
+ **/
+GPB_FINAL @interface GetProfiles : GPBMessage
+
+/** 信息标示，原路返回 */
+@property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<GetProfile*> *getProfilesArray;
+/** The number of items in @c getProfilesArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger getProfilesArray_Count;
+
+@end
+
+#pragma mark - Profile
+
+typedef GPB_ENUM(Profile_FieldNumber) {
+  Profile_FieldNumber_Sign = 1,
+  Profile_FieldNumber_Uid = 2,
+  Profile_FieldNumber_UpdateTime = 3,
+  Profile_FieldNumber_NickName = 4,
+  Profile_FieldNumber_Avatar = 5,
+  Profile_FieldNumber_Gold = 6,
+  Profile_FieldNumber_Verified = 7,
+};
+
+/**
+ * 18
+ **/
+GPB_FINAL @interface Profile : GPBMessage
+
+/** 信息标示，原路返回 */
+@property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite) int64_t uid;
+
+/** profile的更新时间 精确到秒的时间戳 */
+@property(nonatomic, readwrite) int64_t updateTime;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *nickName;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *avatar;
+
+@property(nonatomic, readwrite) BOOL gold;
+
+@property(nonatomic, readwrite) BOOL verified;
+
+@end
+
+#pragma mark - ProfileList
+
+typedef GPB_ENUM(ProfileList_FieldNumber) {
+  ProfileList_FieldNumber_ProfilesArray = 1,
+};
+
+/**
+ * 19
+ **/
+GPB_FINAL @interface ProfileList : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<Profile*> *profilesArray;
+/** The number of items in @c profilesArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger profilesArray_Count;
+
+@end
+
+#pragma mark - BlockU
+
+typedef GPB_ENUM(BlockU_FieldNumber) {
+  BlockU_FieldNumber_ToUid = 1,
+};
+
+/**
+ * 20
+ **/
+GPB_FINAL @interface BlockU : GPBMessage
+
+/** block谁 */
+@property(nonatomic, readwrite) int64_t toUid;
+
+@end
+
+#pragma mark - UnblockU
+
+typedef GPB_ENUM(UnblockU_FieldNumber) {
+  UnblockU_FieldNumber_ToUid = 1,
+};
+
+/**
+ * 21
+ **/
+GPB_FINAL @interface UnblockU : GPBMessage
+
+/** unblock谁 */
+@property(nonatomic, readwrite) int64_t toUid;
+
+@end
+
+#pragma mark - GetChatListOnlineUids
+
+typedef GPB_ENUM(GetChatListOnlineUids_FieldNumber) {
+  GetChatListOnlineUids_FieldNumber_Sign = 1,
+};
+
+/**
+ * 22
+ **/
+GPB_FINAL @interface GetChatListOnlineUids : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+@end
+
+#pragma mark - OnlineUids
+
+typedef GPB_ENUM(OnlineUids_FieldNumber) {
+  OnlineUids_FieldNumber_UidsArray = 2,
+};
+
+/**
+ * 23
+ **/
+GPB_FINAL @interface OnlineUids : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) GPBInt64Array *uidsArray;
+/** The number of items in @c uidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger uidsArray_Count;
+
+@end
+
+#pragma mark - IsOnline
+
+typedef GPB_ENUM(IsOnline_FieldNumber) {
+  IsOnline_FieldNumber_Sign = 1,
+  IsOnline_FieldNumber_Uid = 2,
+};
+
+/**
+ * 24
+ **/
+GPB_FINAL @interface IsOnline : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite) int64_t uid;
 
 @end
 
