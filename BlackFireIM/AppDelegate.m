@@ -6,7 +6,8 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "BFTabBarController.h"
+
 
 @interface AppDelegate ()
 
@@ -21,7 +22,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    self.window.rootViewController = [[ViewController alloc] init];
+    self.window.rootViewController = [[BFTabBarController alloc] init];
     return YES;
 }
 

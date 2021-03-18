@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///能用数据库
 + (NSString *)pathDBCommon;
 
+///聊天图片保存地址
++ (NSString *)pathForIMImage;
+
 @end
 
 NS_ASSUME_NONNULL_END

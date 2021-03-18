@@ -86,6 +86,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)onProfileUpdate:(MSProfileInfo *)info;
 
+
+- (void)ms_uploadImage:(NSString *)path
+              progress:(void(^)(CGFloat))progress
+               success:(void(^)(NSString *))success
+                failed:(void(^)(NSError *))failed;
+
 @end
 
 

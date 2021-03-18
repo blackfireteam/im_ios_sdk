@@ -22,7 +22,7 @@ typedef void (^BFIMMessageListSucc)(NSArray<MSIMElem *> * msgs,BOOL isFinished);
 //                         创建和发送文本、图片等消息接口
 //
 /////////////////////////////////////////////////////////////////////////////////
-/** 创建文本消息*/
+/** 创建文本消息 文本最大支持 8k*/
 - (MSIMTextElem *)createTextMessage:(NSString *)text;
 
 /** 创建图片消息（图片文件最大支持 28 MB）

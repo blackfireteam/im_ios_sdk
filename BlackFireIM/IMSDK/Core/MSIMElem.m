@@ -55,6 +55,15 @@
     return elem;
 }
 
+- (NSString *)displayStr
+{
+    if (self.text.length > 100) {
+        return [self.text substringToIndex:100];
+    }else {
+        return self.text;
+    }
+}
+
 @end
 
 @implementation MSIMImageElem
@@ -68,12 +77,18 @@
 {
     MSIMImageElem *elem = [[[self class] allocWithZone:zone]init];
     elem.url = self.url;
+    elem.image = self.image;
     elem.path = self.path;
     elem.width = self.width;
     elem.height = self.height;
     elem.size = self.size;
     elem.uuid = self.uuid;
     return elem;
+}
+
+- (NSString *)displayStr
+{
+    return @"[图片]";
 }
 
 @end

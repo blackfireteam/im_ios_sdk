@@ -152,13 +152,6 @@
 {
 }
 
-- (void)scrollToBottom:(BOOL)animate
-{
-    if (_uiMsgs.count > 0) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_uiMsgs.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animate];
-    }
-}
-
 - (void)didTapViewController
 {
  

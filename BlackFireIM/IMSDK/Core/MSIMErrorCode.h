@@ -36,7 +36,9 @@ enum ERROR_CODE {
     
     ERR_USER_SEND_EMPTY                         = 9001,    ///< 用户待发送的消息内容为空
     ERR_USER_PARAMS_ERROR                       = 9002,    ///< 参数异常
-    
+    ERR_IM_TEXT_MAX_ERROR                       = 9003,    ///< 文本消息长度超过限制
+    ERR_IM_IMAGE_TYPE_ERROR                     = 9004,    ///<图片类型不支持
+    ERR_IM_IMAGE_MAX_ERROR                      = 9005,    ///<图片大小超过限制
 };
 
 #endif /* MSIMErrorCode_h */

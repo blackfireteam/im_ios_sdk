@@ -5,7 +5,7 @@
 //  Created by benny wang on 2021/2/26.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "MSIMConst.h"
 
 
@@ -43,6 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)partner_id;
 
+/** 在会话列表中显示的文字*/
+@property(nonatomic,copy,readonly) NSString *displayStr;
+
+
 @end
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +77,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) NSInteger height;
 /** 下载URL*/
 @property(nonatomic,copy) NSString *url;
-/** 待发送的图片本地路径*/
+/** 待发送的图片*/
+@property(nonatomic,strong) UIImage *image;
+/** 保存在沙盒中的相对地址*/
 @property(nonatomic,copy) NSString *path;
 
 @end

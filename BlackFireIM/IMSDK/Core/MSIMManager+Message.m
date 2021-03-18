@@ -8,6 +8,9 @@
 #import "MSIMManager+Message.h"
 #import "MSIMTools.h"
 #import "MSIMErrorCode.h"
+#import "MSDBImageFileStore.h"
+#import "NSString+Ext.h"
+#import "NSFileManager+filePath.h"
 
 
 @implementation MSIMManager (Message)
@@ -20,7 +23,7 @@
     elem.type = BFIM_MSG_TYPE_TEXT;
     elem.fromUid = [MSIMTools sharedInstance].user_id;
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
+    elem.readStatus = BFIM_MSG_STATUS_READ;
     elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     return elem;
 }
@@ -33,7 +36,7 @@
     elem.type = BFIM_MSG_TYPE_IMAGE;
     elem.fromUid = [MSIMTools sharedInstance].user_id;
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
+    elem.readStatus = BFIM_MSG_STATUS_READ;
     elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     return elem;
 }
@@ -78,9 +81,15 @@
         failed(ERR_USER_PARAMS_ERROR,@"文本消息内容为空");
         return;
     }
+    if ([elem.text dataUsingEncoding:NSUTF8StringEncoding].length > 8 * 1024) {
+        failed(ERR_IM_TEXT_MAX_ERROR,@"文本消息大小最大支持8k");
+        return;
+    }
     //先写入数据库
     BOOL isOK = [self.messageStore addMessage:elem];
     if (isOK) {
+        [self.listener onNewMessages:@[elem]];
+        
         ChatS *chats = [[ChatS alloc]init];
         chats.sign = elem.msg_sign;
         chats.type = elem.type;
@@ -110,38 +119,106 @@
 /// @param failed 发送失败
 - (void)sendImageMessage:(MSIMImageElem *)elem
                successed:(void(^)(NSInteger msg_id))success
-                  failed:(void(^)(NSInteger code,NSString *errorString))failed;
+                  failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
-    if (elem.url.length == 0) {
-        failed(ERR_USER_PARAMS_ERROR,@"图片消息Url为空");
+    if (elem.url.length == 0 || ![elem.url hasPrefix:@"http"]) {
+        if (elem.uuid.length > 0) {
+            MSDBImageFileStore *store = [[MSDBImageFileStore alloc]init];
+            MSImageInfo *imageInfo = [store searchRecord:elem.uuid];
+            if ([imageInfo.url hasPrefix:@"http"]) {
+                elem.url = imageInfo.url;
+                [self.listener onNewMessages:@[elem]];
+                [self.messageStore addMessage:elem];
+                [self sendImageMessageByTCP:elem successed:success failed:failed];
+            }else {
+                [self uploadImage:elem successed:success failed:failed];
+            }
+        }else {
+            [self uploadImage:elem successed:success failed:failed];
+        }
         return;
     }
-    //先写入数据库
-    BOOL isOK = [self.messageStore addMessage:elem];
-    if (isOK) {
-        ChatS *chats = [[ChatS alloc]init];
-        chats.sign = elem.msg_sign;
-        chats.type = elem.type;
-        chats.body = elem.url;
-        chats.toUid = elem.toUid.integerValue;
-        chats.width = elem.width;
-        chats.height = elem.height;
-        WS(weakSelf)
-        [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-            STRONG_SELF(strongSelf)
-            if (code == 0) {
-                ChatSR *result = response;
-                [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC partnerID:elem.toUid];
-                success(result.msgId);
-            }else {
-                NSLog(@"发送失败");
-                failed(code,error);
-                [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL partnerID:elem.toUid];
-            }
-        }];
+    [self.listener onNewMessages:@[elem]];
+    [self.messageStore addMessage:elem];
+    [self sendImageMessageByTCP:elem successed:success failed:failed];
+}
+
+- (void)uploadImage:(MSIMImageElem *)elem
+          successed:(void(^)(NSInteger msg_id))success
+             failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    if (elem.path == nil || ![[NSFileManager defaultManager]fileExistsAtPath:elem.path]) {
+        failed(ERR_USER_PARAMS_ERROR,@"图片资源不存在");
     }else {
-        failed(ERR_SDK_DB_WRITE_FAIL,@"数据库写入失败");
+        //先压缩
+        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:elem.path]];
+        if (imageData == nil) {
+            failed(ERR_USER_PARAMS_ERROR,@"图片资源不存在");
+            return;
+        }
+        [self.listener onNewMessages:@[elem]];
+        [self.messageStore addMessage:elem];
+        NSString *imageExt = [NSString contentTypeForImageData:imageData];
+        if ([imageExt isEqualToString:@"png"] || [imageExt isEqualToString:@"jpeg"]) {
+            UIImage *image = [UIImage imageWithData:imageData];
+            if (image.size.width > 1920 || image.size.height > 1920) {
+                CGFloat aspectRadio = MIN(1920/image.size.width, 1920/image.size.height);
+                CGFloat aspectWidth = image.size.width * aspectRadio;
+                CGFloat aspectHeight = image.size.height * aspectRadio;
+                
+                UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
+                [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
+                image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                
+                NSString *savePath = [[NSFileManager pathForIMImage] stringByAppendingPathComponent:[elem.path pathExtension]];
+                [[NSFileManager defaultManager] createFileAtPath:savePath contents:imageData attributes:nil];
+                elem.path = savePath;
+                
+                if (self.listener && [self.listener respondsToSelector:@selector(uploadImage:successed:failed:)]) {
+                    self.listener ms_uploadImage:<#(nonnull NSString *)#> progress:<#^(CGFloat)progress#> success:<#^(NSString * _Nonnull)success#> failed:<#^(NSError * _Nonnull)failed#>
+                }
+                //再上传
+            }else {
+                //再上传
+            }
+        }else if ([imageExt isEqualToString:@"gif"]) {
+            if (imageData.length > 28*1024*1028) {
+                failed(ERR_IM_IMAGE_MAX_ERROR,@"图片大小超过限制");
+                return;
+            }
+            //再上传
+        }else {
+            failed(ERR_IM_IMAGE_TYPE_ERROR,@"图片类型不支持");
+            return;
+        }
     }
+}
+
+- (void)sendImageMessageByTCP:(MSIMImageElem *)elem
+                    successed:(void(^)(NSInteger msg_id))success
+                       failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    ChatS *chats = [[ChatS alloc]init];
+    chats.sign = elem.msg_sign;
+    chats.type = elem.type;
+    chats.body = elem.url;
+    chats.toUid = elem.toUid.integerValue;
+    chats.width = elem.width;
+    chats.height = elem.height;
+    WS(weakSelf)
+    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+        STRONG_SELF(strongSelf)
+        if (code == 0) {
+            ChatSR *result = response;
+            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC partnerID:elem.toUid];
+            success(result.msgId);
+        }else {
+            NSLog(@"发送失败");
+            failed(code,error);
+            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL partnerID:elem.toUid];
+        }
+    }];
 }
 
 /// 请求撤回某一条消息

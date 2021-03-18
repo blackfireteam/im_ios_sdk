@@ -36,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///最后一条标记为已读的消息id
 @property(nonatomic,assign) NSInteger msg_last_read;
 
+///显示的时间
+@property(nonatomic,assign) NSInteger time;
+
 ///未读数
 @property(nonatomic,assign) NSInteger unread_count;
 

@@ -89,9 +89,18 @@ typedef NS_ENUM(NSInteger ,BFIMMessageType){
     BFIM_MSG_TYPE_NULL = 999,//空消息，用于占位
 };
 
+/** 网络连接状态*/
+typedef NS_ENUM(NSUInteger, BFIMNetStatus) {
+    IMNET_STATUS_SUCC,   //连接成功
+    IMNET_STATUS_CONNECTING,  //正在连接
+    IMNET_STATUS_CONNFAILED,  //连接失败
+    IMNET_STATUS_DISCONNECT,  //断开连接
+};
+
 #define BFIMNotification_onRecvNewMessage @"BFIMNotification_onRecvNewMessage"
 #define BFIMNotification_MessageRevoke @"BFIMNotification_MessageRevoke"
 #define TUIKitNotification_onRecvMessageReceipts @"TUIKitNotification_onRecvMessageReceipts"
+#define TUIKitNotification_TIMConnListener @"TUIKitNotification_TIMConnListener"
 
 
 #endif /* MSIMConst_h */

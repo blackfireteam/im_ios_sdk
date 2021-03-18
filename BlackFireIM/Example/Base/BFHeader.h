@@ -117,4 +117,12 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TController_Background_Color RGBA(237, 237, 237, 1.0)
 #define TController_Background_Color_Dark RGBA(25, 25, 25, 1.0)
 
+// cell commom color
+#define TCell_Nomal [UIColor whiteColor]
+#define TCell_Nomal_Dark RGB(35, 35, 35)
+#define TCell_Touched RGB(219, 219, 219)
+#define TCell_Touched_Dark RGB(47, 47, 47)
+#define TCell_OnTop RGB(247, 247, 247)
+#define TCell_OnTop_Dark RGB(47, 47, 47)
+
 #endif /* BFHeader_h */

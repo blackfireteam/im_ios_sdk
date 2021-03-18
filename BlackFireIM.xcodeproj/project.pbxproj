@@ -60,6 +60,17 @@
 		F05671E125F21C1100782F9C /* BFImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F05671E025F21C1100782F9C /* BFImageMessageCell.m */; };
 		F05836172601FAC20008C4FD /* BFChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836162601FAC20008C4FD /* BFChatViewController.m */; };
 		F058361D260203680008C4FD /* BFTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F058361C260203680008C4FD /* BFTabBarController.m */; };
+		F05836232602E20D0008C4FD /* BFConversationListController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836222602E20D0008C4FD /* BFConversationListController.m */; };
+		F05836292602E21F0008C4FD /* BFContactController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836282602E21F0008C4FD /* BFContactController.m */; };
+		F058362F2602E22D0008C4FD /* BFProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F058362E2602E22D0008C4FD /* BFProfileViewController.m */; };
+		F05836352602E38E0008C4FD /* BFNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836342602E38E0008C4FD /* BFNavigationController.m */; };
+		F058365C2602EE810008C4FD /* BFNaviBarIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F058365B2602EE810008C4FD /* BFNaviBarIndicatorView.m */; };
+		F05836652602F6810008C4FD /* BFConversationListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836642602F6810008C4FD /* BFConversationListCell.m */; };
+		F058366B2602F71B0008C4FD /* BFUnreadView.m in Sources */ = {isa = PBXBuildFile; fileRef = F058366A2602F71B0008C4FD /* BFUnreadView.m */; };
+		F05836712602FB300008C4FD /* NSDate+MSKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836702602FB300008C4FD /* NSDate+MSKit.m */; };
+		F058367A2602FD950008C4FD /* BFConversationCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836792602FD950008C4FD /* BFConversationCellData.m */; };
+		F0583681260303600008C4FD /* BFConversationListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F0583680260303600008C4FD /* BFConversationListViewModel.m */; };
+		F058369A26033D0E0008C4FD /* MSDBImageFileStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F058369926033D0E0008C4FD /* MSDBImageFileStore.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +202,29 @@
 		F05836162601FAC20008C4FD /* BFChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFChatViewController.m; sourceTree = "<group>"; };
 		F058361B260203680008C4FD /* BFTabBarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFTabBarController.h; sourceTree = "<group>"; };
 		F058361C260203680008C4FD /* BFTabBarController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFTabBarController.m; sourceTree = "<group>"; };
+		F05836212602E20D0008C4FD /* BFConversationListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFConversationListController.h; sourceTree = "<group>"; };
+		F05836222602E20D0008C4FD /* BFConversationListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFConversationListController.m; sourceTree = "<group>"; };
+		F05836272602E21F0008C4FD /* BFContactController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFContactController.h; sourceTree = "<group>"; };
+		F05836282602E21F0008C4FD /* BFContactController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFContactController.m; sourceTree = "<group>"; };
+		F058362D2602E22D0008C4FD /* BFProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFProfileViewController.h; sourceTree = "<group>"; };
+		F058362E2602E22D0008C4FD /* BFProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFProfileViewController.m; sourceTree = "<group>"; };
+		F05836332602E38E0008C4FD /* BFNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFNavigationController.h; sourceTree = "<group>"; };
+		F05836342602E38E0008C4FD /* BFNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFNavigationController.m; sourceTree = "<group>"; };
+		F05836532602ECDB0008C4FD /* MSIMSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSIMSDK.h; sourceTree = "<group>"; };
+		F058365A2602EE810008C4FD /* BFNaviBarIndicatorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFNaviBarIndicatorView.h; sourceTree = "<group>"; };
+		F058365B2602EE810008C4FD /* BFNaviBarIndicatorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFNaviBarIndicatorView.m; sourceTree = "<group>"; };
+		F05836632602F6810008C4FD /* BFConversationListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFConversationListCell.h; sourceTree = "<group>"; };
+		F05836642602F6810008C4FD /* BFConversationListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFConversationListCell.m; sourceTree = "<group>"; };
+		F05836692602F71B0008C4FD /* BFUnreadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUnreadView.h; sourceTree = "<group>"; };
+		F058366A2602F71B0008C4FD /* BFUnreadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUnreadView.m; sourceTree = "<group>"; };
+		F058366F2602FB300008C4FD /* NSDate+MSKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+MSKit.h"; sourceTree = "<group>"; };
+		F05836702602FB300008C4FD /* NSDate+MSKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+MSKit.m"; sourceTree = "<group>"; };
+		F05836782602FD950008C4FD /* BFConversationCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFConversationCellData.h; sourceTree = "<group>"; };
+		F05836792602FD950008C4FD /* BFConversationCellData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFConversationCellData.m; sourceTree = "<group>"; };
+		F058367F260303600008C4FD /* BFConversationListViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFConversationListViewModel.h; sourceTree = "<group>"; };
+		F0583680260303600008C4FD /* BFConversationListViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFConversationListViewModel.m; sourceTree = "<group>"; };
+		F058369826033D0E0008C4FD /* MSDBImageFileStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSDBImageFileStore.h; sourceTree = "<group>"; };
+		F058369926033D0E0008C4FD /* MSDBImageFileStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSDBImageFileStore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -363,6 +397,8 @@
 				F056711A25EF694A00782F9C /* MSDBConversationStore.m */,
 				F036362625FEF7DD00E69D14 /* MSDBProfileStore.h */,
 				F036362725FEF7DD00E69D14 /* MSDBProfileStore.m */,
+				F058369826033D0E0008C4FD /* MSDBImageFileStore.h */,
+				F058369926033D0E0008C4FD /* MSDBImageFileStore.m */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -374,6 +410,7 @@
 				F052EC7B25ECD2B800F35D74 /* Core */,
 				F052EC7C25ECD2D100F35D74 /* Database */,
 				F011D61025E755ED0061F9D6 /* Category */,
+				F05836532602ECDB0008C4FD /* MSIMSDK.h */,
 			);
 			path = IMSDK;
 			sourceTree = "<group>";
@@ -381,47 +418,13 @@
 		F056712525EF916800782F9C /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				F056719D25F1BC4300782F9C /* Model */,
+				F058368526032A5E0008C4FD /* ChatDetail */,
+				F05836572602EE4E0008C4FD /* Conversation */,
+				F05836392602E6040008C4FD /* Super */,
 				F056714B25F07AE400782F9C /* Resource */,
 				F056713A25F076F900782F9C /* Base */,
-				F056712725EF917E00782F9C /* View */,
-				F056712625EF917700782F9C /* Controller */,
 			);
 			path = Example;
-			sourceTree = "<group>";
-		};
-		F056712625EF917700782F9C /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				F056718225F0A7AE00782F9C /* BFInputViewController.h */,
-				F056718325F0A7AE00782F9C /* BFInputViewController.m */,
-				F056718825F0ACC600782F9C /* BFMessageController.h */,
-				F056718925F0ACC600782F9C /* BFMessageController.m */,
-				F05836152601FAC20008C4FD /* BFChatViewController.h */,
-				F05836162601FAC20008C4FD /* BFChatViewController.m */,
-				F058361B260203680008C4FD /* BFTabBarController.h */,
-				F058361C260203680008C4FD /* BFTabBarController.m */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		F056712725EF917E00782F9C /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F056712825EF919600782F9C /* BFInputBarView.h */,
-				F056712925EF919600782F9C /* BFInputBarView.m */,
-				F056713125F06E1000782F9C /* BFResponderTextView.h */,
-				F056713225F06E1000782F9C /* BFResponderTextView.m */,
-				F056719725F0DDF600782F9C /* BFMessageCell.h */,
-				F056719825F0DDF600782F9C /* BFMessageCell.m */,
-				F05671C125F1DD5B00782F9C /* BFBubbleMessageCell.h */,
-				F05671C225F1DD5B00782F9C /* BFBubbleMessageCell.m */,
-				F05671D325F2169E00782F9C /* BFTextMessageCell.h */,
-				F05671D425F2169E00782F9C /* BFTextMessageCell.m */,
-				F05671DF25F21C1100782F9C /* BFImageMessageCell.h */,
-				F05671E025F21C1100782F9C /* BFImageMessageCell.m */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		F056713A25F076F900782F9C /* Base */ = {
@@ -440,6 +443,8 @@
 				F056715F25F07F1600782F9C /* NSBundle+BFKit.m */,
 				F056716425F087D200782F9C /* UIView+BFExtension.h */,
 				F056716525F087D200782F9C /* UIView+BFExtension.m */,
+				F058366F2602FB300008C4FD /* NSDate+MSKit.h */,
+				F05836702602FB300008C4FD /* NSDate+MSKit.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -453,7 +458,107 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
-		F056719D25F1BC4300782F9C /* Model */ = {
+		F05836392602E6040008C4FD /* Super */ = {
+			isa = PBXGroup;
+			children = (
+				F058361B260203680008C4FD /* BFTabBarController.h */,
+				F058361C260203680008C4FD /* BFTabBarController.m */,
+				F05836332602E38E0008C4FD /* BFNavigationController.h */,
+				F05836342602E38E0008C4FD /* BFNavigationController.m */,
+				F05836272602E21F0008C4FD /* BFContactController.h */,
+				F05836282602E21F0008C4FD /* BFContactController.m */,
+				F058362D2602E22D0008C4FD /* BFProfileViewController.h */,
+				F058362E2602E22D0008C4FD /* BFProfileViewController.m */,
+			);
+			path = Super;
+			sourceTree = "<group>";
+		};
+		F05836572602EE4E0008C4FD /* Conversation */ = {
+			isa = PBXGroup;
+			children = (
+				F05836582602EE580008C4FD /* Controller */,
+				F05836592602EE5F0008C4FD /* View */,
+				F058367E260303460008C4FD /* Model */,
+			);
+			path = Conversation;
+			sourceTree = "<group>";
+		};
+		F05836582602EE580008C4FD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F05836212602E20D0008C4FD /* BFConversationListController.h */,
+				F05836222602E20D0008C4FD /* BFConversationListController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F05836592602EE5F0008C4FD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F058365A2602EE810008C4FD /* BFNaviBarIndicatorView.h */,
+				F058365B2602EE810008C4FD /* BFNaviBarIndicatorView.m */,
+				F05836632602F6810008C4FD /* BFConversationListCell.h */,
+				F05836642602F6810008C4FD /* BFConversationListCell.m */,
+				F05836692602F71B0008C4FD /* BFUnreadView.h */,
+				F058366A2602F71B0008C4FD /* BFUnreadView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F058367E260303460008C4FD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F05836782602FD950008C4FD /* BFConversationCellData.h */,
+				F05836792602FD950008C4FD /* BFConversationCellData.m */,
+				F058367F260303600008C4FD /* BFConversationListViewModel.h */,
+				F0583680260303600008C4FD /* BFConversationListViewModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F058368526032A5E0008C4FD /* ChatDetail */ = {
+			isa = PBXGroup;
+			children = (
+				F058368626032A790008C4FD /* Controller */,
+				F058368726032A800008C4FD /* View */,
+				F058368826032A860008C4FD /* Model */,
+			);
+			path = ChatDetail;
+			sourceTree = "<group>";
+		};
+		F058368626032A790008C4FD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F056718225F0A7AE00782F9C /* BFInputViewController.h */,
+				F056718325F0A7AE00782F9C /* BFInputViewController.m */,
+				F056718825F0ACC600782F9C /* BFMessageController.h */,
+				F056718925F0ACC600782F9C /* BFMessageController.m */,
+				F05836152601FAC20008C4FD /* BFChatViewController.h */,
+				F05836162601FAC20008C4FD /* BFChatViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F058368726032A800008C4FD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F056712825EF919600782F9C /* BFInputBarView.h */,
+				F056712925EF919600782F9C /* BFInputBarView.m */,
+				F056713125F06E1000782F9C /* BFResponderTextView.h */,
+				F056713225F06E1000782F9C /* BFResponderTextView.m */,
+				F056719725F0DDF600782F9C /* BFMessageCell.h */,
+				F056719825F0DDF600782F9C /* BFMessageCell.m */,
+				F05671C125F1DD5B00782F9C /* BFBubbleMessageCell.h */,
+				F05671C225F1DD5B00782F9C /* BFBubbleMessageCell.m */,
+				F05671D325F2169E00782F9C /* BFTextMessageCell.h */,
+				F05671D425F2169E00782F9C /* BFTextMessageCell.m */,
+				F05671DF25F21C1100782F9C /* BFImageMessageCell.h */,
+				F05671E025F21C1100782F9C /* BFImageMessageCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F058368826032A860008C4FD /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				F056719E25F1BC6200782F9C /* BFMessageCellData.h */,
@@ -632,8 +737,11 @@
 				F05671BD25F1D8F200782F9C /* UIView+Frame.m in Sources */,
 				F011D58425E736BD0061F9D6 /* ViewController.m in Sources */,
 				F036366226007C3800E69D14 /* MSDBBaseStore.m in Sources */,
+				F05836232602E20D0008C4FD /* BFConversationListController.m in Sources */,
 				F05671D525F2169E00782F9C /* BFTextMessageCell.m in Sources */,
+				F05836712602FB300008C4FD /* NSDate+MSKit.m in Sources */,
 				F011D65425E8C8410061F9D6 /* MSIMTools.m in Sources */,
+				F058366B2602F71B0008C4FD /* BFUnreadView.m in Sources */,
 				F036365C260049A400E69D14 /* MSIMManager+Parse.m in Sources */,
 				F056718425F0A7AE00782F9C /* BFInputViewController.m in Sources */,
 				F05836172601FAC20008C4FD /* BFChatViewController.m in Sources */,
@@ -644,6 +752,7 @@
 				F05671C325F1DD5B00782F9C /* BFBubbleMessageCell.m in Sources */,
 				F056719925F0DDF600782F9C /* BFMessageCell.m in Sources */,
 				F011D58F25E736C10061F9D6 /* main.m in Sources */,
+				F05836652602F6810008C4FD /* BFConversationListCell.m in Sources */,
 				F011D62825E768530061F9D6 /* MSIMManager.m in Sources */,
 				F05671C925F1DDF200782F9C /* BFBubbleMessageCellData.m in Sources */,
 				F05671A625F1BDC200782F9C /* BFMessageCellLayout.m in Sources */,
@@ -661,17 +770,24 @@
 				F056712125EF69AC00782F9C /* MSIMConversation.m in Sources */,
 				F05671DB25F217ED00782F9C /* BFImageMessageCellData.m in Sources */,
 				F011D62225E767B10061F9D6 /* IMSDKConfig.m in Sources */,
+				F058369A26033D0E0008C4FD /* MSDBImageFileStore.m in Sources */,
 				F036363525FEFB6E00E69D14 /* MSProfileProvider.m in Sources */,
 				F052EC9425EDDE2C00F35D74 /* MSDBMessageStore.m in Sources */,
 				F036362E25FEF7FB00E69D14 /* MSProfileInfo.m in Sources */,
 				F056716625F087D200782F9C /* UIView+BFExtension.m in Sources */,
+				F058365C2602EE810008C4FD /* BFNaviBarIndicatorView.m in Sources */,
 				F011D66025E8DC4D0061F9D6 /* MSIMElem.m in Sources */,
 				F056711225EF631F00782F9C /* NSString+Ext.m in Sources */,
 				F036364A25FF541300E69D14 /* ChatProtobuf.pbobjc.m in Sources */,
 				F052EC8825EDD9E300F35D74 /* MSDBManager.m in Sources */,
 				F011D61325E755FD0061F9D6 /* NSData+zlib.mm in Sources */,
+				F05836292602E21F0008C4FD /* BFContactController.m in Sources */,
+				F058362F2602E22D0008C4FD /* BFProfileViewController.m in Sources */,
 				F056713325F06E1000782F9C /* BFResponderTextView.m in Sources */,
+				F058367A2602FD950008C4FD /* BFConversationCellData.m in Sources */,
+				F0583681260303600008C4FD /* BFConversationListViewModel.m in Sources */,
 				F036362825FEF7DD00E69D14 /* MSDBProfileStore.m in Sources */,
+				F05836352602E38E0008C4FD /* BFNavigationController.m in Sources */,
 				F056715525F07BE500782F9C /* UIImage+BFKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -850,14 +966,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6GJL8T85T5;
+				DEVELOPMENT_TEAM = 6N3JSL2D62;
 				INFOPLIST_FILE = BlackFireIM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.BlackFireIM;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.msim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -870,14 +986,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6GJL8T85T5;
+				DEVELOPMENT_TEAM = 6N3JSL2D62;
 				INFOPLIST_FILE = BlackFireIM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.BlackFireIM;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.msim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -889,7 +1005,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = BlackFireIMTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -908,7 +1024,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = BlackFireIMTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
