@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)updateMessage:(NSInteger)msg_sign sendStatus:(BFIMMessageStatus)status partnerID:(NSString *)partnerID;
 
 ///标记某一条消息为撤回消息
-- (BOOL)updateMessageRevoke:(NSInteger)msg_sign partnerID:(NSString *)partnerID;
+- (BOOL)updateMessageRevoke:(NSInteger)msg_id partnerID:(NSString *)partnerID;
 
 ///取最后一条msg_id
 - (MSIMElem *)lastMessageID:(NSString *)partner_id;

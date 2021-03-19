@@ -79,10 +79,10 @@ static NSString *ext_data = @"ext_data";
 }
 
 ///标记某一条消息为撤回消息
-- (BOOL)updateMessageRevoke:(NSInteger)msg_sign partnerID:(NSString *)partnerID
+- (BOOL)updateMessageRevoke:(NSInteger)msg_id partnerID:(NSString *)partnerID
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set msg_type = '%zd' where msg_sign = '%zd'",tableName,BFIM_MSG_TYPE_RECALL,msg_sign];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set msg_type = '%zd' where msg_id = '%zd'",tableName,BFIM_MSG_TYPE_RECALL,msg_id];
     BOOL isOK = [self excuteSQL:sqlStr];
     return isOK;
 }

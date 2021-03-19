@@ -79,3 +79,10 @@ static NSString *FILE_TABLE_NAME = @"file";
 
 
 @end
+
+
+@implementation MSImageInfo
+
+
+
+@end

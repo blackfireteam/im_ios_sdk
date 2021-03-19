@@ -100,10 +100,10 @@ static MSIMManager *_manager;
     return _socketQueue;
 }
 
-- (void)initWithConfig:(IMSDKConfig *)config listener:(id<MSIMManagerListener>)listener
+- (void)initWithConfig:(IMSDKConfig *)config listener:(id<MSIMSDKListener>)listener
 {
     _config = config;
-    _listener = listener;
+    _connListener = listener;
 }
 
 - (void)connectTCPToServer
@@ -112,6 +112,10 @@ static MSIMManager *_manager;
     [self.socket connectToHost:self.config.ip onPort:self.config.port error:&error];
     if(error) {
         NSLog(@"socket连接错误：%@", error);
+    }else {
+        if (self.connListener && [self.connListener respondsToSelector:@selector(onConnecting)]) {
+            [self.connListener onConnecting];
+        }
     }
 }
 
@@ -123,6 +127,9 @@ static MSIMManager *_manager;
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
 {
+    if (self.connListener && [self.connListener respondsToSelector:@selector(connectSucc)]) {
+        [self.connListener connectSucc];
+    }
     [self.socket readDataWithTimeout:-1 tag:100];
     self.retryCount = 0;
     [self startHeartBeat];
@@ -138,6 +145,14 @@ static MSIMManager *_manager;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.retryCount*self.retryCount * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self connectTCPToServer];
         });
+    }else if (self.needToDisconnect == NO) {//断线重连失败
+        if (self.connListener && [self.connListener respondsToSelector:@selector(onReConnFailed:err:)]) {
+            [self.connListener onReConnFailed:err.code err:err.localizedDescription];
+        }
+        return;
+    }
+    if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
+        [self.connListener connectFailed:err.code err:err.localizedDescription];
     }
 }
 
@@ -315,6 +330,15 @@ static MSIMManager *_manager;
         }
         [self sendMessageResponse:result.sign resultCode:result.code resultMsg:result.msg response:result];
     }
+    if (result.code == ERR_LOGIN_KICKED_OFF_BY_OTHER) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.connListener && [self.connListener respondsToSelector:@selector(onForceOffline)]) {
+                [self.connListener onForceOffline];
+            }
+            self.needToDisconnect = YES;
+            [self disConnectTCP];
+        });
+    }
 }
 
 - (void)sendMessageResponse:(NSInteger)sign resultCode:(NSInteger)code resultMsg:(NSString *)msg response:(id)response
@@ -424,6 +448,11 @@ static MSIMManager *_manager;
             [strongSelf.convCaches removeAllObjects];
             [strongSelf synchronizeConversationList];
         }else {
+            if (code == ERR_USER_SIG_EXPIRED) {
+                if (strongSelf.connListener && [strongSelf.connListener respondsToSelector:@selector(onUserSigExpired)]) {
+                    [strongSelf.connListener onUserSigExpired];
+                }
+            }
             NSLog(@"token 鉴权失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
             [strongSelf disConnectTCP];//断开链接，启动重连
             strongSelf.loginFailBlock(code, error);

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSIMConversation;
 @class MSIMElem;
 @class MSProfileInfo;
-@protocol MSIMManagerListener <NSObject>
+@protocol MSIMSDKListener <NSObject>
 
 @optional
 
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 网络连接失败
 /// @param code 错误码
 /// @param errString 错误描述
-- (void)connectFailed:(int)code err:(NSString *)errString;
+- (void)connectFailed:(NSInteger)code err:(NSString *)errString;
 
 /// 连接中
 - (void)onConnecting;
@@ -36,33 +36,48 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  断线重连失败
  */
-- (void)onReConnFailed:(int)code err:(NSString*)err;
+- (void)onReConnFailed:(NSInteger)code err:(NSString*)err;
 
 /**
  *  用户登录的userSig过期（用户需要重新获取userSig后登录）
  */
 - (void)onUserSigExpired;
 
-/**
- *  刷新会话
- */
-- (void)onRefresh;
+@end
+
+
+@protocol MSIMConversationListener <NSObject>
+
+@optional
 
 /**
- *  刷新部分会话
- *
- *  @param conversations 会话（TIMConversation*）列表
+ * 同步服务器会话开始，SDK 会在登录成功或者断网重连后自动同步服务器会话，您可以监听这个事件做一些 UI 进度展示操作。
  */
-- (void)onRefreshConversations:(NSArray<MSIMConversation *>*)conversations;
+- (void)onSyncServerStart;
 
-///未读数发生变化时通知
+/**
+ * 同步服务器会话完成，如果会话有变更，会通过 onNewConversation | onConversationChanged 回调告知客户
+ */
+- (void)onSyncServerFinish;
+
+/**
+ * 同步服务器会话失败
+ */
+- (void)onSyncServerFailed;
+
+///新增会话或会话发生变化
+- (void)onUpdateConversations:(NSArray<MSIMConversation*> *) conversationList;
+
+///小红点未读数发生变化
 - (void)onUpdateUnreadCountInConversation:(NSString *)conv_id unreadCount:(NSInteger)count;
 
-/**
- *  新消息回调通知
- *
- *  @param msgs 新消息列表，MSIMElem 类型数组
- */
+@end
+
+@protocol MSIMMessageListener <NSObject>
+
+@required
+
+/// 收到新消息
 - (void)onNewMessages:(NSArray<MSIMElem *> *)msgs;
 
 /**
@@ -79,18 +94,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)onMessageUpdate:(NSArray<MSIMElem *> *) msgs;
 
+@end
+
+@protocol MSIMProfileListener <NSObject>
+
+@required
+
 /**
  *  用户头像昵称等修改通知
  *
  *  @param info 用户数据
  */
 - (void)onProfileUpdate:(MSProfileInfo *)info;
-
-
-- (void)ms_uploadImage:(NSString *)path
-              progress:(void(^)(CGFloat))progress
-               success:(void(^)(NSString *))success
-                failed:(void(^)(NSError *))failed;
 
 @end
 

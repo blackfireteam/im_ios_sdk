@@ -21,7 +21,7 @@
         MSProfileInfo *info = [MSProfileInfo createWithProto:p];
         [[MSProfileProvider provider] updateProfile:info];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.listener onProfileUpdate:info];
+            [self.profileListener onProfileUpdate:info];
         });
     }
 }
@@ -61,6 +61,7 @@
             [profiles addObject:tempP];
         }
         //拉取最后一页聊天记录
+        WS(weakSelf)
         [self getC2CHistoryMessageList:conv.partner_id count:20 lastMsg:item.msgEnd succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 MSIMElem *lastElem = nil;
@@ -69,9 +70,9 @@
                         lastElem = msg;
                     }
                 }
-                if (lastElem && self.listener && [self.listener respondsToSelector:@selector(onRefreshConversations:)]) {
+                if (lastElem && weakSelf.convListener && [weakSelf.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
                     conv.show_msg = lastElem;
-                    [self.listener onRefreshConversations:@[conv]];
+                    [weakSelf.convListener onUpdateConversations:@[conv]];
                 }
             });
                 } fail:^(NSInteger code, NSString * _Nonnull desc) {
@@ -84,10 +85,13 @@
         [[MSProfileProvider provider] synchronizeProfiles:profiles];
         BOOL isOK = [self.convStore addConversations:self.convCaches];
         //通知会话有更新
-        if (isOK && self.listener && [self.listener respondsToSelector:@selector(onRefreshConversations:)]) {
+        if (isOK && self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.listener onRefreshConversations:self.convCaches];
+                [self.convListener onUpdateConversations:self.convCaches];
             });
+        }
+        if (self.convListener && [self.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
+            [self.convListener onSyncServerFinish];
         }
         [self.convCaches removeAllObjects];
     }
@@ -101,7 +105,7 @@
         MSIMElem *elem = nil;
         if (response.type == BFIM_MSG_TYPE_RECALL) {//消息撤回
             elem = [[MSIMElem alloc]init];
-            elem.type = BFIM_MSG_TYPE_RECALL;
+            elem.type = BFIM_MSG_TYPE_NULL;
             if (response.sign > 0) {//收到申请撤回的结果
                 [self sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
             }
@@ -133,10 +137,9 @@
         BOOL isOK = [self.messageStore addMessages:recieves];
         if (isOK) {//数据库保存成功，通知和代理同时下发
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.listener && [self.listener respondsToSelector:@selector(onNewMessages:)]) {
-                    [self.listener onNewMessages:recieves];
+                if (self.msgListener && [self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
+                    [self.msgListener onNewMessages:recieves];
                 }
-                [[NSNotificationCenter defaultCenter] postNotificationName:BFIMNotification_onRecvNewMessage object:recieves];
             });
         }
     }
@@ -146,8 +149,8 @@
 {
     [self.convStore updateConvesation:[NSString stringWithFormat:@"%lld",result.fromUid] unread_count:result.unread];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.listener && [self.listener respondsToSelector:@selector(onUpdateUnreadCountInConversation:unreadCount:)]) {
-            [self.listener onUpdateUnreadCountInConversation:[NSString stringWithFormat:@"c2c_%lld",result.fromUid] unreadCount:result.unread];
+        if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateUnreadCountInConversation:unreadCount:)]) {
+            [self.convListener onUpdateUnreadCountInConversation:[NSString stringWithFormat:@"c2c_%lld",result.fromUid] unreadCount:result.unread];
         }
     });
 }

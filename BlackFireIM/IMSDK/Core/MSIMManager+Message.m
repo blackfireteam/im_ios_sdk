@@ -88,7 +88,7 @@
     //先写入数据库
     BOOL isOK = [self.messageStore addMessage:elem];
     if (isOK) {
-        [self.listener onNewMessages:@[elem]];
+        [self.msgListener onNewMessages:@[elem]];
         
         ChatS *chats = [[ChatS alloc]init];
         chats.sign = elem.msg_sign;
@@ -101,11 +101,15 @@
             if (code == ERR_SUCC) {
                 ChatSR *result = response;
                 success(result.msgId);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
                 [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC partnerID:elem.toUid];
+                [strongSelf.msgListener onMessageUpdate:@[elem]];
             }else {
                 NSLog(@"发送失败");
                 failed(code,error);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
                 [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL partnerID:elem.toUid];
+                [strongSelf.msgListener onMessageUpdate:@[elem]];
             }
         }];
     }else {
@@ -127,7 +131,7 @@
             MSImageInfo *imageInfo = [store searchRecord:elem.uuid];
             if ([imageInfo.url hasPrefix:@"http"]) {
                 elem.url = imageInfo.url;
-                [self.listener onNewMessages:@[elem]];
+                [self.msgListener onNewMessages:@[elem]];
                 [self.messageStore addMessage:elem];
                 [self sendImageMessageByTCP:elem successed:success failed:failed];
             }else {
@@ -138,7 +142,7 @@
         }
         return;
     }
-    [self.listener onNewMessages:@[elem]];
+    [self.msgListener onNewMessages:@[elem]];
     [self.messageStore addMessage:elem];
     [self sendImageMessageByTCP:elem successed:success failed:failed];
 }
@@ -156,10 +160,10 @@
             failed(ERR_USER_PARAMS_ERROR,@"图片资源不存在");
             return;
         }
-        [self.listener onNewMessages:@[elem]];
-        [self.messageStore addMessage:elem];
         NSString *imageExt = [NSString contentTypeForImageData:imageData];
         if ([imageExt isEqualToString:@"png"] || [imageExt isEqualToString:@"jpeg"]) {
+            [self.msgListener onNewMessages:@[elem]];
+            [self.messageStore addMessage:elem];
             UIImage *image = [UIImage imageWithData:imageData];
             if (image.size.width > 1920 || image.size.height > 1920) {
                 CGFloat aspectRadio = MIN(1920/image.size.width, 1920/image.size.height);
@@ -175,9 +179,6 @@
                 [[NSFileManager defaultManager] createFileAtPath:savePath contents:imageData attributes:nil];
                 elem.path = savePath;
                 
-                if (self.listener && [self.listener respondsToSelector:@selector(uploadImage:successed:failed:)]) {
-                    self.listener ms_uploadImage:<#(nonnull NSString *)#> progress:<#^(CGFloat)progress#> success:<#^(NSString * _Nonnull)success#> failed:<#^(NSError * _Nonnull)failed#>
-                }
                 //再上传
             }else {
                 //再上传
@@ -187,10 +188,11 @@
                 failed(ERR_IM_IMAGE_MAX_ERROR,@"图片大小超过限制");
                 return;
             }
+            [self.msgListener onNewMessages:@[elem]];
+            [self.messageStore addMessage:elem];
             //再上传
         }else {
             failed(ERR_IM_IMAGE_TYPE_ERROR,@"图片类型不支持");
-            return;
         }
     }
 }
@@ -211,12 +213,16 @@
         STRONG_SELF(strongSelf)
         if (code == 0) {
             ChatSR *result = response;
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
             [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC partnerID:elem.toUid];
+            [strongSelf.msgListener onMessageUpdate:@[elem]];
             success(result.msgId);
         }else {
             NSLog(@"发送失败");
             failed(code,error);
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL partnerID:elem.toUid];
+            [strongSelf.msgListener onMessageUpdate:@[elem]];
         }
     }];
 }
@@ -243,17 +249,8 @@
     [self send:[revoke data] protoType:XMChatProtoTypeRecall needToEncry:NO sign:revoke.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
-            ChatR *chatr = response;
             //将之前的消息标记为撤回消息
-            [strongSelf.messageStore updateMessageRevoke:revoke.sign partnerID:[NSString stringWithFormat:@"%lld",revoke.toUid]];
-            //再插入一条撤回消息
-            MSIMElem *elem = [[MSIMElem alloc]init];
-            elem.msg_id = chatr.msgId;
-            elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
-            elem.fromUid = [MSIMTools sharedInstance].user_id;
-            elem.toUid = [NSString stringWithFormat:@"%lld",revoke.toUid];
-            elem.type = BFIM_MSG_TYPE_RECALL;
-            [strongSelf.messageStore addMessage:elem];
+            [strongSelf.messageStore updateMessageRevoke:revoke.msgId partnerID:[NSString stringWithFormat:@"%lld",revoke.toUid]];
             success();
         }else {
             failed(code,error);

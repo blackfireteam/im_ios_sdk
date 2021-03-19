@@ -16,15 +16,21 @@
 
 - (void)synchronizeConversationList
 {
+    if (self.convListener && [self.convListener respondsToSelector:@selector(onSyncServerStart)]) {
+        [self.convListener onSyncServerStart];
+    }
     GetChatList *request = [[GetChatList alloc]init];
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.updateTime = [self.convStore lastMessageEnd];
-//    WS(weakSelf)
+    WS(weakSelf)
     [self send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-//        STRONG_SELF(strongSelf)
+        STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
         }else {
             NSLog(@"建立链接与服务器同步会话列表失败.%@", error);
+            if (strongSelf.convListener && [strongSelf.convListener respondsToSelector:@selector(onSyncServerFailed)]) {
+                [strongSelf.convListener onSyncServerFailed];
+            }
         }
     }];
 }

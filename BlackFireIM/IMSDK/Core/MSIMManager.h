@@ -36,11 +36,21 @@ typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 
 + (instancetype)sharedInstance;
 
-@property(nonatomic,weak) id<MSIMManagerListener> listener;
+///IM连接状态监听器
+@property(nonatomic,weak) id<MSIMSDKListener> connListener;
+
+///收发消息监听器
+@property(nonatomic,weak) id<MSIMMessageListener> msgListener;
+
+///会话列表监听器
+@property(nonatomic,weak) id<MSIMConversationListener> convListener;
+
+///profile信息变更监听器
+@property(nonatomic,weak) id<MSIMProfileListener> profileListener;
 
 ///初始化 SDK 并设置 V2TIMSDKListener 的监听对象
 ///initSDK 后 SDK 会自动连接网络，网络连接状态可以在 V2TIMSDKListener 回调里面监听
-- (void)initWithConfig:(IMSDKConfig *)config listener:(id<MSIMManagerListener>)listener;
+- (void)initWithConfig:(IMSDKConfig *)config listener:(id<MSIMSDKListener>)listener;
 
 
 ///  发送消息

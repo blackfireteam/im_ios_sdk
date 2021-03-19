@@ -295,6 +295,7 @@
 		F011D57B25E736BD0061F9D6 /* BlackFireIM */ = {
 			isa = PBXGroup;
 			children = (
+				F05836BB2604344C0008C4FD /* IMSDK_UIKit */,
 				F056712525EF916800782F9C /* Example */,
 				F052ECDB25EF210500F35D74 /* IMSDK */,
 				F011D57C25E736BD0061F9D6 /* AppDelegate.h */,
@@ -573,6 +574,13 @@
 				F05671A525F1BDC200782F9C /* BFMessageCellLayout.m */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		F05836BB2604344C0008C4FD /* IMSDK_UIKit */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = IMSDK_UIKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
