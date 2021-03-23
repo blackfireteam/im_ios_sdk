@@ -49,8 +49,6 @@ typedef NS_ENUM(NSInteger ,BFIMMessageStatus){
     BFIM_MSG_STATUS_SEND_FAIL = 2,//消息发送失败
     
     BFIM_MSG_STATUS_HAS_DELETED = 3,//消息被删除
-    
-    BFIM_MSG_STATUS_HAS_REVOKED = 4,//消息被撤销
 };
 
 /** 聊天类型*/
@@ -97,10 +95,12 @@ typedef NS_ENUM(NSUInteger, BFIMNetStatus) {
     IMNET_STATUS_DISCONNECT,  //断开连接
 };
 
-#define BFIMNotification_onRecvNewMessage @"BFIMNotification_onRecvNewMessage"
-#define BFIMNotification_MessageRevoke @"BFIMNotification_MessageRevoke"
-#define TUIKitNotification_onRecvMessageReceipts @"TUIKitNotification_onRecvMessageReceipts"
-#define TUIKitNotification_TIMConnListener @"TUIKitNotification_TIMConnListener"
+/** 用户在线状态*/
+typedef NS_ENUM(NSUInteger, BFIMUserStatus) {
+    IMUSER_STATUS_FORCEOFFLINE,  //用户被强制下线
+    IMUSER_STATUS_RECONNFAILD,   //用户重连失败
+    IMUSER_STATUS_SIGEXPIRED,    //用户身份（usersig）过期
+};
 
 
 #endif /* MSIMConst_h */

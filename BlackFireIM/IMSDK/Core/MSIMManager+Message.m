@@ -61,9 +61,18 @@
     }
     elem.toUid = reciever;
     if (elem.type == BFIM_MSG_TYPE_TEXT) {
-        [self sendTextMessage:(MSIMTextElem *)elem successed:success failed:failed];
+        MSIMTextElem *textElem = (MSIMTextElem *)elem;
+        if (textElem.text.length == 0) {
+            failed(ERR_USER_PARAMS_ERROR,@"文本消息内容为空");
+            return;
+        }
+        if ([textElem.text dataUsingEncoding:NSUTF8StringEncoding].length > 8 * 1024) {
+            failed(ERR_IM_TEXT_MAX_ERROR,@"文本消息大小最大支持8k");
+            return;
+        }
+        [self sendTextMessage:(MSIMTextElem *)elem isResend:NO successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
-        [self sendImageMessage:(MSIMImageElem *)elem successed:success failed:failed];
+        [self sendImageMessage:(MSIMImageElem *)elem isResend:NO successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"参数异常");
     }
@@ -74,47 +83,38 @@
 /// @param success 发送成功，返回消息的唯一标识ID
 /// @param failed 发送失败
 - (void)sendTextMessage:(MSIMTextElem *)elem
+               isResend:(BOOL)isResend
               successed:(void(^)(NSInteger msg_id))success
                  failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
-    if (elem.text.length == 0) {
-        failed(ERR_USER_PARAMS_ERROR,@"文本消息内容为空");
-        return;
-    }
-    if ([elem.text dataUsingEncoding:NSUTF8StringEncoding].length > 8 * 1024) {
-        failed(ERR_IM_TEXT_MAX_ERROR,@"文本消息大小最大支持8k");
-        return;
-    }
-    //先写入数据库
-    BOOL isOK = [self.messageStore addMessage:elem];
-    if (isOK) {
+    if (isResend == NO) {
+        [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];
-        
-        ChatS *chats = [[ChatS alloc]init];
-        chats.sign = elem.msg_sign;
-        chats.type = elem.type;
-        chats.body = elem.text;
-        chats.toUid = elem.toUid.integerValue;
-        WS(weakSelf)
-        [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-            STRONG_SELF(strongSelf)
-            if (code == ERR_SUCC) {
-                ChatSR *result = response;
-                success(result.msgId);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-                [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC partnerID:elem.toUid];
-                [strongSelf.msgListener onMessageUpdate:@[elem]];
-            }else {
-                NSLog(@"发送失败");
-                failed(code,error);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-                [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL partnerID:elem.toUid];
-                [strongSelf.msgListener onMessageUpdate:@[elem]];
-            }
-        }];
-    }else {
-        failed(ERR_SDK_DB_WRITE_FAIL,@"数据库写入失败");
     }
+    ChatS *chats = [[ChatS alloc]init];
+    chats.sign = elem.msg_sign;
+    chats.type = elem.type;
+    chats.body = elem.text;
+    chats.toUid = elem.toUid.integerValue;
+    WS(weakSelf)
+    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+        STRONG_SELF(strongSelf)
+        if (code == ERR_SUCC) {
+            ChatSR *result = response;
+            success(result.msgId);
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC code:ERR_SUCC reason:@"" partnerID:elem.toUid];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+        }else {
+            NSLog(@"发送失败");
+            failed(code,error);
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+            elem.code = code;
+            elem.reason = error;
+            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+        }
+    }];
 }
 
 /// 发送单聊普通图片消息
@@ -122,6 +122,7 @@
 /// @param success 发送成功，返回消息的唯一标识ID
 /// @param failed 发送失败
 - (void)sendImageMessage:(MSIMImageElem *)elem
+                isResend:(BOOL)isResend
                successed:(void(^)(NSInteger msg_id))success
                   failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
@@ -142,8 +143,10 @@
         }
         return;
     }
-    [self.msgListener onNewMessages:@[elem]];
-    [self.messageStore addMessage:elem];
+    if (isResend == NO) {
+        [self.msgListener onNewMessages:@[elem]];
+        [self.messageStore addMessage:elem];
+    }
     [self sendImageMessageByTCP:elem successed:success failed:failed];
 }
 
@@ -214,15 +217,17 @@
         if (code == 0) {
             ChatSR *result = response;
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC partnerID:elem.toUid];
-            [strongSelf.msgListener onMessageUpdate:@[elem]];
+            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC code:ERR_SUCC reason:@"" partnerID:elem.toUid];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             success(result.msgId);
         }else {
             NSLog(@"发送失败");
             failed(code,error);
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL partnerID:elem.toUid];
-            [strongSelf.msgListener onMessageUpdate:@[elem]];
+            elem.code = code;
+            elem.reason = error;
+            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
         }
     }];
 }
@@ -245,12 +250,9 @@
     revoke.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     revoke.toUid = reciever;
     revoke.msgId = msg_id;
-    WS(weakSelf)
     [self send:[revoke data] protoType:XMChatProtoTypeRecall needToEncry:NO sign:revoke.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-        STRONG_SELF(strongSelf)
+        
         if (code == ERR_SUCC) {
-            //将之前的消息标记为撤回消息
-            [strongSelf.messageStore updateMessageRevoke:revoke.msgId partnerID:[NSString stringWithFormat:@"%lld",revoke.toUid]];
             success();
         }else {
             failed(code,error);
@@ -258,6 +260,27 @@
     }];
 }
 
+/// 单聊消息重发
+/// @param elem 消息体
+/// @param reciever 接收者Uid
+/// @param success 发送成功，返回消息的唯一标识ID
+/// @param failed 发送失败
+- (void)resendC2CMessage:(MSIMElem *)elem
+              toReciever:(NSString *)reciever
+               successed:(void(^)(NSInteger msg_id))success
+                  failed:(MSIMFail)failed
+{
+    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
+    [self.messageStore updateMessage:elem.msg_sign sendStatus:BFIM_MSG_STATUS_SENDING code:0 reason:@"" partnerID:reciever];
+    [self.msgListener onMessageUpdateSendStatus:elem];
+    if (elem.type == BFIM_MSG_TYPE_TEXT) {
+        [self sendTextMessage:(MSIMTextElem *)elem isResend:YES successed:success failed:failed];
+    }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
+        [self sendImageMessage:(MSIMImageElem *)elem isResend:YES successed:success failed:failed];
+    }else {
+        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+    }
+}
 /**
  *  获取单聊历史消息
  *
@@ -274,10 +297,10 @@
         fail(ERR_USER_PARAMS_ERROR,@"参数异常");
         return;
     }
-    [self.messageStore messageByPartnerID:user_id last_msg_id:lastMsgID count:count*2 complete:^(NSArray<MSIMElem *> * _Nonnull data, BOOL hasMore) {
-        if (succ) {
-            succ(data,hasMore ? NO : YES);
-        }
+    [self.messageStore messageByPartnerID:user_id last_msg_sign:lastMsgID count:count complete:^(NSArray<MSIMElem *> * _Nonnull data, BOOL hasMore) {
+            if (succ) {
+                succ(data,hasMore ? NO : YES);
+            }
     }];
 }
 

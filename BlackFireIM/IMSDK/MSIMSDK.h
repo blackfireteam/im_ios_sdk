@@ -10,10 +10,11 @@
 
 
 #import "MSIMManager.h"
+#import "MSIMManagerListener.h"
+#import "MSIMConst.h"
+#import "IMSDKConfig.h"
 #import "MSIMManager+Message.h"
 #import "MSIMManager+Conversation.h"
-#import "UIColor+BFDarkMode.h"
-#import "MSIMConst.h"
 
 
 #endif /* MSIMSDK_h */

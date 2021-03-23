@@ -31,6 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
 /** 消息状态*/
 @property(nonatomic,assign) BFIMMessageStatus sendStatus;
 
+/** 消息发送失败错误码*/
+@property(nonatomic,assign) NSInteger code;
+
+/** 消息发送失败描述*/
+@property(nonatomic,copy) NSString *reason;
+
 /** 消息已读状态*/
 @property(nonatomic,assign) BFIMMessageReadStatus readStatus;
 

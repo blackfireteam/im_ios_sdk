@@ -110,6 +110,7 @@
 "TUIKitMessageTipsYouRecallMessage" = "您撤回了一条消息";
 "TUIKitMessageTipsRecallMessageFormat" = "\"%@\"撤回了一条消息";
 "TUIkitMessageTipsOthersRecallMessage" = "对方撤回了一条消息";
+"TUIkitMessageTipsUnknowMessage" = "不支持的消息类型，请升级SDK查看";
 "TUIKitMessageTipsJoinGroupFormat" = "\"%@\"加入群组";
 "TUIKitMessageTipsInviteJoinGroupFormat" = "\"%@\"邀请\"%@\"加入群组";
 "TUIKitMessageTipsLeaveGroupFormat" = "\"%@\"退出了群聊";
@@ -151,6 +152,7 @@
 "TUIKitMoreCamera" = "拍照";
 "TUIKitMorePhoto" = "相册";
 "TUIKitMoreVideo" = "录像";
+"TUIKitMoreLocation" = "位置";
 "TUIKitMoreFile" = "文件";
 "TUIKitMoreVideoCall" = "视频通话";
 "TUIKitMoreVoiceCall" = "语音通话";

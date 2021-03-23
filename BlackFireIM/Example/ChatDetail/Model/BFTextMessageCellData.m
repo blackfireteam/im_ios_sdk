@@ -33,11 +33,9 @@
         if (direction == MsgDirectionIncoming) {
             _textColor = [[self class] incommingTextColor];
             _textFont = [[self class] incommingTextFont];
-            self.cellLayout = [BFMessageCellLayout incommingTextMessageLayout];
         } else {
             _textColor = [[self class] outgoingTextColor];
             _textFont = [[self class] outgoingTextFont];
-            self.cellLayout = [BFMessageCellLayout outgoingTextMessageLayout];
         }
     }
     return self;
@@ -45,22 +43,15 @@
 
 - (CGSize)contentSize
 {
+    UIEdgeInsets contentInset = UIEdgeInsetsMake(10, 16, 16, 16);
     CGRect rect = [self.attributedString boundingRectWithSize:CGSizeMake(TTextMessageCell_Text_Width_Max, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
     CGSize size = CGSizeMake(CGFLOAT_CEIL(rect.size.width), CGFLOAT_CEIL(rect.size.height));
     self.textSize = size;
-    self.textOrigin = CGPointMake(self.cellLayout.bubbleInsets.left, self.cellLayout.bubbleInsets.top+self.bubbleTop);
+    self.textOrigin = CGPointMake(contentInset.left, contentInset.top);
 
-    size.height += self.cellLayout.bubbleInsets.top+self.cellLayout.bubbleInsets.bottom;
-    size.width += self.cellLayout.bubbleInsets.left+self.cellLayout.bubbleInsets.right;
-
-    if (self.direction == MsgDirectionIncoming) {
-//        size.width = MAX(size.width, [BFBubbleMessageCellData incommingBubble].size.width);
-        size.height = MAX(size.height, [BFBubbleMessageCellData incommingBubble].size.height);
-    } else {
-//        size.width = MAX(size.width, [BFBubbleMessageCellData outgoingBubble].size.width);
-        size.height = MAX(size.height, [BFBubbleMessageCellData outgoingBubble].size.height);
-    }
-
+    size.height += contentInset.top+contentInset.bottom;
+    size.width += contentInset.left+contentInset.right;
+    
     return size;
 }
 
@@ -158,7 +149,7 @@ static UIFont *sIncommingTextFont;
 
 - (NSString *)reuseId
 {
-    return @"BFTextMessageCellData";
+    return TTextMessageCell_ReuseId;
 }
 
 @end

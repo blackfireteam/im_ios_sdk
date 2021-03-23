@@ -137,7 +137,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  即在输入条中占据大部分面积的白色文本输入框
  *  继承自 UITextView
  */
-@property(nonatomic,strong) UITextView *inputTextView;
+@property(nonatomic,strong) BFResponderTextView *inputTextView;
 
 /**
  *  录音按钮

@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BFChatViewController : UIViewController
 
+@property(nonatomic,copy) NSString *partner_id;
+
 @end
 
 NS_ASSUME_NONNULL_END

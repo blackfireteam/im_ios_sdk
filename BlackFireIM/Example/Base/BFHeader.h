@@ -109,6 +109,12 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TLine_Color_Dark RGBA(35, 35, 35, 0.6)
 #define TLine_Heigh 0.5
 
+// page commom color
+#define TPage_Color RGBA(222, 222, 222, 1.0)
+#define TPage_Color_Dark RGBA(55, 55, 55, 1.0)
+#define TPage_Current_Color RGBA(125, 125, 125, 1.0)
+#define TPage_Current_Color_Dark RGBA(140, 140, 140, 1.0)
+
 // title commom color
 #define TText_Color [UIColor blackColor]
 #define TText_Color_Dark RGB(217, 217, 217)
@@ -124,5 +130,10 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TCell_Touched_Dark RGB(47, 47, 47)
 #define TCell_OnTop RGB(247, 247, 247)
 #define TCell_OnTop_Dark RGB(47, 47, 47)
+
+// input view commom color
+#define TInput_Background_Color  RGBA(246, 246, 246, 1.0)
+#define TInput_Background_Color_Dark  RGBA(30, 30, 30, 1.0)
+
 
 #endif /* BFHeader_h */

@@ -12,13 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface BFBubbleMessageCellData : BFMessageCellData
 
 /**
- *  气泡顶部 以便确定气泡位置
- *  该数值用于确定气泡位置，方便气泡内的内容进行 UI 布局。
- *  若该数值出现异常或者随意设置，会出现消息位置错位等 UI 错误。
- */
-@property(nonatomic,assign) CGFloat bubbleTop;
-
-/**
  *  气泡图标（正常）
  *  气泡图标会根据消息是发送还是接受作出改变，数据源中已实现相关业务逻辑。您也可以根据需求进行个性化定制。
  */
@@ -55,17 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic,class) UIImage *incommingHighlightedBubble;
 
-/**
- *  发送气泡顶部
- *  用于定位发送气泡的顶部，当气泡消息单元为发送时赋值给 bubbleTop。
- */
-@property(nonatomic,class) CGFloat outgoingBubbleTop;
-
-/**
- *  接收气泡顶部
- *  用于定位接收气泡的顶部，当气泡消息单元为接收时赋值给 bubbleTop。
- */
-@property(nonatomic,class) CGFloat incommingBubbleTop;
 
 @end
 

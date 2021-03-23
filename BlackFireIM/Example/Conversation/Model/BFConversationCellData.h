@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) MSIMConversation *conv;
 
-@property (nonatomic, strong) UIImage *avatarImage;
+@property (nonatomic, strong,readonly) UIImage *avatarImage;
 
-@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong,readonly) NSString *title;
 
 /**
  *  会话消息概览（下标题）
@@ -26,13 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
  *  当最新的消息为多媒体消息时，概览的内容为对应的多媒体形式，如：“动画表情” / “[文件]” / “[语音]” / “[图片]” / “[视频]” 等。
  *  若当前会话有草稿时，概览内容为：“[草稿]XXXXX”，XXXXX为草稿内容。
  */
-@property (nonatomic, strong) NSMutableAttributedString *subTitle;
+@property (nonatomic, strong,readonly) NSAttributedString *subTitle;
 
 /**
  *  最新消息时间
  *  记录会话中最新消息的接收/发送时间。
  */
-@property (nonatomic, strong) NSDate *time;
+@property (nonatomic, strong,readonly) NSDate *time;
 
 
 @end

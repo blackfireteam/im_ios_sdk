@@ -88,11 +88,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) onRecvMessageReceipts:(NSArray *)receipts;
 
 /**
- *  消息修改通知
- *
- *  @param msgs 修改的消息列表，TIMMessage 类型数组
+ *  消息发送状态变化通知
  */
-- (void)onMessageUpdate:(NSArray<MSIMElem *> *) msgs;
+- (void)onMessageUpdateSendStatus:(MSIMElem *)elem;
 
 @end
 

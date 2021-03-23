@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSIMTools : NSObject
 
-+ (instancetype)sharedInstance;
++ (MSIMTools *)sharedInstance;
 
 @property(nonatomic,copy) NSString *user_id;
 

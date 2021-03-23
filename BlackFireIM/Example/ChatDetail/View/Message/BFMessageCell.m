@@ -14,7 +14,7 @@
 
 @interface BFMessageCell()
 
-@property(nonatomic,strong) BFMessageCellData *data;
+@property(nonatomic,strong) BFMessageCellData *messageData;
 
 @end
 @implementation BFMessageCell
@@ -26,7 +26,7 @@
         self.backgroundColor = [UIColor clearColor];
         //head
         _avatarView = [[UIImageView alloc] init];
-        _avatarView.contentMode = UIViewContentModeScaleAspectFit;
+        _avatarView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:_avatarView];
         UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSelectMessageAvatar:)];
         [_avatarView addGestureRecognizer:tap1];
@@ -74,13 +74,13 @@
 
 - (void)fillWithData:(BFMessageCellData *)data
 {
-    self.data = data;
+    self.messageData = data;
 
     [self.avatarView setImage:data.avatarImage];
     [self.avatarView sd_setImageWithURL:data.avatarURL placeholderImage:data.avatarImage];
     
     self.avatarView.layer.masksToBounds = YES;
-    self.avatarView.layer.cornerRadius = data.cellLayout.avatarSize.height * 0.5;
+    self.avatarView.layer.cornerRadius = 40 * 0.5;
     
     //set data
     self.nameLabel.text = data.nickName;
@@ -108,37 +108,42 @@
         _nameLabel.height = 0;
     }
     
-    BFMessageCellLayout *cellLayout = self.messageData.cellLayout;
     if (self.messageData.direction == MsgDirectionIncoming) {
-        self.avatarView.x = cellLayout.avatarInsets.left;
-        self.avatarView.y = cellLayout.avatarInsets.top;
-        self.avatarView.width = cellLayout.avatarSize.width;
-        self.avatarView.height = cellLayout.avatarSize.height;
+        self.avatarView.x = 8;
+        self.avatarView.y = 3;
+        self.avatarView.width = 40;
+        self.avatarView.height = 40;
         
+        self.nameLabel.x = self.avatarView.maxX+5;
         self.nameLabel.y = self.avatarView.y;
         
         CGSize csize = [self.messageData contentSize];
-        CGFloat ctop = cellLayout.messageInsets.top + _nameLabel.height;
-        self.container.x = cellLayout.messageInsets.left+self.avatarView.maxX;
-        self.container.y = ctop;
+        self.container.x = self.nameLabel.x;
+        self.container.y = self.nameLabel.height + 3;
         self.container.width = csize.width;
         self.container.height = csize.height;
         
-        self.nameLabel.x = _container.x + 7;//与气泡对齐
         [self.indicator sizeToFit];
-        self.indicator.x = self.container.maxX + 8;
-        self.indicator.centerY = self.container.centerY;
+        self.indicator.frame = CGRectZero;
         self.retryView.frame = self.indicator.frame;
         self.readReceiptLabel.hidden = YES;
     } else {
-        self.avatarView.width = cellLayout.avatarSize.width;
-        self.avatarView.height = cellLayout.avatarSize.height;
-        self.avatarView.y = cellLayout.avatarInsets.top;
+        self.avatarView.width = 40;
+        self.avatarView.height = 40;
+        self.avatarView.y = 3;
+        self.avatarView.maxX = self.contentView.width-8;
+        
+        self.nameLabel.maxX = self.avatarView.x-5;
+        self.nameLabel.y = self.avatarView.y;
         
         CGSize csize = [self.messageData contentSize];
-//        CGFloat ctop = cellLayout.messageInsets.top + _nameLabel.height;
         self.container.width = csize.width;
         self.container.height = csize.height;
+        self.container.y = self.nameLabel.height + 3;
+        self.container.maxX = self.nameLabel.maxX;
+        [self.indicator sizeToFit];
+        self.indicator.centerY = self.container.centerY;
+        self.indicator.x = self.container.x - 8 - self.indicator.width;
         self.retryView.frame = self.indicator.frame;
     }
 }

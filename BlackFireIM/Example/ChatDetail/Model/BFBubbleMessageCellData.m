@@ -18,11 +18,9 @@
         if (direction == MsgDirectionIncoming) {
             _bubble = [[self class] incommingBubble];
             _highlightedBubble = [[self class] incommingHighlightedBubble];
-            _bubbleTop = [[self class] incommingBubbleTop];
         } else {
             _bubble = [[self class] outgoingBubble];
             _highlightedBubble = [[self class] outgoingHighlightedBubble];
-            _bubbleTop = [[self class] outgoingBubbleTop];
         }
     }
     return self;
@@ -86,29 +84,5 @@ static UIImage *sIncommingHighlightedBubble;
     sIncommingHighlightedBubble = incommingHighlightedBubble;
 }
 
-
-static CGFloat sOutgoingBubbleTop = -2;
-
-+ (CGFloat)outgoingBubbleTop
-{
-    return sOutgoingBubbleTop;
-}
-
-+ (void)setOutgoingBubbleTop:(CGFloat)outgoingBubble
-{
-    sOutgoingBubbleTop = outgoingBubble;
-}
-
-static CGFloat sIncommingBubbleTop = -2;
-
-+ (CGFloat)incommingBubbleTop
-{
-    return sIncommingBubbleTop;
-}
-
-+ (void)setIncommingBubbleTop:(CGFloat)incommingBubbleTop
-{
-    sIncommingBubbleTop = incommingBubbleTop;
-}
 
 @end

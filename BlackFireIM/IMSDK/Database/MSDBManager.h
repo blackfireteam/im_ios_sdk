@@ -29,6 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)accountChanged;
 
+///app启动或切换帐号时，扫描消息数据库中所有消息表，将消息发送中状态的消息改成发送失败
+- (void)scanAllTables;
+
 @end
 
 NS_ASSUME_NONNULL_END

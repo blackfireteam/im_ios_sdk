@@ -109,6 +109,7 @@
 "TUIKitMessageTipsYouRecallMessage" = "You recalled a message.";
 "TUIKitMessageTipsRecallMessageFormat" = "\"%@\" recalled a message.";
 "TUIkitMessageTipsOthersRecallMessage" = "The other user recalled a message.";
+"TUIkitMessageTipsUnknowMessage" = "Unsupport message,please update SDK";
 "TUIKitMessageTipsJoinGroupFormat" = "\"%@\" joined the group.";
 "TUIKitMessageTipsInviteJoinGroupFormat" = "\"%@\" invited \"%@\" to join the group.";
 "TUIKitMessageTipsLeaveGroupFormat" = "\"%@\" left the group chat.";
@@ -150,6 +151,7 @@
 "TUIKitMoreCamera" = "Take Photo";
 "TUIKitMorePhoto" = "Album";
 "TUIKitMoreVideo" = "Video";
+"TUIKitMoreLocation" = "Location";
 "TUIKitMoreFile" = "Files";
 "TUIKitMoreVideoCall" = "Video Call";
 "TUIKitMoreVoiceCall" = "Voice Call";

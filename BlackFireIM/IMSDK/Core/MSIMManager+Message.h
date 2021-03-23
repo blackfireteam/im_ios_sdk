@@ -53,6 +53,16 @@ typedef void (^BFIMMessageListSucc)(NSArray<MSIMElem *> * msgs,BOOL isFinished);
             successed:(MSIMSucc)success
                failed:(MSIMFail)failed;
 
+/// 单聊消息重发
+/// @param elem 消息体
+/// @param reciever 接收者Uid
+/// @param success 发送成功，返回消息的唯一标识ID
+/// @param failed 发送失败
+- (void)resendC2CMessage:(MSIMElem *)elem
+              toReciever:(NSString *)reciever
+               successed:(void(^)(NSInteger msg_id))success
+                  failed:(MSIMFail)failed;
+
 /////////////////////////////////////////////////////////////////////////////////
 //
 //                         获取历史消息、撤回、删除、标记已读等接口

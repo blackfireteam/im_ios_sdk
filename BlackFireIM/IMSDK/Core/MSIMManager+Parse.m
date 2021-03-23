@@ -11,6 +11,7 @@
 #import "MSIMErrorCode.h"
 #import "MSIMConversation.h"
 #import "MSIMManager+Message.h"
+#import "MSIMTools.h"
 
 @implementation MSIMManager (Parse)
 
@@ -106,6 +107,9 @@
         if (response.type == BFIM_MSG_TYPE_RECALL) {//消息撤回
             elem = [[MSIMElem alloc]init];
             elem.type = BFIM_MSG_TYPE_NULL;
+            //将之前的消息标记为撤回消息
+            NSInteger f_id = [[NSString stringWithFormat:@"%lld",response.fromUid] isEqualToString:[MSIMTools sharedInstance].user_id] ? response.toUid : response.fromUid;
+            [self.messageStore updateMessageRevoke:[response.body integerValue] partnerID:[NSString stringWithFormat:@"%zd",f_id]];
             if (response.sign > 0) {//收到申请撤回的结果
                 [self sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
             }

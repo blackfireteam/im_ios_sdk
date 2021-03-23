@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "MSIMElem.h"
-#import "BFMessageCellLayout.h"
 
 /**
  *  消息方向枚举
@@ -33,8 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) BOOL showName;
 
 @property(nonatomic,strong) MSIMElem *elem;
-
-@property(nonatomic,strong) BFMessageCellLayout *cellLayout;
 
 @property(nonatomic,copy,readonly) NSString *reuseId;
 

@@ -33,8 +33,6 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.bubbleView.y = self.bubbleData.bubbleTop;
-    self.retryView.centerY = self.bubbleView.centerY;
 }
 
 @end

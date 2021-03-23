@@ -18,15 +18,9 @@
     if (self) {
         _direction = direction;
         _avatarImage = [UIImage imageNamed:TUIKitResource(@"default_c2c_head")];
-        if (direction == MsgDirectionIncoming) {
-            _cellLayout = [BFMessageCellLayout incommingMessageLayout];
-        } else {
-            _cellLayout = [BFMessageCellLayout outgoingMessageLayout];
-        }
     }
     return self;
 }
-
 
 - (CGFloat)heightOfWidth:(CGFloat)width
 {
@@ -36,7 +30,7 @@
     }
     CGSize containerSize = [self contentSize];
     height += containerSize.height;
-    height += self.cellLayout.messageInsets.top + self.cellLayout.messageInsets.bottom;
+    height += 3 + 1;
 
     if (height < 55)
         height = 55;
@@ -51,7 +45,7 @@
 
 - (NSString *)reuseId
 {
-    return @"BFMessageCellData";
+    return @"BFMessageCell";
 }
 
 @end

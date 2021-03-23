@@ -12,7 +12,10 @@
 
 - (BOOL)isSelf
 {
-    return self.fromUid == [MSIMTools sharedInstance].user_id;
+    if ([self.fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
+        return YES;
+    }
+    return NO;
 }
 
 - (NSString *)partner_id
@@ -36,6 +39,8 @@
     elem.block_id = self.block_id;
     elem.sendStatus = self.sendStatus;
     elem.readStatus = self.readStatus;
+    elem.code = self.code;
+    elem.reason = self.reason;
     return elem;
 }
 

@@ -15,7 +15,7 @@
 @implementation MSIMTools
 
 static MSIMTools *_tools;
-+ (instancetype)sharedInstance
++ (MSIMTools *)sharedInstance
 {
     static dispatch_once_t once;
     dispatch_once(&once, ^{
@@ -26,13 +26,13 @@ static MSIMTools *_tools;
 
 - (NSInteger)currentLocalTimeInterval
 {
-    NSInteger stamp = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval stamp = [[NSDate date] timeIntervalSince1970];
     return stamp * 1000 * 1000;
 }
 
 - (NSInteger)adjustLocalTimeInterval
 {
-    NSInteger stamp = self.currentLocalTimeInterval + self.diff;
+    NSTimeInterval stamp = self.currentLocalTimeInterval + self.diff;
     return stamp;
 }
 

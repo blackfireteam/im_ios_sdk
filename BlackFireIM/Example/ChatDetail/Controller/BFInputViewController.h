@@ -7,6 +7,10 @@
 
 #import <UIKit/UIKit.h>
 #import "BFInputBarView.h"
+#import "BFChatMoreView.h"
+#import "BFFaceView.h"
+#import "BFMenuView.h"
+
 
 @class BFInputViewController;
 NS_ASSUME_NONNULL_BEGIN
@@ -41,17 +45,21 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)inputController:(BFInputViewController *)inputController didDeleteAt:(NSString *)atText;
 
+
+/// 点击拍照，照片等更多功能
+- (void)inputController:(BFInputViewController *)inputController didSelectMoreCell:(BFInputMoreCell *)cell;
+
 @end
 
 @interface BFInputViewController : UIViewController
 
 @property(nonatomic,strong) BFInputBarView *inputBar;
 
-@property (nonatomic,strong) UIView *faceView;
+@property (nonatomic,strong) BFFaceView *faceView;
 
-@property (nonatomic, strong) UIView *menuView;
+@property (nonatomic, strong) BFMenuView *menuView;
 
-@property (nonatomic, strong) UIView *moreView;
+@property (nonatomic, strong) BFChatMoreView *moreView;
 
 @property(nonatomic,weak) id<BFInputViewControllerDelegate> delegate;
 

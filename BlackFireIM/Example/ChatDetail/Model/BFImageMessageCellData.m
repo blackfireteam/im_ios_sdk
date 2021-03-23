@@ -46,7 +46,7 @@
 
 - (NSString *)reuseId
 {
-    return @"BFImageMessageCellData";
+    return TImageMessageCell_ReuseId;
 }
 
 @end

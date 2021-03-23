@@ -107,6 +107,20 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     complete(data,hasMore);
 }
 
+///查询某一条会话
+- (MSIMConversation *)searchConversation:(NSString *)conv_id
+{
+    __block MSIMConversation *conv = nil;
+    NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE conv_id = '%@'", CONV_TABLE_NAME,conv_id];
+    [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
+        while ([rsSet next]) {
+            conv = [self bf_component_conv:rsSet];
+        }
+        [rsSet close];
+    }];
+    return conv;
+}
+
 - (MSIMConversation *)bf_component_conv:(FMResultSet *)rsSet
 {
     MSIMConversation *conv = [[MSIMConversation alloc]init];
@@ -141,6 +155,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
         while ([rsSet next]) {
             msg_end = [rsSet longLongIntForColumn:@"msg_end"];
         }
+        [rsSet close];
     }];
     return msg_end;
 }

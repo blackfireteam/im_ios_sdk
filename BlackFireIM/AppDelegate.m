@@ -7,7 +7,7 @@
 
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
-
+#import "MSIMKit.h"
 
 @interface AppDelegate ()
 
@@ -23,6 +23,13 @@
     [self.window makeKeyAndVisible];
     
     self.window.rootViewController = [[BFTabBarController alloc] init];
+    
+    [[MSIMKit sharedInstance] initWithConfig:[IMSDKConfig defaultConfig]];
+    [[MSIMKit sharedInstance] login:@"99" token:@"" succ:^{
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            
+    }];
     return YES;
 }
 

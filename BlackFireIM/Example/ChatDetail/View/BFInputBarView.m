@@ -320,8 +320,7 @@
             }
         }
         return NO;
-    }
-    else if ([text isEqualToString:@""]) {
+    }else if ([text isEqualToString:@""]) {
         if (textView.text.length > range.location) {
             // 一次性删除 [微笑] 这种表情消息
             if ([textView.text characterAtIndex:range.location] == ']') {
@@ -341,9 +340,7 @@
                         return YES;
                     }
                 }
-            }
-            // 一次性删除 @xxx 这种 @ 消息
-            else if ([textView.text characterAtIndex:range.location] == ' ') {
+            }else if ([textView.text characterAtIndex:range.location] == ' ') {// 一次性删除 @xxx 这种 @ 消息
                 NSUInteger location = range.location;
                 NSUInteger length = range.length;
                 int at = 64;    // '@' 对应的ascii码
@@ -362,9 +359,7 @@
                 }
             }
         }
-    }
-    // 监听 @ 字符的输入
-    else if ([text isEqualToString:@"@"]) {
+    }else if ([text isEqualToString:@"@"]) {// 监听 @ 字符的输入
         if (self.delegate && [self.delegate respondsToSelector:@selector(inputBarDidInputAt:)]) {
             [self.delegate inputBarDidInputAt:self];
         }

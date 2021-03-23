@@ -8,6 +8,8 @@
 #import "BFInputViewController.h"
 #import "BFHeader.h"
 #import "UIColor+BFDarkMode.h"
+#import "NSBundle+BFKit.h"
+#import "UIImage+BFKit.h"
 
 
 typedef NS_ENUM(NSUInteger, InputStatus) {
@@ -17,9 +19,11 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     Input_Status_Input_Keyboard,
     Input_Status_Input_Talk,
 };
-@interface BFInputViewController ()<BFInputBarViewDelegate>
+@interface BFInputViewController ()<BFInputBarViewDelegate,BFChatMoreViewDelegate,BFFaceViewDelegate,BFMenuViewDelegate>
 
 @property (nonatomic, assign) InputStatus status;
+
+@property(nonatomic,strong) NSMutableArray *defaultFace;
 
 @end
 
@@ -67,11 +71,9 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 {
     if(_status == Input_Status_Input_Face){
         [self hideFaceAnimation];
-    }
-    else if(_status == Input_Status_Input_More){
+    }else if(_status == Input_Status_Input_More){
         [self hideMoreAnimation];
-    }
-    else{
+    }else{
         //[self hideFaceAnimation:NO];
         //[self hideMoreAnimation:NO];
     }
@@ -275,5 +277,115 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     }
 }
 
+- (BFChatMoreView *)moreView
+{
+    if(!_moreView){
+        _moreView = [[BFChatMoreView alloc] initWithFrame:CGRectMake(0, _inputBar.frame.origin.y + _inputBar.frame.size.height, self.view.frame.size.width, 0)];
+        _moreView.delegate = self;
+        BFInputMoreCellData *cameraData = [[BFInputMoreCellData alloc]initWithType:BFIM_MORE_CAMERA];
+        cameraData.title = [NSBundle bf_localizedStringForKey:@"TUIKitMoreCamera"];
+        cameraData.image = [UIImage bf_imageNamed:@"more_camera"];
+        
+        BFInputMoreCellData *photoData = [[BFInputMoreCellData alloc]initWithType:BFIM_MORE_PHOTO];
+        photoData.title = [NSBundle bf_localizedStringForKey:@"TUIKitMorePhoto"];
+        photoData.image = [UIImage bf_imageNamed:@"more_picture"];
+        
+        [_moreView setData:@[cameraData,photoData]];
+    }
+    return _moreView;
+}
+
+- (BFFaceView *)faceView
+{
+    if(!_faceView){
+        _faceView = [[BFFaceView alloc] initWithFrame:CGRectMake(0, _inputBar.frame.origin.y + _inputBar.frame.size.height, self.view.frame.size.width, 180)];
+        _faceView.delegate = self;
+        [_faceView setData:self.defaultFace];
+    }
+    return _faceView;
+}
+
+- (NSMutableArray *)defaultFace
+{
+    if (!_defaultFace) {
+        _defaultFace = [NSMutableArray array];
+        //emoji group
+        NSMutableArray *emojiFaces = [NSMutableArray array];
+        NSArray *emojis = [NSArray arrayWithContentsOfFile:TUIKitFace(@"emoji/emoji.plist")];
+        for (NSDictionary *dic in emojis) {
+            BFFaceCellData *data = [[BFFaceCellData alloc] init];
+            NSString *name = [dic objectForKey:@"face_name"];
+            data.name = [NSString stringWithFormat:@"emoji/%@",name];
+            [emojiFaces addObject:data];
+        }
+        if(emojiFaces.count != 0){
+            BFFaceGroup *emojiGroup = [[BFFaceGroup alloc] init];
+            emojiGroup.groupIndex = 0;
+            emojiGroup.groupPath = TUIKitFace(@"emoji/");
+            emojiGroup.faces = emojiFaces;
+            emojiGroup.rowCount = 3;
+            emojiGroup.itemCountPerRow = 9;
+            emojiGroup.needBackDelete = YES;
+            [_defaultFace addObject:emojiGroup];
+        }
+    }
+    return _defaultFace;
+}
+
+- (BFMenuView *)menuView
+{
+    if(!_menuView){
+        _menuView = [[BFMenuView alloc] initWithFrame:CGRectMake(0, self.faceView.frame.origin.y + self.faceView.frame.size.height, self.view.frame.size.width, 40)];
+        _menuView.delegate = self;
+    }
+    return _menuView;
+}
+
+#pragma mark - more view delegate
+- (void)moreView:(BFChatMoreView *)moreView didSelectMoreCell:(BFInputMoreCell *)cell
+{
+    if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSelectMoreCell:)]){
+        [_delegate inputController:self didSelectMoreCell:cell];
+    }
+}
+
+#pragma mark - BFFaceViewDelegate
+
+- (void)faceView:(BFFaceView *)faceView scrollToFaceGroupIndex:(NSInteger)index
+{
+//    [self.menuView scrollToMenuIndex:index];
+}
+
+- (void)faceViewDidBackDelete:(BFFaceView *)faceView
+{
+    [_inputBar backDelete];
+}
+
+- (void)faceView:(BFFaceView *)faceView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    BFFaceGroup *group = self.defaultFace[indexPath.section];
+    BFFaceCellData *face = group.faces[indexPath.row];
+    if(indexPath.section == 0){
+        NSString *faceName = [face.name substringFromIndex:@"emoji/".length];
+        [_inputBar addEmoji:faceName];
+    }else{
+        //直接发送
+        // to do
+    }
+}
+
+#pragma mark - BFMenuViewDelegate
+
+- (void)menuViewDidSendMessage:(BFMenuView *)menuView
+{
+    NSString *text = [_inputBar getInput];
+    if([text isEqualToString:@""]){
+        return;
+    }
+    [_inputBar clearInput];
+    if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendMessage:)]){
+        [_delegate inputController:self didSendMessage:text];
+    }
+}
 
 @end

@@ -29,7 +29,9 @@
 @property(nonatomic,strong) NSTimer *callbackTimer;
 
 @property(nonatomic,strong) NSLock *dictionaryLock;
-@property(nonatomic,nonatomic) NSMutableDictionary *callbackBlock;
+@property(nonatomic,strong) NSMutableDictionary *callbackBlock;
+
+@property(nonatomic,strong) NSMutableDictionary *taskIDs;
 
 @property(nonatomic,strong) GCDAsyncSocket *socket;
 @property(nonatomic,strong)dispatch_queue_t socketQueue;// 数据的串行队列
@@ -60,6 +62,7 @@ static MSIMManager *_manager;
         _buffer = [NSMutableData data];
         [_buffer setLength: 0];
         _callbackBlock = [NSMutableDictionary dictionary];
+        _taskIDs = [NSMutableDictionary dictionary];
         _socket = [[GCDAsyncSocket alloc]initWithDelegate:self delegateQueue:self.socketQueue];
         _callbackTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(callbackHandler:) userInfo:nil repeats:true];
         [[NSRunLoop mainRunLoop]addTimer:_callbackTimer forMode:NSRunLoopCommonModes];
@@ -127,9 +130,11 @@ static MSIMManager *_manager;
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
 {
-    if (self.connListener && [self.connListener respondsToSelector:@selector(connectSucc)]) {
-        [self.connListener connectSucc];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.connListener && [self.connListener respondsToSelector:@selector(connectSucc)]) {
+            [self.connListener connectSucc];
+        }
+    });
     [self.socket readDataWithTimeout:-1 tag:100];
     self.retryCount = 0;
     [self startHeartBeat];
@@ -146,14 +151,18 @@ static MSIMManager *_manager;
             [self connectTCPToServer];
         });
     }else if (self.needToDisconnect == NO) {//断线重连失败
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.connListener && [self.connListener respondsToSelector:@selector(onReConnFailed:err:)]) {
+                [self.connListener onReConnFailed:err.code err:err.localizedDescription];
+            }
+        });
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
         if (self.connListener && [self.connListener respondsToSelector:@selector(onReConnFailed:err:)]) {
             [self.connListener onReConnFailed:err.code err:err.localizedDescription];
         }
-        return;
-    }
-    if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
-        [self.connListener connectFailed:err.code err:err.localizedDescription];
-    }
+    });
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -311,8 +320,9 @@ static MSIMManager *_manager;
 
 - (void)messageRsultHandler:(Result *)result
 {
-    NSString *key = [NSString stringWithFormat:@"%lld",result.sign];
-    NSDictionary *dic = [self.callbackBlock objectForKey:key];
+    NSString *taskID = [self taskIDForMsgSeq:result.sign];
+    if (taskID == nil) return;
+    NSDictionary *dic = [self.callbackBlock objectForKey:taskID];
     if (dic) {
         XMChatProtoType protoType = [dic[@"protoType"] integerValue];
         if (protoType == XMChatProtoTypeSend) {
@@ -343,15 +353,31 @@ static MSIMManager *_manager;
 
 - (void)sendMessageResponse:(NSInteger)sign resultCode:(NSInteger)code resultMsg:(NSString *)msg response:(id)response
 {
-    NSString *key = [NSString stringWithFormat:@"%ld",sign];
-    NSDictionary *dic = [self.callbackBlock objectForKey:key];
-    TCPBlock complete = dic[@"callback"];
-    if(complete) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            complete(code,response,msg);
-            [self.callbackBlock removeObjectForKey:key];
-        });
+    NSString *taskID = [self taskIDForMsgSeq:sign];
+    if (taskID) {
+        NSDictionary *dic = [self.callbackBlock objectForKey:taskID];
+        TCPBlock complete = dic[@"callback"];
+        if(complete) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                complete(code,response,msg);
+                [self.callbackBlock removeObjectForKey:taskID];
+                [self.taskIDs removeObjectForKey:taskID];
+            });
+        }
     }
+}
+
+- (NSString *)taskIDForMsgSeq:(NSInteger)sign
+{
+    NSString *msg_seq = [NSString stringWithFormat:@"%ld",sign];
+    __block NSString *taskID = nil;
+    [self.taskIDs enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
+            if ([msg_seq isEqualToString:value]) {
+                taskID = key;
+                *stop = YES;
+            }
+    }];
+    return taskID;
 }
 
 - (void)send:(NSData *)sendData protoType:(XMChatProtoType)protoType needToEncry:(BOOL)encry sign:(int64_t)sign callback:(TCPBlock)block
@@ -376,9 +402,11 @@ static MSIMManager *_manager;
     
     if(block) {
         // 保存回调 block 到字典里，接收时候用到
-        NSString *key = [NSString stringWithFormat:@"%lld",sign];
         [_dictionaryLock lock];
-        [_callbackBlock setObject:@{@"callback": block,@"protoType": @(protoType),@"data": sendData} forKey:key];
+        //重新生成一个taskID,映射到msg_seq
+        NSString *taskID = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval];
+        [self.taskIDs setValue:[NSString stringWithFormat:@"%lld",sign] forKey:taskID];
+        [_callbackBlock setObject:@{@"callback": block,@"protoType": @(protoType)} forKey:taskID];
         [_dictionaryLock unlock];
     }
     [self.socket writeData:data withTimeout:-1 tag:100];
@@ -392,11 +420,13 @@ static MSIMManager *_manager;
         NSInteger sendTime = key.integerValue;
         if (([MSIMTools sharedInstance].adjustLocalTimeInterval - sendTime) > 60*1000*1000) {//判断超时，回调失败
             NSDictionary *dic = self.callbackBlock[key];
+            NSString *msg_seq = [self.taskIDs valueForKey:key];
             TCPBlock complete = dic[@"callback"];
             if (complete) {
-                complete(key.integerValue,nil,nil);
+                complete(msg_seq.integerValue,nil,@"发送超时");
             }
             [self.callbackBlock removeObjectForKey:key];
+            [self.taskIDs removeObjectForKey:key];
         }
     }
 }
@@ -493,6 +523,7 @@ static MSIMManager *_manager;
         self.needToDisconnect = NO;
         [self connectTCPToServer];
     }
+    [[MSDBManager sharedInstance] scanAllTables];
 }
 
 ///退出登录
