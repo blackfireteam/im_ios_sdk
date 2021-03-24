@@ -51,6 +51,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///根据msg_id查询消息
 - (MSIMElem *)searchMessage:(NSString *)partner_id msg_id:(NSInteger)msg_id;
 
+///根据msg_sign查询消息
+- (MSIMElem *)searchMessage:(NSString *)partner_id msg_sign:(NSInteger)msg_sign;
+
 ///将所有的发送中的消息置为发送失败
 - (BOOL)cleanAllSendingMessage:(NSString *)tableName;
 

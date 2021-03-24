@@ -6,6 +6,7 @@
 //
 
 #import "MSIMConversation.h"
+#import "MSProfileProvider.h"
 
 
 @implementation MSIMConversation
@@ -34,6 +35,11 @@
             return [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         }
     }
+}
+
+- (MSProfileInfo *)userInfo
+{
+    return [[MSProfileProvider provider] providerProfileFromLocal:[self.partner_id integerValue]];
 }
 
 @end

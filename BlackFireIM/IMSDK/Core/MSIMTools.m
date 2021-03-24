@@ -43,4 +43,20 @@ static MSIMTools *_tools;
     self.diff = s_time - self.currentLocalTimeInterval;
 }
 
+///维护会话列表更新时间
+- (void)updateConversationTime:(NSInteger)update_time
+{
+    NSString *key = [NSString stringWithFormat:@"conv_update_%@",self.user_id];
+    [[NSUserDefaults standardUserDefaults] setInteger:update_time forKey:key];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+}
+
+///获取会话列表更新时间
+- (NSInteger)convUpdateTime
+{
+    NSString *key = [NSString stringWithFormat:@"conv_update_%@",self.user_id];
+    NSInteger update_time = [[NSUserDefaults standardUserDefaults] integerForKey:key];
+    return update_time;
+}
+
 @end

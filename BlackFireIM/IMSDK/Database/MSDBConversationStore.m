@@ -23,14 +23,13 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     if (isOK == NO) {
         return NO;
     }
-    NSString *addSQL = @"REPLACE into %@ (conv_id,chat_type,f_id,msg_start,msg_end,show_msg_id,msg_last_read,unread_count,ext) VALUES (?,?,?,?,?,?,?,?,?)";
+    NSString *addSQL = @"REPLACE into %@ (conv_id,chat_type,f_id,msg_end,show_msg_sign,msg_last_read,unread_count,ext) VALUES (?,?,?,?,?,?,?,?)";
     NSString *sqlStr = [NSString stringWithFormat:addSQL,CONV_TABLE_NAME];
     NSArray *addParams = @[conv.conversation_id,
                            @(conv.chat_type),
                            conv.partner_id,
-                           @(conv.msg_start),
                            @(conv.msg_end),
-                           @(conv.show_msg_id),
+                           @(conv.show_msg_sign),
                            @(conv.msg_last_read),
                            @(conv.unread_count),
                            conv.extString];
@@ -40,7 +39,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 
 - (BOOL)createTable
 {
-    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(conv_id TEXT,chat_type INTEGER,f_id TEXT,msg_start INTEGER,msg_end INTEGER,show_msg_id INTEGER,msg_last_read INTEGER,unread_count INTEGER,ext TEXT,PRIMARY KEY(conv_id))",CONV_TABLE_NAME];
+    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(conv_id TEXT,chat_type INTEGER,f_id TEXT,msg_end INTEGER,show_msg_sign INTEGER,msg_last_read INTEGER,unread_count INTEGER,ext TEXT,PRIMARY KEY(conv_id))",CONV_TABLE_NAME];
     BOOL isOK = [self createTable:CONV_TABLE_NAME withSQL:createSQL];
     if (isOK == NO) {
         NSLog(@"创建表失败****%@",CONV_TABLE_NAME);
@@ -91,7 +90,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
                                count:(NSInteger)count
                             complete:(void(^)(NSArray<MSIMConversation *> *data,BOOL hasMore))complete
 {
-    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_end < '%zd' and order by msg_end desc limit '%zd'",CONV_TABLE_NAME,last_msg_id,count+1];
+    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_end < '%zd' order by msg_end desc limit '%zd'",CONV_TABLE_NAME,last_msg_id,count+1];
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
@@ -126,9 +125,8 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     MSIMConversation *conv = [[MSIMConversation alloc]init];
     conv.partner_id = [rsSet stringForColumn:@"f_id"];
     conv.chat_type = [rsSet intForColumn:@"chat_type"];
-    conv.msg_start = [rsSet longLongIntForColumn:@"msg_start"];
     conv.msg_end = [rsSet longLongIntForColumn:@"msg_end"];
-    conv.show_msg_id = [rsSet longLongIntForColumn:@"show_msg_id"];
+    conv.show_msg_sign = [rsSet longLongIntForColumn:@"show_msg_sign"];
     conv.msg_last_read = [rsSet longLongIntForColumn:@"msg_last_read"];
     conv.unread_count = [rsSet intForColumn:@"unread_count"];
     NSString *extString = [rsSet stringForColumn:@"ext"];

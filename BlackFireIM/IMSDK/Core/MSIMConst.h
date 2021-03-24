@@ -37,6 +37,10 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
     XMChatProtoTypeGetProfiles = 17,//批量请求用户信息
     XMChatProtoTypeGetProfileResult = 18,//请求单个用户信息返回
     XMChatProtoTypeGetProfilesResult = 19,//请求批量用户信息返回
+    
+    XMChatProtoTypeProfileOnline = 50,//通知客户端用户上线事件
+    XMChatProtoTypeProfileOffline = 52,//通知客户端用户下线事件
+    
 };
 
 /** 消息发送状态*/

@@ -46,7 +46,7 @@
 - (void)rightBarButtonClick
 {
     BFChatViewController *vc = [[BFChatViewController alloc]init];
-    vc.partner_id = @"1";
+    vc.partner_id = @"4";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -64,6 +64,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNetworkChanged:) name:MSUIKitNotification_ConnListener object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onConvUnreadUpdate:) name:MSUIKitNotification_ConversationUnreadCount object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
 }
 
 - (void)setupViews
@@ -76,6 +77,7 @@
     [self.tableView registerClass:[BFConversationListCell class] forCellReuseIdentifier:@"TConversationCell"];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.rowHeight = 80;
     [self.view addSubview:self.tableView];
 }
 
@@ -85,6 +87,16 @@
         _dataList = [NSMutableArray array];
     }
     return _dataList;
+}
+
+- (void)profileUpdate:(NSNotification *)note
+{
+    MSProfileInfo *profile = note.object;
+    for (BFConversationCellData *data in self.dataList) {
+        if ([data.conv.partner_id isEqualToString: profile.user_id]) {
+            [self.tableView reloadData];
+        }
+    }
 }
 
 - (void)loadConversation
@@ -190,11 +202,6 @@
     return self.dataList.count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 55;
-}
-
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return YES;
@@ -238,6 +245,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     BFChatViewController *vc = [[BFChatViewController alloc]init];
+    BFConversationCellData *data = self.dataList[indexPath.row];
+    vc.partner_id = data.conv.partner_id;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

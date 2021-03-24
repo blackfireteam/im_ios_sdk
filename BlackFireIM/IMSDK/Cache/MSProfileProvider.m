@@ -17,6 +17,8 @@
 @property(nonatomic,strong) NSCache *mainCache;
 @property(nonatomic,strong) MSDBProfileStore *store;
 
+@property(nonatomic,strong)dispatch_queue_t profileQueue;// 数据库操作的异步串行队列
+
 @end
 @implementation MSProfileProvider
 
@@ -48,6 +50,14 @@ static MSProfileProvider *instance;
         _store = [[MSDBProfileStore alloc]init];
     }
     return _store;
+}
+
+- (dispatch_queue_t)profileQueue
+{
+    if(!_profileQueue) {
+        _profileQueue = dispatch_queue_create("com.profileSocket", DISPATCH_QUEUE_SERIAL);
+    }
+    return _profileQueue;
 }
 
 /// 查询某个用户的个人信息
@@ -106,7 +116,9 @@ static MSProfileProvider *instance;
 {
     if (info.user_id.length == 0) return;
     [self.mainCache setObject:info forKey:info.user_id];
-    [self.store addProfile:info];
+    dispatch_async(self.profileQueue, ^{
+        [self.store addProfile:info];
+    });
 }
 
 ///返回本地数据库中所有的用户信息

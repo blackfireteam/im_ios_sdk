@@ -130,6 +130,7 @@ static MSIMManager *_manager;
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
 {
+    NSLog(@"****建立连接成功****");
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.connListener && [self.connListener respondsToSelector:@selector(connectSucc)]) {
             [self.connListener connectSucc];
@@ -137,12 +138,13 @@ static MSIMManager *_manager;
     });
     [self.socket readDataWithTimeout:-1 tag:100];
     self.retryCount = 0;
-    [self startHeartBeat];
     [self imLogin];//建立长链接，马上鉴权
+    [self startHeartBeat];
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
+    NSLog(@"****连接断开****");
     [self closeTimer];
     //在非手动断开的情况下才进行重连
     if(self.needToDisconnect == NO && self.retryCount <= self.config.retryCount) {
@@ -206,13 +208,10 @@ static MSIMManager *_manager;
         }
     }
     [self.socket readDataWithTimeout:-1 tag:100];
-    [self startHeartBeat];
 }
-
 
 - (void)handlePackage:(NSData *)package protoType:(NSInteger)type
 {
-    NSLog(@"收到数据的长度:%ld**type = %ld",package.length,type);
     if(package == nil || package.length == 0) {
         return;
     }
@@ -223,9 +222,12 @@ static MSIMManager *_manager;
             ChatSR *result = [[ChatSR alloc]initWithData:package error:&error];
             if (error == nil && result != nil) {
                 [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"单条消息已发送到服务器" response:result];
+                //更新会话更新时间
+                [[MSIMTools sharedInstance]updateConversationTime:result.sign];
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
+            NSLog(@"收到单条消息回执***%@",result);
         }
             break;
         case XMChatProtoTypeRecieve: // 收到新消息
@@ -237,6 +239,7 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
+            NSLog(@"收到新消息***%@",recieve);
         }
             break;
         case XMChatProtoTypeMassRecieve: //收到批量消息
@@ -249,24 +252,29 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
+            NSLog(@"收到批量消息***%@",batch);
         }
             break;
         case XMChatProtoTypeLastReadMsg: //消息已读状态发生变更通知（客户端收到这个才去变更）
         {
             NSError *error;
             LastReadMsg *result = [[LastReadMsg alloc]initWithData:package error:&error];
-            if (error != nil) {
+            if (error == nil) {
                 [self chatUnreadCountChanged:result];
+                //更新会话更新时间
+                [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
             }
+            NSLog(@"消息已读状态发生变更通知***%@",result);
         }
             break;
         case XMChatProtoTypeGetChatListResponse: //拉取会话列表结果
         {
             NSError *error;
             ChatList *result = [[ChatList alloc]initWithData:package error:&error];
-            if (error != nil) {
+            if (error == nil) {
                 [self chatListResultHandler:result];
             }
+            NSLog(@"拉取会话列表结果***%@",result);
         }
             break;
         case XMChatProtoTypeGetProfileResult: //返回的单个用户信息结果
@@ -278,9 +286,10 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
+            NSLog(@"返回的单个用户信息结果***%@",profile);
         }
             break;
-        case XMChatProtoTypeGetProfiles: //返回批量用户信息结果
+        case XMChatProtoTypeGetProfilesResult: //返回批量用户信息结果
         {
             NSError *error;
             ProfileList *profiles = [[ProfileList alloc]initWithData:package error:&error];
@@ -289,17 +298,21 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
+            NSLog(@"返回批量用户信息结果***%@",profiles);
         }
             break;
-        case XMChatProtoTypeDeleteChat: //删除一条会成功通知
+        case XMChatProtoTypeDeleteChat: //删除一条会话成功通知
         {
             NSError *error;
             DelChat *result = [[DelChat alloc]initWithData:package error:&error];
             if(error == nil && result != nil) {
                 [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"" response:result];
+                //更新会话更新时间
+                [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
+            NSLog(@"删除一条会话成功通知***%@",result);
         }
             break;
         case XMChatProtoTypeResult: //主动发起操作处理结果
@@ -311,6 +324,32 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
+            NSLog(@"主动发起操作处理结果***%@",result);
+        }
+            break;
+        case XMChatProtoTypeProfileOnline: //有用户上线了
+        {
+            NSError *error;
+            ProfileOnline *online = [[ProfileOnline alloc]initWithData:package error:&error];
+            if (error == nil && online != nil) {
+                [self userOnLineHandler:online];
+            }else {
+                NSLog(@"消息protobuf解析失败-- %@",error);
+            }
+            NSLog(@"有用户上线了***%@",online);
+        }
+            break;
+            
+        case XMChatProtoTypeProfileOffline: //有用户下线了
+        {
+            NSError *error;
+            UsrOffline *offline = [[UsrOffline alloc]initWithData:package error:&error];
+            if (error == nil && offline != nil) {
+                [self userOfflineHandler:offline];
+            }else {
+                NSLog(@"消息protobuf解析失败-- %@",error);
+            }
+            NSLog(@"有用户下线了***%@",offline);
         }
             break;
         default:
@@ -383,14 +422,12 @@ static MSIMManager *_manager;
 - (void)send:(NSData *)sendData protoType:(XMChatProtoType)protoType needToEncry:(BOOL)encry sign:(int64_t)sign callback:(TCPBlock)block
 {
     // 包头是 4个字节 包括：前20位代表整个数据包的长度，后11位代表proto的编码 ，最后一位表示报文是否压缩
-    NSLog(@"压缩前***%zd",sendData.length);
     NSInteger type = protoType;
     type = type << 2;
     NSInteger isZip = 0;
     if((sendData.length + 4)/1024 > 10) {//如果发送的文本大于10kb,进行zlib压缩
         isZip = 1;
         sendData = [NSData dataByCompressingData:sendData];
-        NSLog(@"压缩后***%zd",sendData.length);
     }
     encry = encry << 1;
     NSInteger originalLength = ((NSInteger)sendData.length + 4) << 12;
@@ -410,7 +447,6 @@ static MSIMManager *_manager;
         [_dictionaryLock unlock];
     }
     [self.socket writeData:data withTimeout:-1 tag:100];
-    [self startHeartBeat];
 }
 
 - (void)callbackHandler:(NSTimer *)timer
@@ -472,7 +508,7 @@ static MSIMManager *_manager;
         if (code == ERR_SUCC) {
             Result *result = response;
             [MSIMTools sharedInstance].user_id = [NSString stringWithFormat:@"%lld",result.uid];
-            [[MSIMTools sharedInstance] updateServerTime:result.nowTime];
+            [[MSIMTools sharedInstance] updateServerTime:result.nowTime*1000*1000];
             strongSelf.loginSuccBlock();
             //同步会话列表
             [strongSelf.convCaches removeAllObjects];

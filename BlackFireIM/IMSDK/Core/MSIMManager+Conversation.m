@@ -10,6 +10,8 @@
 #import "MSIMConst.h"
 #import "MSIMErrorCode.h"
 #import "MSProfileProvider.h"
+#import "MSConversationProvider.h"
+
 
 @implementation MSIMManager (Conversation)
 
@@ -21,7 +23,7 @@
     }
     GetChatList *request = [[GetChatList alloc]init];
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
-    request.updateTime = [self.convStore lastMessageEnd];
+    request.updateTime = [MSIMTools sharedInstance].convUpdateTime;
     WS(weakSelf)
     [self send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
@@ -49,14 +51,16 @@
         fail(ERR_USER_PARAMS_ERROR,@"参数异常");
         return;
     }
+    if (nextSeq == 0) {
+        nextSeq = INT_MAX;
+    }
     [self.convStore conversationsWithLast_msg_id:nextSeq count:count complete:^(NSArray<MSIMConversation *> * _Nonnull data, BOOL hasMore) {
         //组装最后一条消息和头像昵称等信息
         for (MSIMConversation *conv in data) {
-            MSIMElem *elem = [self.messageStore searchMessage:conv.partner_id msg_id:conv.show_msg_id];
+            MSIMElem *elem = [self.messageStore searchMessage:conv.partner_id msg_sign:conv.show_msg_sign];
             conv.show_msg = elem;
-            MSProfileInfo *info = [[MSProfileProvider provider] providerProfileFromLocal:conv.partner_id.integerValue];
-            conv.userInfo = info;
         }
+        [[MSConversationProvider provider]updateConversations:data];
         MSIMConversation *lastConv = data.lastObject;
         NSInteger nextSign = lastConv.msg_end;
         succ(data,nextSign,hasMore ? NO : YES);
@@ -78,7 +82,7 @@
     delRequest.toUid = conv.partner_id.integerValue;
     [self send:[delRequest data] protoType:XMChatProtoTypeDeleteChat needToEncry:NO sign:delRequest.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
-            [self.convStore deleteConversation:conv.conversation_id];
+            [[MSConversationProvider provider]deleteConversation:conv.conversation_id];
             succed();
         }else {
             failed(ERR_SDK_DB_DEL_CONVERSATION_FAIL,@"删除会话失败");

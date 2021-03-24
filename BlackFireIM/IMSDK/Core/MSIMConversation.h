@@ -24,26 +24,20 @@ NS_ASSUME_NONNULL_BEGIN
 ///如果是单聊：对方的uid,群聊： 指group_id
 @property(nonatomic,copy) NSString *partner_id;
 
-///服务器记录的第一条消息id
-@property(nonatomic,assign) NSInteger msg_start;
-
 ///服务器记录的最后一条消息id
 @property(nonatomic,assign) NSInteger msg_end;
 
-///要显示在会话列表的最后一条消息id 该id不一定是msg end
-@property(nonatomic,assign) NSInteger show_msg_id;
+///要显示在会话列表的最后一条消息msg_sign
+@property(nonatomic,assign) NSInteger show_msg_sign;
 
 ///最后一条标记为已读的消息id
 @property(nonatomic,assign) NSInteger msg_last_read;
-
-///显示的时间
-@property(nonatomic,assign) NSInteger time;
 
 ///未读数
 @property(nonatomic,assign) NSInteger unread_count;
 
 ///用户信息
-@property(nonatomic,copy) MSProfileInfo *userInfo;
+@property(nonatomic,strong,readonly) MSProfileInfo *userInfo;
 
 ///扩展字段
 @property(nonatomic,strong) MSCustomExt *ext;

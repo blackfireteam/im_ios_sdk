@@ -21,6 +21,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateServerTime:(NSInteger)s_time;
 
+///维护会话列表更新时间
+- (void)updateConversationTime:(NSInteger)update_time;
+
+///获取会话列表更新时间
+- (NSInteger)convUpdateTime;
+
 @end
 
 NS_ASSUME_NONNULL_END

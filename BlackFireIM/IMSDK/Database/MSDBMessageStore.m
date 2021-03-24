@@ -15,6 +15,7 @@
 #import "NSDictionary+Ext.h"
 #import "MSDBConversationStore.h"
 #import "MSIMConversation.h"
+#import "MSConversationProvider.h"
 
 static NSString *msg_id = @"msg_id";
 static NSString *msg_sign = @"msg_sign";
@@ -31,7 +32,7 @@ static NSString *ext_data = @"ext_data";
 ///向数据库中添加一条记录
 - (BOOL)addMessage:(MSIMElem *)elem
 {
-    NSString *fid = elem.isSelf ? elem.toUid : elem.fromUid;
+    NSString *fid = elem.partner_id;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",fid];
     NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(msg_id INTEGER,msg_sign INTEGER NOT NULL,f_id TEXT,t_id TEXT,msg_type INTEGER,send_status INTEGER,read_status INTEGER,code INTEGER,reason TEXT,block_id INTEGER NOT NULL,ext_data TEXT,PRIMARY KEY(msg_sign))",tableName];
     BOOL isOK = [self createTable:tableName withSQL:createSQL];
@@ -77,6 +78,26 @@ static NSString *ext_data = @"ext_data";
                            @(block_id),
                            XMNoNilString([elem.contentDic el_convertJsonString])];
     BOOL isAddOK = [self excuteSQL:sqlStr withArrParameter:addParams];
+    //更新会话
+    MSIMConversation *conv = [[MSConversationProvider provider] providerConversation:fid];
+    if (conv) {
+        if (conv.msg_end < elem.msg_id) {
+            conv.msg_end = elem.msg_id;
+        }
+        if (elem.type != BFIM_MSG_TYPE_NULL && conv.show_msg_sign < elem.msg_sign) {
+            conv.show_msg_sign = elem.msg_sign;
+            conv.show_msg = elem;
+        }
+        [[MSConversationProvider provider]updateConversation:conv];
+    }else {
+        MSIMConversation *con = [[MSIMConversation alloc]init];
+        con.partner_id = fid;
+        con.chat_type = BFIM_CHAT_TYPE_C2C;
+        con.show_msg = elem;
+        con.show_msg_sign = elem.msg_sign;
+        con.msg_end = elem.msg_id;
+        [[MSConversationProvider provider]updateConversation:con];
+    }
     return isAddOK;
 }
 
@@ -99,6 +120,12 @@ static NSString *ext_data = @"ext_data";
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
     NSString *sqlStr = [NSString stringWithFormat:@"update %@ set msg_type = '%zd' where msg_id = '%zd'",tableName,BFIM_MSG_TYPE_RECALL,msg_id];
     BOOL isOK = [self excuteSQL:sqlStr];
+    //更新会话
+    MSIMConversation *conv = [[MSConversationProvider provider] providerConversation:partnerID];
+    if (conv && conv.msg_end == msg_id) {
+        conv.show_msg.type = BFIM_MSG_TYPE_RECALL;
+        [[MSConversationProvider provider]updateConversation:conv];
+    }
     return isOK;
 }
 
@@ -226,6 +253,12 @@ static NSString *ext_data = @"ext_data";
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
     NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = '%zd',reason = '%@' where msg_sign = '%zd'",tableName,status,code,XMNoNilString(reason),msg_sign];
     BOOL isOK = [self excuteSQL:sqlStr];
+    //更新会话
+    MSIMConversation *conv = [[MSConversationProvider provider] providerConversation:partnerID];
+    if (conv && conv.show_msg_sign == msg_sign) {
+        conv.show_msg.sendStatus = status;
+        [[MSConversationProvider provider]updateConversation:conv];
+    }
     return isOK;
 }
 
@@ -290,7 +323,6 @@ static NSString *ext_data = @"ext_data";
 }
 
 - (void)fetchHistoryMessageWithDataArray:(NSMutableArray *)arr
-                              min_msg_id:(NSInteger)minID
                               max_msg_id:(NSInteger)maxID
                              lastMessage:(MSIMElem *)elem
                                    count:(NSInteger)count
@@ -311,15 +343,15 @@ static NSString *ext_data = @"ext_data";
                     tempMaxID = e.msg_id;
                 }
             }
-            if (tempMaxID <= minID || arr.count >= count) {
-                complete(arr,tempMaxID > minID);
+            if (tempMaxID <= 1 || arr.count >= count) {
+                complete(arr,tempMaxID > 1);
                 return;
             }
             //不够,继续往上取
             MSIMElem *nextElem = [[MSIMElem alloc]init];
             nextElem.msg_sign = datas.lastObject.msg_sign-1;
             nextElem.block_id = datas.lastObject.block_id+1;
-            [self fetchHistoryMessageWithDataArray:arr min_msg_id:minID max_msg_id:tempMaxID-1 lastMessage:nextElem count:count-arr.count partnerID:partnerID complete:complete];
+            [self fetchHistoryMessageWithDataArray:arr max_msg_id:tempMaxID-1 lastMessage:nextElem count:count-arr.count partnerID:partnerID complete:complete];
         }else {
             //取网络
             //本地与服务器之间的差异
@@ -347,15 +379,15 @@ static NSString *ext_data = @"ext_data";
                         }
                         [self addMessage:e];
                     }
-                    if (tempMaxID <= minID || arr.count >= count) {
-                        complete(arr,tempMaxID > minID);
+                    if (tempMaxID <= 1 || arr.count >= count) {
+                        complete(arr,tempMaxID > 1);
                         return;
                     }
                     //不够,继续往上取
                     MSIMElem *nextElem = [[MSIMElem alloc]init];
                     nextElem.msg_sign = tempArr.lastObject.msg_sign-1;
                     nextElem.block_id = tempArr.lastObject.block_id+1;
-                    [self fetchHistoryMessageWithDataArray:arr min_msg_id:minID max_msg_id:tempMaxID-1 lastMessage:nextElem count:count-arr.count partnerID:partnerID complete:complete];
+                    [self fetchHistoryMessageWithDataArray:arr max_msg_id:tempMaxID-1 lastMessage:nextElem count:count-arr.count partnerID:partnerID complete:complete];
                     
                 }else {
                     complete(arr,YES);
@@ -380,7 +412,6 @@ static NSString *ext_data = @"ext_data";
     //先取出对应会话中记录的最后一条msg_id
     MSDBConversationStore *convStore = [[MSDBConversationStore alloc]init];
     MSIMConversation *conv = [convStore searchConversation:[NSString stringWithFormat:@"c2c_%@",partnerID]];
-    NSInteger msg_start = conv.msg_start;
     NSInteger msg_end = conv.msg_end;
     MSIMElem *lastElem;
     if (last_msg_sign) {
@@ -389,7 +420,7 @@ static NSString *ext_data = @"ext_data";
         lastElem = [self lastMessage:partnerID];
     }
     NSMutableArray *arr = [NSMutableArray array];
-    [self fetchHistoryMessageWithDataArray:arr min_msg_id:msg_start max_msg_id:msg_end lastMessage:lastElem count:count partnerID:partnerID complete:complete];
+    [self fetchHistoryMessageWithDataArray:arr max_msg_id:msg_end lastMessage:lastElem count:count partnerID:partnerID complete:complete];
 }
 
 - (NSArray<MSIMElem *> *)messageFromLocalByPartnerID:(NSString *)partnerID
@@ -445,7 +476,7 @@ static NSString *ext_data = @"ext_data";
 ///将所有的发送中的消息置为发送失败
 - (BOOL)cleanAllSendingMessage:(NSString *)tableName
 {
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd' where send_status = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,BFIM_MSG_STATUS_SENDING];
     BOOL isOK = [self excuteSQL:sqlStr];
     return isOK;
 }

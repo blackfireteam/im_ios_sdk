@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class ProfileList;
 @class ChatR;
 @class ChatList;
+@class ProfileOnline;
+@class UsrOffline;
 @interface MSIMManager (Parse)
 
 ///收到服务器下发的消息处理
@@ -25,6 +27,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 ///服务器返回的未读数结果处理
 - (void)chatUnreadCountChanged:(LastReadMsg *)result;
+
+///服务器返回的用户上线通知处理
+- (void)userOnLineHandler:(ProfileOnline *)online;
+
+///服务器返回的用户下线通知处理
+- (void)userOfflineHandler:(UsrOffline *)offline;
 
 @end
 

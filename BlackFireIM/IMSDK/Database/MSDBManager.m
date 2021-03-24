@@ -10,6 +10,7 @@
 #import "MSIMTools.h"
 #import "NSFileManager+filePath.h"
 #import "MSDBMessageStore.h"
+#import "MSConversationProvider.h"
 
 
 @interface MSDBManager()
@@ -53,6 +54,7 @@ static MSDBManager *manager;
 - (void)accountChanged
 {
     [self scanAllTables];
+    [[MSConversationProvider provider]clean];
     [_messageQueue close];
     _messageQueue = nil;
 }

@@ -668,51 +668,47 @@ GPB_FINAL @interface UnblockU : GPBMessage
 
 @end
 
-#pragma mark - GetChatListOnlineUids
+#pragma mark - ProfileOnline
 
-typedef GPB_ENUM(GetChatListOnlineUids_FieldNumber) {
-  GetChatListOnlineUids_FieldNumber_Sign = 1,
+typedef GPB_ENUM(ProfileOnline_FieldNumber) {
+  ProfileOnline_FieldNumber_Uid = 1,
+  ProfileOnline_FieldNumber_UpdateTime = 2,
+  ProfileOnline_FieldNumber_NickName = 3,
+  ProfileOnline_FieldNumber_Avatar = 4,
+  ProfileOnline_FieldNumber_Gold = 5,
+  ProfileOnline_FieldNumber_Verified = 6,
 };
 
 /**
- * 22
+ * 50  for demo: 通知客户端用户上线事件
  **/
-GPB_FINAL @interface GetChatListOnlineUids : GPBMessage
+GPB_FINAL @interface ProfileOnline : GPBMessage
 
-@property(nonatomic, readwrite) int64_t sign;
+@property(nonatomic, readwrite) int64_t uid;
+
+/** profile的更新时间 精确到秒的时间戳 */
+@property(nonatomic, readwrite) int64_t updateTime;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *nickName;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *avatar;
+
+@property(nonatomic, readwrite) BOOL gold;
+
+@property(nonatomic, readwrite) BOOL verified;
 
 @end
 
-#pragma mark - OnlineUids
+#pragma mark - UsrOffline
 
-typedef GPB_ENUM(OnlineUids_FieldNumber) {
-  OnlineUids_FieldNumber_UidsArray = 2,
+typedef GPB_ENUM(UsrOffline_FieldNumber) {
+  UsrOffline_FieldNumber_Uid = 1,
 };
 
 /**
- * 23
+ * 52 for demo：通知客户端用户下线事件
  **/
-GPB_FINAL @interface OnlineUids : GPBMessage
-
-@property(nonatomic, readwrite, strong, null_resettable) GPBInt64Array *uidsArray;
-/** The number of items in @c uidsArray without causing the array to be created. */
-@property(nonatomic, readonly) NSUInteger uidsArray_Count;
-
-@end
-
-#pragma mark - IsOnline
-
-typedef GPB_ENUM(IsOnline_FieldNumber) {
-  IsOnline_FieldNumber_Sign = 1,
-  IsOnline_FieldNumber_Uid = 2,
-};
-
-/**
- * 24
- **/
-GPB_FINAL @interface IsOnline : GPBMessage
-
-@property(nonatomic, readwrite) int64_t sign;
+GPB_FINAL @interface UsrOffline : GPBMessage
 
 @property(nonatomic, readwrite) int64_t uid;
 

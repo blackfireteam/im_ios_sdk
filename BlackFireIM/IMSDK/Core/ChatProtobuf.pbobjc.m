@@ -1823,108 +1823,24 @@ typedef struct UnblockU__storage_ {
 
 @end
 
-#pragma mark - GetChatListOnlineUids
+#pragma mark - ProfileOnline
 
-@implementation GetChatListOnlineUids
+@implementation ProfileOnline
 
-@dynamic sign;
-
-typedef struct GetChatListOnlineUids__storage_ {
-  uint32_t _has_storage_[1];
-  int64_t sign;
-} GetChatListOnlineUids__storage_;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = nil;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "sign",
-        .dataTypeSpecific.clazz = Nil,
-        .number = GetChatListOnlineUids_FieldNumber_Sign,
-        .hasIndex = 0,
-        .offset = (uint32_t)offsetof(GetChatListOnlineUids__storage_, sign),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeInt64,
-      },
-    };
-    GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[GetChatListOnlineUids class]
-                                     rootClass:[ChatProtobufRoot class]
-                                          file:ChatProtobufRoot_FileDescriptor()
-                                        fields:fields
-                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(GetChatListOnlineUids__storage_)
-                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
-    #if defined(DEBUG) && DEBUG
-      NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif  // DEBUG
-    descriptor = localDescriptor;
-  }
-  return descriptor;
-}
-
-@end
-
-#pragma mark - OnlineUids
-
-@implementation OnlineUids
-
-@dynamic uidsArray, uidsArray_Count;
-
-typedef struct OnlineUids__storage_ {
-  uint32_t _has_storage_[1];
-  GPBInt64Array *uidsArray;
-} OnlineUids__storage_;
-
-// This method is threadsafe because it is initially called
-// in +initialize for each subclass.
-+ (GPBDescriptor *)descriptor {
-  static GPBDescriptor *descriptor = nil;
-  if (!descriptor) {
-    static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "uidsArray",
-        .dataTypeSpecific.clazz = Nil,
-        .number = OnlineUids_FieldNumber_UidsArray,
-        .hasIndex = GPBNoHasBit,
-        .offset = (uint32_t)offsetof(OnlineUids__storage_, uidsArray),
-        .flags = (GPBFieldFlags)(GPBFieldRepeated | GPBFieldPacked),
-        .dataType = GPBDataTypeInt64,
-      },
-    };
-    GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[OnlineUids class]
-                                     rootClass:[ChatProtobufRoot class]
-                                          file:ChatProtobufRoot_FileDescriptor()
-                                        fields:fields
-                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(OnlineUids__storage_)
-                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
-    #if defined(DEBUG) && DEBUG
-      NSAssert(descriptor == nil, @"Startup recursed!");
-    #endif  // DEBUG
-    descriptor = localDescriptor;
-  }
-  return descriptor;
-}
-
-@end
-
-#pragma mark - IsOnline
-
-@implementation IsOnline
-
-@dynamic sign;
 @dynamic uid;
+@dynamic updateTime;
+@dynamic nickName;
+@dynamic avatar;
+@dynamic gold;
+@dynamic verified;
 
-typedef struct IsOnline__storage_ {
+typedef struct ProfileOnline__storage_ {
   uint32_t _has_storage_[1];
-  int64_t sign;
+  NSString *nickName;
+  NSString *avatar;
   int64_t uid;
-} IsOnline__storage_;
+  int64_t updateTime;
+} ProfileOnline__storage_;
 
 // This method is threadsafe because it is initially called
 // in +initialize for each subclass.
@@ -1932,32 +1848,113 @@ typedef struct IsOnline__storage_ {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
-      {
-        .name = "sign",
-        .dataTypeSpecific.clazz = Nil,
-        .number = IsOnline_FieldNumber_Sign,
-        .hasIndex = 0,
-        .offset = (uint32_t)offsetof(IsOnline__storage_, sign),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
-        .dataType = GPBDataTypeInt64,
-      },
       {
         .name = "uid",
         .dataTypeSpecific.clazz = Nil,
-        .number = IsOnline_FieldNumber_Uid,
+        .number = ProfileOnline_FieldNumber_Uid,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ProfileOnline__storage_, uid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "updateTime",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProfileOnline_FieldNumber_UpdateTime,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(IsOnline__storage_, uid),
+        .offset = (uint32_t)offsetof(ProfileOnline__storage_, updateTime),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "nickName",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProfileOnline_FieldNumber_NickName,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(ProfileOnline__storage_, nickName),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "avatar",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProfileOnline_FieldNumber_Avatar,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(ProfileOnline__storage_, avatar),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "gold",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProfileOnline_FieldNumber_Gold,
+        .hasIndex = 4,
+        .offset = 5,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "verified",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProfileOnline_FieldNumber_Verified,
+        .hasIndex = 6,
+        .offset = 7,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProfileOnline class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProfileOnline__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - UsrOffline
+
+@implementation UsrOffline
+
+@dynamic uid;
+
+typedef struct UsrOffline__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t uid;
+} UsrOffline__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "uid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = UsrOffline_FieldNumber_Uid,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(UsrOffline__storage_, uid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
     };
     GPBDescriptor *localDescriptor =
-        [GPBDescriptor allocDescriptorForClass:[IsOnline class]
+        [GPBDescriptor allocDescriptorForClass:[UsrOffline class]
                                      rootClass:[ChatProtobufRoot class]
                                           file:ChatProtobufRoot_FileDescriptor()
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
-                                   storageSize:sizeof(IsOnline__storage_)
+                                   storageSize:sizeof(UsrOffline__storage_)
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");

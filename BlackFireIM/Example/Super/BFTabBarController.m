@@ -7,7 +7,7 @@
 
 #import "BFTabBarController.h"
 #import "BFConversationListController.h"
-#import "BFContactController.h"
+#import "BFDiscoveryController.h"
 #import "BFProfileViewController.h"
 #import "BFNavigationController.h"
 
@@ -32,7 +32,7 @@
     BFNavigationController *convNav = [[BFNavigationController alloc]initWithRootViewController:convVC];
     [self addChildViewController:convNav];
     
-    BFContactController *tactVC = [[BFContactController alloc]init];
+    BFDiscoveryController *tactVC = [[BFDiscoveryController alloc]init];
     tactVC.tabBarItem.title = @"联系人";
     tactVC.tabBarItem.image = [[UIImage imageNamed:@"contact_normal"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     tactVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"contact_selected"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

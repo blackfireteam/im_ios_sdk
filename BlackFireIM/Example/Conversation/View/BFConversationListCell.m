@@ -9,7 +9,7 @@
 #import "UIColor+BFDarkMode.h"
 #import "BFHeader.h"
 #import "NSDate+MSKit.h"
-
+#import <SDWebImage.h>
 
 @interface BFConversationListCell()
 
@@ -61,6 +61,7 @@
     
     self.headImageView.layer.masksToBounds = YES;
     self.headImageView.layer.cornerRadius = self.headImageView.frame.size.height/2;
+    [self.headImageView sd_setImageWithURL:[NSURL URLWithString:XMNoNilString(convData.conv.userInfo.avatar)]];
 }
 
 - (void)layoutSubviews

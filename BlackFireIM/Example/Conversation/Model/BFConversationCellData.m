@@ -38,7 +38,7 @@
 
 - (NSDate *)time
 {
-    return [NSDate dateWithTimeIntervalSince1970:self.conv.time/1000/1000];
+    return [NSDate dateWithTimeIntervalSince1970:self.conv.show_msg_sign/1000/1000];
 }
 
 @end

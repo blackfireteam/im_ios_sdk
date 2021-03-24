@@ -12,8 +12,8 @@
 + (instancetype)defaultConfig
 {
     IMSDKConfig *config = [[IMSDKConfig alloc]init];
-    config.ip = @"192.168.1.1";
-    config.port = 9090;
+    config.ip = @"192.168.50.254";
+    config.port = 18888;
     config.token = @"";
     config.heartDuration = 30;
     config.retryCount = 5;
