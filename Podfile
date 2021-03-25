@@ -10,5 +10,7 @@ pod 'Protobuf'
 pod 'FMDB'
 pod 'UICKeyChainStore'
 pod 'SDWebImage'
+pod 'RealReachability'
+
 
 end

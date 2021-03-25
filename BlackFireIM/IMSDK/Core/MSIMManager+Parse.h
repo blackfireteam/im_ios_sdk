@@ -34,6 +34,11 @@ NS_ASSUME_NONNULL_BEGIN
 ///服务器返回的用户下线通知处理
 - (void)userOfflineHandler:(UsrOffline *)offline;
 
+///服务器返回的历史数据处理
+- (NSArray<MSIMElem *> *)chatHistoryHandler:(NSArray<ChatR *> *)responses;
+
+- (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem;
+
 @end
 
 NS_ASSUME_NONNULL_END

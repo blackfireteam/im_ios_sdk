@@ -142,6 +142,7 @@
                     
                     STRONG_SELF(strongSelf)
                     strongSelf.isLoadingMsg = NO;
+                    [strongSelf.indicatorView stopAnimating];
                     
         }];
     }
@@ -274,18 +275,18 @@
     }
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (!self.noMoreMsg && scrollView.contentOffset.y <= self.indicatorView.height) {
-        if (!self.indicatorView.isAnimating) {
-            [self.indicatorView startAnimating];
-        }
-    }else {
-        if (self.indicatorView.isAnimating) {
-            [self.indicatorView stopAnimating];
-        }
-    }
-}
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    if (!self.noMoreMsg && scrollView.contentOffset.y <= self.indicatorView.height) {
+//        if (!self.indicatorView.isAnimating) {
+//            [self.indicatorView startAnimating];
+//        }
+//    }else {
+//        if (self.indicatorView.isAnimating) {
+//            [self.indicatorView stopAnimating];
+//        }
+//    }
+//}
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {

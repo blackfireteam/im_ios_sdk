@@ -30,15 +30,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (MSIMConversation *)searchConversation:(NSString *)conv_id;
 
 /// 分页获取会话记录
-- (void)conversationsWithLast_msg_id:(NSInteger)last_msg_id
-                               count:(NSInteger)count
-                            complete:(void(^)(NSArray<MSIMConversation *> *data,BOOL hasMore))complete;
+- (void)conversationsWithLast_seq:(NSInteger)last_seq
+                            count:(NSInteger)count
+                         complete:(void(^)(NSArray<MSIMConversation *> *data,BOOL hasMore))complete;
 
 ///删除某一条会话，不清空聊天记录
 - (BOOL)deleteConversation:(NSString *)conv_id;
-
-///查询会话列表中最新的一条msg_id。用于跟服务器同步增量更新
-- (NSInteger)lastMessageEnd;
 
 @end
 

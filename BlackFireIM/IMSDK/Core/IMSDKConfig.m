@@ -12,6 +12,7 @@
 + (instancetype)defaultConfig
 {
     IMSDKConfig *config = [[IMSDKConfig alloc]init];
+//    config.ip = @"im.ekfree.com";
     config.ip = @"192.168.50.254";
     config.port = 18888;
     config.token = @"";

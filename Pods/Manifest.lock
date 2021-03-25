@@ -19,6 +19,11 @@ PODS:
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - Protobuf (3.14.0)
+  - RealReachability (1.3.0):
+    - RealReachability/Connection (= 1.3.0)
+    - RealReachability/Ping (= 1.3.0)
+  - RealReachability/Connection (1.3.0)
+  - RealReachability/Ping (1.3.0)
   - SDWebImage (5.9.0):
     - SDWebImage/Core (= 5.9.0)
   - SDWebImage/Core (5.9.0)
@@ -29,6 +34,7 @@ DEPENDENCIES:
   - CocoaAsyncSocket
   - FMDB
   - Protobuf
+  - RealReachability
   - SDWebImage
   - UICKeyChainStore
 
@@ -38,6 +44,7 @@ SPEC REPOS:
     - CocoaAsyncSocket
     - FMDB
     - Protobuf
+    - RealReachability
     - SDWebImage
     - UICKeyChainStore
 
@@ -46,9 +53,10 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
+  RealReachability: eae9c58d2db52fadd8e1cba4b5d4c028454fbc47
   SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
   UICKeyChainStore: ba3bff2c762b12db1e516f395c837dd25298b05e
 
-PODFILE CHECKSUM: 27f962adfe5ed6e6d0c58418fd0d0b791159d7bb
+PODFILE CHECKSUM: 339920b8303be821d7a5b412fc74117c13906d55
 
 COCOAPODS: 1.10.1

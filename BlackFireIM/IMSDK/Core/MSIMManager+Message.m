@@ -11,6 +11,7 @@
 #import "MSDBImageFileStore.h"
 #import "NSString+Ext.h"
 #import "NSFileManager+filePath.h"
+#import "MSIMManager+Parse.h"
 
 
 @implementation MSIMManager (Message)
@@ -97,6 +98,7 @@
     chats.body = elem.text;
     chats.toUid = elem.toUid.integerValue;
     WS(weakSelf)
+    NSLog(@"[发送消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
@@ -105,6 +107,7 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
             [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC code:ERR_SUCC reason:@"" partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem];
         }else {
             NSLog(@"发送失败");
             failed(code,error);
@@ -113,6 +116,7 @@
             elem.reason = error;
             [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL code:elem.code reason:elem.reason partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem];
         }
     }];
 }
@@ -134,6 +138,7 @@
                 elem.url = imageInfo.url;
                 [self.msgListener onNewMessages:@[elem]];
                 [self.messageStore addMessage:elem];
+                [self elemNeedToUpdateConversation:elem];
                 [self sendImageMessageByTCP:elem successed:success failed:failed];
             }else {
                 [self uploadImage:elem successed:success failed:failed];
@@ -146,6 +151,7 @@
     if (isResend == NO) {
         [self.msgListener onNewMessages:@[elem]];
         [self.messageStore addMessage:elem];
+        [self elemNeedToUpdateConversation:elem];
     }
     [self sendImageMessageByTCP:elem successed:success failed:failed];
 }
@@ -167,6 +173,7 @@
         if ([imageExt isEqualToString:@"png"] || [imageExt isEqualToString:@"jpeg"]) {
             [self.msgListener onNewMessages:@[elem]];
             [self.messageStore addMessage:elem];
+            [self elemNeedToUpdateConversation:elem];
             UIImage *image = [UIImage imageWithData:imageData];
             if (image.size.width > 1920 || image.size.height > 1920) {
                 CGFloat aspectRadio = MIN(1920/image.size.width, 1920/image.size.height);
@@ -193,6 +200,7 @@
             }
             [self.msgListener onNewMessages:@[elem]];
             [self.messageStore addMessage:elem];
+            [self elemNeedToUpdateConversation:elem];
             //再上传
         }else {
             failed(ERR_IM_IMAGE_TYPE_ERROR,@"图片类型不支持");
@@ -212,6 +220,7 @@
     chats.width = elem.width;
     chats.height = elem.height;
     WS(weakSelf)
+    NSLog(@"[发送消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == 0) {
@@ -219,6 +228,7 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
             [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC code:ERR_SUCC reason:@"" partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem];
             success(result.msgId);
         }else {
             NSLog(@"发送失败");
@@ -228,6 +238,7 @@
             elem.reason = error;
             [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL code:elem.code reason:elem.reason partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem];
         }
     }];
 }
@@ -250,6 +261,7 @@
     revoke.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     revoke.toUid = reciever;
     revoke.msgId = msg_id;
+    NSLog(@"[发送消息]Revoke:\n%@",revoke);
     [self send:[revoke data] protoType:XMChatProtoTypeRecall needToEncry:NO sign:revoke.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
         if (code == ERR_SUCC) {

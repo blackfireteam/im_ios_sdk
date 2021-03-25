@@ -155,6 +155,7 @@ static MSProfileProvider *instance;
     }
     request.getProfilesArray = pArr;
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    NSLog(@"[发送消息]GetProfiles:\n%@",request);
     [[MSIMManager sharedInstance]send:[request data] protoType:XMChatProtoTypeGetProfiles needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
             

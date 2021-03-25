@@ -16,6 +16,7 @@
 #import "MSDBConversationStore.h"
 #import "MSIMConversation.h"
 #import "MSConversationProvider.h"
+#import "MSIMManager+Parse.h"
 
 static NSString *msg_id = @"msg_id";
 static NSString *msg_sign = @"msg_sign";
@@ -78,26 +79,6 @@ static NSString *ext_data = @"ext_data";
                            @(block_id),
                            XMNoNilString([elem.contentDic el_convertJsonString])];
     BOOL isAddOK = [self excuteSQL:sqlStr withArrParameter:addParams];
-    //更新会话
-    MSIMConversation *conv = [[MSConversationProvider provider] providerConversation:fid];
-    if (conv) {
-        if (conv.msg_end < elem.msg_id) {
-            conv.msg_end = elem.msg_id;
-        }
-        if (elem.type != BFIM_MSG_TYPE_NULL && conv.show_msg_sign < elem.msg_sign) {
-            conv.show_msg_sign = elem.msg_sign;
-            conv.show_msg = elem;
-        }
-        [[MSConversationProvider provider]updateConversation:conv];
-    }else {
-        MSIMConversation *con = [[MSIMConversation alloc]init];
-        con.partner_id = fid;
-        con.chat_type = BFIM_CHAT_TYPE_C2C;
-        con.show_msg = elem;
-        con.show_msg_sign = elem.msg_sign;
-        con.msg_end = elem.msg_id;
-        [[MSConversationProvider provider]updateConversation:con];
-    }
     return isAddOK;
 }
 
@@ -262,38 +243,6 @@ static NSString *ext_data = @"ext_data";
     return isOK;
 }
 
-///服务器同步过来的历史消息，中间有可能会丢失，为了兼容，我会在丢失的位置本地插入一条空消息占位
-- (NSArray *)fillHistoryList:(NSArray<ChatR *> *)historys
-               fromStartSign:(NSInteger)startSign
-              fromStartMsgID:(NSInteger)startMsgID
-                      offset:(NSInteger)offset
-{
-    NSMutableArray *tempArr = [NSMutableArray array];
-    NSInteger tempSign = startSign == 0 ? [MSIMTools sharedInstance].adjustLocalTimeInterval : startSign;
-    for (NSInteger i = startMsgID-1; i <= startMsgID-offset; i++) {
-        BOOL isExist = NO;
-        ChatR *existR = nil;
-        for (ChatR *r in historys) {
-            if (i == r.msgId) {
-                isExist = YES;
-                existR = r;
-                break;
-            }
-        }
-        if (isExist == NO) {
-            tempSign -= 1;
-            MSIMElem *item = [[MSIMElem alloc]init];
-            item.msg_id = i;
-            item.type = BFIM_MSG_TYPE_NULL;
-            item.msg_sign =  tempSign;
-            [tempArr addObject:item];
-        }else {
-            tempSign = existR.msgTime-1;
-        }
-    }
-    return tempArr;
-}
-
 - (NSArray<MSIMElem *> *)localMessageGroupByBlockID:(NSInteger)blockID partnerID:(NSString *)partnerID maxCount:(NSInteger)count
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
@@ -322,87 +271,6 @@ static NSString *ext_data = @"ext_data";
     return elem;
 }
 
-- (void)fetchHistoryMessageWithDataArray:(NSMutableArray *)arr
-                              max_msg_id:(NSInteger)maxID
-                             lastMessage:(MSIMElem *)elem
-                                   count:(NSInteger)count
-                               partnerID:(NSString *)partnerID
-                                complete:(void(^)(NSArray<MSIMElem *> *data,BOOL hasMore))complete
-{
-    if (maxID > 0) {
-        MSIMElem *lastMessageID = [self latestMessageIDBeforeMsgSign:elem.msg_sign partnerID:partnerID];
-        if (lastMessageID.msg_id >= maxID) {
-            //取本地
-            NSArray<MSIMElem *> *datas = [self localMessageGroupByBlockID:elem.block_id partnerID:partnerID maxCount:count-arr.count];
-            NSInteger tempMaxID = 0;
-            for (MSIMElem *e in datas) {
-                if (e.type != BFIM_MSG_TYPE_NULL) {
-                    [arr addObject:e];
-                }
-                if (e.msg_id) {
-                    tempMaxID = e.msg_id;
-                }
-            }
-            if (tempMaxID <= 1 || arr.count >= count) {
-                complete(arr,tempMaxID > 1);
-                return;
-            }
-            //不够,继续往上取
-            MSIMElem *nextElem = [[MSIMElem alloc]init];
-            nextElem.msg_sign = datas.lastObject.msg_sign-1;
-            nextElem.block_id = datas.lastObject.block_id+1;
-            [self fetchHistoryMessageWithDataArray:arr max_msg_id:tempMaxID-1 lastMessage:nextElem count:count-arr.count partnerID:partnerID complete:complete];
-        }else {
-            //取网络
-            //本地与服务器之间的差异
-            GetHistory *history = [[GetHistory alloc]init];
-            history.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
-            history.toUid = partnerID.integerValue;
-            history.msgEnd = maxID;
-            if (lastMessageID.msg_id == 0) {
-                history.offset = MIN(count-arr.count, maxID);
-            }else {
-                history.offset = MIN(count-arr.count, maxID-lastMessageID.msg_id+1);
-            }
-            
-            [[MSIMManager sharedInstance]send:[history data] protoType:XMChatProtoTypeGetHistoryMsg needToEncry:NO sign:history.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-                if (code == ERR_SUCC) {
-                    ChatRBatch *batch = response;
-                    NSArray<MSIMElem *> *tempArr = [self fillHistoryList:batch.msgsArray fromStartSign:elem.msg_sign fromStartMsgID:maxID offset:history.offset];
-                    NSInteger tempMaxID = 0;
-                    for (MSIMElem *e in tempArr) {
-                        if (e.type != BFIM_MSG_TYPE_NULL) {
-                            [arr addObject:e];
-                        }
-                        if (e.msg_id) {
-                            tempMaxID = e.msg_id;
-                        }
-                        [self addMessage:e];
-                    }
-                    if (tempMaxID <= 1 || arr.count >= count) {
-                        complete(arr,tempMaxID > 1);
-                        return;
-                    }
-                    //不够,继续往上取
-                    MSIMElem *nextElem = [[MSIMElem alloc]init];
-                    nextElem.msg_sign = tempArr.lastObject.msg_sign-1;
-                    nextElem.block_id = tempArr.lastObject.block_id+1;
-                    [self fetchHistoryMessageWithDataArray:arr max_msg_id:tempMaxID-1 lastMessage:nextElem count:count-arr.count partnerID:partnerID complete:complete];
-                    
-                }else {
-                    complete(arr,YES);
-                }
-            }];
-        }
-    }else {
-        //取本地
-        NSArray *tempArr = [self messageFromLocalByPartnerID:partnerID last_msg_id:elem.msg_sign+1 count:count];
-        [arr addObjectsFromArray:tempArr];
-        complete(arr,NO);
-        return;
-    }
-}
-
 /// 分页获取聊天记录
 - (void)messageByPartnerID:(NSString *)partnerID
              last_msg_sign:(NSInteger)last_msg_sign
@@ -413,22 +281,87 @@ static NSString *ext_data = @"ext_data";
     MSDBConversationStore *convStore = [[MSDBConversationStore alloc]init];
     MSIMConversation *conv = [convStore searchConversation:[NSString stringWithFormat:@"c2c_%@",partnerID]];
     NSInteger msg_end = conv.msg_end;
-    MSIMElem *lastElem;
-    if (last_msg_sign) {
-        lastElem = [self searchMessage:partnerID msg_sign:last_msg_sign];
+    if (last_msg_sign == 0) {//第一页
+        MSIMElem *lastElem = [self lastMessageID:partnerID];
+        if (msg_end <= lastElem.msg_id) {//直接本地取
+            NSArray<MSIMElem *> *arr = [self messageFromLocalByPartnerID:partnerID last_msg_id:last_msg_sign block_id:lastElem.block_id];
+            NSInteger minMsgID = [self minMsgIDInMessages:arr];
+            complete(arr,minMsgID > 1 ? YES : NO);
+        }else {
+            [self fetchHistoryMessageFromEnd:0 toStart:lastElem.msg_id partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
+                if (lastElem.msg_id == 0 || msg_end - lastElem.msg_id > count) {
+                    complete(msgs,YES);
+                }else {
+                    NSArray *arr = [self messageFromLocalByPartnerID:partnerID last_msg_id:last_msg_sign block_id:lastElem.block_id];
+                    NSInteger minMsgID = [self minMsgIDInMessages:arr];
+                    complete(arr,minMsgID > 1 ? YES : NO);
+                }
+            }];
+        }
     }else {
-        lastElem = [self lastMessage:partnerID];
+        MSIMElem *preElem = [self searchMessage:partnerID msg_sign:last_msg_sign];
+        NSArray<MSIMElem *> *arr = [self messageFromLocalByPartnerID:partnerID last_msg_id:last_msg_sign block_id:preElem.block_id];
+        if (arr.count > count) {
+            complete(arr,YES);
+        }else {
+            NSInteger minMsgID = [self minMsgIDInMessages:arr];
+            if (minMsgID <= 1) {
+                complete(arr,NO);
+            }else {
+                MSIMElem *lastMsdID = [self latestMessageIDBeforeMsgSign:arr.lastObject.msg_sign partnerID:partnerID];
+                [self fetchHistoryMessageFromEnd:[self minMsgIDInMessages:arr] toStart:lastMsdID.msg_id partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
+                    NSMutableArray *tempArr = [NSMutableArray array];
+                    [tempArr addObjectsFromArray:arr];
+                    [tempArr addObjectsFromArray:msgs];
+                    complete(tempArr,YES);
+                }];
+            }
+        }
     }
-    NSMutableArray *arr = [NSMutableArray array];
-    [self fetchHistoryMessageWithDataArray:arr max_msg_id:msg_end lastMessage:lastElem count:count partnerID:partnerID complete:complete];
 }
+
+- (NSInteger)minMsgIDInMessages:(NSArray *)msgs
+{
+    NSInteger msgID = INT64_MAX;
+    for (MSIMElem *elem in msgs) {
+        if (elem.msg_id > 0 && elem.msg_id < msgID) {
+            msgID = elem.msg_id;
+        }
+    }
+    return msgID;
+}
+
+- (void)fetchHistoryMessageFromEnd:(NSInteger)msgEnd toStart:(NSInteger)msgStart partner_Id:(NSString *)partner_id result:(void(^)(NSArray<MSIMElem *> *))result
+{
+    GetHistory *history = [[GetHistory alloc]init];
+    history.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    history.toUid = partner_id.integerValue;
+    history.msgEnd = msgEnd;
+    history.msgStart = msgStart;
+    NSLog(@"[发送消息]GetHistory:\n%@",history);
+    [[MSIMManager sharedInstance]send:[history data] protoType:XMChatProtoTypeGetHistoryMsg needToEncry:NO sign:history.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+        if (code == ERR_SUCC) {
+            ChatRBatch *batch = response;
+            NSArray<MSIMElem *> *msgs = [[MSIMManager sharedInstance] chatHistoryHandler:batch.msgsArray];
+            result(msgs);
+        }else {
+            result(nil);
+        }
+    }];
+}
+
 
 - (NSArray<MSIMElem *> *)messageFromLocalByPartnerID:(NSString *)partnerID
                                          last_msg_id:(NSInteger)last_msg_id
-                                               count:(NSInteger)count
+                                            block_id:(NSInteger)block_id
 {
+    NSString *sqlStr;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_type != '%zd' order by msg_sign desc limit '%zd'",tableName,last_msg_id,BFIM_MSG_TYPE_NULL,count+1];
+    if (last_msg_id == 0) {
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' and block_id = 1 order by msg_sign desc limit 21",tableName,BFIM_MSG_TYPE_NULL];
+    }else {
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit 21",tableName,last_msg_id,BFIM_MSG_TYPE_NULL,block_id];
+    }
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {

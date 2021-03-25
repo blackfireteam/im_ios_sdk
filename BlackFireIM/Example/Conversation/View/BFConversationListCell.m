@@ -59,8 +59,8 @@
     self.subTitleLabel.attributedText = convData.subTitle;
     [self.unReadView setNum:convData.conv.unread_count];
     
-    self.headImageView.layer.masksToBounds = YES;
-    self.headImageView.layer.cornerRadius = self.headImageView.frame.size.height/2;
+//    self.headImageView.layer.masksToBounds = YES;
+//    self.headImageView.layer.cornerRadius = self.headImageView.frame.size.height/2;
     [self.headImageView sd_setImageWithURL:[NSURL URLWithString:XMNoNilString(convData.conv.userInfo.avatar)]];
 }
 

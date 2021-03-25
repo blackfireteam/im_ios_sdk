@@ -73,7 +73,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 - (NSArray<MSIMConversation *> *)allConvesations
 {
     __block NSMutableArray *convs = [[NSMutableArray alloc] init];
-    NSString *sqlString = [NSString stringWithFormat: @"SELECT * FROM %@ ORDER BY show_msg_id DESC", CONV_TABLE_NAME];
+    NSString *sqlString = [NSString stringWithFormat: @"SELECT * FROM %@ ORDER BY show_msg_sign DESC", CONV_TABLE_NAME];
     
     [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
@@ -86,11 +86,16 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 }
 
 /// 分页获取会话记录
-- (void)conversationsWithLast_msg_id:(NSInteger)last_msg_id
-                               count:(NSInteger)count
-                            complete:(void(^)(NSArray<MSIMConversation *> *data,BOOL hasMore))complete
+- (void)conversationsWithLast_seq:(NSInteger)last_seq
+                            count:(NSInteger)count
+                         complete:(void(^)(NSArray<MSIMConversation *> *data,BOOL hasMore))complete
 {
-    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_end < '%zd' order by msg_end desc limit '%zd'",CONV_TABLE_NAME,last_msg_id,count+1];
+    NSString *sqlStr;
+    if (last_seq == 0) {
+        sqlStr = [NSString stringWithFormat:@"select * from %@ order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,count+1];
+    }else {
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where show_msg_sign < '%zd' order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,last_seq,count+1];
+    }
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
@@ -144,18 +149,6 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     return ok;
 }
 
-///查询会话列表中最新的一条msg_id。用于跟服务器同步增量更新
-- (NSInteger)lastMessageEnd
-{
-    __block NSInteger msg_end = 0;
-    NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM %@ order by msg_end desc limit 1", CONV_TABLE_NAME];
-    [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
-        while ([rsSet next]) {
-            msg_end = [rsSet longLongIntForColumn:@"msg_end"];
-        }
-        [rsSet close];
-    }];
-    return msg_end;
-}
+
 
 @end

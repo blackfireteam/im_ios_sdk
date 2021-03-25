@@ -83,6 +83,19 @@
     }
 }
 
+- (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem
+{
+    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:elem.partner_id];
+    if(elem.msg_sign >= conv.show_msg_sign) {
+        conv.show_msg_sign = elem.msg_sign;
+        conv.show_msg = elem;
+        [self.convListener onUpdateConversations:@[conv]];
+        [[MSConversationProvider provider]updateConversation:conv];
+        return YES;
+    }
+    return NO;
+}
+
 - (void)updateConvLastMessage:(NSArray *)convs
 {
     //拉取最后一页聊天记录
@@ -92,10 +105,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 MSIMElem *lastElem = msgs.firstObject;
                 if (lastElem && weakSelf.convListener && [weakSelf.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-                    conv.show_msg = lastElem;
-                    conv.show_msg_sign = lastElem.msg_sign;
-                    [weakSelf.convListener onUpdateConversations:@[conv]];
-                    [[MSConversationProvider provider]updateConversation:conv];
+                    [weakSelf elemNeedToUpdateConversation:lastElem];
                 }
             });
                 } fail:^(NSInteger code, NSString * _Nonnull desc) {
@@ -106,8 +116,36 @@
 ///收到服务器下发的消息处理
 - (void)recieveMessages:(NSArray<ChatR *> *)responses
 {
+    NSArray *msgs = [self chatHistoryHandler:responses];
+    if (msgs.count > 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.msgListener && [self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
+                [self.msgListener onNewMessages:msgs];
+            }
+            MSIMElem *lastElem = msgs.lastObject;
+            MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:lastElem.partner_id];
+            if (lastElem.msg_sign > conv.show_msg_sign) {
+                conv.show_msg = lastElem;
+                conv.show_msg_sign = lastElem.msg_sign;
+                [[MSConversationProvider provider]updateConversation:conv];
+                if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+                    [self.convListener onUpdateConversations:@[conv]];
+                }
+            }
+            //如果本地没有会话
+            if (conv == nil) {
+                MSProfileInfo *info = [[MSProfileInfo alloc]init];
+                info.user_id = lastElem.partner_id;
+                [[MSProfileProvider provider]synchronizeProfiles:@[info]];
+            }
+        });
+    }
+}
+
+///服务器返回的历史数据处理
+- (NSArray<MSIMElem *> *)chatHistoryHandler:(NSArray<ChatR *> *)responses
+{
     NSMutableArray *recieves = [NSMutableArray array];
-    NSMutableArray *convs = [NSMutableArray array];
     for (ChatR *response in responses) {
         MSIMElem *elem = nil;
         if (response.type == BFIM_MSG_TYPE_RECALL) {//消息撤回
@@ -145,19 +183,8 @@
             [[MSIMTools sharedInstance]updateConversationTime:response.msgTime];
         }
     }
-    if (recieves.count > 0) {
-        BOOL isOK = [self.messageStore addMessages:recieves];
-        if (isOK) {//数据库保存成功，通知和代理同时下发
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.msgListener && [self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
-                    [self.msgListener onNewMessages:recieves];
-                }
-                if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-                    [self.convListener onUpdateConversations:convs];
-                }
-            });
-        }
-    }
+    [self.messageStore addMessages:recieves];
+    return recieves;
 }
 
 - (void)chatUnreadCountChanged:(LastReadMsg *)result
@@ -189,7 +216,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSString *user_id = [NSString stringWithFormat:@"%lld",offline.uid];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_online" object:user_id];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_offline" object:user_id];
     });
 }
 

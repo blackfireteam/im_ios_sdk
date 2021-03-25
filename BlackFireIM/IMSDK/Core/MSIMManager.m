@@ -16,8 +16,9 @@
 #import "MSIMManager+Conversation.h"
 #import "MSProfileProvider.h"
 #import "MSIMManager+Parse.h"
+#import <RealReachability.h>
 
-
+#define kMsgMaxOutTime 30
 @interface MSIMManager()<GCDAsyncSocketDelegate>
 
 @property(nonatomic,strong) IMSDKConfig *config;
@@ -66,7 +67,12 @@ static MSIMManager *_manager;
         _socket = [[GCDAsyncSocket alloc]initWithDelegate:self delegateQueue:self.socketQueue];
         _callbackTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(callbackHandler:) userInfo:nil repeats:true];
         [[NSRunLoop mainRunLoop]addTimer:_callbackTimer forMode:NSRunLoopCommonModes];
-        
+        //监听网络变化
+        [GLobalRealReachability startNotifier];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(networkChanged:)
+                                                         name:kRealReachabilityChangedNotification
+                                                       object:nil];
     }
     return self;
 }
@@ -125,6 +131,38 @@ static MSIMManager *_manager;
 - (void)disConnectTCP
 {
     [self.socket disconnect];
+}
+
+- (void)networkChanged:(NSNotification *)note
+{
+    RealReachability *reachability = (RealReachability *)note.object;
+    ReachabilityStatus status = [reachability currentReachabilityStatus];
+    switch (status){
+            case RealStatusUnknown:
+            {
+                NSLog(@"~~~~~~~~~~~~~RealStatusUnknown");
+                break;
+            }
+                
+            case RealStatusNotReachable:
+            {
+                NSLog(@"~~~~~~~~~~~~~RealStatusNotReachable");
+                break;
+            }
+                
+            case RealStatusViaWWAN:
+            {
+                NSLog(@"~~~~~~~~~~~~~RealStatusViaWWAN");
+                break;
+            }
+            case RealStatusViaWiFi:
+            {
+                NSLog(@"~~~~~~~~~~~~~RealStatusViaWiFi");
+                break;
+            }
+            default:
+                break;
+        }
 }
 
 #pragma mark - GCDAsyncSocketDelegate
@@ -247,12 +285,12 @@ static MSIMManager *_manager;
             NSError *error;
             ChatRBatch *batch = [[ChatRBatch alloc]initWithData:package error:&error];
             if (error == nil && batch.msgsArray != nil) {
-                [self recieveMessages:batch.msgsArray];
                 [self sendMessageResponse:batch.sign resultCode:ERR_SUCC resultMsg:@"收到历史消息" response:batch];
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"收到批量消息***%@",batch);
+            NSLog(@"收到批量消息");
+            NSLog(@"%@",batch);
         }
             break;
         case XMChatProtoTypeLastReadMsg: //消息已读状态发生变更通知（客户端收到这个才去变更）
@@ -454,7 +492,7 @@ static MSIMManager *_manager;
     NSArray *allKeys = self.callbackBlock.allKeys;
     for (NSString *key in allKeys) {
         NSInteger sendTime = key.integerValue;
-        if (([MSIMTools sharedInstance].adjustLocalTimeInterval - sendTime) > 60*1000*1000) {//判断超时，回调失败
+        if (([MSIMTools sharedInstance].adjustLocalTimeInterval - sendTime) > kMsgMaxOutTime*1000*1000) {//判断超时，回调失败
             NSDictionary *dic = self.callbackBlock[key];
             NSString *msg_seq = [self.taskIDs valueForKey:key];
             TCPBlock complete = dic[@"callback"];
@@ -503,6 +541,7 @@ static MSIMManager *_manager;
     ImLogin *login = [[ImLogin alloc]init];
     login.token = self.config.token;
     login.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    NSLog(@"[发送消息-login]:\n%@",login);
     [self send:[login data] protoType:XMChatProtoTypeLogin needToEncry:false sign:login.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
@@ -569,6 +608,7 @@ static MSIMManager *_manager;
     WS(weakSelf)
     ImLogout *logout = [[ImLogout alloc]init];
     logout.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    NSLog(@"[发送消息-logout]:\n%@",logout);
     [self send:[logout data] protoType:XMChatProtoTypeLogout needToEncry:NO sign:logout.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {

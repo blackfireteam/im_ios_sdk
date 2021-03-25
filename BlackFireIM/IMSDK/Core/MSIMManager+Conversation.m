@@ -51,18 +51,24 @@
         fail(ERR_USER_PARAMS_ERROR,@"参数异常");
         return;
     }
-    if (nextSeq == 0) {
-        nextSeq = INT_MAX;
-    }
-    [self.convStore conversationsWithLast_msg_id:nextSeq count:count complete:^(NSArray<MSIMConversation *> * _Nonnull data, BOOL hasMore) {
+    [self.convStore conversationsWithLast_seq:nextSeq count:count complete:^(NSArray<MSIMConversation *> * _Nonnull data, BOOL hasMore) {
         //组装最后一条消息和头像昵称等信息
+        NSMutableArray *profiles = [NSMutableArray array];
         for (MSIMConversation *conv in data) {
             MSIMElem *elem = [self.messageStore searchMessage:conv.partner_id msg_sign:conv.show_msg_sign];
             conv.show_msg = elem;
+            MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:conv.partner_id.integerValue];
+            if (info == nil) {
+                info = [[MSProfileInfo alloc]init];
+                info.user_id = conv.partner_id;
+            }
+            [profiles addObject:info];
         }
         [[MSConversationProvider provider]updateConversations:data];
+        //同步Profile信息
+        [[MSProfileProvider provider]synchronizeProfiles:profiles];
         MSIMConversation *lastConv = data.lastObject;
-        NSInteger nextSign = lastConv.msg_end;
+        NSInteger nextSign = lastConv.show_msg_sign;
         succ(data,nextSign,hasMore ? NO : YES);
     }];
 }

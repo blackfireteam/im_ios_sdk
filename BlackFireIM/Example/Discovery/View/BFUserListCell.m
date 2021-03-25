@@ -8,6 +8,8 @@
 #import "BFUserListCell.h"
 #import "UIColor+BFDarkMode.h"
 #import <SDWebImage.h>
+#import "UIView+Frame.h"
+
 
 @implementation BFUserListCell
 
@@ -36,6 +38,13 @@
 {
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:info.avatar]];
     self.nameLabel.text = info.nick_name;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.avatarView.frame = CGRectMake(10, self.height*0.5-15, 30, 30);
+    self.nameLabel.frame = CGRectMake(self.avatarView.maxX+10, self.avatarView.centerY-10, 200, 20);
 }
 
 @end
