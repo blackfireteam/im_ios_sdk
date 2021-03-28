@@ -261,7 +261,7 @@ static MSIMManager *_manager;
             if (error == nil && result != nil) {
                 [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"单条消息已发送到服务器" response:result];
                 //更新会话更新时间
-                [[MSIMTools sharedInstance]updateConversationTime:result.sign];
+                [[MSIMTools sharedInstance]updateConversationTime:result.msgTime];
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
@@ -277,7 +277,7 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"收到新消息***%@",recieve);
+            NSLog(@"[收到]新消息***%@",recieve);
         }
             break;
         case XMChatProtoTypeMassRecieve: //收到批量消息
@@ -289,7 +289,7 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"收到批量消息");
+            NSLog(@"[收到]历史消息");
             NSLog(@"%@",batch);
         }
             break;
@@ -302,7 +302,7 @@ static MSIMManager *_manager;
                 //更新会话更新时间
                 [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
             }
-            NSLog(@"消息已读状态发生变更通知***%@",result);
+            NSLog(@"[收到]消息已读状态发生变更通知***%@",result);
         }
             break;
         case XMChatProtoTypeGetChatListResponse: //拉取会话列表结果
@@ -312,7 +312,7 @@ static MSIMManager *_manager;
             if (error == nil) {
                 [self chatListResultHandler:result];
             }
-            NSLog(@"拉取会话列表结果***%@",result);
+            NSLog(@"[收到]会话列表***%@",result);
         }
             break;
         case XMChatProtoTypeGetProfileResult: //返回的单个用户信息结果
@@ -324,7 +324,7 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"返回的单个用户信息结果***%@",profile);
+            NSLog(@"[收到]用户信息***%@",profile);
         }
             break;
         case XMChatProtoTypeGetProfilesResult: //返回批量用户信息结果
@@ -336,7 +336,7 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"返回批量用户信息结果***%@",profiles);
+            NSLog(@"[收到]批量用户信息***%@",profiles);
         }
             break;
         case XMChatProtoTypeDeleteChat: //删除一条会话成功通知
@@ -350,7 +350,7 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"删除一条会话成功通知***%@",result);
+            NSLog(@"[收到]删除一条会话成功通知***%@",result);
         }
             break;
         case XMChatProtoTypeResult: //主动发起操作处理结果
@@ -374,7 +374,7 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"有用户上线了***%@",online);
+            NSLog(@"[收到]有用户上线了***%@",online);
         }
             break;
             
@@ -387,7 +387,7 @@ static MSIMManager *_manager;
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"有用户下线了***%@",offline);
+            NSLog(@"[收到]有用户下线了***%@",offline);
         }
             break;
         default:
@@ -572,19 +572,15 @@ static MSIMManager *_manager;
 }
 
 ///登录需要设置用户名 userID 和用户签名 token
-- (void)login:(NSString *)userID
-        token:(NSString *)token
+- (void)login:(NSString *)userSign
          succ:(MSIMSucc)succ
        failed:(MSIMFail)fail
 {
-    if (userID == nil) {
+    if (userSign == nil) {
         return;
     }
-    if (token == nil) {
-        return;
-    }
-    [MSIMTools sharedInstance].user_id = userID;
-    self.config.token = token;
+    [MSIMTools sharedInstance].user_id = @"5";
+    self.config.token = userSign;
     self.loginSuccBlock = succ;
     self.loginFailBlock = fail;
     if (self.socket.isConnected) {

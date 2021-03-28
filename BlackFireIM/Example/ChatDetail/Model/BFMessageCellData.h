@@ -21,9 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BFMessageCellData : NSObject
 
-@property(nonatomic,strong) UIImage *avatarImage;
+@property(nonatomic,strong) UIImage *defaultAvatar;
 
-@property(nonatomic,strong) NSURL *avatarURL;
+@property(nonatomic,strong) NSString *avatarUrl;
 
 @property(nonatomic,copy) NSString *nickName;
 

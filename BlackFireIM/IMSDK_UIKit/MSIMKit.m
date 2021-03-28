@@ -34,12 +34,11 @@
 
 
 ///登录需要设置用户名 userID 和用户签名 token
-- (void)login:(NSString *)userID
-        token:(NSString *)token
+- (void)login:(NSString *)userSign
          succ:(MSIMSucc)succ
        failed:(MSIMFail)fail
 {
-    [[MSIMManager sharedInstance] login:userID token:token succ:succ failed:fail];
+    [[MSIMManager sharedInstance] login:userSign succ:succ failed:fail];
 }
 
 #pragma mark - MSIMSDKListener

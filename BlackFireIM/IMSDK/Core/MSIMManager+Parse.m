@@ -86,9 +86,23 @@
 - (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem
 {
     MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:elem.partner_id];
+    if (conv == nil) {
+        conv = [[MSIMConversation alloc]init];
+        conv.chat_type = BFIM_CHAT_TYPE_C2C;
+        conv.partner_id = elem.partner_id;
+        conv.show_msg = elem;
+        conv.show_msg_sign = elem.msg_sign;
+        conv.msg_end = elem.msg_id;
+        [self.convListener onUpdateConversations:@[conv]];
+        [[MSConversationProvider provider]updateConversation:conv];
+        return YES;
+    }
     if(elem.msg_sign >= conv.show_msg_sign) {
         conv.show_msg_sign = elem.msg_sign;
         conv.show_msg = elem;
+        if (elem.msg_id > conv.msg_end) {
+            conv.msg_end = elem.msg_id;
+        }
         [self.convListener onUpdateConversations:@[conv]];
         [[MSConversationProvider provider]updateConversation:conv];
         return YES;
@@ -104,9 +118,7 @@
         [self getC2CHistoryMessageList:conv.partner_id count:20 lastMsg:0 succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 MSIMElem *lastElem = msgs.firstObject;
-                if (lastElem && weakSelf.convListener && [weakSelf.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-                    [weakSelf elemNeedToUpdateConversation:lastElem];
-                }
+                [weakSelf elemNeedToUpdateConversation:lastElem];
             });
                 } fail:^(NSInteger code, NSString * _Nonnull desc) {
         }];
@@ -116,30 +128,25 @@
 ///收到服务器下发的消息处理
 - (void)recieveMessages:(NSArray<ChatR *> *)responses
 {
-    NSArray *msgs = [self chatHistoryHandler:responses];
-    if (msgs.count > 0) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.msgListener && [self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
-                [self.msgListener onNewMessages:msgs];
-            }
-            MSIMElem *lastElem = msgs.lastObject;
-            MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:lastElem.partner_id];
-            if (lastElem.msg_sign > conv.show_msg_sign) {
-                conv.show_msg = lastElem;
-                conv.show_msg_sign = lastElem.msg_sign;
-                [[MSConversationProvider provider]updateConversation:conv];
-                if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-                    [self.convListener onUpdateConversations:@[conv]];
-                }
-            }
-            //如果本地没有会话
-            if (conv == nil) {
-                MSProfileInfo *info = [[MSProfileInfo alloc]init];
-                info.user_id = lastElem.partner_id;
-                [[MSProfileProvider provider]synchronizeProfiles:@[info]];
-            }
-        });
-    }
+    NSArray<MSIMElem *> *msgs = [self chatHistoryHandler:responses];
+    msgs = [msgs sortedArrayUsingComparator:^NSComparisonResult(MSIMElem *obj1, MSIMElem *obj2) {
+        if (obj1.msg_id > obj2.msg_id) {
+            return NSOrderedDescending;
+        }
+        return NSOrderedAscending;
+    }];
+    MSIMElem *lastElem = msgs.lastObject;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (lastElem.type == BFIM_MSG_TYPE_NULL) {
+            MSIMElem *showElem = [self.messageStore lastShowMessage:lastElem.partner_id];
+            showElem.msg_id = lastElem.msg_id;
+            [self elemNeedToUpdateConversation:showElem];
+        }else {
+            [self elemNeedToUpdateConversation:lastElem];
+        }
+    });
+    //更新会话更新时间
+    [[MSIMTools sharedInstance]updateConversationTime:lastElem.msg_sign];
 }
 
 ///服务器返回的历史数据处理
@@ -151,9 +158,11 @@
         if (response.type == BFIM_MSG_TYPE_RECALL) {//消息撤回
             elem = [[MSIMElem alloc]init];
             elem.type = BFIM_MSG_TYPE_NULL;
+            
             //将之前的消息标记为撤回消息
-            NSInteger f_id = [[NSString stringWithFormat:@"%lld",response.fromUid] isEqualToString:[MSIMTools sharedInstance].user_id] ? response.toUid : response.fromUid;
-            [self.messageStore updateMessageRevoke:[response.body integerValue] partnerID:[NSString stringWithFormat:@"%zd",f_id]];
+            elem.fromUid = [NSString stringWithFormat:@"%lld",response.fromUid];
+            elem.toUid = [NSString stringWithFormat:@"%lld",response.toUid];
+            [self.messageStore updateMessageRevoke:[response.body integerValue] partnerID:elem.partner_id];
             if (response.sign > 0) {//收到申请撤回的结果
                 [self sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
             }
@@ -170,6 +179,9 @@
             imageElem.url = response.body;
             imageElem.type = BFIM_MSG_TYPE_IMAGE;
             elem = imageElem;
+        }else if (response.type == BFIM_MSG_TYPE_REVOKE) {
+            elem = [[MSIMElem alloc]init];
+            elem.type = BFIM_MSG_TYPE_REVOKE;
         }
         if (elem) {
             elem.fromUid = [NSString stringWithFormat:@"%lld",response.fromUid];
@@ -179,8 +191,6 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
             elem.readStatus = BFIM_MSG_STATUS_UNREAD;
             [recieves addObject:elem];
-            //更新会话更新时间
-            [[MSIMTools sharedInstance]updateConversationTime:response.msgTime];
         }
     }
     [self.messageStore addMessages:recieves];

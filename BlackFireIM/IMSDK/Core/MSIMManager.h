@@ -66,9 +66,8 @@ typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 ///反初始化 SDK
 - (void) unInitSDK;
 
-///登录需要设置用户名 userID 和用户签名 token
-- (void)login:(NSString *)userID
-        token:(NSString *)token
+///登录需要用户签名 token
+- (void)login:(NSString *)userSign
          succ:(MSIMSucc)succ
        failed:(MSIMFail)fail;
 

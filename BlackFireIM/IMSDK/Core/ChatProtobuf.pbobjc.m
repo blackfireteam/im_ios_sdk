@@ -459,11 +459,13 @@ typedef struct ChatS__storage_ {
 
 @dynamic sign;
 @dynamic msgId;
+@dynamic msgTime;
 
 typedef struct ChatSR__storage_ {
   uint32_t _has_storage_[1];
   int64_t sign;
   int64_t msgId;
+  int64_t msgTime;
 } ChatSR__storage_;
 
 // This method is threadsafe because it is initially called
@@ -487,6 +489,15 @@ typedef struct ChatSR__storage_ {
         .number = ChatSR_FieldNumber_MsgId,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(ChatSR__storage_, msgId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "msgTime",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatSR_FieldNumber_MsgTime,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(ChatSR__storage_, msgTime),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },

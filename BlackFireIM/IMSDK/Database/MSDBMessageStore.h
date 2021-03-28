@@ -24,18 +24,29 @@ NS_ASSUME_NONNULL_BEGIN
 ///更新某条消息的已读状态
 - (BOOL)updateMessage:(NSInteger)msg_sign readStatus:(BFIMMessageReadStatus)status partnerID:(NSString *)partnerID;
 
-///更新某一条消息的发送状态
-- (BOOL)updateMessage:(NSInteger)msg_sign
-           sendStatus:(BFIMMessageStatus)status
+///更新消息发送状态为成功
+- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
+                       msg_id:(NSInteger)msg_id
+                    partnerID:(NSString *)partnerID;
+
+///更新消息发送状态为失败
+- (BOOL)updateMessageToFail:(NSInteger)msg_sign
                  code:(NSInteger)code
                reason:(NSString *)reason
             partnerID:(NSString *)partnerID;
+
+///更新消息发送状态为发送中
+- (BOOL)updateMessageToSending:(NSInteger)msg_sign
+                     partnerID:(NSString *)partnerID;
 
 ///标记某一条消息为撤回消息
 - (BOOL)updateMessageRevoke:(NSInteger)msg_id partnerID:(NSString *)partnerID;
 
 ///取最后一条msg_id
 - (MSIMElem *)lastMessageID:(NSString *)partner_id;
+
+///取最后一条可显示的消息
+- (MSIMElem *)lastShowMessage:(NSString *)partner_id;
 
 /// 分页获取聊天记录
 /// @param partnerID 对方Uid

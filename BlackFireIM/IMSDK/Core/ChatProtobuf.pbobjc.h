@@ -193,6 +193,7 @@ GPB_FINAL @interface ChatS : GPBMessage
 typedef GPB_ENUM(ChatSR_FieldNumber) {
   ChatSR_FieldNumber_Sign = 1,
   ChatSR_FieldNumber_MsgId = 2,
+  ChatSR_FieldNumber_MsgTime = 3,
 };
 
 /**
@@ -205,6 +206,8 @@ GPB_FINAL @interface ChatSR : GPBMessage
 
 /** 消息id */
 @property(nonatomic, readwrite) int64_t msgId;
+
+@property(nonatomic, readwrite) int64_t msgTime;
 
 @end
 

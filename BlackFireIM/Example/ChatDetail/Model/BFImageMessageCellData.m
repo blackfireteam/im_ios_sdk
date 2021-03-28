@@ -19,18 +19,22 @@
     return self;
 }
 
+- (MSIMImageElem *)imageElem
+{
+    return (MSIMImageElem *)self.elem;
+}
+
 - (CGSize)contentSize
 {
    CGSize size = CGSizeZero;
-   BOOL isDir = NO;
-    NSString *imagePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:self.imageElem.path];
-   if(![imagePath isEqualToString:@""] &&
-      [[NSFileManager defaultManager] fileExistsAtPath:imagePath isDirectory:&isDir]){
-       if(!isDir){
-           size = [UIImage imageWithContentsOfFile:imagePath].size;
-       }
-   }
-
+    if (self.imageElem.path.length > 0) {
+        NSString *imagePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:self.imageElem.path];
+        if ([[NSFileManager defaultManager]fileExistsAtPath:imagePath]) {
+            self.thumbImage = [UIImage imageWithContentsOfFile:imagePath];
+            size = self.thumbImage.size;
+        }
+    }
+   size = CGSizeMake(self.imageElem.width, self.imageElem.height);
    if(CGSizeEqualToSize(size, CGSizeZero)){
        return size;
    }

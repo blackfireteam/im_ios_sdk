@@ -25,7 +25,7 @@
 
         //nameLabel
         _nameLabel = [[UILabel alloc] init];
-        _nameLabel.font = [UIFont systemFontOfSize:13];
+        _nameLabel.font = [UIFont systemFontOfSize:16];
         _nameLabel.textColor = [UIColor d_systemGrayColor];
         [self.contentView addSubview:_nameLabel];
         
@@ -43,7 +43,8 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.avatarView.frame = CGRectMake(10, self.height*0.5-15, 30, 30);
+    
+    self.avatarView.frame = CGRectMake(15, 12, self.height - 2*12, self.height - 2*12);
     self.nameLabel.frame = CGRectMake(self.avatarView.maxX+10, self.avatarView.centerY-10, 200, 20);
 }
 

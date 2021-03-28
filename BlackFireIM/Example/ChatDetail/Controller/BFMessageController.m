@@ -20,6 +20,7 @@
 #import "NSBundle+BFKit.h"
 #import "UIView+Frame.h"
 #import "MSIMTools.h"
+#import "MSProfileProvider.h"
 
 
 #define MAX_MESSAGE_SEP_DLAY (5 * 60)
@@ -77,6 +78,8 @@
     
     self.tableView.scrollsToTop = NO;
     self.tableView.estimatedRowHeight = 0;
+    self.tableView.estimatedSectionFooterHeight = 0;
+    self.tableView.estimatedSectionHeaderHeight = 0;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.tableView.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
     [self.tableView registerClass:[BFTextMessageCell class] forCellReuseIdentifier:TTextMessageCell_ReuseId];
@@ -134,14 +137,27 @@
                 [strongSelf.heightCache removeAllObjects];
                 [strongSelf.tableView reloadData];
                 [strongSelf.tableView layoutIfNeeded];
+                if(!strongSelf.firstLoad){
+                    CGFloat visibleHeight = 0;
+                    for (NSInteger i = 0; i < uiMsgs.count; ++i) {
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                        visibleHeight += [strongSelf tableView:strongSelf.tableView heightForRowAtIndexPath:indexPath];
+                    }
+                    if(strongSelf.noMoreMsg){
+                        visibleHeight -= 40;
+                    }
+                    [strongSelf.tableView scrollRectToVisible:CGRectMake(0, strongSelf.tableView.contentOffset.y + visibleHeight, strongSelf.tableView.frame.size.width, strongSelf.tableView.frame.size.height) animated:NO];
+                }
             }
             strongSelf.isLoadingMsg = NO;
+            strongSelf.firstLoad = NO;
             [strongSelf.indicatorView stopAnimating];
             
                 } fail:^(NSInteger code, NSString * _Nonnull desc) {
                     
                     STRONG_SELF(strongSelf)
                     strongSelf.isLoadingMsg = NO;
+                    strongSelf.firstLoad = NO;
                     [strongSelf.indicatorView stopAnimating];
                     
         }];
@@ -157,7 +173,7 @@
         BFSystemMessageCellData *dateMsg = [self transSystemMsgFromDate: elem.msg_sign];
         
         BFMessageCellData *data;
-        if (elem.type == BFIM_MSG_TYPE_RECALL) {// 撤回的消息
+        if (elem.type == BFIM_MSG_TYPE_REVOKE) {// 撤回的消息
             BFSystemMessageCellData *revoke = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
             if (elem.isSelf) {
                 revoke.content = [NSBundle bf_localizedStringForKey:@"TUIKitMessageTipsYouRecallMessage"];
@@ -170,11 +186,13 @@
             BFTextMessageCellData *textMsg = [[BFTextMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             textMsg.content = textElem.text;
             textMsg.elem = textElem;
+            textMsg.avatarUrl = [[MSProfileProvider provider]providerProfileFromLocal:textElem.fromUid.integerValue].avatar;
             data = textMsg;
         }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
             MSIMImageElem *imageElem = (MSIMImageElem *)elem;
             BFImageMessageCellData *imageMsg = [[BFImageMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             imageMsg.elem = imageElem;
+            imageMsg.avatarUrl = [[MSProfileProvider provider]providerProfileFromLocal:imageElem.fromUid.integerValue].avatar;
             data = imageMsg;
         }else {
             BFSystemMessageCellData *unknowData = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
@@ -275,18 +293,18 @@
     }
 }
 
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    if (!self.noMoreMsg && scrollView.contentOffset.y <= self.indicatorView.height) {
-//        if (!self.indicatorView.isAnimating) {
-//            [self.indicatorView startAnimating];
-//        }
-//    }else {
-//        if (self.indicatorView.isAnimating) {
-//            [self.indicatorView stopAnimating];
-//        }
-//    }
-//}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (!self.noMoreMsg && scrollView.contentOffset.y <= self.indicatorView.height) {
+        if (!self.indicatorView.isAnimating) {
+            [self.indicatorView startAnimating];
+        }
+    }else {
+        if (self.indicatorView.isAnimating) {
+            [self.indicatorView stopAnimating];
+        }
+    }
+}
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
@@ -407,10 +425,34 @@
 - (void)onRevoke:(id)sender
 {
     [[MSIMManager sharedInstance] revokeMessage:self.menuUIMsg.elem.msg_id toReciever:self.partner_id.integerValue successed:^{
-            
+        
+        [self revokeMsg:self.menuUIMsg];
+        
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
             
     }];
+}
+
+- (void)revokeMsg:(BFMessageCellData *)msg
+{
+    if (msg == nil) return;
+    NSInteger index = [self.uiMsgs indexOfObject:msg];
+    if (index == NSNotFound) return;
+    [self.uiMsgs removeObject:msg];
+    if (index < self.heightCache.count) {
+        [self.heightCache replaceObjectAtIndex:index withObject:@(0)];
+    }
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    BFSystemMessageCellData *data = [[BFSystemMessageCellData alloc]initWithDirection:(msg.elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+    if (msg.elem.isSelf) {
+        data.content = [NSBundle bf_localizedStringForKey:@"TUIKitMessageTipsYouRecallMessage"];
+    }else {
+        data.content = [NSBundle bf_localizedStringForKey:@"TUIkitMessageTipsOthersRecallMessage"];
+    }
+    [self.uiMsgs insertObject:data atIndex:index];
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 @end

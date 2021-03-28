@@ -115,7 +115,7 @@
     for (NSInteger i = 0; i < convList.count; i++) {
         MSIMConversation *conv = convList[i];
         BOOL isExist = NO;
-        for (NSInteger j = 0; i < self.dataList.count; j++) {
+        for (NSInteger j = 0; j < self.dataList.count; j++) {
             MSIMConversation *localConv = self.dataList[j].conv;
             if ([localConv.conversation_id isEqualToString:conv.conversation_id]) {
                 self.dataList[j].conv = conv;

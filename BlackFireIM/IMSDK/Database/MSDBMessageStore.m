@@ -25,6 +25,7 @@ static NSString *t_id = @"t_id";
 static NSString *msg_type = @"msg_type";
 static NSString *send_status = @"send_status";
 static NSString *read_status = @"read_status";
+static NSString *block_id = @"block_id";
 static NSString *code = @"code";
 static NSString *reason = @"reason";
 static NSString *ext_data = @"ext_data";
@@ -40,10 +41,6 @@ static NSString *ext_data = @"ext_data";
     if (isOK == NO) {
         NSLog(@"创建表失败****%@",tableName);
         return NO;
-    }
-    //根据msg_id将消息去重
-    if (elem.msg_id && [self searchMessage:fid msg_id:elem.msg_id]) {
-        return YES;
     }
     MSIMElem *lastContainMsgIDElem = [self lastMessageID:fid];
     NSInteger block_id = 1;
@@ -65,7 +62,7 @@ static NSString *ext_data = @"ext_data";
             block_id = [self maxBlockID:fid];
         }
     }
-    NSString *addSQL = @"insert into %@ (msg_id,msg_sign,f_id,t_id,msg_type,send_status,read_status,code,reason,block_id,ext_data) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    NSString *addSQL = @"replace into %@ (msg_id,msg_sign,f_id,t_id,msg_type,send_status,read_status,code,reason,block_id,ext_data) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     NSString *sqlStr = [NSString stringWithFormat:addSQL,tableName];
     NSArray *addParams = @[@(elem.msg_id),
                            @(elem.msg_sign),
@@ -99,14 +96,8 @@ static NSString *ext_data = @"ext_data";
 - (BOOL)updateMessageRevoke:(NSInteger)msg_id partnerID:(NSString *)partnerID
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set msg_type = '%zd' where msg_id = '%zd'",tableName,BFIM_MSG_TYPE_RECALL,msg_id];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set msg_type = '%zd' where msg_id = '%zd'",tableName,BFIM_MSG_TYPE_REVOKE,msg_id];
     BOOL isOK = [self excuteSQL:sqlStr];
-    //更新会话
-    MSIMConversation *conv = [[MSConversationProvider provider] providerConversation:partnerID];
-    if (conv && conv.msg_end == msg_id) {
-        conv.show_msg.type = BFIM_MSG_TYPE_RECALL;
-        [[MSConversationProvider provider]updateConversation:conv];
-    }
     return isOK;
 }
 
@@ -137,6 +128,26 @@ static NSString *ext_data = @"ext_data";
     __block MSIMElem *elem = nil;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partner_id];
     NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ order by msg_sign desc limit 1",tableName];
+    WS(weakSelf)
+    [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
+        STRONG_SELF(strongSelf)
+        while ([rsSet next]) {
+            elem = [strongSelf bf_componentElem:rsSet];
+        }
+        [rsSet close];
+    }];
+    return elem;
+}
+
+///取最后一条可显示的消息
+- (MSIMElem *)lastShowMessage:(NSString *)partner_id
+{
+    if (partner_id.length == 0) {
+        return nil;
+    }
+    __block MSIMElem *elem = nil;
+    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partner_id];
+    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' order by msg_sign desc limit 1",tableName,BFIM_MSG_TYPE_NULL];
     WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         STRONG_SELF(strongSelf)
@@ -224,22 +235,33 @@ static NSString *ext_data = @"ext_data";
     return isOK;
 }
 
-///更新某一条消息的发送状态
-- (BOOL)updateMessage:(NSInteger)msg_sign
-           sendStatus:(BFIMMessageStatus)status
+- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
+                       msg_id:(NSInteger)msg_id
+                    partnerID:(NSString *)partnerID
+{
+    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',msg_id = '%zd' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SEND_SUCC,msg_id,msg_sign];
+    BOOL isOK = [self excuteSQL:sqlStr];
+    return isOK;
+}
+
+- (BOOL)updateMessageToFail:(NSInteger)msg_sign
                  code:(NSInteger)code
                reason:(NSString *)reason
             partnerID:(NSString *)partnerID
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = '%zd',reason = '%@' where msg_sign = '%zd'",tableName,status,code,XMNoNilString(reason),msg_sign];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = '%zd',reason = '%@' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,code,XMNoNilString(reason),msg_sign];
     BOOL isOK = [self excuteSQL:sqlStr];
-    //更新会话
-    MSIMConversation *conv = [[MSConversationProvider provider] providerConversation:partnerID];
-    if (conv && conv.show_msg_sign == msg_sign) {
-        conv.show_msg.sendStatus = status;
-        [[MSConversationProvider provider]updateConversation:conv];
-    }
+    return isOK;
+}
+
+- (BOOL)updateMessageToSending:(NSInteger)msg_sign
+                     partnerID:(NSString *)partnerID
+{
+    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = 0,reason = '%@' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SENDING,@"",msg_sign];
+    BOOL isOK = [self excuteSQL:sqlStr];
     return isOK;
 }
 
@@ -261,6 +283,20 @@ static NSString *ext_data = @"ext_data";
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
     NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign <= '%zd' and msg_id != 0 order by msg_sign desc limit 1",tableName,msg_sign];
+    __block MSIMElem *elem = nil;
+    [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
+        while ([rsSet next]) {
+            elem = [self bf_componentElem:rsSet];
+        }
+        [rsSet close];
+    }];
+    return elem;
+}
+
+- (MSIMElem *)greaterMessageIDBeforeMsgSign:(NSInteger)msg_sign partnerID:(NSString *)partnerID
+{
+    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
+    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign >= '%zd' and msg_id != 0 order by msg_sign asc limit 1",tableName,msg_sign];
     __block MSIMElem *elem = nil;
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
@@ -304,17 +340,25 @@ static NSString *ext_data = @"ext_data";
         if (arr.count > count) {
             complete(arr,YES);
         }else {
-            NSInteger minMsgID = [self minMsgIDInMessages:arr];
-            if (minMsgID <= 1) {
-                complete(arr,NO);
-            }else {
-                MSIMElem *lastMsdID = [self latestMessageIDBeforeMsgSign:arr.lastObject.msg_sign partnerID:partnerID];
-                [self fetchHistoryMessageFromEnd:[self minMsgIDInMessages:arr] toStart:lastMsdID.msg_id partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
-                    NSMutableArray *tempArr = [NSMutableArray array];
-                    [tempArr addObjectsFromArray:arr];
-                    [tempArr addObjectsFromArray:msgs];
-                    complete(tempArr,YES);
+            if (arr.count == 0) {
+                MSIMElem *greaterMsdID = [self greaterMessageIDBeforeMsgSign:last_msg_sign partnerID:partnerID];
+                NSInteger startID = count >= greaterMsdID.msg_id ? 0 : (greaterMsdID.msg_id-count);
+                [self fetchHistoryMessageFromEnd:greaterMsdID.msg_id toStart:startID partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
+                    complete(msgs,(greaterMsdID.msg_id > count ? YES : NO));
                 }];
+            }else {
+                NSInteger minMsgID = [self minMsgIDInMessages:arr];
+                if (minMsgID <= 1) {
+                    complete(arr,NO);
+                }else {
+                    MSIMElem *lastMsdID = [self latestMessageIDBeforeMsgSign:arr.lastObject.msg_sign partnerID:partnerID];
+                    [self fetchHistoryMessageFromEnd:[self minMsgIDInMessages:arr] toStart:lastMsdID.msg_id partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
+                        NSMutableArray *tempArr = [NSMutableArray array];
+                        [tempArr addObjectsFromArray:arr];
+                        [tempArr addObjectsFromArray:msgs];
+                        complete(tempArr,YES);
+                    }];
+                }
             }
         }
     }
@@ -374,7 +418,7 @@ static NSString *ext_data = @"ext_data";
 
 - (MSIMElem *)bf_componentElem:(FMResultSet *)rsSet
 {
-    MSIMElem *elem = nil;
+    MSIMElem *elem = [[MSIMElem alloc]init];
     BFIMMessageType type = [rsSet intForColumn:msg_type];
     NSString *contentJson = [rsSet stringForColumn:ext_data];
     NSDictionary *dic = [contentJson el_convertToDictionary];
@@ -392,17 +436,16 @@ static NSString *ext_data = @"ext_data";
         imageElem.uuid = dic[@"uuid"];
         elem = imageElem;
     }
-    if (elem) {
-        elem.msg_id = [rsSet longLongIntForColumn:msg_id];
-        elem.msg_sign = [rsSet longLongIntForColumn:msg_sign];
-        elem.type = type;
-        elem.fromUid = [rsSet stringForColumn:f_id];
-        elem.toUid = [rsSet stringForColumn:t_id];
-        elem.sendStatus = [rsSet intForColumn:send_status];
-        elem.readStatus = [rsSet intForColumn:read_status];
-        elem.code = [rsSet intForColumn:code];
-        elem.reason = [rsSet stringForColumn:reason];
-    }
+    elem.msg_id = [rsSet longLongIntForColumn:@"msg_id"];
+    elem.msg_sign = [rsSet longLongIntForColumn:@"msg_sign"];
+    elem.type = type;
+    elem.fromUid = [rsSet stringForColumn:@"f_id"];
+    elem.toUid = [rsSet stringForColumn:@"t_id"];
+    elem.sendStatus = [rsSet intForColumn:@"send_status"];
+    elem.readStatus = [rsSet intForColumn:@"read_status"];
+    elem.block_id = [rsSet intForColumn:@"block_id"];
+    elem.code = [rsSet intForColumn:@"code"];
+    elem.reason = [rsSet stringForColumn:@"reason"];
     return elem;
 }
 

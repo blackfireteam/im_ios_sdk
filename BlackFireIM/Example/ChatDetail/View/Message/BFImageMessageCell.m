@@ -7,7 +7,7 @@
 
 #import "BFImageMessageCell.h"
 #import "BFHeader.h"
-
+#import <SDWebImage.h>
 
 @implementation BFImageMessageCell
 
@@ -44,7 +44,11 @@
     //set data
     [super fillWithData:data];
     self.imageData = data;
-    _thumb.image = nil;
+    if (data.thumbImage) {
+        self.thumb.image = data.thumbImage;
+    }else {
+        [self.thumb sd_setImageWithURL:[NSURL URLWithString:data.imageElem.url]];
+    }
 }
 
 @end

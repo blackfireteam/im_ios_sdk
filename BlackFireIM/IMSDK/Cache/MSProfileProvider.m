@@ -17,8 +17,6 @@
 @property(nonatomic,strong) NSCache *mainCache;
 @property(nonatomic,strong) MSDBProfileStore *store;
 
-@property(nonatomic,strong)dispatch_queue_t profileQueue;// 数据库操作的异步串行队列
-
 @end
 @implementation MSProfileProvider
 
@@ -50,14 +48,6 @@ static MSProfileProvider *instance;
         _store = [[MSDBProfileStore alloc]init];
     }
     return _store;
-}
-
-- (dispatch_queue_t)profileQueue
-{
-    if(!_profileQueue) {
-        _profileQueue = dispatch_queue_create("com.profileSocket", DISPATCH_QUEUE_SERIAL);
-    }
-    return _profileQueue;
 }
 
 /// 查询某个用户的个人信息
@@ -116,9 +106,7 @@ static MSProfileProvider *instance;
 {
     if (info.user_id.length == 0) return;
     [self.mainCache setObject:info forKey:info.user_id];
-    dispatch_async(self.profileQueue, ^{
-        [self.store addProfile:info];
-    });
+    [self.store addProfile:info];
 }
 
 ///返回本地数据库中所有的用户信息
@@ -131,7 +119,12 @@ static MSProfileProvider *instance;
 ///批量请求，100个一组
 - (void)synchronizeProfiles:(NSArray<MSProfileInfo *> *)profiles
 {
-    [self componentRequestWithProfiles:profiles];
+    //顺便同步下自己的Profile
+    MSProfileInfo *me = [[MSProfileInfo alloc]init];
+    me.user_id = [MSIMTools sharedInstance].user_id;
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:profiles];
+    [arr addObject:me];
+    [self componentRequestWithProfiles:arr];
 }
 
 - (void)componentRequestWithProfiles:(NSArray *)arr

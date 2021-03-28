@@ -68,7 +68,7 @@
     self.tableView.estimatedRowHeight = 0;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.tableView.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
-    self.tableView.rowHeight = 70;
+    self.tableView.rowHeight = 80;
     [self.tableView registerClass:[BFUserListCell class] forCellReuseIdentifier:@"userCell"];
 }
 

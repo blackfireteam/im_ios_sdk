@@ -7,6 +7,8 @@
 
 #import "MSIMElem.h"
 #import "MSIMTools.h"
+#import "NSBundle+BFKit.h"
+
 
 @implementation MSIMElem
 
@@ -42,6 +44,15 @@
     elem.code = self.code;
     elem.reason = self.reason;
     return elem;
+}
+
+- (NSString *)displayStr
+{
+    if (self.isSelf) {
+        return [NSBundle bf_localizedStringForKey:@"TUIKitMessageTipsYouRecallMessage"];
+    }else {
+        return [NSBundle bf_localizedStringForKey:@"TUIkitMessageTipsOthersRecallMessage"];
+    }
 }
 
 @end
@@ -93,7 +104,7 @@
 
 - (NSString *)displayStr
 {
-    return @"[图片]";
+    return [NSBundle bf_localizedStringForKey:@"TUIkitMessageTypeImage"];
 }
 
 @end

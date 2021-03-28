@@ -10,6 +10,8 @@
 #import "BFHeader.h"
 #import "NSDate+MSKit.h"
 #import <SDWebImage.h>
+#import "UIView+Frame.h"
+
 
 @interface BFConversationListCell()
 
@@ -71,10 +73,11 @@
     CGFloat imageHeight = height - 2*12;
     self.headImageView.frame = CGRectMake(15, 12, imageHeight, imageHeight);
     CGSize timeSize = [self.timeLabel sizeThatFits:CGSizeMake(200, 20)];
-    self.timeLabel.frame = CGRectMake(self.frame.size.width-15-timeSize.width, height-timeSize.height-8, timeSize.width, timeSize.height);
+    self.timeLabel.frame = CGRectMake(self.frame.size.width-15-timeSize.width, 8, timeSize.width, timeSize.height);
     CGSize titleSize = [self.titleLabel sizeThatFits:CGSizeMake(200, 30)];
     self.titleLabel.frame = CGRectMake(CGRectGetMaxX(self.headImageView.frame)+10, CGRectGetMinY(self.headImageView.frame), titleSize.width, titleSize.height);
-    self.unReadView.frame = CGRectMake(self.frame.size.width-15-20, CGRectGetMinY(self.headImageView.frame), 20, 20);
+    self.unReadView.maxX = self.width-15;
+    self.unReadView.y = height*0.5;
     self.subTitleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, CGRectGetMaxY(self.headImageView.frame)-20, 250, 20);
 }
 

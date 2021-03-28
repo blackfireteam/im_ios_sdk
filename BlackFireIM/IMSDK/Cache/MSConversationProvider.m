@@ -14,8 +14,6 @@
 @property(nonatomic,strong) NSCache *mainCache;
 @property(nonatomic,strong) MSDBConversationStore *store;
 
-@property(nonatomic,strong)dispatch_queue_t storeQueue;// 数据库操作的异步串行队列
-
 @end
 @implementation MSConversationProvider
 
@@ -49,14 +47,6 @@ static MSConversationProvider *instance;
     return _store;
 }
 
-- (dispatch_queue_t)storeQueue
-{
-    if(!_storeQueue) {
-        _storeQueue = dispatch_queue_create("com.storeSocket", DISPATCH_QUEUE_SERIAL);
-    }
-    return _storeQueue;
-}
-
 - (MSIMConversation *)providerConversation:(NSString *)partner_id
 {
     if (!partner_id) return nil;
@@ -77,9 +67,7 @@ static MSConversationProvider *instance;
 {
     if (!conv) return;
     [self.mainCache setObject:conv forKey:conv.conversation_id];
-    dispatch_async(self.storeQueue, ^{
-        [self.store addConversation:conv];
-    });
+    [self.store addConversation:conv];
 }
 
 - (void)updateConversations:(NSArray<MSIMConversation *> *)convs
@@ -94,9 +82,7 @@ static MSConversationProvider *instance;
 {
     if (!conv_id) return;
     [self.mainCache removeObjectForKey:conv_id];
-    dispatch_async(self.storeQueue, ^{
-        [self.store deleteConversation:conv_id];
-    });
+    [self.store deleteConversation:conv_id];
 }
 
 - (void)clean

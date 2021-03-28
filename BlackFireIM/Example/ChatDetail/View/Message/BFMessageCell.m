@@ -75,9 +75,7 @@
 - (void)fillWithData:(BFMessageCellData *)data
 {
     self.messageData = data;
-
-    [self.avatarView setImage:data.avatarImage];
-    [self.avatarView sd_setImageWithURL:data.avatarURL placeholderImage:data.avatarImage];
+    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:data.avatarUrl] placeholderImage:data.defaultAvatar];
     
     self.avatarView.layer.masksToBounds = YES;
     self.avatarView.layer.cornerRadius = 40 * 0.5;

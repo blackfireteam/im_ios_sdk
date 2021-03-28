@@ -17,7 +17,7 @@
     self = [super init];
     if (self) {
         _direction = direction;
-        _avatarImage = [UIImage imageNamed:TUIKitResource(@"default_c2c_head")];
+        _defaultAvatar = [UIImage imageNamed:TUIKitResource(@"default_c2c_head")];
     }
     return self;
 }

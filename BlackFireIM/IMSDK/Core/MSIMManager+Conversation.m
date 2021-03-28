@@ -25,6 +25,7 @@
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.updateTime = [MSIMTools sharedInstance].convUpdateTime;
     WS(weakSelf)
+    NSLog(@"[发送消息]同步会话列表：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
@@ -86,6 +87,7 @@
     DelChat *delRequest = [[DelChat alloc]init];
     delRequest.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     delRequest.toUid = conv.partner_id.integerValue;
+    NSLog(@"[发送消息]删除会话：%@",delRequest);
     [self send:[delRequest data] protoType:XMChatProtoTypeDeleteChat needToEncry:NO sign:delRequest.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
             [[MSConversationProvider provider]deleteConversation:conv.conversation_id];
@@ -111,6 +113,7 @@
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.toUid = user_id.integerValue;
     request.msgId = msgID;
+    NSLog(@"[发送消息]标记消息已读：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeMsgread needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
             

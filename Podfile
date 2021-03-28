@@ -11,6 +11,6 @@ pod 'FMDB'
 pod 'UICKeyChainStore'
 pod 'SDWebImage'
 pod 'RealReachability'
-
+pod 'YBImageBrowser'
 
 end

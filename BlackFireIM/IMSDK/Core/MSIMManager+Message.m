@@ -105,7 +105,8 @@
             ChatSR *result = response;
             success(result.msgId);
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC code:ERR_SUCC reason:@"" partnerID:elem.toUid];
+            elem.msg_id = result.msgId;
+            [strongSelf.messageStore updateMessageToSuccss:chats.sign msg_id:elem.msg_id partnerID:elem.partner_id];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem];
         }else {
@@ -114,7 +115,7 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
             elem.reason = error;
-            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [strongSelf.messageStore updateMessageToFail:chats.sign code:elem.code reason:elem.reason partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem];
         }
@@ -226,7 +227,8 @@
         if (code == 0) {
             ChatSR *result = response;
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_SUCC code:ERR_SUCC reason:@"" partnerID:elem.toUid];
+            elem.msg_id = result.msgId;
+            [strongSelf.messageStore updateMessageToSuccss:chats.sign msg_id:elem.msg_id partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem];
             success(result.msgId);
@@ -236,7 +238,7 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
             elem.reason = error;
-            [strongSelf.messageStore updateMessage:chats.sign sendStatus:BFIM_MSG_STATUS_SEND_FAIL code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [strongSelf.messageStore updateMessageToFail:chats.sign code:elem.code reason:elem.reason partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem];
         }
@@ -265,6 +267,7 @@
     [self send:[revoke data] protoType:XMChatProtoTypeRecall needToEncry:NO sign:revoke.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
         if (code == ERR_SUCC) {
+            
             success();
         }else {
             failed(code,error);
@@ -283,7 +286,7 @@
                   failed:(MSIMFail)failed
 {
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    [self.messageStore updateMessage:elem.msg_sign sendStatus:BFIM_MSG_STATUS_SENDING code:0 reason:@"" partnerID:reciever];
+    [self.messageStore updateMessageToSending:elem.msg_sign partnerID:reciever];
     [self.msgListener onMessageUpdateSendStatus:elem];
     if (elem.type == BFIM_MSG_TYPE_TEXT) {
         [self sendTextMessage:(MSIMTextElem *)elem isResend:YES successed:success failed:failed];
