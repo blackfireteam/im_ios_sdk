@@ -10,7 +10,7 @@
 #import "UIColor+BFDarkMode.h"
 #import "NSBundle+BFKit.h"
 #import "UIImage+BFKit.h"
-
+#import "BFFaceUtil.h"
 
 typedef NS_ENUM(NSUInteger, InputStatus) {
     Input_Status_Input,
@@ -22,8 +22,6 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 @interface BFInputViewController ()<BFInputBarViewDelegate,BFChatMoreViewDelegate,BFFaceViewDelegate,BFMenuViewDelegate>
 
 @property (nonatomic, assign) InputStatus status;
-
-@property(nonatomic,strong) NSMutableArray *defaultFace;
 
 @end
 
@@ -300,36 +298,9 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     if(!_faceView){
         _faceView = [[BFFaceView alloc] initWithFrame:CGRectMake(0, _inputBar.frame.origin.y + _inputBar.frame.size.height, self.view.frame.size.width, 180)];
         _faceView.delegate = self;
-        [_faceView setData:self.defaultFace];
+        [_faceView setData:[BFFaceUtil defaultConfig].defaultFace];
     }
     return _faceView;
-}
-
-- (NSMutableArray *)defaultFace
-{
-    if (!_defaultFace) {
-        _defaultFace = [NSMutableArray array];
-        //emoji group
-        NSMutableArray *emojiFaces = [NSMutableArray array];
-        NSArray *emojis = [NSArray arrayWithContentsOfFile:TUIKitFace(@"emoji/emoji.plist")];
-        for (NSDictionary *dic in emojis) {
-            BFFaceCellData *data = [[BFFaceCellData alloc] init];
-            NSString *name = [dic objectForKey:@"face_name"];
-            data.name = [NSString stringWithFormat:@"emoji/%@",name];
-            [emojiFaces addObject:data];
-        }
-        if(emojiFaces.count != 0){
-            BFFaceGroup *emojiGroup = [[BFFaceGroup alloc] init];
-            emojiGroup.groupIndex = 0;
-            emojiGroup.groupPath = TUIKitFace(@"emoji/");
-            emojiGroup.faces = emojiFaces;
-            emojiGroup.rowCount = 3;
-            emojiGroup.itemCountPerRow = 9;
-            emojiGroup.needBackDelete = YES;
-            [_defaultFace addObject:emojiGroup];
-        }
-    }
-    return _defaultFace;
 }
 
 - (BFMenuView *)menuView
@@ -363,7 +334,7 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 
 - (void)faceView:(BFFaceView *)faceView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    BFFaceGroup *group = self.defaultFace[indexPath.section];
+    BFFaceGroup *group = [BFFaceUtil defaultConfig].defaultFace[indexPath.section];
     BFFaceCellData *face = group.faces[indexPath.row];
     if(indexPath.section == 0){
         NSString *faceName = [face.name substringFromIndex:@"emoji/".length];

@@ -70,6 +70,7 @@
 		F05836C1260479880008C4FD /* MSIMKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836C0260479880008C4FD /* MSIMKit.m */; };
 		F05836D42605A1750008C4FD /* NSDictionary+Ext.m in Sources */ = {isa = PBXBuildFile; fileRef = F05836D32605A1750008C4FD /* NSDictionary+Ext.m */; };
 		F0777BA82611CCD8006CA660 /* BFBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BA72611CCD8006CA660 /* BFBaseViewController.m */; };
+		F0777BAE2611D418006CA660 /* BFFaceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BAD2611D418006CA660 /* BFFaceUtil.m */; };
 		F0878A802605EB0200268122 /* BFSystemMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A7F2605EB0200268122 /* BFSystemMessageCellData.m */; };
 		F0878A862608428500268122 /* BFSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A852608428500268122 /* BFSystemMessageCell.m */; };
 		F0878A8F2608DCF900268122 /* BFChatMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A8E2608DCF900268122 /* BFChatMoreView.m */; };
@@ -234,6 +235,8 @@
 		F05836D32605A1750008C4FD /* NSDictionary+Ext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Ext.m"; sourceTree = "<group>"; };
 		F0777BA62611CCD8006CA660 /* BFBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFBaseViewController.h; sourceTree = "<group>"; };
 		F0777BA72611CCD8006CA660 /* BFBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFBaseViewController.m; sourceTree = "<group>"; };
+		F0777BAC2611D418006CA660 /* BFFaceUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFFaceUtil.h; sourceTree = "<group>"; };
+		F0777BAD2611D418006CA660 /* BFFaceUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFFaceUtil.m; sourceTree = "<group>"; };
 		F0878A7E2605EB0200268122 /* BFSystemMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSystemMessageCellData.h; sourceTree = "<group>"; };
 		F0878A7F2605EB0200268122 /* BFSystemMessageCellData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSystemMessageCellData.m; sourceTree = "<group>"; };
 		F0878A842608428500268122 /* BFSystemMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSystemMessageCell.h; sourceTree = "<group>"; };
@@ -624,6 +627,8 @@
 				F09316B62609BFEC0099E39E /* BFFaceView.m */,
 				F09316BB2609DB8C0099E39E /* BFMenuView.h */,
 				F09316BC2609DB8C0099E39E /* BFMenuView.m */,
+				F0777BAC2611D418006CA660 /* BFFaceUtil.h */,
+				F0777BAD2611D418006CA660 /* BFFaceUtil.m */,
 			);
 			path = Face;
 			sourceTree = "<group>";
@@ -898,6 +903,7 @@
 				F011D62225E767B10061F9D6 /* IMSDKConfig.m in Sources */,
 				F0878A952608DD8000268122 /* BFInputMoreCell.m in Sources */,
 				F058369A26033D0E0008C4FD /* MSDBImageFileStore.m in Sources */,
+				F0777BAE2611D418006CA660 /* BFFaceUtil.m in Sources */,
 				F036363525FEFB6E00E69D14 /* MSProfileProvider.m in Sources */,
 				F052EC9425EDDE2C00F35D74 /* MSDBMessageStore.m in Sources */,
 				F05836D42605A1750008C4FD /* NSDictionary+Ext.m in Sources */,
