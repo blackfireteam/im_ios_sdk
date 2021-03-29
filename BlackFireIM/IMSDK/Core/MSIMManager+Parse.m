@@ -83,7 +83,7 @@
     }
 }
 
-- (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem
+- (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem increaseUnreadCount:(BOOL)increase
 {
     MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:elem.partner_id];
     if (conv == nil) {
@@ -93,6 +93,15 @@
         conv.show_msg = elem;
         conv.show_msg_sign = elem.msg_sign;
         conv.msg_end = elem.msg_id;
+        if (increase) {
+            conv.unread_count += 1;
+        }
+        MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:elem.partner_id.integerValue];
+        if (profile == nil) {
+            MSProfileInfo *info = [[MSProfileInfo alloc]init];
+            info.user_id = elem.partner_id;
+            [[MSProfileProvider provider]synchronizeProfiles:@[info]];
+        }
         [self.convListener onUpdateConversations:@[conv]];
         [[MSConversationProvider provider]updateConversation:conv];
         return YES;
@@ -102,6 +111,9 @@
         conv.show_msg = elem;
         if (elem.msg_id > conv.msg_end) {
             conv.msg_end = elem.msg_id;
+        }
+        if (increase) {
+            conv.unread_count += 1;
         }
         [self.convListener onUpdateConversations:@[conv]];
         [[MSConversationProvider provider]updateConversation:conv];
@@ -118,7 +130,7 @@
         [self getC2CHistoryMessageList:conv.partner_id count:20 lastMsg:0 succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 MSIMElem *lastElem = msgs.firstObject;
-                [weakSelf elemNeedToUpdateConversation:lastElem];
+                [weakSelf elemNeedToUpdateConversation:lastElem increaseUnreadCount:NO];
             });
                 } fail:^(NSInteger code, NSString * _Nonnull desc) {
         }];
@@ -126,27 +138,20 @@
 }
 
 ///收到服务器下发的消息处理
-- (void)recieveMessages:(NSArray<ChatR *> *)responses
+- (void)recieveMessage:(ChatR *)response
 {
-    NSArray<MSIMElem *> *msgs = [self chatHistoryHandler:responses];
-    msgs = [msgs sortedArrayUsingComparator:^NSComparisonResult(MSIMElem *obj1, MSIMElem *obj2) {
-        if (obj1.msg_id > obj2.msg_id) {
-            return NSOrderedDescending;
-        }
-        return NSOrderedAscending;
-    }];
-    MSIMElem *lastElem = msgs.lastObject;
+    MSIMElem *elem = [self chatHistoryHandler:@[response]].lastObject;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (lastElem.type == BFIM_MSG_TYPE_NULL) {
-            MSIMElem *showElem = [self.messageStore lastShowMessage:lastElem.partner_id];
-            showElem.msg_id = lastElem.msg_id;
-            [self elemNeedToUpdateConversation:showElem];
+        if (elem.type == BFIM_MSG_TYPE_NULL) {
+            MSIMElem *showElem = [self.messageStore lastShowMessage:elem.partner_id];
+            showElem.msg_id = elem.msg_id;
+            [self elemNeedToUpdateConversation:showElem increaseUnreadCount:NO];
         }else {
-            [self elemNeedToUpdateConversation:lastElem];
+            [self elemNeedToUpdateConversation:elem increaseUnreadCount:YES];
         }
     });
     //更新会话更新时间
-    [[MSIMTools sharedInstance]updateConversationTime:lastElem.msg_sign];
+    [[MSIMTools sharedInstance]updateConversationTime:elem.msg_sign];
 }
 
 ///服务器返回的历史数据处理
@@ -199,10 +204,14 @@
 
 - (void)chatUnreadCountChanged:(LastReadMsg *)result
 {
-    [self.convStore updateConvesation:[NSString stringWithFormat:@"%lld",result.fromUid] unread_count:result.unread];
+    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:[NSString stringWithFormat:@"%lld",result.fromUid]];
+    conv.unread_count = result.unread;
+    [[MSConversationProvider provider]updateConversation:conv];
+    //更新会话更新时间
+    [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateUnreadCountInConversation:unreadCount:)]) {
-            [self.convListener onUpdateUnreadCountInConversation:[NSString stringWithFormat:@"c2c_%lld",result.fromUid] unreadCount:result.unread];
+        if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+            [self.convListener onUpdateConversations:@[conv]];
         }
     });
 }

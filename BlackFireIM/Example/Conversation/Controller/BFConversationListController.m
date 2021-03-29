@@ -63,7 +63,6 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNetworkChanged:) name:MSUIKitNotification_ConnListener object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onConvUnreadUpdate:) name:MSUIKitNotification_ConversationUnreadCount object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
 }
 
@@ -183,18 +182,6 @@
     [self updateConversation:list];
 }
 
-- (void)onConvUnreadUpdate:(NSNotification *)note
-{
-    NSDictionary *dic = note.object;
-    NSString *conv_id = dic[@"conv_id"];
-    NSInteger count = [dic[@"count"] integerValue];
-    for (BFConversationCellData *data in self.dataList) {
-        if ([data.conv.conversation_id isEqualToString:conv_id]) {
-            data.conv.unread_count = count;
-        }
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -214,7 +201,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [NSBundle bf_localizedStringForKey:@"Delete"];
+    return TUILocalizableString(Delete);
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath

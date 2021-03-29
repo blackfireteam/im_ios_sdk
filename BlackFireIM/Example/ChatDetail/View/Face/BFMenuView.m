@@ -28,7 +28,7 @@
 
     _sendButton = [[UIButton alloc] init];
     _sendButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
-    [_sendButton setTitle:[NSBundle bf_localizedStringForKey:@"Send"] forState:UIControlStateNormal];
+    [_sendButton setTitle:TUILocalizableString(Send) forState:UIControlStateNormal];
     _sendButton.backgroundColor = RGBA(87, 190, 105, 1.0);
     [_sendButton addTarget:self action:@selector(sendUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_sendButton];

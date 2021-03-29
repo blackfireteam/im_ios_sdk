@@ -9,6 +9,7 @@
 #import "BFHeader.h"
 #import "UIColor+BFDarkMode.h"
 #import "MSIMManager+Message.h"
+#import "MSIMManager+Conversation.h"
 #import "BFTextMessageCellData.h"
 #import "BFImageMessageCellData.h"
 #import "BFTextMessageCell.h"
@@ -59,7 +60,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self readedReport];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -72,6 +72,7 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewMessage:) name:MSUIKitNotification_MessageListener object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusUpdate:) name:MSUIKitNotification_MessageSendStatusUpdate object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapViewController)];
     [self.view addGestureRecognizer:tap];
@@ -97,7 +98,21 @@
 
 - (void)readedReport
 {
-    
+    //取最后一条msg_id != 0的消息
+    NSInteger n_id = 0;
+    for (NSInteger i = self.uiMsgs.count-1; i >= 0; i--) {
+        BFMessageCellData *data = self.uiMsgs[i];
+        if (data.elem.msg_id > 0) {
+            n_id = data.elem.msg_id;
+            break;
+        }
+    }
+    if (n_id == 0) return;
+    [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id lastMsgID:n_id succ:^{
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            
+    }];
 }
 
 ///重发消息
@@ -131,7 +146,7 @@
                 strongSelf.noMoreMsg = isFinished;
             }
             NSMutableArray *uiMsgs = [strongSelf transUIMsgFromIMMsg:msgs];
-            if (uiMsgs != 0) {
+            if (uiMsgs.count != 0) {
                 NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, uiMsgs.count)];
                 [strongSelf.uiMsgs insertObjects:uiMsgs atIndexes:indexSet];
                 [strongSelf.heightCache removeAllObjects];
@@ -176,9 +191,9 @@
         if (elem.type == BFIM_MSG_TYPE_REVOKE) {// 撤回的消息
             BFSystemMessageCellData *revoke = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
             if (elem.isSelf) {
-                revoke.content = [NSBundle bf_localizedStringForKey:@"TUIKitMessageTipsYouRecallMessage"];
+                revoke.content = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
             }else {
-                revoke.content = [NSBundle bf_localizedStringForKey:@"TUIkitMessageTipsOthersRecallMessage"];
+                revoke.content = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
             }
             data = revoke;
         }else if (elem.type == BFIM_MSG_TYPE_TEXT) {
@@ -186,17 +201,15 @@
             BFTextMessageCellData *textMsg = [[BFTextMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             textMsg.content = textElem.text;
             textMsg.elem = textElem;
-            textMsg.avatarUrl = [[MSProfileProvider provider]providerProfileFromLocal:textElem.fromUid.integerValue].avatar;
             data = textMsg;
         }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
             MSIMImageElem *imageElem = (MSIMImageElem *)elem;
             BFImageMessageCellData *imageMsg = [[BFImageMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             imageMsg.elem = imageElem;
-            imageMsg.avatarUrl = [[MSProfileProvider provider]providerProfileFromLocal:imageElem.fromUid.integerValue].avatar;
             data = imageMsg;
         }else {
             BFSystemMessageCellData *unknowData = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
-            unknowData.content = [NSBundle bf_localizedStringForKey:@"TUIkitMessageTipsUnknowMessage"];
+            unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);
             data = unknowData;
         }
         if (dateMsg) {
@@ -230,10 +243,10 @@
         }
         [self.tableView endUpdates];
         [self scrollToBottom:YES];
-        [self readedReport];
     }
 }
 
+///消息状态发生变化通知
 - (void)messageStatusUpdate:(NSNotification *)note
 {
     MSIMElem *elem = note.object;
@@ -244,6 +257,18 @@
             BFMessageCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             [cell fillWithData:data];
         }
+    }
+}
+
+///用户个人信息更新通知
+- (void)profileUpdate:(NSNotification *)note
+{
+    MSProfileInfo *profile = note.object;
+    if ([profile.user_id isEqualToString:self.partner_id] || [profile.user_id isEqualToString:[MSIMTools sharedInstance].user_id]) {
+        [self.tableView reloadData];
+    }
+    if ([profile.user_id isEqualToString:self.partner_id]) {
+        self.navigationItem.title = profile.nick_name;
     }
 }
 
@@ -350,10 +375,10 @@
     
     NSMutableArray *items = [NSMutableArray array];
     if ([data isKindOfClass:[BFTextMessageCellData class]]) {
-        [items addObject:[[UIMenuItem alloc]initWithTitle:[NSBundle bf_localizedStringForKey:@"Copy"] action:@selector(onCopyMsg:)]];
+        [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Copy) action:@selector(onCopyMsg:)]];
     }
     if (data.elem.sendStatus == BFIM_MSG_STATUS_SEND_SUCC) {
-        [items addObject:[[UIMenuItem alloc]initWithTitle:[NSBundle bf_localizedStringForKey:@"Revoke"] action:@selector(onRevoke:)]];
+        [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Revoke) action:@selector(onRevoke:)]];
     }
     UIMenuController *vc = [UIMenuController sharedMenuController];
     vc.menuItems = items;
@@ -381,11 +406,11 @@
 /** 消息失败重发*/
 - (void)onRetryMessage:(BFMessageCell *)cell
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSBundle bf_localizedStringForKey:@"TUIKitTipsConfirmResendMessage"] message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:[NSBundle bf_localizedStringForKey:@"Re-send"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:TUILocalizableString(TUIKitTipsConfirmResendMessage) message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:TUILocalizableString(Re-send) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self resendMessage:cell.messageData];
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:[NSBundle bf_localizedStringForKey:@"Cancel"] style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:TUILocalizableString(Cancel) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 
     }]];
     [self.navigationController presentViewController:alert animated:YES completion:nil];
@@ -446,9 +471,9 @@
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     BFSystemMessageCellData *data = [[BFSystemMessageCellData alloc]initWithDirection:(msg.elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
     if (msg.elem.isSelf) {
-        data.content = [NSBundle bf_localizedStringForKey:@"TUIKitMessageTipsYouRecallMessage"];
+        data.content = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
     }else {
-        data.content = [NSBundle bf_localizedStringForKey:@"TUIkitMessageTipsOthersRecallMessage"];
+        data.content = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
     }
     [self.uiMsgs insertObject:data atIndex:index];
     [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];

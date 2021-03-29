@@ -23,10 +23,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"在线用户";
+    self.navigationItem.title = @"在线用户";
     [self setupUI];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userOnline:) name:@"MSUIKitNotification_Profile_online" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userOffline:) name:@"MSUIKitNotification_Profile_offline" object:nil];
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userOnline:) name:@"MSUIKitNotification_Profile_online" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userOffline:) name:@"MSUIKitNotification_Profile_offline" object:nil];
+    }
+    return self;
 }
 
 - (void)dealloc

@@ -68,9 +68,6 @@ NS_ASSUME_NONNULL_BEGIN
 ///新增会话或会话发生变化
 - (void)onUpdateConversations:(NSArray<MSIMConversation*> *) conversationList;
 
-///小红点未读数发生变化
-- (void)onUpdateUnreadCountInConversation:(NSString *)conv_id unreadCount:(NSInteger)count;
-
 @end
 
 @protocol MSIMMessageListener <NSObject>

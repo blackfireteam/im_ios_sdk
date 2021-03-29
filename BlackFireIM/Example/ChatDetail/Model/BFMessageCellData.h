@@ -23,10 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) UIImage *defaultAvatar;
 
-@property(nonatomic,strong) NSString *avatarUrl;
-
-@property(nonatomic,copy) NSString *nickName;
-
 @property(nonatomic,assign) TMsgDirection direction;
 
 @property(nonatomic,assign) BOOL showName;

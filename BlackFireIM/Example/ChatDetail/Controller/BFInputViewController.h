@@ -5,7 +5,7 @@
 //  Created by benny wang on 2021/3/4.
 //
 
-#import <UIKit/UIKit.h>
+#import "BFBaseViewController.h"
 #import "BFInputBarView.h"
 #import "BFChatMoreView.h"
 #import "BFFaceView.h"
@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface BFInputViewController : UIViewController
+@interface BFInputViewController : BFBaseViewController
 
 @property(nonatomic,strong) BFInputBarView *inputBar;
 

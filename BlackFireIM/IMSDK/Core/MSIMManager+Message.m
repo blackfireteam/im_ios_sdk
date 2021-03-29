@@ -108,7 +108,7 @@
             elem.msg_id = result.msgId;
             [strongSelf.messageStore updateMessageToSuccss:chats.sign msg_id:elem.msg_id partnerID:elem.partner_id];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }else {
             NSLog(@"发送失败");
             failed(code,error);
@@ -117,7 +117,7 @@
             elem.reason = error;
             [strongSelf.messageStore updateMessageToFail:chats.sign code:elem.code reason:elem.reason partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }
     }];
 }
@@ -139,7 +139,7 @@
                 elem.url = imageInfo.url;
                 [self.msgListener onNewMessages:@[elem]];
                 [self.messageStore addMessage:elem];
-                [self elemNeedToUpdateConversation:elem];
+                [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
                 [self sendImageMessageByTCP:elem successed:success failed:failed];
             }else {
                 [self uploadImage:elem successed:success failed:failed];
@@ -152,7 +152,7 @@
     if (isResend == NO) {
         [self.msgListener onNewMessages:@[elem]];
         [self.messageStore addMessage:elem];
-        [self elemNeedToUpdateConversation:elem];
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
     }
     [self sendImageMessageByTCP:elem successed:success failed:failed];
 }
@@ -174,7 +174,7 @@
         if ([imageExt isEqualToString:@"png"] || [imageExt isEqualToString:@"jpeg"]) {
             [self.msgListener onNewMessages:@[elem]];
             [self.messageStore addMessage:elem];
-            [self elemNeedToUpdateConversation:elem];
+            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             UIImage *image = [UIImage imageWithData:imageData];
             if (image.size.width > 1920 || image.size.height > 1920) {
                 CGFloat aspectRadio = MIN(1920/image.size.width, 1920/image.size.height);
@@ -201,7 +201,7 @@
             }
             [self.msgListener onNewMessages:@[elem]];
             [self.messageStore addMessage:elem];
-            [self elemNeedToUpdateConversation:elem];
+            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             //再上传
         }else {
             failed(ERR_IM_IMAGE_TYPE_ERROR,@"图片类型不支持");
@@ -230,7 +230,7 @@
             elem.msg_id = result.msgId;
             [strongSelf.messageStore updateMessageToSuccss:chats.sign msg_id:elem.msg_id partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             success(result.msgId);
         }else {
             NSLog(@"发送失败");
@@ -240,7 +240,7 @@
             elem.reason = error;
             [strongSelf.messageStore updateMessageToFail:chats.sign code:elem.code reason:elem.reason partnerID:elem.toUid];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }
     }];
 }

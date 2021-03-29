@@ -12,6 +12,7 @@
 #import "BFInputViewController.h"
 #import "MSIMSDK.h"
 #import "BFChatViewController+More.h"
+#import "MSProfileProvider.h"
 
 
 @interface BFChatViewController ()<BFInputViewControllerDelegate,BFMessageControllerDelegate>
@@ -46,6 +47,10 @@
     self.inputController.delegate = self;
     [self addChildViewController:self.inputController];
     [self.view addSubview:self.inputController.view];
+    
+    [[MSProfileProvider provider] providerProfile:self.partner_id.integerValue complete:^(MSProfileInfo * _Nonnull profile) {
+            self.navigationItem.title = profile.nick_name;
+    }];
 }
 
 #pragma mark - <BFInputViewControllerDelegate>
@@ -84,6 +89,13 @@
     
 }
 
+/**
+ *  有 @xxx 字符删除
+ */
+- (void)inputController:(BFInputViewController *)inputController didDeleteAt:(NSString *)atText
+{
+    
+}
 /// 点击拍照，照片等更多功能
 - (void)inputController:(BFInputViewController *)inputController didSelectMoreCell:(BFInputMoreCell *)cell
 {

@@ -116,11 +116,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUpdate object:conversationList];
 }
 
-///小红点未读数发生变化
-- (void)onUpdateUnreadCountInConversation:(NSString *)conv_id unreadCount:(NSInteger)count
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUnreadCount object:@{@"conv_id":conv_id,@"count":@(count)}];
-}
 
 #pragma mark - MSIMMessageListener
 
@@ -128,16 +123,6 @@
 - (void)onNewMessages:(NSArray<MSIMElem *> *)msgs
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageListener object:msgs];
-}
-
-/**
- *  收到了已读回执
- *
- *  @param receipts 已读回执（TIMMessageReceipt*）列表
- */
-- (void) onRecvMessageReceipts:(NSArray *)receipts
-{
-    
 }
 
 /**

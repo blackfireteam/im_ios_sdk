@@ -19,27 +19,26 @@
     NSDateFormatter *dateFmt = [[NSDateFormatter alloc ] init ];
     BOOL isYesterday = NO;
     if (nowCmps.year != myCmps.year) {
-        dateFmt.dateFormat = @"yyyy/MM/dd";
-    }
-    else{
+        dateFmt.dateFormat = @"yyyy/MM/dd HH:mm";
+    }else{
         if (nowCmps.day==myCmps.day) {
             dateFmt.dateFormat = @"HH:mm";
         } else if((nowCmps.day-myCmps.day)==1) {
             isYesterday = YES;
-            dateFmt.AMSymbol = [NSBundle bf_localizedStringForKey:@"am"]; //@"上午";
-            dateFmt.PMSymbol = [NSBundle bf_localizedStringForKey:@"pm"]; //@"下午";
-            dateFmt.dateFormat = [NSBundle bf_localizedStringForKey:@"YesterdayDateFormat"];
+            dateFmt.AMSymbol = TUILocalizableString(am); //@"上午";
+            dateFmt.PMSymbol = TUILocalizableString(pm); //@"下午";
+            dateFmt.dateFormat = TUILocalizableString(YesterdayDateFormat);
         } else {
             if ((nowCmps.day-myCmps.day) <=7) {
-                dateFmt.dateFormat = @"EEEE";
+                dateFmt.dateFormat = @"EEEE HH:mm";
             }else {
-                dateFmt.dateFormat = @"yyyy/MM/dd";
+                dateFmt.dateFormat = @"yyyy/MM/dd HH:mm";
             }
         }
     }
     NSString *str = [dateFmt stringFromDate:self];
     if (isYesterday) {
-        str = [NSString stringWithFormat:@"%@ %@", [NSBundle bf_localizedStringForKey:@"Yesterday"], str];
+        str = [NSString stringWithFormat:@"%@ %@", TUILocalizableString(Yesterday), str];
     }
     return str;
 }

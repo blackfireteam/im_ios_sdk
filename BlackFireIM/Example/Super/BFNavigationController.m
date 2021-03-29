@@ -6,6 +6,7 @@
 //
 
 #import "BFNavigationController.h"
+#import "UIColor+BFDarkMode.h"
 
 @interface BFNavigationController ()
 
@@ -16,7 +17,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.navigationBar.tintColor = [UIColor d_colorWithColorLight:[UIColor darkTextColor] dark:[UIColor lightTextColor]];
 }
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated

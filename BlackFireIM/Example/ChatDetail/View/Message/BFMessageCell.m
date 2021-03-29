@@ -10,7 +10,7 @@
 #import <SDWebImage.h>
 #import "BFHeader.h"
 #import "UIView+Frame.h"
-
+#import "MSProfileProvider.h"
 
 @interface BFMessageCell()
 
@@ -75,14 +75,20 @@
 - (void)fillWithData:(BFMessageCellData *)data
 {
     self.messageData = data;
-    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:data.avatarUrl] placeholderImage:data.defaultAvatar];
+    self.avatarView.image = data.defaultAvatar;
+    WS(weakSelf);
+    NSInteger fromUid = data.elem.fromUid.integerValue;
+    if (fromUid) {
+        [[MSProfileProvider provider]providerProfile:fromUid complete:^(MSProfileInfo * _Nonnull profile) {
+            STRONG_SELF(strongSelf)
+            [strongSelf.avatarView sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:data.defaultAvatar];
+            strongSelf.nameLabel.text = profile.nick_name;
+        }];
+    }
     
     self.avatarView.layer.masksToBounds = YES;
     self.avatarView.layer.cornerRadius = 40 * 0.5;
     
-    //set data
-    self.nameLabel.text = data.nickName;
-
     if(data.elem.sendStatus == BFIM_MSG_STATUS_SEND_FAIL){
         [_indicator stopAnimating];
         self.retryView.image = [UIImage imageNamed:TUIKitResource(@"msg_error")];

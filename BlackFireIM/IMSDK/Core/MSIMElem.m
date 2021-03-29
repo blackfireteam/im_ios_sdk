@@ -48,11 +48,14 @@
 
 - (NSString *)displayStr
 {
-    if (self.isSelf) {
-        return [NSBundle bf_localizedStringForKey:@"TUIKitMessageTipsYouRecallMessage"];
-    }else {
-        return [NSBundle bf_localizedStringForKey:@"TUIkitMessageTipsOthersRecallMessage"];
+    if (self.type == BFIM_MSG_TYPE_REVOKE) {
+        if (self.isSelf) {
+            return TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
+        }else {
+            return TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
+        }
     }
+    return @"";
 }
 
 @end
@@ -104,7 +107,7 @@
 
 - (NSString *)displayStr
 {
-    return [NSBundle bf_localizedStringForKey:@"TUIkitMessageTypeImage"];
+    return TUILocalizableString(TUIkitMessageTypeImage);
 }
 
 @end

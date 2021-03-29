@@ -283,11 +283,11 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
         _moreView = [[BFChatMoreView alloc] initWithFrame:CGRectMake(0, _inputBar.frame.origin.y + _inputBar.frame.size.height, self.view.frame.size.width, 0)];
         _moreView.delegate = self;
         BFInputMoreCellData *cameraData = [[BFInputMoreCellData alloc]initWithType:BFIM_MORE_CAMERA];
-        cameraData.title = [NSBundle bf_localizedStringForKey:@"TUIKitMoreCamera"];
+        cameraData.title = TUILocalizableString(TUIKitMoreCamera);
         cameraData.image = [UIImage bf_imageNamed:@"more_camera"];
         
         BFInputMoreCellData *photoData = [[BFInputMoreCellData alloc]initWithType:BFIM_MORE_PHOTO];
-        photoData.title = [NSBundle bf_localizedStringForKey:@"TUIKitMorePhoto"];
+        photoData.title = TUILocalizableString(TUIKitMorePhoto);
         photoData.image = [UIImage bf_imageNamed:@"more_picture"];
         
         [_moreView setData:@[cameraData,photoData]];

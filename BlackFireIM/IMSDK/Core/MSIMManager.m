@@ -273,7 +273,7 @@ static MSIMManager *_manager;
             NSError *error;
             ChatR *recieve = [[ChatR alloc]initWithData:package error:&error];
             if (error == nil && recieve != nil) {
-                [self recieveMessages:@[recieve]];
+                [self recieveMessage:recieve];
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }

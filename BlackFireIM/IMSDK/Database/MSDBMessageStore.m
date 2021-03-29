@@ -307,6 +307,21 @@ static NSString *ext_data = @"ext_data";
     return elem;
 }
 
+///取出小于或等于msg_id的对方发出的消息的msg_id
+- (NSInteger)latestMsgIDLessThan:(NSInteger)msg_id partner_id:(NSString *)partner_id
+{
+    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partner_id];
+    NSString *sqlStr = [NSString stringWithFormat:@"select msg_id from %@ where msg_id <= '%zd' and f_id = '%@' and msg_id != 0 order by msg_sign desc limit 1",tableName,msg_id,partner_id];
+    __block NSInteger minMsgID = 0;
+    [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
+        while ([rsSet next]) {
+            minMsgID = [rsSet longLongIntForColumn:@"msg_id"];
+        }
+        [rsSet close];
+    }];
+    return minMsgID;
+}
+
 /// 分页获取聊天记录
 - (void)messageByPartnerID:(NSString *)partnerID
              last_msg_sign:(NSInteger)last_msg_sign
@@ -366,6 +381,7 @@ static NSString *ext_data = @"ext_data";
 
 - (NSInteger)minMsgIDInMessages:(NSArray *)msgs
 {
+    if (msgs.count == 0) return 0;
     NSInteger msgID = INT64_MAX;
     for (MSIMElem *elem in msgs) {
         if (elem.msg_id > 0 && elem.msg_id < msgID) {
@@ -387,7 +403,14 @@ static NSString *ext_data = @"ext_data";
         if (code == ERR_SUCC) {
             ChatRBatch *batch = response;
             NSArray<MSIMElem *> *msgs = [[MSIMManager sharedInstance] chatHistoryHandler:batch.msgsArray];
-            result(msgs);
+            //将不显示的消息剔除
+            NSMutableArray *tempArr = [NSMutableArray array];
+            for (MSIMElem *elem in msgs) {
+                if (elem.type != BFIM_MSG_TYPE_NULL) {
+                    [tempArr addObject:elem];
+                }
+            }
+            result(tempArr);
         }else {
             result(nil);
         }

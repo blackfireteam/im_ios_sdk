@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define TUILocalizableString(key) [NSBundle bf_localizedStringForKey:@""#key""]
+
 @interface NSBundle (BFKit)
 
 #pragma mark - TUIKit 代码相关国际化

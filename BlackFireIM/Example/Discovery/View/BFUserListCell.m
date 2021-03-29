@@ -9,7 +9,7 @@
 #import "UIColor+BFDarkMode.h"
 #import <SDWebImage.h>
 #import "UIView+Frame.h"
-
+#import "BFHeader.h"
 
 @implementation BFUserListCell
 
@@ -17,7 +17,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor d_colorWithColorLight:TCell_Nomal dark:TCell_Nomal_Dark];
         //head
         _avatarView = [[UIImageView alloc] init];
         _avatarView.contentMode = UIViewContentModeScaleAspectFill;

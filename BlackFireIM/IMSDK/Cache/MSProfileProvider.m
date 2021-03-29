@@ -72,6 +72,7 @@ static MSProfileProvider *instance;
             getP.uid = [uid integerValue];
             getP.updateTime = 0;
             getP.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+            NSLog(@"[发送消息]GetProfile: %@",getP);
             [[MSIMManager sharedInstance]send:[getP data] protoType:XMChatProtoTypeGetProfile needToEncry:NO sign:getP.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
                             if (code == ERR_SUCC) {
                                 Profile *profile = response;

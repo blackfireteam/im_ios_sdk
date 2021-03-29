@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSIMManager (Parse)
 
 ///收到服务器下发的消息处理
-- (void)recieveMessages:(NSArray<ChatR *> *)responses;
+- (void)recieveMessage:(ChatR *)response;
 
 ///服务器返回的批量用户信息处理
 - (void)profilesResultHandler:(ProfileList *)list;
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///服务器返回的历史数据处理
 - (NSArray<MSIMElem *> *)chatHistoryHandler:(NSArray<ChatR *> *)responses;
 
-- (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem;
+- (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem increaseUnreadCount:(BOOL)increase;
 
 @end
 

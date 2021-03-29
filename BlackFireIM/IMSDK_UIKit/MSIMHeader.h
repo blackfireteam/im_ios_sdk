@@ -14,9 +14,6 @@
 //会话列表有变更通知
 #define MSUIKitNotification_ConversationUpdate @"MSUIKitNotification_ConversationUpdate"
 
-//会话列表未读数有变更通知
-#define MSUIKitNotification_ConversationUnreadCount @"MSUIKitNotification_ConversationUnreadCount"
-
 //有新消息通知
 #define MSUIKitNotification_MessageListener @"MSUIKitNotification_MessageListener"
 //消息状态有变更通知
