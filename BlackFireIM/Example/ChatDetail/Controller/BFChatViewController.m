@@ -13,6 +13,8 @@
 #import "MSIMSDK.h"
 #import "BFChatViewController+More.h"
 #import "MSProfileProvider.h"
+#import "BFMessageCell.h"
+#import <YBImageBrowser.h>
 
 
 @interface BFChatViewController ()<BFInputViewControllerDelegate,BFMessageControllerDelegate>
@@ -132,6 +134,15 @@
 - (void)messageController:(BFMessageController *)controller onSelectMessageContent:(BFMessageCell *)cell
 {
     [self.inputController reset];
+    if (cell.messageData.elem.type == BFIM_MSG_TYPE_IMAGE) {//点击图片消息，查看图片
+        MSIMImageElem *imageElem = (MSIMImageElem *)cell.messageData.elem;
+        YBIBImageData *data = [YBIBImageData new];
+        data.imageURL = [NSURL URLWithString:imageElem.url];
+        data.projectiveView = cell.container.subviews.firstObject;
+        YBImageBrowser *browser = [YBImageBrowser new];
+        browser.dataSourceArray = @[data];
+        [browser show];
+    }
 }
 
 /**

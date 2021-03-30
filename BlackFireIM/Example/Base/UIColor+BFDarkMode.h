@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIColor *)d_systemBlueColor;
 
++ (UIColor *)d_systemBlackColor;
+
 @end
 
 NS_ASSUME_NONNULL_END

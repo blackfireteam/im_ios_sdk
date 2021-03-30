@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (MSIMTools *)sharedInstance;
 
-@property(nonatomic,copy) NSString *user_id;
+@property(nonatomic,copy) NSString * _Nullable user_id;
 
 @property(nonatomic,assign,readonly) NSInteger currentLocalTimeInterval;
 

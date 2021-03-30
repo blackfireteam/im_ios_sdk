@@ -13,6 +13,7 @@
 
 @end
 @implementation MSIMTools
+@synthesize user_id = _user_id;
 
 static MSIMTools *_tools;
 + (MSIMTools *)sharedInstance
@@ -43,6 +44,20 @@ static MSIMTools *_tools;
     self.diff = s_time - self.currentLocalTimeInterval;
 }
 
+- (void)setUser_id:(NSString *)user_id
+{
+    _user_id = user_id;
+    [[NSUserDefaults standardUserDefaults]setObject:user_id forKey:@"user_id"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+}
+
+- (NSString *)user_id
+{
+    if (!_user_id) {
+        _user_id = [[NSUserDefaults standardUserDefaults]objectForKey:@"user_id"];
+    }
+    return _user_id;
+}
 ///维护会话列表更新时间
 - (void)updateConversationTime:(NSInteger)update_time
 {

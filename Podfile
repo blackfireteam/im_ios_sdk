@@ -12,5 +12,7 @@ pod 'UICKeyChainStore'
 pod 'SDWebImage'
 pod 'RealReachability'
 pod 'YBImageBrowser'
+pod 'SVProgressHUD'
+pod 'YYImage'
 
 end

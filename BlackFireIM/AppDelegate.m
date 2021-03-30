@@ -7,7 +7,9 @@
 
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
-#import "MSIMKit.h"
+#import "BFLoginController.h"
+#import "MSIMTools.h"
+#import "BFNavigationController.h"
 
 @interface AppDelegate ()
 
@@ -22,16 +24,12 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    self.window.rootViewController = [[BFTabBarController alloc] init];
+    if ([MSIMTools sharedInstance].user_id) {
+        self.window.rootViewController = [[BFTabBarController alloc] init];
+    }else {
+        self.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
+    }
     
-    [[MSIMKit sharedInstance] initWithConfig:[IMSDKConfig defaultConfig]];
-    //uid = 23 T3AmDPOTp7smtGUElDRw/A==
-    //uid = 5  lxmxSxIG9jIJWyruS08tsg==
-    [[MSIMKit sharedInstance] login:@"T3AmDPOTp7smtGUElDRw/A==" succ:^{
-            
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            
-    }];
     return YES;
 }
 

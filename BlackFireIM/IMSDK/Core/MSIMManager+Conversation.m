@@ -66,8 +66,6 @@
             [profiles addObject:info];
         }
         [[MSConversationProvider provider]updateConversations:data];
-        //同步Profile信息
-        [[MSProfileProvider provider]synchronizeProfiles:profiles];
         MSIMConversation *lastConv = data.lastObject;
         NSInteger nextSign = lastConv.show_msg_sign;
         succ(data,nextSign,hasMore ? NO : YES);

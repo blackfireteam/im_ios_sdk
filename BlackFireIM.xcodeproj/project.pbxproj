@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -72,6 +72,7 @@
 		F0777BA82611CCD8006CA660 /* BFBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BA72611CCD8006CA660 /* BFBaseViewController.m */; };
 		F0777BAE2611D418006CA660 /* BFFaceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BAD2611D418006CA660 /* BFFaceUtil.m */; };
 		F0777BB42612C2C6006CA660 /* BFNoticeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BB32612C2C6006CA660 /* BFNoticeCountView.m */; };
+		F0777BBD2612FB56006CA660 /* BFLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BBC2612FB56006CA660 /* BFLoginController.m */; };
 		F0878A802605EB0200268122 /* BFSystemMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A7F2605EB0200268122 /* BFSystemMessageCellData.m */; };
 		F0878A862608428500268122 /* BFSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A852608428500268122 /* BFSystemMessageCell.m */; };
 		F0878A8F2608DCF900268122 /* BFChatMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A8E2608DCF900268122 /* BFChatMoreView.m */; };
@@ -240,6 +241,8 @@
 		F0777BAD2611D418006CA660 /* BFFaceUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFFaceUtil.m; sourceTree = "<group>"; };
 		F0777BB22612C2C6006CA660 /* BFNoticeCountView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFNoticeCountView.h; sourceTree = "<group>"; };
 		F0777BB32612C2C6006CA660 /* BFNoticeCountView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFNoticeCountView.m; sourceTree = "<group>"; };
+		F0777BBB2612FB56006CA660 /* BFLoginController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFLoginController.h; sourceTree = "<group>"; };
+		F0777BBC2612FB56006CA660 /* BFLoginController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFLoginController.m; sourceTree = "<group>"; };
 		F0878A7E2605EB0200268122 /* BFSystemMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSystemMessageCellData.h; sourceTree = "<group>"; };
 		F0878A7F2605EB0200268122 /* BFSystemMessageCellData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSystemMessageCellData.m; sourceTree = "<group>"; };
 		F0878A842608428500268122 /* BFSystemMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSystemMessageCell.h; sourceTree = "<group>"; };
@@ -458,6 +461,8 @@
 		F056712525EF916800782F9C /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				F0777BCF26130967006CA660 /* Profile */,
+				F0777BB82612FAE8006CA660 /* Login */,
 				F09316D6260B816D0099E39E /* Discovery */,
 				F058368526032A5E0008C4FD /* ChatDetail */,
 				F05836572602EE4E0008C4FD /* Conversation */,
@@ -508,8 +513,6 @@
 				F0777BA72611CCD8006CA660 /* BFBaseViewController.m */,
 				F05836332602E38E0008C4FD /* BFNavigationController.h */,
 				F05836342602E38E0008C4FD /* BFNavigationController.m */,
-				F058362D2602E22D0008C4FD /* BFProfileViewController.h */,
-				F058362E2602E22D0008C4FD /* BFProfileViewController.m */,
 			);
 			path = Super;
 			sourceTree = "<group>";
@@ -621,6 +624,40 @@
 			path = IMSDK_UIKit;
 			sourceTree = "<group>";
 		};
+		F0777BB82612FAE8006CA660 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				F0777BBA2612FAF9006CA660 /* Controller */,
+				F0777BB92612FAF2006CA660 /* View */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		F0777BB92612FAF2006CA660 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F0777BBA2612FAF9006CA660 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F0777BBB2612FB56006CA660 /* BFLoginController.h */,
+				F0777BBC2612FB56006CA660 /* BFLoginController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F0777BCF26130967006CA660 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				F058362D2602E22D0008C4FD /* BFProfileViewController.h */,
+				F058362E2602E22D0008C4FD /* BFProfileViewController.m */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		F09316A02609BB8C0099E39E /* Face */ = {
 			isa = PBXGroup;
 			children = (
@@ -712,6 +749,7 @@
 				F011D57525E736BD0061F9D6 /* Sources */,
 				F011D57625E736BD0061F9D6 /* Frameworks */,
 				F011D57725E736BD0061F9D6 /* Resources */,
+				38DF2BCC64EDADA176819C77 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -830,6 +868,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		38DF2BCC64EDADA176819C77 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A314BAD49F9E5992DB9E8A9D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -912,6 +967,7 @@
 				F0777BAE2611D418006CA660 /* BFFaceUtil.m in Sources */,
 				F036363525FEFB6E00E69D14 /* MSProfileProvider.m in Sources */,
 				F052EC9425EDDE2C00F35D74 /* MSDBMessageStore.m in Sources */,
+				F0777BBD2612FB56006CA660 /* BFLoginController.m in Sources */,
 				F05836D42605A1750008C4FD /* NSDictionary+Ext.m in Sources */,
 				F036362E25FEF7FB00E69D14 /* MSProfileInfo.m in Sources */,
 				F056716625F087D200782F9C /* UIView+BFExtension.m in Sources */,

@@ -27,6 +27,8 @@
 @property(nonatomic,assign) NSInteger bodyLength;//包体总长度
 @property(nonatomic,strong) NSTimer *heartTimer; // 心跳 timer
 
+@property(nonatomic,strong) NSTimer *retryTimer;//断线重连timer
+
 @property(nonatomic,strong) NSTimer *callbackTimer;
 
 @property(nonatomic,strong) NSLock *dictionaryLock;
@@ -113,14 +115,21 @@ static MSIMManager *_manager;
 {
     _config = config;
     _connListener = listener;
+    //建立长连接
+    self.needToDisconnect = NO;
+    [self connectTCPToServer];
 }
 
 - (void)connectTCPToServer
 {
+    NSLog(@"请求建立TCP连接");
     NSError *error = nil;
     [self.socket connectToHost:self.config.ip onPort:self.config.port error:&error];
     if(error) {
         NSLog(@"socket连接错误：%@", error);
+        if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
+            [self.connListener connectFailed:error.code err:error.localizedDescription];
+        }
     }else {
         if (self.connListener && [self.connListener respondsToSelector:@selector(onConnecting)]) {
             [self.connListener onConnecting];
@@ -130,6 +139,7 @@ static MSIMManager *_manager;
 
 - (void)disConnectTCP
 {
+    NSLog(@"请求断开TCP连接");
     [self.socket disconnect];
 }
 
@@ -176,7 +186,8 @@ static MSIMManager *_manager;
     });
     [self.socket readDataWithTimeout:-1 tag:100];
     self.retryCount = 0;
-    [self imLogin];//建立长链接，马上鉴权
+    [self.retryTimer invalidate];
+    self.retryTimer = nil;
     [self startHeartBeat];
 }
 
@@ -184,11 +195,14 @@ static MSIMManager *_manager;
 {
     NSLog(@"****连接断开****");
     [self closeTimer];
+    [self.retryTimer invalidate];
+    self.retryTimer = nil;
     //在非手动断开的情况下才进行重连
     if(self.needToDisconnect == NO && self.retryCount <= self.config.retryCount) {
         self.retryCount++;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.retryCount*self.retryCount * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self connectTCPToServer];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:self.retryCount*self.retryCount target:self selector:@selector(connectTCPToServer) userInfo:nil repeats:true];
+            [[NSRunLoop mainRunLoop]addTimer:self.retryTimer forMode:NSRunLoopCommonModes];
         });
     }else if (self.needToDisconnect == NO) {//断线重连失败
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -198,11 +212,6 @@ static MSIMManager *_manager;
         });
         return;
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.connListener && [self.connListener respondsToSelector:@selector(onReConnFailed:err:)]) {
-            [self.connListener onReConnFailed:err.code err:err.localizedDescription];
-        }
-    });
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -559,7 +568,6 @@ static MSIMManager *_manager;
                 }
             }
             NSLog(@"token 鉴权失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
-            [strongSelf disConnectTCP];//断开链接，启动重连
             strongSelf.loginFailBlock(code, error);
         }
     }];
@@ -579,22 +587,17 @@ static MSIMManager *_manager;
     if (userSign == nil) {
         return;
     }
-    [MSIMTools sharedInstance].user_id = @"5";
     self.config.token = userSign;
     self.loginSuccBlock = succ;
     self.loginFailBlock = fail;
     if (self.socket.isConnected) {
-        self.needToDisconnect = YES;
-        [self disConnectTCP];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.needToDisconnect = NO;
-            [self connectTCPToServer];
-        });
+        [self imLogin];//鉴权
     }else {
-        self.needToDisconnect = NO;
         [self connectTCPToServer];
     }
-    [[MSDBManager sharedInstance] scanAllTables];
+    if ([MSIMTools sharedInstance].user_id) {
+        [[MSDBManager sharedInstance] scanAllTables];
+    }
 }
 
 ///退出登录
@@ -609,12 +612,13 @@ static MSIMManager *_manager;
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
 //            Result *result = response;
+            [MSIMTools sharedInstance].user_id = nil;
+            strongSelf.needToDisconnect = YES;
+            [strongSelf disConnectTCP];
+            [[MSDBManager sharedInstance] accountChanged];
             succ();
         }else {
-            NSLog(@"token 鉴权失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
-            strongSelf.needToDisconnect = YES;
-            [strongSelf disConnectTCP];//断开链接，启动重连
-            [[MSDBManager sharedInstance] accountChanged];
+            NSLog(@"退出登录失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
             fail(code, error);
         }
     }];
