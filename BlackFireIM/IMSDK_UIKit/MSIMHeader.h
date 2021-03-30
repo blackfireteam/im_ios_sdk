@@ -18,6 +18,8 @@
 #define MSUIKitNotification_MessageListener @"MSUIKitNotification_MessageListener"
 //消息状态有变更通知
 #define MSUIKitNotification_MessageSendStatusUpdate @"MSUIKitNotification_MessageSendStatusUpdate"
+//收到对方撤回消息的通知
+#define MSUIKitNotification_MessageRecieveRevoke @"MSUIKitNotification_MessageRecieveRevoke"
 
 //用户信息更新通知
 #define MSUIKitNotification_ProfileUpdate @"MSUIKitNotification_ProfileUpdate"

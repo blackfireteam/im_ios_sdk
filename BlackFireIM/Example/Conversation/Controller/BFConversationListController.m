@@ -46,7 +46,7 @@
 - (void)rightBarButtonClick
 {
     BFChatViewController *vc = [[BFChatViewController alloc]init];
-    vc.partner_id = @"4";
+    vc.partner_id = @"5";
     [self.navigationController pushViewController:vc animated:YES];
 }
 

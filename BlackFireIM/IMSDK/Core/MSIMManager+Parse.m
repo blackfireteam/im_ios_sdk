@@ -147,6 +147,9 @@
             showElem.msg_id = elem.msg_id;
             [self elemNeedToUpdateConversation:showElem increaseUnreadCount:NO];
         }else {
+            if ([self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
+                [self.msgListener onNewMessages:@[elem]];
+            }
             [self elemNeedToUpdateConversation:elem increaseUnreadCount:YES];
         }
     });
@@ -168,9 +171,12 @@
             elem.fromUid = [NSString stringWithFormat:@"%lld",response.fromUid];
             elem.toUid = [NSString stringWithFormat:@"%lld",response.toUid];
             [self.messageStore updateMessageRevoke:[response.body integerValue] partnerID:elem.partner_id];
-            if (response.sign > 0) {//收到申请撤回的结果
-                [self sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
-            }
+            [self sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([self.msgListener respondsToSelector:@selector(onRevokeMessage:)]) {
+                    [self.msgListener onRevokeMessage:response.body.integerValue];
+                }
+            });
         }else if (response.type == BFIM_MSG_TYPE_TEXT) {
             MSIMTextElem *textElem = [[MSIMTextElem alloc]init];
             textElem.text = response.body;

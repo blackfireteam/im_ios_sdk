@@ -78,16 +78,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onNewMessages:(NSArray<MSIMElem *> *)msgs;
 
 /**
- *  收到了已读回执
- *
- *  @param receipts 已读回执（TIMMessageReceipt*）列表
- */
-- (void) onRecvMessageReceipts:(NSArray *)receipts;
-
-/**
  *  消息发送状态变化通知
  */
 - (void)onMessageUpdateSendStatus:(MSIMElem *)elem;
+
+///收到一条对方撤回的消息
+- (void)onRevokeMessage:(NSInteger)msg_id;
 
 @end
 

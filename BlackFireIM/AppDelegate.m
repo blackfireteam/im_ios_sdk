@@ -25,7 +25,9 @@
     self.window.rootViewController = [[BFTabBarController alloc] init];
     
     [[MSIMKit sharedInstance] initWithConfig:[IMSDKConfig defaultConfig]];
-    [[MSIMKit sharedInstance] login:@"lxmxSxIG9jIJWyruS08tsg==" succ:^{
+    //uid = 23 T3AmDPOTp7smtGUElDRw/A==
+    //uid = 5  lxmxSxIG9jIJWyruS08tsg==
+    [[MSIMKit sharedInstance] login:@"T3AmDPOTp7smtGUElDRw/A==" succ:^{
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
             

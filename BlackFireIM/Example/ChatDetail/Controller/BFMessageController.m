@@ -22,10 +22,11 @@
 #import "UIView+Frame.h"
 #import "MSIMTools.h"
 #import "MSProfileProvider.h"
+#import "BFNoticeCountView.h"
 
 
 #define MAX_MESSAGE_SEP_DLAY (5 * 60)
-@interface BFMessageController ()<BFMessageCellDelegate>
+@interface BFMessageController ()<BFMessageCellDelegate,BFNoticeCountViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *uiMsgs;
 @property (nonatomic, strong) NSMutableArray *heightCache;
@@ -40,6 +41,8 @@
 @property(nonatomic,strong) BFMessageCellData *menuUIMsg;
 
 @property(nonatomic,assign) NSInteger last_msg_sign;
+
+@property(nonatomic,strong) BFNoticeCountView *countTipView;
 
 @end
 
@@ -73,6 +76,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewMessage:) name:MSUIKitNotification_MessageListener object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusUpdate:) name:MSUIKitNotification_MessageSendStatusUpdate object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(recieveRevokeMessage:) name:MSUIKitNotification_MessageRecieveRevoke object:nil];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapViewController)];
     [self.view addGestureRecognizer:tap];
@@ -91,24 +95,30 @@
     _indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     self.tableView.tableHeaderView = _indicatorView;
     
+    _countTipView = [[BFNoticeCountView alloc]init];
+    [_countTipView setHidden:YES];
+    _countTipView.delegate = self;
+    
     _heightCache = [NSMutableArray array];
     _uiMsgs = [[NSMutableArray alloc] init];
     _firstLoad = YES;
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (self.countTipView.superview == nil) {
+        [self.parentViewController.view addSubview:self.countTipView];
+    }
+    self.countTipView.frame = CGRectMake(self.tableView.width-30-10, self.tableView.height-30-10, 30, 30);
+}
+
 - (void)readedReport
 {
     //取最后一条msg_id != 0的消息
-    NSInteger n_id = 0;
-    for (NSInteger i = self.uiMsgs.count-1; i >= 0; i--) {
-        BFMessageCellData *data = self.uiMsgs[i];
-        if (data.elem.msg_id > 0) {
-            n_id = data.elem.msg_id;
-            break;
-        }
-    }
-    if (n_id == 0) return;
-    [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id lastMsgID:n_id succ:^{
+    MSIMElem *elem = [[MSIMManager sharedInstance].messageStore lastMessageID:self.partner_id];
+    if (elem == nil) return;
+    [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id lastMsgID:elem.msg_id succ:^{
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
             
@@ -231,18 +241,42 @@
     return nil;
 }
 
+///收到新消息
 - (void)onNewMessage:(NSNotification *)note
 {
     NSArray *elems = note.object;
     NSMutableArray *uiMsgs = [self transUIMsgFromIMMsg:elems];
     if (uiMsgs.count) {
+        //当前列表是否停留在底部
+        BOOL isAtBottom = (self.tableView.contentOffset.y + self.tableView.height + 20 >= self.tableView.contentSize.height);
         [self.tableView beginUpdates];
         for (BFMessageCellData *data in uiMsgs) {
             [self.uiMsgs addObject:data];
             [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_uiMsgs.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         }
         [self.tableView endUpdates];
-        [self scrollToBottom:YES];
+        //当列表没有停留在底部时，不自动滚动显示出新消息。会在底部显示未读数，点击滚动到底部。
+        //适当增加些容错
+        if (isAtBottom) {
+            [self scrollToBottom:YES];
+        }else {
+            [self.countTipView increaseCount];
+        }
+    }
+}
+
+///收到一条对方撤回的消息
+- (void)recieveRevokeMessage:(NSNotification *)note
+{
+    NSInteger msg_id = [(NSNumber *)note.object integerValue];
+    BFMessageCellData *revokeData = nil;
+    for (BFMessageCellData *data in self.uiMsgs) {
+        if (data.elem.msg_id == msg_id) {
+            revokeData = data;
+        }
+    }
+    if (revokeData) {
+        [self revokeMsg:revokeData];
     }
 }
 
@@ -328,6 +362,9 @@
         if (self.indicatorView.isAnimating) {
             [self.indicatorView stopAnimating];
         }
+    }
+    if (scrollView.contentOffset.y + scrollView.height + 20 >= scrollView.contentSize.height) {
+        [self.countTipView cleanCount];
     }
 }
 
@@ -451,7 +488,7 @@
 {
     [[MSIMManager sharedInstance] revokeMessage:self.menuUIMsg.elem.msg_id toReciever:self.partner_id.integerValue successed:^{
         
-        [self revokeMsg:self.menuUIMsg];
+        NSLog(@"撤回成功");
         
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
             
@@ -478,6 +515,14 @@
     [self.uiMsgs insertObject:data atIndex:index];
     [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
+}
+
+#pragma mark - BFNoticeCountViewDelegate
+
+- (void)countViewDidTap
+{
+    [self.countTipView cleanCount];
+    [self scrollToBottom:YES];
 }
 
 @end
