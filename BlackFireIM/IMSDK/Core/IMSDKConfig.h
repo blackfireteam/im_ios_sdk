@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString *ip;
 @property(nonatomic,assign) UInt16 port;
-@property(nonatomic,copy) NSString *token;
+
 /** 心跳间隔 默认 ：30s, min: 5s max: 4分钟*/
 @property(nonatomic,assign) NSInteger heartDuration;
 /** 链接断开，自动重连次数,默认：5次，min: 1次*/

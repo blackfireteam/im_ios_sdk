@@ -7,7 +7,25 @@
 		<key>BlackFireIM.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>9</integer>
+			<integer>11</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>F011D57825E736BD0061F9D6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F011D59325E736C10061F9D6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F011D59E25E736C10061F9D6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

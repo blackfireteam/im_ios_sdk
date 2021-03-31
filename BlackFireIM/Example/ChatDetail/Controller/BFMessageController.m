@@ -15,15 +15,15 @@
 #import "BFTextMessageCell.h"
 #import "BFImageMessageCell.h"
 #import "BFSystemMessageCell.h"
+#import "MSIMSDK.h"
 #import "MSIMHeader.h"
 #import "BFSystemMessageCellData.h"
 #import "NSDate+MSKit.h"
 #import "NSBundle+BFKit.h"
 #import "UIView+Frame.h"
-#import "MSIMTools.h"
 #import "MSProfileProvider.h"
 #import "BFNoticeCountView.h"
-
+#import <SVProgressHUD.h>
 
 #define MAX_MESSAGE_SEP_DLAY (5 * 60)
 @interface BFMessageController ()<BFMessageCellDelegate,BFNoticeCountViewDelegate>
@@ -131,7 +131,7 @@
     [[MSIMManager sharedInstance] resendC2CMessage:data.elem toReciever:data.elem.toUid successed:^(NSInteger msg_id) {
         data.elem.msg_id = msg_id;
     } failed:^(NSInteger code, NSString * _Nonnull desc) {
-        
+        [SVProgressHUD showInfoWithStatus:desc];
     }];
 }
 
@@ -194,6 +194,7 @@
     NSMutableArray *uiMsgs = [NSMutableArray array];
     for (NSInteger k = elems.count-1; k >= 0; --k) {
         MSIMElem *elem = elems[k];
+        if (![elem.partner_id isEqualToString:self.partner_id]) continue;
         // 时间信息
         BFSystemMessageCellData *dateMsg = [self transSystemMsgFromDate: elem.msg_sign];
         
@@ -268,10 +269,11 @@
 ///收到一条对方撤回的消息
 - (void)recieveRevokeMessage:(NSNotification *)note
 {
-    NSInteger msg_id = [(NSNumber *)note.object integerValue];
+    MSIMElem *elem = note.object;
+    if (![elem.partner_id isEqualToString:self.partner_id]) return;
     BFMessageCellData *revokeData = nil;
     for (BFMessageCellData *data in self.uiMsgs) {
-        if (data.elem.msg_id == msg_id) {
+        if (data.elem.msg_id == elem.revoke_msg_id) {
             revokeData = data;
         }
     }
@@ -284,6 +286,7 @@
 - (void)messageStatusUpdate:(NSNotification *)note
 {
     MSIMElem *elem = note.object;
+    if (![elem.partner_id isEqualToString:self.partner_id]) return;
     for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
         BFMessageCellData *data = self.uiMsgs[i];
         if (data.elem.msg_sign == elem.msg_sign) {

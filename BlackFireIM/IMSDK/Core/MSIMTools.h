@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString * _Nullable user_id;
 
+@property(nonatomic,copy) NSString * _Nullable user_sign;
+
 @property(nonatomic,assign,readonly) NSInteger currentLocalTimeInterval;
 
 @property(nonatomic,assign,readonly) NSInteger adjustLocalTimeInterval;

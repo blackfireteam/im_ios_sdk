@@ -39,6 +39,7 @@
     elem.msg_id = self.msg_id;
     elem.msg_sign = self.msg_sign;
     elem.block_id = self.block_id;
+    elem.revoke_msg_id = self.revoke_msg_id;
     elem.sendStatus = self.sendStatus;
     elem.readStatus = self.readStatus;
     elem.code = self.code;

@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onMessageUpdateSendStatus:(MSIMElem *)elem;
 
 ///收到一条对方撤回的消息
-- (void)onRevokeMessage:(NSInteger)msg_id;
+- (void)onRevokeMessage:(MSIMElem *)elem;
 
 @end
 

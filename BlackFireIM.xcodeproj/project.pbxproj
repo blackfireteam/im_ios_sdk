@@ -42,7 +42,6 @@
 		F011D58F25E736C10061F9D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D58E25E736C10061F9D6 /* main.m */; };
 		F011D59925E736C10061F9D6 /* BlackFireIMTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D59825E736C10061F9D6 /* BlackFireIMTests.m */; };
 		F011D5A425E736C10061F9D6 /* BlackFireIMUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */; };
-		F011D5F225E751650061F9D6 /* BFAsyncSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D5F125E751650061F9D6 /* BFAsyncSocketManager.m */; };
 		F011D61325E755FD0061F9D6 /* NSData+zlib.mm in Sources */ = {isa = PBXBuildFile; fileRef = F011D61125E755FD0061F9D6 /* NSData+zlib.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F011D62225E767B10061F9D6 /* IMSDKConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D62125E767B10061F9D6 /* IMSDKConfig.m */; };
 		F011D62825E768530061F9D6 /* MSIMManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D62725E768530061F9D6 /* MSIMManager.m */; };
@@ -112,6 +111,7 @@
 		F09316C3260AD8190099E39E /* MSConversationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316C2260AD8190099E39E /* MSConversationProvider.m */; };
 		F09316DC260B81B80099E39E /* BFDiscoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316DB260B81B80099E39E /* BFDiscoveryController.m */; };
 		F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316E1260B82EE0099E39E /* BFUserListCell.m */; };
+		F0DC8131261462DF0042D4BD /* BFUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC8130261462DF0042D4BD /* BFUploadManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -215,8 +215,6 @@
 		F011D59F25E736C10061F9D6 /* BlackFireIMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackFireIMUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlackFireIMUITests.m; sourceTree = "<group>"; };
 		F011D5A525E736C10061F9D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F011D5F025E751650061F9D6 /* BFAsyncSocketManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFAsyncSocketManager.h; sourceTree = "<group>"; };
-		F011D5F125E751650061F9D6 /* BFAsyncSocketManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFAsyncSocketManager.m; sourceTree = "<group>"; };
 		F011D61125E755FD0061F9D6 /* NSData+zlib.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+zlib.mm"; sourceTree = "<group>"; };
 		F011D61225E755FD0061F9D6 /* NSData+zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+zlib.h"; sourceTree = "<group>"; };
 		F011D62025E767B10061F9D6 /* IMSDKConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMSDKConfig.h; sourceTree = "<group>"; };
@@ -360,6 +358,8 @@
 		F09316DB260B81B80099E39E /* BFDiscoveryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDiscoveryController.m; sourceTree = "<group>"; };
 		F09316E0260B82EE0099E39E /* BFUserListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUserListCell.h; sourceTree = "<group>"; };
 		F09316E1260B82EE0099E39E /* BFUserListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUserListCell.m; sourceTree = "<group>"; };
+		F0DC812F261462DF0042D4BD /* BFUploadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUploadManager.h; sourceTree = "<group>"; };
+		F0DC8130261462DF0042D4BD /* BFUploadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUploadManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -634,8 +634,6 @@
 				F01E2B9F260DA25F004D4D92 /* ChatProtobuf.pbobjc.h */,
 				F01E2B9E260DA25E004D4D92 /* ChatProtobuf.pbobjc.m */,
 				F052ECAD25EE3B6E00F35D74 /* MSIMManagerListener.h */,
-				F011D5F025E751650061F9D6 /* BFAsyncSocketManager.h */,
-				F011D5F125E751650061F9D6 /* BFAsyncSocketManager.m */,
 				F011D62025E767B10061F9D6 /* IMSDKConfig.h */,
 				F011D62125E767B10061F9D6 /* IMSDKConfig.m */,
 				F052ECDC25EF214000F35D74 /* MSIMErrorCode.h */,
@@ -725,6 +723,8 @@
 				F056716525F087D200782F9C /* UIView+BFExtension.m */,
 				F058366F2602FB300008C4FD /* NSDate+MSKit.h */,
 				F05836702602FB300008C4FD /* NSDate+MSKit.m */,
+				F0DC812F261462DF0042D4BD /* BFUploadManager.h */,
+				F0DC8130261462DF0042D4BD /* BFUploadManager.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1201,13 +1201,13 @@
 				F05836C1260479880008C4FD /* MSIMKit.m in Sources */,
 				F056718A25F0ACC600782F9C /* BFMessageController.m in Sources */,
 				F0278D7925F614D100B566D9 /* MSIMManager+Conversation.m in Sources */,
+				F0DC8131261462DF0042D4BD /* BFUploadManager.m in Sources */,
 				F0878A802605EB0200268122 /* BFSystemMessageCellData.m in Sources */,
 				F052ECA925EE1DB700F35D74 /* NSString+AES.m in Sources */,
 				F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */,
 				F0878A862608428500268122 /* BFSystemMessageCell.m in Sources */,
 				F05671E125F21C1100782F9C /* BFImageMessageCell.m in Sources */,
 				F056712A25EF919600782F9C /* BFInputBarView.m in Sources */,
-				F011D5F225E751650061F9D6 /* BFAsyncSocketManager.m in Sources */,
 				F0020B602614263E0080C005 /* YBIBToolViewHandler.m in Sources */,
 				F0777BB42612C2C6006CA660 /* BFNoticeCountView.m in Sources */,
 				F0020B5A2614263E0080C005 /* YBIBIconManager.m in Sources */,

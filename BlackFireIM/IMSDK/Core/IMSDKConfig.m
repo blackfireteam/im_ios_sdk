@@ -15,7 +15,6 @@
 //    config.ip = @"im.ekfree.com";
     config.ip = @"192.168.50.254";
     config.port = 18888;
-    config.token = @"";
     config.heartDuration = 30;
     config.retryCount = 5;
     return config;

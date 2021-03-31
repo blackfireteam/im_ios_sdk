@@ -14,6 +14,7 @@
 @end
 @implementation MSIMTools
 @synthesize user_id = _user_id;
+@synthesize user_sign = _user_sign;
 
 static MSIMTools *_tools;
 + (MSIMTools *)sharedInstance
@@ -58,6 +59,22 @@ static MSIMTools *_tools;
     }
     return _user_id;
 }
+
+- (void)setUser_sign:(NSString *)user_sign
+{
+    _user_sign = user_sign;
+    [[NSUserDefaults standardUserDefaults]setObject:user_sign forKey:@"user_sign"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+}
+
+- (NSString *)user_sign
+{
+    if (!_user_sign) {
+        _user_sign = [[NSUserDefaults standardUserDefaults]objectForKey:@"user_sign"];
+    }
+    return _user_sign;
+}
+
 ///维护会话列表更新时间
 - (void)updateConversationTime:(NSInteger)update_time
 {

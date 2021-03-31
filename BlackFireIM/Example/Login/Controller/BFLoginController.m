@@ -38,7 +38,6 @@
         btn.tag = 100 + i;
         [self.view addSubview:btn];
     }
-    [[MSIMKit sharedInstance] initWithConfig:[IMSDKConfig defaultConfig]];
 }
 
 - (void)btnDidClick:(UIButton *)sender

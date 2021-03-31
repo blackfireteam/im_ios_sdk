@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 //通过图片Data数据第一个字节 来获取图片扩展名
 + (NSString *)contentTypeForImageData:(NSData *)data;
 
++ (NSString *)uuidString;
+
 - (NSString *)md5;
 
 - (CGSize)textSizeIn:(CGSize)size font:(UIFont *)font;

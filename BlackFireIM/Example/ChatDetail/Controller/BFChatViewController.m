@@ -11,10 +11,10 @@
 #import "BFMessageController.h"
 #import "BFInputViewController.h"
 #import "MSIMSDK.h"
-#import "BFChatViewController+More.h"
-#import "MSProfileProvider.h"
-#import "BFMessageCell.h"
 #import "YBImageBrowser.h"
+#import <SVProgressHUD.h>
+#import "BFChatViewController+More.h"
+#import "BFMessageCell.h"
 
 
 @interface BFChatViewController ()<BFInputViewControllerDelegate,BFMessageControllerDelegate>
@@ -79,10 +79,10 @@
 {
     MSIMTextElem *textElem = [[MSIMManager sharedInstance] createTextMessage:msg];
     [[MSIMManager sharedInstance] sendC2CMessage:textElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
-        textElem.msg_id = msg_id;
         
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
-        NSLog(@"code = %zd,desc = %@",code,desc);
+            NSLog(@"code = %zd,desc = %@",code,desc);
+            [SVProgressHUD showInfoWithStatus:desc];
     }];
 }
 

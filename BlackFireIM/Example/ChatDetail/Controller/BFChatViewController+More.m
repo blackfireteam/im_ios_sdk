@@ -9,6 +9,8 @@
 #import "BFHeader.h"
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "MSIMSDK.h"
+#import <SVProgressHUD.h>
 
 
 @interface BFChatViewController()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -42,16 +44,14 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
     // 快速点的时候会回调多次
-//    WS(weakSelf)
+    WS(weakSelf)
     picker.delegate = nil;
     [picker dismissViewControllerAnimated:YES completion:^{
-//        STRONG_SELF(strongSelf)
+        STRONG_SELF(strongSelf)
         NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
         if([mediaType isEqualToString:(NSString *)kUTTypeImage]){
             UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            UIImageOrientation imageOrientation = image.imageOrientation;
-            if(imageOrientation != UIImageOrientationUp)
-            {
+            if (image.size.width > 1920 || image.size.height > 1920) {
                 CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height );
                 CGFloat aspectWidth = image.size.width * aspectRatio;
                 CGFloat aspectHeight = image.size.height * aspectRatio;
@@ -61,19 +61,13 @@
                 image = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
             }
-
-//            NSData *data = UIImageJPEGRepresentation(image, 0.75);
-//            NSString *path = [TUIKit_Image_Path stringByAppendingString:[THelper genImageName:nil]];
-//            [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
-//
-//            TUIImageMessageCellData *uiImage = [[TUIImageMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
-//            uiImage.path = path;
-//            uiImage.length = data.length;
-//            [self sendMessage:uiImage];
-//
-//            if (self.delegate && [self.delegate respondsToSelector:@selector(chatController:didSendMessage:)]) {
-//                [self.delegate chatController:self didSendMessage:uiImage];
-//            }
+            MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
+            imageElem.type = BFIM_MSG_TYPE_IMAGE;
+            imageElem.image = image;
+            imageElem.width = image.size.width;
+            imageElem.height = image.size.height;
+            [strongSelf sendImage:imageElem];
+            
         }else if([mediaType isEqualToString:(NSString *)kUTTypeMovie]){
             
             NSURL *url = [info objectForKey:UIImagePickerControllerMediaURL];
@@ -121,6 +115,17 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)sendImage:(MSIMImageElem *)elem
+{
+    MSIMImageElem *imageElem = [[MSIMManager sharedInstance]createImageMessage:elem];
+    [[MSIMManager sharedInstance]sendC2CMessage:imageElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            NSLog(@"code = %zd,desc = %@",code,desc);
+            [SVProgressHUD showInfoWithStatus:desc];
+    }];
 }
 
 - (void)sendVideoWithUrl:(NSURL*)url

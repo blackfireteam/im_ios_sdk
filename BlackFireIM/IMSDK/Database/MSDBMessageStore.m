@@ -381,10 +381,11 @@ static NSString *ext_data = @"ext_data";
 
 - (NSInteger)minMsgIDInMessages:(NSArray *)msgs
 {
-    if (msgs.count == 0) return 0;
-    NSInteger msgID = INT64_MAX;
-    for (MSIMElem *elem in msgs) {
-        if (elem.msg_id > 0 && elem.msg_id < msgID) {
+    NSInteger msgID = 0;
+    for (NSInteger i = 0; i < msgs.count; i++) {
+        MSIMElem *elem = msgs[i];
+        if (elem.msg_id == 0) continue;
+        if (msgID == 0 || elem.msg_id < msgID) {
             msgID = elem.msg_id;
         }
     }

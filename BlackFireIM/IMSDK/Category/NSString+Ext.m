@@ -11,6 +11,16 @@
 
 @implementation NSString (Ext)
 
++ (NSString *)uuidString
+{
+    CFUUIDRef puuid = CFUUIDCreate(nil);
+    CFStringRef uuidString = CFUUIDCreateString(nil, puuid);
+    NSString * result = (NSString *)CFBridgingRelease(CFStringCreateCopy( NULL, uuidString));
+    CFRelease(puuid);
+    CFRelease(uuidString);
+    return result;
+}
+
 - (NSDictionary *)el_convertToDictionary
 {
     if(self == nil || self.length == 0) {

@@ -42,6 +42,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign,readonly) NSDictionary *contentDic;
 
+/** 被撤回消息msg_id*/
+@property(nonatomic,assign) NSInteger revoke_msg_id;
+
 @property(nonatomic,assign) NSInteger block_id;
 
 /** TRUE：表示是发送消息；FALSE：表示是接收消息*/

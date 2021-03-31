@@ -170,11 +170,12 @@
             //将之前的消息标记为撤回消息
             elem.fromUid = [NSString stringWithFormat:@"%lld",response.fromUid];
             elem.toUid = [NSString stringWithFormat:@"%lld",response.toUid];
-            [self.messageStore updateMessageRevoke:[response.body integerValue] partnerID:elem.partner_id];
+            elem.revoke_msg_id = response.body.integerValue;
+            [self.messageStore updateMessageRevoke:elem.revoke_msg_id partnerID:elem.partner_id];
             [self sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if ([self.msgListener respondsToSelector:@selector(onRevokeMessage:)]) {
-                    [self.msgListener onRevokeMessage:response.body.integerValue];
+                    [self.msgListener onRevokeMessage:elem];
                 }
             });
         }else if (response.type == BFIM_MSG_TYPE_TEXT) {

@@ -134,9 +134,9 @@
 }
 
 ///收到一条对方撤回的消息
-- (void)onRevokeMessage:(NSInteger)msg_id
+- (void)onRevokeMessage:(MSIMElem *)elem
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageRecieveRevoke object:@(msg_id)];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageRecieveRevoke object:elem];
 }
 
 #pragma mark - MSIMProfileListener

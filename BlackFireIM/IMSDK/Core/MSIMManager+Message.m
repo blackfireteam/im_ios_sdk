@@ -12,6 +12,7 @@
 #import "NSString+Ext.h"
 #import "NSFileManager+filePath.h"
 #import "MSIMManager+Parse.h"
+#import "BFUploadManager.h"
 
 
 @implementation MSIMManager (Message)
@@ -161,52 +162,16 @@
           successed:(void(^)(NSInteger msg_id))success
              failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
-    if (elem.path == nil || ![[NSFileManager defaultManager]fileExistsAtPath:elem.path]) {
-        failed(ERR_USER_PARAMS_ERROR,@"图片资源不存在");
-    }else {
-        //先压缩
-        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:elem.path]];
-        if (imageData == nil) {
-            failed(ERR_USER_PARAMS_ERROR,@"图片资源不存在");
-            return;
-        }
-        NSString *imageExt = [NSString contentTypeForImageData:imageData];
-        if ([imageExt isEqualToString:@"png"] || [imageExt isEqualToString:@"jpeg"]) {
-            [self.msgListener onNewMessages:@[elem]];
-            [self.messageStore addMessage:elem];
-            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-            UIImage *image = [UIImage imageWithData:imageData];
-            if (image.size.width > 1920 || image.size.height > 1920) {
-                CGFloat aspectRadio = MIN(1920/image.size.width, 1920/image.size.height);
-                CGFloat aspectWidth = image.size.width * aspectRadio;
-                CGFloat aspectHeight = image.size.height * aspectRadio;
-                
-                UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
-                [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-                
-                NSString *savePath = [[NSFileManager pathForIMImage] stringByAppendingPathComponent:[elem.path pathExtension]];
-                [[NSFileManager defaultManager] createFileAtPath:savePath contents:imageData attributes:nil];
-                elem.path = savePath;
-                
-                //再上传
-            }else {
-                //再上传
-            }
-        }else if ([imageExt isEqualToString:@"gif"]) {
-            if (imageData.length > 28*1024*1028) {
-                failed(ERR_IM_IMAGE_MAX_ERROR,@"图片大小超过限制");
-                return;
-            }
-            [self.msgListener onNewMessages:@[elem]];
-            [self.messageStore addMessage:elem];
-            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-            //再上传
-        }else {
-            failed(ERR_IM_IMAGE_TYPE_ERROR,@"图片类型不支持");
-        }
-    }
+    [self.msgListener onNewMessages:@[elem]];
+    [self.messageStore addMessage:elem];
+    [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+    [BFUploadManager uploadImageToCOS:elem uploadProgress:^(CGFloat progress) {
+            
+        } success:^(NSString * _Nonnull url) {
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            
+    }];
 }
 
 - (void)sendImageMessageByTCP:(MSIMImageElem *)elem
