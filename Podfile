@@ -8,11 +8,10 @@ pod 'AFNetworking'
 pod 'CocoaAsyncSocket'
 pod 'Protobuf'
 pod 'FMDB'
-pod 'UICKeyChainStore'
+#pod 'UICKeyChainStore'
 pod 'SDWebImage'
 pod 'RealReachability'
-pod 'YBImageBrowser'
 pod 'SVProgressHUD'
-pod 'YYImage'
+pod 'YYImage', :git => 'https://github.com/QiuYeHong90/YYImage.git'
 
 end

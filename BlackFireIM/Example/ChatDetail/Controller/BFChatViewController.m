@@ -14,7 +14,7 @@
 #import "BFChatViewController+More.h"
 #import "MSProfileProvider.h"
 #import "BFMessageCell.h"
-#import <YBImageBrowser.h>
+#import "YBImageBrowser.h"
 
 
 @interface BFChatViewController ()<BFInputViewControllerDelegate,BFMessageControllerDelegate>
