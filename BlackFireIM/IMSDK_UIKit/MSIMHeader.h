@@ -10,6 +10,8 @@
 
 //IM网络连接状态通知
 #define MSUIKitNotification_ConnListener @"MSUIKitNotification_ConnListener"
+//用户登录状态通知
+#define MSUIKitNotification_UserStatusListener @"MSUIKitNotification_UserStatusListener"
 
 //会话列表有变更通知
 #define MSUIKitNotification_ConversationUpdate @"MSUIKitNotification_ConversationUpdate"

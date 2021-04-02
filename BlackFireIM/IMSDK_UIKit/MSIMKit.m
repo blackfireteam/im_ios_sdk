@@ -67,7 +67,7 @@
  */
 - (void)onForceOffline
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMUSER_STATUS_FORCEOFFLINE]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_FORCEOFFLINE]];
 }
 
 /**
@@ -75,7 +75,7 @@
  */
 - (void)onReConnFailed:(NSInteger)code err:(NSString*)err
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMUSER_STATUS_RECONNFAILD]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_RECONNFAILD]];
 }
 
 /**
@@ -83,7 +83,7 @@
  */
 - (void)onUserSigExpired
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMUSER_STATUS_SIGEXPIRED]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_SIGEXPIRED]];
 }
 
 #pragma mark - MSIMConversationListener

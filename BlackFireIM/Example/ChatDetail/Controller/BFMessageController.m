@@ -431,7 +431,7 @@
     if ([data isKindOfClass:[BFTextMessageCellData class]]) {
         [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Copy) action:@selector(onCopyMsg:)]];
     }
-    if (data.elem.sendStatus == BFIM_MSG_STATUS_SEND_SUCC) {
+    if (data.elem.isSelf && data.elem.sendStatus == BFIM_MSG_STATUS_SEND_SUCC) {
         [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Revoke) action:@selector(onRevoke:)]];
     }
     UIMenuController *vc = [UIMenuController sharedMenuController];

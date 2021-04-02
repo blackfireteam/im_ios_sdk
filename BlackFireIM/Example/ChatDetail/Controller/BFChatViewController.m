@@ -99,6 +99,7 @@
 {
     
 }
+
 /// 点击拍照，照片等更多功能
 - (void)inputController:(BFInputViewController *)inputController didSelectMoreCell:(BFInputMoreCell *)cell
 {

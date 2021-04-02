@@ -15,7 +15,9 @@
 #import "UIColor+BFDarkMode.h"
 #import "MSIMHeader.h"
 #import "UIImage+BFKit.h"
-
+#import "AppDelegate.h"
+#import "BFNavigationController.h"
+#import "BFLoginController.h"
 
 @interface BFConversationListController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -62,6 +64,8 @@
     self.navigationItem.titleView = _titleView;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNetworkChanged:) name:MSUIKitNotification_ConnListener object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
 }
@@ -174,6 +178,44 @@
         default:
             break;
     }
+}
+
+- (void)onUserLogStatusChanged:(NSNotification *)notification
+{
+    BFIMUserStatus status = [notification.object intValue];
+    switch (status) {
+        case IMUSER_STATUS_FORCEOFFLINE://用户被强制下线
+        {
+            WS(weakSelf)
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:@"您的帐号已经在其它的设备上登录" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf logout];
+            }];
+            [alert addAction:action1];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+            break;
+        case IMUSER_STATUS_SIGEXPIRED:
+        {
+            WS(weakSelf)
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:@"您的登录授权已过期，请重新登录" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf logout];
+            }];
+            [alert addAction:action1];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+            break;
+        case IMUSER_STATUS_RECONNFAILD://用户重连失败
+        default:
+            break;
+    }
+}
+
+- (void)logout
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
 }
 
 - (void)onNewConvUpdate:(NSNotification *)note

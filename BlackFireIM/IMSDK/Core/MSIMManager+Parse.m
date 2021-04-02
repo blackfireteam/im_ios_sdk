@@ -191,6 +191,15 @@
             imageElem.url = response.body;
             imageElem.type = BFIM_MSG_TYPE_IMAGE;
             elem = imageElem;
+        }else if (response.type == BFIM_MSG_TYPE_VIDEO) {
+            MSIMVideoElem *videoElem = [[MSIMVideoElem alloc]init];
+            videoElem.width = response.width;
+            videoElem.height = response.height;
+            videoElem.videoUrl = response.body;
+            videoElem.coverUrl = response.thumb;
+            videoElem.duration = response.duration;
+            videoElem.type = BFIM_MSG_TYPE_VIDEO;
+            elem = videoElem;
         }else if (response.type == BFIM_MSG_TYPE_REVOKE) {
             elem = [[MSIMElem alloc]init];
             elem.type = BFIM_MSG_TYPE_REVOKE;
