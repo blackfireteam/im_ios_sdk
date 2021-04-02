@@ -14,7 +14,6 @@
 {
     self = [super init];
     if (self) {
-        _uploadProgress = 100;
     }
     return self;
 }
@@ -27,16 +26,9 @@
 - (CGSize)contentSize
 {
    CGSize size = CGSizeZero;
-    if (self.imageElem.path.length > 0) {
-        NSString *imagePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:self.imageElem.path];
-        if ([[NSFileManager defaultManager]fileExistsAtPath:imagePath]) {
-            self.thumbImage = [UIImage imageWithContentsOfFile:imagePath];
-            size = self.thumbImage.size;
-        }
-    }
    size = CGSizeMake(self.imageElem.width, self.imageElem.height);
    if(CGSizeEqualToSize(size, CGSizeZero)){
-       return size;
+       return CGSizeMake(200, 200);
    }
    if(size.height > size.width){
        size.width = size.width / size.height * TImageMessageCell_Image_Height_Max;

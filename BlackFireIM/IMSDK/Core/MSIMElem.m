@@ -113,6 +113,35 @@
 
 @end
 
+@implementation MSIMVideoElem
+
+- (NSDictionary *)contentDic
+{
+    return @{@"videoUrl": XMNoNilString(self.videoUrl),@"width": @(self.width),@"height": @(self.height),@"videoPath": XMNoNilString(self.videoPath),@"duration": @(self.duration),@"coverPath":XMNoNilString(self.coverUrl),@"coverUrl":XMNoNilString(self.coverUrl),@"uuid": XMNoNilString(self.uuid)};
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MSIMVideoElem *elem = [[[self class] allocWithZone:zone]init];
+    elem.videoUrl = self.videoUrl;
+    elem.videoPath = self.videoPath;
+    elem.coverUrl = self.coverUrl;
+    elem.coverPath = self.coverPath;
+    elem.width = self.width;
+    elem.height = self.height;
+    elem.duration = self.duration;
+    elem.uuid = self.uuid;
+    return elem;
+}
+
+- (NSString *)displayStr
+{
+    return TUILocalizableString(TUIkitMessageTypeVideo);
+}
+
+
+@end
+
 @implementation MSIMCustomElem
 
 - (NSDictionary *)contentDic

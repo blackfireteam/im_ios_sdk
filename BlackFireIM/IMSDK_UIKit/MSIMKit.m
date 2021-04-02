@@ -6,6 +6,8 @@
 //
 
 #import "MSIMKit.h"
+#import "MSIMErrorCode.h"
+
 
 @interface MSIMKit()<MSIMMessageListener,MSIMProfileListener,MSIMConversationListener,MSIMSDKListener>
 
@@ -51,7 +53,7 @@
 /// 网络连接失败
 - (void)connectFailed:(NSInteger)code err:(NSString *)errString
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMNET_STATUS_CONNFAILED]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:(code == ERR_NET_NOT_CONNECT) ? IMNET_STATUS_DISCONNECT : IMNET_STATUS_CONNFAILED]];
 }
 
 /// 连接中

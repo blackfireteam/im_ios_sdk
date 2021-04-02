@@ -15,6 +15,7 @@
 #import "BFTextMessageCell.h"
 #import "BFImageMessageCell.h"
 #import "BFSystemMessageCell.h"
+#import "BFVideoMessageCell.h"
 #import "MSIMSDK.h"
 #import "MSIMHeader.h"
 #import "BFSystemMessageCellData.h"
@@ -57,12 +58,18 @@
 
 - (void)dealloc
 {
+    NSLog(@"%@ dealloc",self.class);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -90,6 +97,7 @@
     [self.tableView registerClass:[BFTextMessageCell class] forCellReuseIdentifier:TTextMessageCell_ReuseId];
     [self.tableView registerClass:[BFImageMessageCell class] forCellReuseIdentifier:TImageMessageCell_ReuseId];
     [self.tableView registerClass:[BFSystemMessageCell class] forCellReuseIdentifier:TSystemMessageCell_ReuseId];
+    [self.tableView registerClass:[BFVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
     
     _indicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 40)];
     _indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
@@ -210,14 +218,20 @@
         }else if (elem.type == BFIM_MSG_TYPE_TEXT) {
             MSIMTextElem *textElem = (MSIMTextElem *)elem;
             BFTextMessageCellData *textMsg = [[BFTextMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+            textMsg.showName = YES;
             textMsg.content = textElem.text;
             textMsg.elem = textElem;
             data = textMsg;
         }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
-            MSIMImageElem *imageElem = (MSIMImageElem *)elem;
             BFImageMessageCellData *imageMsg = [[BFImageMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
-            imageMsg.elem = imageElem;
+            imageMsg.showName = YES;
+            imageMsg.elem = elem;
             data = imageMsg;
+        }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
+            BFVideoMessageCellData *videoMsg = [[BFVideoMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+            videoMsg.showName = YES;
+            videoMsg.elem = elem;
+            data = videoMsg;
         }else {
             BFSystemMessageCellData *unknowData = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
             unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);
@@ -290,7 +304,7 @@
     for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
         BFMessageCellData *data = self.uiMsgs[i];
         if (data.elem.msg_sign == elem.msg_sign) {
-            data.elem.sendStatus = elem.sendStatus;
+            data.elem = elem;
             BFMessageCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             [cell fillWithData:data];
         }

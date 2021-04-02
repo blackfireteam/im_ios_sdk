@@ -455,10 +455,21 @@ static NSString *ext_data = @"ext_data";
         imageElem.width = [dic[@"width"]integerValue];
         imageElem.height = [dic[@"height"]integerValue];
         imageElem.size = [dic[@"size"]integerValue];
-        imageElem.path = dic[@"path"];
+        imageElem.path = [self fixLocalImagePath:dic[@"path"]];
         imageElem.url = dic[@"url"];
         imageElem.uuid = dic[@"uuid"];
         elem = imageElem;
+    }else if (type == BFIM_MSG_TYPE_VIDEO) {
+        MSIMVideoElem *videoElem = [[MSIMVideoElem alloc]init];
+        videoElem.width = [dic[@"width"]integerValue];
+        videoElem.height = [dic[@"height"]integerValue];
+        videoElem.videoUrl = dic[@"videoUrl"];
+        videoElem.videoPath = [self fixLocalImagePath:dic[@"videoPath"]];
+        videoElem.coverPath = [self fixLocalImagePath:dic[@"coverPath"]];
+        videoElem.coverUrl = dic[@"coverUrl"];
+        videoElem.duration = [dic[@"duration"] integerValue];
+        videoElem.uuid = dic[@"uuid"];
+        elem = videoElem;
     }
     elem.msg_id = [rsSet longLongIntForColumn:@"msg_id"];
     elem.msg_sign = [rsSet longLongIntForColumn:@"msg_sign"];
@@ -479,6 +490,34 @@ static NSString *ext_data = @"ext_data";
     NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd' where send_status = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,BFIM_MSG_STATUS_SENDING];
     BOOL isOK = [self excuteSQL:sqlStr];
     return isOK;
+}
+
+- (NSString *)fixLocalImagePath:(NSString *)path
+{
+    if (path.length == 0) return @"";
+    NSString *homePath = NSHomeDirectory();
+    if ([path hasPrefix:homePath]) {
+        return path;
+    }
+    if ([path containsString:@"/Documents/"]) {
+        NSRange range = [path rangeOfString:@"/Documents/"];
+        path = [path substringFromIndex:range.location];
+        path = [homePath stringByAppendingPathComponent:path];
+        return path;
+    }
+    if ([path containsString:@"/Library/"]) {
+        NSRange range = [path rangeOfString:@"/Library/"];
+        path = [path substringFromIndex:range.location];
+        path = [homePath stringByAppendingPathComponent:path];
+        return path;
+    }
+    if ([path containsString:@"/tmp/"]) {
+        NSRange range = [path rangeOfString:@"/tmp/"];
+        path = [path substringFromIndex:range.location];
+        path = [homePath stringByAppendingPathComponent:path];
+        return path;
+    }
+    return @"";
 }
 
 @end

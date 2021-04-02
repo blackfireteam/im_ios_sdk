@@ -8,7 +8,7 @@
 #import "MSIMManager+Message.h"
 #import "MSIMTools.h"
 #import "MSIMErrorCode.h"
-#import "MSDBImageFileStore.h"
+#import "MSDBFileRecordStore.h"
 #import "NSString+Ext.h"
 #import "NSFileManager+filePath.h"
 #import "MSIMManager+Parse.h"
@@ -36,6 +36,19 @@
 - (MSIMImageElem *)createImageMessage:(MSIMImageElem *)elem
 {
     elem.type = BFIM_MSG_TYPE_IMAGE;
+    elem.fromUid = [MSIMTools sharedInstance].user_id;
+    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
+    elem.readStatus = BFIM_MSG_STATUS_READ;
+    elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    return elem;
+}
+
+/** 创建视频消息（视频文件最大支持 100 MB））
+    如果是系统相册拿的视频，需要先把视频导入 APP 的目录下
+ */
+- (MSIMVideoElem *)createVideoMessage:(MSIMVideoElem *)elem
+{
+    elem.type = BFIM_MSG_TYPE_VIDEO;
     elem.fromUid = [MSIMTools sharedInstance].user_id;
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
     elem.readStatus = BFIM_MSG_STATUS_READ;
@@ -75,6 +88,8 @@
         [self sendTextMessage:(MSIMTextElem *)elem isResend:NO successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
         [self sendImageMessage:(MSIMImageElem *)elem isResend:NO successed:success failed:failed];
+    }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
+        [self sendVideoMessage:(MSIMVideoElem *)elem isResend:NO successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"参数异常");
     }
@@ -132,15 +147,17 @@
                successed:(void(^)(NSInteger msg_id))success
                   failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
+    if (isResend == NO) {
+        [self.msgListener onNewMessages:@[elem]];
+        [self.messageStore addMessage:elem];
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+    }
     if (elem.url.length == 0 || ![elem.url hasPrefix:@"http"]) {
         if (elem.uuid.length > 0) {
-            MSDBImageFileStore *store = [[MSDBImageFileStore alloc]init];
-            MSImageInfo *imageInfo = [store searchRecord:elem.uuid];
-            if ([imageInfo.url hasPrefix:@"http"]) {
-                elem.url = imageInfo.url;
-                [self.msgListener onNewMessages:@[elem]];
-                [self.messageStore addMessage:elem];
-                [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
+            MSFileInfo *cacheElem = [store searchRecord:elem.uuid];
+            if ([cacheElem.url hasPrefix:@"http"]) {
+                elem.url = cacheElem.url;
                 [self sendImageMessageByTCP:elem successed:success failed:failed];
             }else {
                 [self uploadImage:elem successed:success failed:failed];
@@ -150,11 +167,6 @@
         }
         return;
     }
-    if (isResend == NO) {
-        [self.msgListener onNewMessages:@[elem]];
-        [self.messageStore addMessage:elem];
-        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-    }
     [self sendImageMessageByTCP:elem successed:success failed:failed];
 }
 
@@ -162,15 +174,39 @@
           successed:(void(^)(NSInteger msg_id))success
              failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
-    [self.msgListener onNewMessages:@[elem]];
-    [self.messageStore addMessage:elem];
-    [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
     [BFUploadManager uploadImageToCOS:elem uploadProgress:^(CGFloat progress) {
-            
+        
+         elem.progress = progress;
+         [self.msgListener onMessageUpdateSendStatus:elem];
         } success:^(NSString * _Nonnull url) {
+            
+            elem.progress = 1;
+            elem.url = url;
+            if (elem.uuid.length) {
+                MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
+                MSFileInfo *info = [[MSFileInfo alloc]init];
+                info.uuid = elem.uuid;
+                info.url = elem.url;
+                [store addRecord:info];
+            }
+            //上传成功，清除沙盒中的缓存
+            [[NSFileManager defaultManager]removeItemAtPath:elem.path error:nil];
+            
+            [self.messageStore addMessage:elem];
+            [self.msgListener onMessageUpdateSendStatus:elem];
+            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            [self sendImageMessageByTCP:elem successed:success failed:failed];
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
             
+            elem.progress = 0;
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+            elem.code = code;
+            elem.reason = desc;
+            [self.messageStore updateMessageToFail:elem.msg_sign code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [self.msgListener onMessageUpdateSendStatus:elem];
+            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            failed(code,desc);
     }];
 }
 
@@ -185,6 +221,118 @@
     chats.toUid = elem.toUid.integerValue;
     chats.width = elem.width;
     chats.height = elem.height;
+    WS(weakSelf)
+    NSLog(@"[发送消息]ChatS:\n%@",chats);
+    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+        STRONG_SELF(strongSelf)
+        if (code == 0) {
+            ChatSR *result = response;
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+            elem.msg_id = result.msgId;
+            [strongSelf.messageStore updateMessageToSuccss:chats.sign msg_id:elem.msg_id partnerID:elem.toUid];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            success(result.msgId);
+        }else {
+            NSLog(@"发送失败");
+            failed(code,error);
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+            elem.code = code;
+            elem.reason = error;
+            [strongSelf.messageStore updateMessageToFail:chats.sign code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        }
+    }];
+}
+
+/// 发送单聊普通视频消息
+/// @param elem 视频消息
+/// @param success 发送成功，返回消息的唯一标识ID
+/// @param failed 发送失败
+- (void)sendVideoMessage:(MSIMVideoElem *)elem
+                isResend:(BOOL)isResend
+               successed:(void(^)(NSInteger msg_id))success
+                  failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    if (isResend == NO) {
+        [self.msgListener onNewMessages:@[elem]];
+        [self.messageStore addMessage:elem];
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+    }
+    if (!([elem.videoUrl hasPrefix:@"http"] && [elem.coverUrl hasPrefix:@"http"])) {
+        if (elem.uuid.length > 0) {
+            MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
+            MSFileInfo *cacheElem = [store searchRecord:elem.uuid];
+            if ([cacheElem.url hasPrefix:@"http"]) {
+                elem.videoUrl = cacheElem.url;
+            }
+            [self uploadVideo:elem successed:success failed:failed];
+        }else {
+            [self uploadVideo:elem successed:success failed:failed];
+        }
+        return;
+    }
+    [self sendVideoMessageByTCP:elem successed:success failed:failed];
+}
+
+- (void)uploadVideo:(MSIMVideoElem *)elem
+          successed:(void(^)(NSInteger msg_id))success
+             failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    [BFUploadManager uploadVideoToCOS:elem uploadProgress:^(CGFloat progress) {
+        
+        elem.progress = progress;
+        [self.msgListener onMessageUpdateSendStatus:elem];
+        
+    } success:^(NSString * _Nonnull coverUrl, NSString * _Nonnull videoUrl) {
+        
+        elem.progress = 1;
+        elem.coverUrl = coverUrl;
+        elem.videoUrl = videoUrl;
+        if (elem.uuid.length) {
+            MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
+            MSFileInfo *info = [[MSFileInfo alloc]init];
+            info.uuid = elem.uuid;
+            info.url = elem.videoUrl;
+            [store addRecord:info];
+        }
+        //上传成功，清除沙盒中的缓存
+        [[NSFileManager defaultManager]removeItemAtPath:elem.coverPath error:nil];
+        [[NSFileManager defaultManager]removeItemAtPath:elem.videoPath error:nil];
+        
+        [self.messageStore addMessage:elem];
+        [self.msgListener onMessageUpdateSendStatus:elem];
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        [self sendVideoMessageByTCP:elem successed:success failed:failed];
+        
+    } failed:^(NSInteger code, NSString * _Nonnull desc) {
+        
+        elem.progress = 0;
+        elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+        elem.code = code;
+        elem.reason = desc;
+        [self.messageStore updateMessageToFail:elem.msg_sign code:elem.code reason:elem.reason partnerID:elem.toUid];
+        [self.msgListener onMessageUpdateSendStatus:elem];
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        failed(code,desc);
+        
+    }];
+}
+
+- (void)sendVideoMessageByTCP:(MSIMVideoElem *)elem
+                    successed:(void(^)(NSInteger msg_id))success
+                       failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    ChatS *chats = [[ChatS alloc]init];
+    chats.sign = elem.msg_sign;
+    chats.type = elem.type;
+    chats.body = elem.videoUrl;
+    chats.thumb = elem.coverUrl;
+    chats.toUid = elem.toUid.integerValue;
+    chats.width = elem.width;
+    chats.height = elem.height;
+    chats.duration = elem.duration;
     WS(weakSelf)
     NSLog(@"[发送消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
@@ -257,6 +405,8 @@
         [self sendTextMessage:(MSIMTextElem *)elem isResend:YES successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
         [self sendImageMessage:(MSIMImageElem *)elem isResend:YES successed:success failed:failed];
+    }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
+        [self sendVideoMessage:(MSIMVideoElem *)elem isResend:YES successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"参数异常");
     }

@@ -113,12 +113,12 @@ static MSIMManager *_manager;
 {
     _config = config;
     _connListener = listener;
-    //建立长连接
     [self connectTCPToServer];
 }
 
 - (void)connectTCPToServer
 {
+    if (!self.socket.isDisconnected) return;
     NSLog(@"请求建立TCP连接");
     NSError *error = nil;
     [self.socket connectToHost:self.config.ip onPort:self.config.port error:&error];
@@ -144,27 +144,46 @@ static MSIMManager *_manager;
 {
     RealReachability *reachability = (RealReachability *)note.object;
     ReachabilityStatus status = [reachability currentReachabilityStatus];
+    [self handlerNetwork:status];
+}
+
+- (void)handlerNetwork:(ReachabilityStatus)status
+{
     switch (status){
             case RealStatusUnknown:
             {
                 NSLog(@"~~~~~~~~~~~~~RealStatusUnknown");
+                if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
+                    [self.connListener connectFailed:ERR_NET_NOT_CONNECT err:@"无网络"];
+                }
                 break;
             }
                 
             case RealStatusNotReachable:
             {
                 NSLog(@"~~~~~~~~~~~~~RealStatusNotReachable");
+                if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
+                    [self.connListener connectFailed:ERR_NET_NOT_CONNECT err:@"无网络"];
+                }
                 break;
             }
                 
             case RealStatusViaWWAN:
             {
                 NSLog(@"~~~~~~~~~~~~~RealStatusViaWWAN");
+                if (!self.socket.isConnected) {
+                    self.retryCount = 0;
+                    [self connectTCPToServer];
+                }
                 break;
             }
             case RealStatusViaWiFi:
             {
                 NSLog(@"~~~~~~~~~~~~~RealStatusViaWiFi");
+                if (!self.socket.isConnected) {
+                    self.retryCount = 0;
+                    [self connectTCPToServer];
+                }
                 break;
             }
             default:

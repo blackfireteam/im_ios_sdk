@@ -11,11 +11,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BFChatViewController (More)
 
-///相册
+///照片
 - (void)selectPhotoForSend;
 
-///拍照
-- (void)takePictureForSend;
+///视频
+- (void)selectVideoForSend;
 
 @end
 

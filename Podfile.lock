@@ -31,6 +31,7 @@ PODS:
     - SDWebImage/Core (= 5.9.0)
   - SDWebImage/Core (5.9.0)
   - SVProgressHUD (2.2.5)
+  - TZImagePickerController (3.5.8)
   - YYImage (1.0.4):
     - YYImage/Core (= 1.0.4)
   - YYImage/Core (1.0.4)
@@ -44,6 +45,7 @@ DEPENDENCIES:
   - RealReachability
   - SDWebImage
   - SVProgressHUD
+  - TZImagePickerController
   - YYImage (from `https://github.com/QiuYeHong90/YYImage.git`)
 
 SPEC REPOS:
@@ -57,6 +59,7 @@ SPEC REPOS:
     - RealReachability
     - SDWebImage
     - SVProgressHUD
+    - TZImagePickerController
 
 EXTERNAL SOURCES:
   YYImage:
@@ -77,8 +80,9 @@ SPEC CHECKSUMS:
   RealReachability: eae9c58d2db52fadd8e1cba4b5d4c028454fbc47
   SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  TZImagePickerController: 7fd9702897ef8c0b7c951e5463f4bcf398296f9e
   YYImage: 20ec986d18a8d0ad421619d166a9e628097e2433
 
-PODFILE CHECKSUM: d4e0a97af17015f4cc4be3491e66f0b04bd04a24
+PODFILE CHECKSUM: 3947a93864c97af797c5b762147f197a05c85bda
 
 COCOAPODS: 1.10.1

@@ -21,6 +21,10 @@ enum ERROR_CODE {
     ERR_LOGIN_KICKED_OFF_BY_OTHER               = 2008,    ///< 其他终端登录同一个帐号，引起已登录的帐号被踢，需重新登录。
     ERR_USER_SIG_EXPIRED                        = 2009,    ///< UserSig 过期，请重新获取有效的 UserSig 后再重新登录。
     
+    ERR_SOCKET_CONNECT_SUCC                     = 3000,    ///<长连接建立成功
+    ERR_NET_NOT_CONNECT                         = 3001,    ///<无网络
+    ERR_SOCKET_CONNECT_FAIL                     = 3002,    ///<长连接建立失败
+    
     ERR_IO_OPERATION_FAILED                     = 6022,    ///< 操作本地 IO 错误，检查是否有读写权限，磁盘是否已满。
     ERR_PARSE_RESPONSE_FAILED                   = 6001,    ///< PB 解析失败，内部错误
     ERR_SERIALIZE_REQ_FAILED                    = 6002,    ///< PB 序列化失败，内部错误

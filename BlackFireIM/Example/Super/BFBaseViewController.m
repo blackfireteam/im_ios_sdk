@@ -21,5 +21,9 @@
         self.navigationItem.backBarButtonItem = backItem;
 }
 
+- (void)dealloc
+{
+    NSLog(@"%@ dealloc",self.class);
+}
 
 @end

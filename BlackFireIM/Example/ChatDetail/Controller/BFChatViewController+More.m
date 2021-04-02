@@ -11,9 +11,12 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "MSIMSDK.h"
 #import <SVProgressHUD.h>
+#import "NSFileManager+filePath.h"
+#import "NSString+Ext.h"
+#import <TZImagePickerController.h>
 
 
-@interface BFChatViewController()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface BFChatViewController()<TZImagePickerControllerDelegate>
 
 
 @end
@@ -21,101 +24,86 @@
 
 - (void)selectPhotoForSend
 {
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-        picker.delegate = self;
-        [self presentViewController:picker animated:YES completion:nil];
-    }
+    TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
+    picker.allowPickingImage = YES;
+    picker.allowPickingVideo = NO;
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
-- (void)takePictureForSend
+- (void)selectVideoForSend
 {
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
-        picker.delegate = self;
-        [self presentViewController:picker animated:YES completion:nil];
-    }
+    TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
+    picker.allowPickingImage = NO;
+    picker.allowPickingVideo = YES;
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto
 {
-    // 快速点的时候会回调多次
-    WS(weakSelf)
-    picker.delegate = nil;
-    [picker dismissViewControllerAnimated:YES completion:^{
-        STRONG_SELF(strongSelf)
-        NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-        if([mediaType isEqualToString:(NSString *)kUTTypeImage]){
-            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            if (image.size.width > 1920 || image.size.height > 1920) {
-                CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height );
-                CGFloat aspectWidth = image.size.width * aspectRatio;
-                CGFloat aspectHeight = image.size.height * aspectRatio;
+    UIImage *image = photos.firstObject;
+    PHAsset *asset = assets.firstObject;
+    if (image.size.width > 1920 || image.size.height > 1920) {
+        CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height );
+        CGFloat aspectWidth = image.size.width * aspectRatio;
+        CGFloat aspectHeight = image.size.height * aspectRatio;
 
-                UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
-                [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-            }
-            MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
-            imageElem.type = BFIM_MSG_TYPE_IMAGE;
-            imageElem.image = image;
-            imageElem.width = image.size.width;
-            imageElem.height = image.size.height;
-            [strongSelf sendImage:imageElem];
-            
-        }else if([mediaType isEqualToString:(NSString *)kUTTypeMovie]){
-            
-            NSURL *url = [info objectForKey:UIImagePickerControllerMediaURL];
-            
-            if(![url.pathExtension  isEqual: @"mp4"]) {
-                NSString* tempPath = NSTemporaryDirectory();
-                NSURL *urlName = [url URLByDeletingPathExtension];
-                NSURL *newUrl = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@%@.mp4", tempPath,[urlName.lastPathComponent stringByRemovingPercentEncoding]]];
-                // mov to mp4
-                AVURLAsset *avAsset = [AVURLAsset URLAssetWithURL:url options:nil];
-                AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]initWithAsset:avAsset presetName:AVAssetExportPresetHighestQuality];
-                 exportSession.outputURL = newUrl;
-                 exportSession.outputFileType = AVFileTypeMPEG4;
-                 exportSession.shouldOptimizeForNetworkUse = YES;
+        UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
+        [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    NSData *data = UIImageJPEGRepresentation(image, 0.75);
+    NSString *fileName = [NSString stringWithFormat:@"%@.jpg",[NSString uuidString]];
+    NSString *path = [[NSFileManager pathForIMImage]stringByAppendingPathComponent:fileName];
+    [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
+    
+    MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
+    imageElem.type = BFIM_MSG_TYPE_IMAGE;
+    imageElem.image = image;
+    imageElem.width = image.size.width;
+    imageElem.height = image.size.height;
+    imageElem.path = path;
+    imageElem.uuid = asset.localIdentifier;
+    [self sendImage:imageElem];
+}
 
-                 [exportSession exportAsynchronouslyWithCompletionHandler:^{
-                 switch ([exportSession status])
-                 {
-                      case AVAssetExportSessionStatusFailed:
-                           NSLog(@"Export session failed");
-                           break;
-                      case AVAssetExportSessionStatusCancelled:
-                           NSLog(@"Export canceled");
-                           break;
-                      case AVAssetExportSessionStatusCompleted:
-                      {
-                           //Video conversion finished
-                           NSLog(@"Successful!");
-                          dispatch_async(dispatch_get_main_queue(), ^{
-//                              [self sendVideoWithUrl:newUrl];
-                          });
-                      }
-                           break;
-                      default:
-                           break;
-                  }
-                 }];
-            } else {
-//                [self sendVideoWithUrl:url];
-            }
-        }
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingVideo:(UIImage *)coverImage sourceAssets:(PHAsset *)asset
+{
+    if (coverImage.size.width > 1920 || coverImage.size.height > 1920) {
+        CGFloat aspectRatio = MIN ( 1920 / coverImage.size.width, 1920 / coverImage.size.height );
+        CGFloat aspectWidth = coverImage.size.width * aspectRatio;
+        CGFloat aspectHeight = coverImage.size.height * aspectRatio;
+
+        UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
+        [coverImage drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
+        coverImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    NSData *data = UIImageJPEGRepresentation(coverImage, 0.75);
+    NSString *fileName = [NSString stringWithFormat:@"%@.jpg",[NSString uuidString]];
+    NSString *path = [[NSFileManager pathForIMImage]stringByAppendingPathComponent:fileName];
+    [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
+    
+    [[TZImageManager manager]getVideoOutputPathWithAsset:asset presetName:AVAssetExportPresetMediumQuality success:^(NSString *outputPath) {
+            
+        NSLog(@"视频导出到本地完成,沙盒路径为:%@",outputPath);
+        MSIMVideoElem *videoElem = [[MSIMVideoElem alloc]init];
+        videoElem.type = BFIM_MSG_TYPE_VIDEO;
+        videoElem.coverImage = coverImage;
+        videoElem.width = asset.pixelWidth;
+        videoElem.height = asset.pixelHeight;
+        videoElem.coverPath = path;
+        videoElem.videoPath = outputPath;
+        videoElem.duration = asset.duration;
+        videoElem.uuid = asset.localIdentifier;
+        [self sendVideo:videoElem];
+        
+        } failure:^(NSString *errorMessage, NSError *error) {
+            NSLog(@"视频导出失败:%@,error:%@",errorMessage, error);
+            [SVProgressHUD showInfoWithStatus:errorMessage];
     }];
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [picker dismissViewControllerAnimated:YES completion:nil];
-}
 
 - (void)sendImage:(MSIMImageElem *)elem
 {
@@ -128,46 +116,15 @@
     }];
 }
 
-- (void)sendVideoWithUrl:(NSURL*)url
+- (void)sendVideo:(MSIMVideoElem *)elem
 {
-//    NSData *videoData = [NSData dataWithContentsOfURL:url];
-//    NSString *videoPath = [NSString stringWithFormat:@"%@%@.mp4", TUIKit_Video_Path, [THelper genVideoName:nil]];
-//    [[NSFileManager defaultManager] createFileAtPath:videoPath contents:videoData attributes:nil];
-//
-//    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
-//    AVURLAsset *urlAsset =  [AVURLAsset URLAssetWithURL:url options:opts];
-//    NSInteger duration = (NSInteger)urlAsset.duration.value / urlAsset.duration.timescale;
-//    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:urlAsset];
-//    gen.appliesPreferredTrackTransform = YES;
-//    gen.maximumSize = CGSizeMake(192, 192);
-//    NSError *error = nil;
-//    CMTime actualTime;
-//    CMTime time = CMTimeMakeWithSeconds(0.0, 10);
-//    CGImageRef imageRef = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
-//    UIImage *image = [[UIImage alloc] initWithCGImage:imageRef];
-//    CGImageRelease(imageRef);
-//
-//    NSData *imageData = UIImagePNGRepresentation(image);
-//    NSString *imagePath = [TUIKit_Video_Path stringByAppendingString:[THelper genSnapshotName:nil]];
-//    [[NSFileManager defaultManager] createFileAtPath:imagePath contents:imageData attributes:nil];
-//
-//    TUIVideoMessageCellData *uiVideo = [[TUIVideoMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
-//    uiVideo.snapshotPath = imagePath;
-//    uiVideo.snapshotItem = [[TUISnapshotItem alloc] init];
-//    UIImage *snapshot = [UIImage imageWithContentsOfFile:imagePath];
-//    uiVideo.snapshotItem.size = snapshot.size;
-//    uiVideo.snapshotItem.length = imageData.length;
-//    uiVideo.videoPath = videoPath;
-//    uiVideo.videoItem = [[TUIVideoItem alloc] init];
-//    uiVideo.videoItem.duration = duration;
-//    uiVideo.videoItem.length = videoData.length;
-//    uiVideo.videoItem.type = url.pathExtension;
-//    uiVideo.uploadProgress = 0;
-//    [self sendMessage:uiVideo];
-//
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(chatController:didSendMessage:)]) {
-//        [self.delegate chatController:self didSendMessage:uiVideo];
-//    }
+    MSIMVideoElem *videoElem = [[MSIMManager sharedInstance]createVideoMessage:elem];
+    [[MSIMManager sharedInstance]sendC2CMessage:videoElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            NSLog(@"code = %zd,desc = %@",code,desc);
+            [SVProgressHUD showInfoWithStatus:desc];
+    }];
 }
 
 @end

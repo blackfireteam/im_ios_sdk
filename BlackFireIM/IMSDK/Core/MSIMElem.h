@@ -88,8 +88,40 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString *url;
 /** 待发送的图片*/
 @property(nonatomic,strong) UIImage *image;
-/** 保存在沙盒中的相对地址*/
+/** 保存在沙盒中的地址*/
 @property(nonatomic,copy) NSString *path;
+/** 图片上传的进度 0 ~ 1*/
+@property(nonatomic,assign) CGFloat progress;
+
+@end
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+//                      视频消息 Elem
+//
+/////////////////////////////////////////////////////////////////////////////////
+@interface MSIMVideoElem : MSIMElem
+
+/** 视频 ID，内部标识，可用于外部缓存key*/
+@property(nonatomic,copy) NSString *uuid;
+/** 视频本地地址*/
+@property(nonatomic,copy) NSString *videoPath;
+/** 视频上传完成的远程地址*/
+@property(nonatomic,copy) NSString *videoUrl;
+/** 封面图片*/
+@property(nonatomic,strong) UIImage *coverImage;
+/** 封面上传成功远程地址*/
+@property(nonatomic,copy) NSString *coverUrl;
+/** 封面本地坡地*/
+@property(nonatomic,copy) NSString *coverPath;
+/** 视频宽*/
+@property(nonatomic,assign) NSInteger width;
+/** 视频高*/
+@property(nonatomic,assign) NSInteger height;
+/** 视频的时长  秒*/
+@property(nonatomic,assign) NSInteger duration;
+/** 视频上传的进度 0 ~ 1*/
+@property(nonatomic,assign) CGFloat progress;
 
 @end
 

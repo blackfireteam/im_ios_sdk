@@ -26,19 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) UILabel *progress;
 
-/**
- *  图像消息单元消息源
- *  imageData 中存放了图像路径，图像原图、大图、缩略图，以及三种图像对应的下载进度、上传进度等各种图像消息单元所需信息。
- *  详细信息请参考 Section\Chat\CellData\TUIIamgeMessageCellData.h
- */
+
 @property (nonatomic, strong) BFImageMessageCellData *imageData;
 
-/**
- *  填充数据
- *  根据 data 设置图像消息的数据。
- *
- *  @param data 填充数据需要的数据源
- */
 - (void)fillWithData:(BFImageMessageCellData *)data;
 
 @end

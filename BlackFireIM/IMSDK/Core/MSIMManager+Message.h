@@ -31,6 +31,11 @@ typedef void (^BFIMMessageListSucc)(NSArray<MSIMElem *> * msgs,BOOL isFinished);
 - (MSIMImageElem *)createImageMessage:(MSIMImageElem *)elem;
 
 
+/** 创建视频消息（视频文件最大支持 100 MB））
+    如果是系统相册拿的视频，需要先把视频导入 APP 的目录下
+ */
+- (MSIMVideoElem *)createVideoMessage:(MSIMVideoElem *)elem;
+
 /// 发送单聊消息
 /// @param elem 消息体
 /// @param reciever 接收者Uid

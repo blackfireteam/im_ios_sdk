@@ -30,7 +30,7 @@
     }
     CGSize containerSize = [self contentSize];
     height += containerSize.height;
-    height += 3 + 1;
+    height += 3 + 5;
 
     if (height < 55)
         height = 55;

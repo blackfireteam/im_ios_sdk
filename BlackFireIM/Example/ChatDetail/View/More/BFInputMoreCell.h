@@ -9,12 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/** 消息发送状态*/
 typedef NS_ENUM(NSInteger ,BFIMMoreType){
     
-    BFIM_MORE_CAMERA = 0, //拍照
+    BFIM_MORE_PHOTO = 0, //照片
     
-    BFIM_MORE_PHOTO = 1,//相册
+    BFIM_MORE_VIDEO = 1,//视频
     
     BFIM_MORE_LOCATION = 2,//位置
 };

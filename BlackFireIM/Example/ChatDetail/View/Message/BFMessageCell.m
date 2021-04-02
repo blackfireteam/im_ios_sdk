@@ -82,7 +82,8 @@
         [[MSProfileProvider provider]providerProfile:fromUid complete:^(MSProfileInfo * _Nonnull profile) {
             STRONG_SELF(strongSelf)
             [strongSelf.avatarView sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:data.defaultAvatar];
-            strongSelf.nameLabel.text = profile.nick_name;
+            strongSelf.nameLabel.text = [NSString stringWithFormat:@"%@--%zd",profile.nick_name,data.elem.msg_id];
+            [strongSelf.nameLabel sizeToFit];
         }];
     }
     

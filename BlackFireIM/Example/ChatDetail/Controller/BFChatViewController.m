@@ -12,6 +12,7 @@
 #import "BFInputViewController.h"
 #import "MSIMSDK.h"
 #import "YBImageBrowser.h"
+#import "YBIBVideoData.h"
 #import <SVProgressHUD.h>
 #import "BFChatViewController+More.h"
 #import "BFMessageCell.h"
@@ -101,10 +102,10 @@
 /// 点击拍照，照片等更多功能
 - (void)inputController:(BFInputViewController *)inputController didSelectMoreCell:(BFInputMoreCell *)cell
 {
-    if (cell.data.tye == BFIM_MORE_CAMERA) {//拍照
-        [self takePictureForSend];
-    }else if (cell.data.tye == BFIM_MORE_PHOTO) {//相册
+    if (cell.data.tye == BFIM_MORE_PHOTO) {//照片
         [self selectPhotoForSend];
+    }else if (cell.data.tye == BFIM_MORE_VIDEO) {//视频
+        [self selectVideoForSend];
     }
 }
 
@@ -135,12 +136,35 @@
 {
     [self.inputController reset];
     if (cell.messageData.elem.type == BFIM_MSG_TYPE_IMAGE) {//点击图片消息，查看图片
-        MSIMImageElem *imageElem = (MSIMImageElem *)cell.messageData.elem;
-        YBIBImageData *data = [YBIBImageData new];
-        data.imageURL = [NSURL URLWithString:imageElem.url];
-        data.projectiveView = cell.container.subviews.firstObject;
+        NSMutableArray *tempArr = [NSMutableArray array];
+        NSInteger defaultIndex = 0;
+        for (NSInteger i = 0; i < self.messageController.uiMsgs.count; i++) {
+            BFMessageCellData *data = self.messageController.uiMsgs[i];
+            if (data.elem.type == BFIM_MSG_TYPE_IMAGE) {
+                BFMessageCell *dataCell = (BFMessageCell *)[self.messageController.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                MSIMImageElem *imageElem = (MSIMImageElem *)data.elem;
+                YBIBImageData *imageData = [YBIBImageData new];
+                imageData.imageURL = [NSURL URLWithString:imageElem.url];
+                imageData.projectiveView = dataCell.container.subviews.firstObject;
+                [tempArr addObject:imageData];
+                if (cell.messageData == data) {
+                    defaultIndex = tempArr.count-1;
+                }
+            }
+        }
         YBImageBrowser *browser = [YBImageBrowser new];
-        browser.dataSourceArray = @[data];
+        browser.dataSourceArray = tempArr;
+        browser.currentPage = defaultIndex;
+        [browser show];
+    }else if (cell.messageData.elem.type == BFIM_MSG_TYPE_VIDEO) {//点击视频
+        
+        MSIMVideoElem *videoElem = (MSIMVideoElem *)cell.messageData.elem;
+        YBIBVideoData *videoData = [YBIBVideoData new];
+        videoData.videoURL = [NSURL URLWithString:videoElem.videoUrl];
+        videoData.projectiveView = cell.container.subviews.firstObject;
+        YBImageBrowser *browser = [YBImageBrowser new];
+        browser.dataSourceArray = @[videoData];
+        browser.currentPage = 0;
         [browser show];
     }
 }

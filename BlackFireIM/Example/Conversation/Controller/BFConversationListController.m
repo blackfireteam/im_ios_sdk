@@ -156,20 +156,20 @@
     BFIMNetStatus status = [notification.object intValue];
     switch (status) {
         case IMNET_STATUS_SUCC:
-            [_titleView setTitle:@"MS·IM"];
             [_titleView stopAnimating];
+            [_titleView setTitle:@"MS·IM"];
             break;
         case IMNET_STATUS_CONNECTING:
-            [_titleView setTitle:@"连接中..."];
             [_titleView startAnimating];
+            [_titleView setTitle:@"连接中..."];
             break;
         case IMNET_STATUS_DISCONNECT:
-            [_titleView setTitle:@"MS·IM(未连接)"];
             [_titleView stopAnimating];
+            [_titleView setTitle:@"MS·IM(无网络)"];
             break;
         case IMNET_STATUS_CONNFAILED:
-            [_titleView setTitle:@"MS·IM(未连接)"];
             [_titleView stopAnimating];
+            [_titleView setTitle:@"MS·IM(未连接)"];
             break;
         default:
             break;
