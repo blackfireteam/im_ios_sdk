@@ -235,35 +235,35 @@ static NSString *ext_data = @"ext_data";
     return isOK;
 }
 
-- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
-                       msg_id:(NSInteger)msg_id
-                    partnerID:(NSString *)partnerID
-{
-    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',msg_id = '%zd' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SEND_SUCC,msg_id,msg_sign];
-    BOOL isOK = [self excuteSQL:sqlStr];
-    return isOK;
-}
-
-- (BOOL)updateMessageToFail:(NSInteger)msg_sign
-                 code:(NSInteger)code
-               reason:(NSString *)reason
-            partnerID:(NSString *)partnerID
-{
-    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = '%zd',reason = '%@' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,code,XMNoNilString(reason),msg_sign];
-    BOOL isOK = [self excuteSQL:sqlStr];
-    return isOK;
-}
-
-- (BOOL)updateMessageToSending:(NSInteger)msg_sign
-                     partnerID:(NSString *)partnerID
-{
-    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = 0,reason = '%@' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SENDING,@"",msg_sign];
-    BOOL isOK = [self excuteSQL:sqlStr];
-    return isOK;
-}
+//- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
+//                       msg_id:(NSInteger)msg_id
+//                    partnerID:(NSString *)partnerID
+//{
+//    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
+//    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',msg_id = '%zd' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SEND_SUCC,msg_id,msg_sign];
+//    BOOL isOK = [self excuteSQL:sqlStr];
+//    return isOK;
+//}
+//
+//- (BOOL)updateMessageToFail:(NSInteger)msg_sign
+//                       code:(NSInteger)code
+//                     reason:(NSString *)reason
+//                  partnerID:(NSString *)partnerID
+//{
+//    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
+//    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = '%zd',reason = '%@' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,code,XMNoNilString(reason),msg_sign];
+//    BOOL isOK = [self excuteSQL:sqlStr];
+//    return isOK;
+//}
+//
+//- (BOOL)updateMessageToSending:(NSInteger)msg_sign
+//                     partnerID:(NSString *)partnerID
+//{
+//    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
+//    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = 0,reason = '%@' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SENDING,@"",msg_sign];
+//    BOOL isOK = [self excuteSQL:sqlStr];
+//    return isOK;
+//}
 
 - (NSArray<MSIMElem *> *)localMessageGroupByBlockID:(NSInteger)blockID partnerID:(NSString *)partnerID maxCount:(NSInteger)count
 {

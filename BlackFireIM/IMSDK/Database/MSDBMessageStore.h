@@ -25,19 +25,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)updateMessage:(NSInteger)msg_sign readStatus:(BFIMMessageReadStatus)status partnerID:(NSString *)partnerID;
 
 ///更新消息发送状态为成功
-- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
-                       msg_id:(NSInteger)msg_id
-                    partnerID:(NSString *)partnerID;
-
-///更新消息发送状态为失败
-- (BOOL)updateMessageToFail:(NSInteger)msg_sign
-                 code:(NSInteger)code
-               reason:(NSString *)reason
-            partnerID:(NSString *)partnerID;
-
-///更新消息发送状态为发送中
-- (BOOL)updateMessageToSending:(NSInteger)msg_sign
-                     partnerID:(NSString *)partnerID;
+//- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
+//                       msg_id:(NSInteger)msg_id
+//                    partnerID:(NSString *)partnerID;
+//
+/////更新消息发送状态为失败
+//- (BOOL)updateMessageToFail:(NSInteger)msg_sign
+//                 code:(NSInteger)code
+//               reason:(NSString *)reason
+//            partnerID:(NSString *)partnerID;
+//
+/////更新消息发送状态为发送中
+//- (BOOL)updateMessageToSending:(NSInteger)msg_sign
+//                     partnerID:(NSString *)partnerID;
 
 ///标记某一条消息为撤回消息
 - (BOOL)updateMessageRevoke:(NSInteger)msg_id partnerID:(NSString *)partnerID;

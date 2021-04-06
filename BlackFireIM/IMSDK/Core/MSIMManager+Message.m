@@ -122,7 +122,7 @@
             success(result.msgId);
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
             elem.msg_id = result.msgId;
-            [strongSelf.messageStore updateMessageToSuccss:chats.sign msg_id:elem.msg_id partnerID:elem.partner_id];
+            [strongSelf.messageStore addMessage:elem];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }else {
@@ -131,7 +131,7 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
             elem.reason = error;
-            [strongSelf.messageStore updateMessageToFail:chats.sign code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [strongSelf.messageStore addMessage:elem];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }
@@ -203,7 +203,7 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
             elem.reason = desc;
-            [self.messageStore updateMessageToFail:elem.msg_sign code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [self.messageStore addMessage:elem];
             [self.msgListener onMessageUpdateSendStatus:elem];
             [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             failed(code,desc);
@@ -229,7 +229,7 @@
             ChatSR *result = response;
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
             elem.msg_id = result.msgId;
-            [strongSelf.messageStore updateMessageToSuccss:chats.sign msg_id:elem.msg_id partnerID:elem.toUid];
+            [strongSelf.messageStore addMessage:elem];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             success(result.msgId);
@@ -239,7 +239,7 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
             elem.reason = error;
-            [strongSelf.messageStore updateMessageToFail:chats.sign code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [strongSelf.messageStore addMessage:elem];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }
@@ -312,7 +312,7 @@
         elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
         elem.code = code;
         elem.reason = desc;
-        [self.messageStore updateMessageToFail:elem.msg_sign code:elem.code reason:elem.reason partnerID:elem.toUid];
+        [self.messageStore addMessage:elem];
         [self.msgListener onMessageUpdateSendStatus:elem];
         [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         failed(code,desc);
@@ -341,7 +341,7 @@
             ChatSR *result = response;
             elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
             elem.msg_id = result.msgId;
-            [strongSelf.messageStore updateMessageToSuccss:chats.sign msg_id:elem.msg_id partnerID:elem.toUid];
+            [strongSelf.messageStore addMessage:elem];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             success(result.msgId);
@@ -351,7 +351,7 @@
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
             elem.reason = error;
-            [strongSelf.messageStore updateMessageToFail:chats.sign code:elem.code reason:elem.reason partnerID:elem.toUid];
+            [strongSelf.messageStore addMessage:elem];
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }
@@ -399,7 +399,7 @@
                   failed:(MSIMFail)failed
 {
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    [self.messageStore updateMessageToSending:elem.msg_sign partnerID:reciever];
+    [self.messageStore addMessage:elem];
     [self.msgListener onMessageUpdateSendStatus:elem];
     if (elem.type == BFIM_MSG_TYPE_TEXT) {
         [self sendTextMessage:(MSIMTextElem *)elem isResend:YES successed:success failed:failed];
