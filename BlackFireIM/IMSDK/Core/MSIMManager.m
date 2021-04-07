@@ -505,7 +505,7 @@ static MSIMManager *_manager;
         //重新生成一个taskID,映射到msg_seq
         NSString *taskID = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval];
         [self.taskIDs setValue:[NSString stringWithFormat:@"%lld",sign] forKey:taskID];
-        [_callbackBlock setObject:@{@"callback": block,@"protoType": @(protoType)} forKey:taskID];
+        [_callbackBlock setObject:@{@"callback": block,@"protoType": @(protoType),@"data":sendData,@"encry":@(encry)} forKey:taskID];
         [_dictionaryLock unlock];
     }
     [self.socket writeData:data withTimeout:-1 tag:100];
@@ -565,6 +565,7 @@ static MSIMManager *_manager;
     ImLogin *login = [[ImLogin alloc]init];
     login.token = user_sign;
     login.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    login.ct = 1;
     NSLog(@"[发送消息-login]:\n%@",login);
     [self send:[login data] protoType:XMChatProtoTypeLogin needToEncry:false sign:login.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
@@ -573,6 +574,9 @@ static MSIMManager *_manager;
             [MSIMTools sharedInstance].user_id = [NSString stringWithFormat:@"%lld",result.uid];
             [MSIMTools sharedInstance].user_sign = user_sign;
             [[MSIMTools sharedInstance] updateServerTime:result.nowTime*1000*1000];
+            //将消息队列中的消息重新发送一遍
+//            [strongSelf resendAllMessages];
+            
             if (strongSelf.loginSuccBlock) strongSelf.loginSuccBlock();
             //同步会话列表
             [strongSelf.convCaches removeAllObjects];
@@ -584,7 +588,7 @@ static MSIMManager *_manager;
                 }
             }
             NSLog(@"token 鉴权失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
-            strongSelf.loginFailBlock(code, error);
+            if (strongSelf.loginFailBlock) strongSelf.loginFailBlock(code, error);
         }
     }];
 }
@@ -632,6 +636,18 @@ static MSIMManager *_manager;
             fail(code, error);
         }
     }];
+}
+
+//断线重连成功后，将所有消息队列中的消息重新发送一遍
+- (void)resendAllMessages
+{
+    for (NSInteger i = 0; i < self.callbackBlock.allKeys.count; i++) {
+        NSString *taskID = self.callbackBlock.allKeys[i];
+        NSDictionary *dic = self.callbackBlock[taskID];
+        [self send:dic[@"data"] protoType:[dic[@"protoType"] integerValue] needToEncry:[dic[@"encry"] boolValue] sign:[self.taskIDs[taskID] integerValue] callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+                    
+        }];
+    }
 }
 
 - (void)cleanIMToken

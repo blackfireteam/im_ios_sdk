@@ -120,12 +120,7 @@ static MSProfileProvider *instance;
 ///批量请求，100个一组
 - (void)synchronizeProfiles:(NSArray<MSProfileInfo *> *)profiles
 {
-    //顺便同步下自己的Profile
-    MSProfileInfo *me = [[MSProfileInfo alloc]init];
-    me.user_id = [MSIMTools sharedInstance].user_id;
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:profiles];
-    [arr addObject:me];
-    [self componentRequestWithProfiles:arr];
+    [self componentRequestWithProfiles:profiles];
 }
 
 - (void)componentRequestWithProfiles:(NSArray *)arr

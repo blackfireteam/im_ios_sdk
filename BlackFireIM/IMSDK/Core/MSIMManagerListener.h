@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSIMConversation;
 @class MSIMElem;
 @class MSProfileInfo;
+@class MSIMMessageReceipt;
 @protocol MSIMSDKListener <NSObject>
 
 @optional
@@ -84,6 +85,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 ///收到一条对方撤回的消息
 - (void)onRevokeMessage:(MSIMElem *)elem;
+
+///收到消息已读回执（仅单聊有效） 
+- (void)onRecvC2CReadReceipt:(MSIMMessageReceipt *)receipt;
 
 @end
 

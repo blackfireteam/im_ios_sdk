@@ -25,7 +25,7 @@
     elem.type = BFIM_MSG_TYPE_TEXT;
     elem.fromUid = [MSIMTools sharedInstance].user_id;
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_READ;
+    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
     elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     return elem;
 }
@@ -38,7 +38,7 @@
     elem.type = BFIM_MSG_TYPE_IMAGE;
     elem.fromUid = [MSIMTools sharedInstance].user_id;
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_READ;
+    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
     elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     return elem;
 }
@@ -51,7 +51,7 @@
     elem.type = BFIM_MSG_TYPE_VIDEO;
     elem.fromUid = [MSIMTools sharedInstance].user_id;
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_READ;
+    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
     elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     return elem;
 }

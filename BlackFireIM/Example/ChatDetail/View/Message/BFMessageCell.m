@@ -11,6 +11,8 @@
 #import "BFHeader.h"
 #import "UIView+Frame.h"
 #import "MSProfileProvider.h"
+#import "NSBundle+BFKit.h"
+
 
 @interface BFMessageCell()
 
@@ -100,56 +102,74 @@
         [_indicator stopAnimating];
         self.retryView.image = nil;
     }
+    if (self.messageData.direction == MsgDirectionOutgoing && self.messageData.elem.sendStatus == BFIM_MSG_STATUS_SEND_SUCC) {
+        
+        self.readReceiptLabel.hidden = NO;
+        self.readReceiptLabel.text = self.messageData.elem.readStatus == BFIM_MSG_STATUS_UNREAD ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
+        [self.readReceiptLabel sizeToFit];
+    }else {
+        self.readReceiptLabel.hidden = YES;
+    }
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    if (self.messageData.showName) {
-        _nameLabel.size = CGSizeMake(MAX(1, _nameLabel.width), MAX(20, _nameLabel.height));
-        _nameLabel.hidden = NO;
-    } else {
-        _nameLabel.hidden = YES;
-        _nameLabel.height = 0;
-    }
     
     if (self.messageData.direction == MsgDirectionIncoming) {
         self.avatarView.x = 8;
-        self.avatarView.y = 3;
+        self.avatarView.y = 5;
         self.avatarView.width = 40;
         self.avatarView.height = 40;
         
         self.nameLabel.x = self.avatarView.maxX+5;
         self.nameLabel.y = self.avatarView.y;
+        if (self.messageData.showName) {
+            self.nameLabel.size = CGSizeMake(MAX(1, _nameLabel.width), MAX(20, _nameLabel.height));
+            self.nameLabel.hidden = NO;
+        } else {
+            self.nameLabel.hidden = YES;
+            self.nameLabel.height = 0;
+        }
         
         CGSize csize = [self.messageData contentSize];
         self.container.x = self.nameLabel.x;
-        self.container.y = self.nameLabel.height + 3;
+        self.container.y = self.nameLabel.height + 5 + self.avatarView.y;
         self.container.width = csize.width;
         self.container.height = csize.height;
         
         [self.indicator sizeToFit];
         self.indicator.frame = CGRectZero;
         self.retryView.frame = self.indicator.frame;
-        self.readReceiptLabel.hidden = YES;
+        
     } else {
         self.avatarView.width = 40;
         self.avatarView.height = 40;
-        self.avatarView.y = 3;
+        self.avatarView.y = 5;
         self.avatarView.maxX = self.contentView.width-8;
         
         self.nameLabel.maxX = self.avatarView.x-5;
         self.nameLabel.y = self.avatarView.y;
+        if (self.messageData.showName) {
+            self.nameLabel.size = CGSizeMake(MAX(1, _nameLabel.width), MAX(20, _nameLabel.height));
+            self.nameLabel.hidden = NO;
+        } else {
+            self.nameLabel.hidden = YES;
+            self.nameLabel.height = 0;
+        }
         
         CGSize csize = [self.messageData contentSize];
         self.container.width = csize.width;
         self.container.height = csize.height;
-        self.container.y = self.nameLabel.height + 3;
+        self.container.y = self.nameLabel.height + 5 + self.avatarView.y;
         self.container.maxX = self.nameLabel.maxX;
         [self.indicator sizeToFit];
         self.indicator.centerY = self.container.centerY;
         self.indicator.x = self.container.x - 8 - self.indicator.width;
         self.retryView.frame = self.indicator.frame;
+        
+        self.readReceiptLabel.centerY = self.container.centerY;
+        self.readReceiptLabel.x = self.container.x - 5 - self.readReceiptLabel.width;
     }
 }
 

@@ -103,11 +103,13 @@ typedef struct Ping__storage_ {
 
 @dynamic sign;
 @dynamic token;
+@dynamic ct;
 
 typedef struct ImLogin__storage_ {
   uint32_t _has_storage_[1];
   NSString *token;
   int64_t sign;
+  int64_t ct;
 } ImLogin__storage_;
 
 // This method is threadsafe because it is initially called
@@ -133,6 +135,15 @@ typedef struct ImLogin__storage_ {
         .offset = (uint32_t)offsetof(ImLogin__storage_, token),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "ct",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ImLogin_FieldNumber_Ct,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(ImLogin__storage_, ct),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
       },
     };
     GPBDescriptor *localDescriptor =
@@ -1966,6 +1977,104 @@ typedef struct UsrOffline__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(UsrOffline__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Signup
+
+@implementation Signup
+
+@dynamic sign;
+@dynamic nickName;
+@dynamic avatar;
+@dynamic pic;
+@dynamic gold;
+@dynamic verified;
+
+typedef struct Signup__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *nickName;
+  NSString *avatar;
+  NSString *pic;
+  int64_t sign;
+} Signup__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Signup_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(Signup__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "nickName",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Signup_FieldNumber_NickName,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(Signup__storage_, nickName),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "avatar",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Signup_FieldNumber_Avatar,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(Signup__storage_, avatar),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "pic",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Signup_FieldNumber_Pic,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(Signup__storage_, pic),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "gold",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Signup_FieldNumber_Gold,
+        .hasIndex = 4,
+        .offset = 5,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+      {
+        .name = "verified",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Signup_FieldNumber_Verified,
+        .hasIndex = 6,
+        .offset = 7,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[Signup class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(Signup__storage_)
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");

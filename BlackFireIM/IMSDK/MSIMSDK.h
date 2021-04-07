@@ -16,7 +16,10 @@
 #import "MSIMManager+Message.h"
 #import "MSIMManager+Conversation.h"
 #import "MSProfileProvider.h"
+#import "MSConversationProvider.h"
 #import "MSIMTools.h"
+#import "MSIMHeader.h"
+#import "MSIMMessageReceipt.h"
 
 
 #endif /* MSIMSDK_h */

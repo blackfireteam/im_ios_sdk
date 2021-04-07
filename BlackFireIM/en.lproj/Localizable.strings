@@ -32,7 +32,7 @@
 "YesterdayDateFormat" = "HH:mma";       // 英文是 HH:mma 不要动
 
 "Read" = "Read";
-"Unread" = "Unread";
+"Deliveried" = "Deliveried";
 
 "Copy" = "Copy";
 "Delete" = "Delete";
@@ -87,6 +87,7 @@
 "TUIkitSignalingDecline" = "Decline Call";
 "TUIKitSignalingNoResponse" = "No answer";
 "TUIkitSignalingUnrecognlize" = "Unrecognized call instruction";
+
 
 "TUIkitMessageTypeImage" = "[Image]";
 "TUIKitMessageTypeVoice" = "[Voice]";

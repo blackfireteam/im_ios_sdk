@@ -26,15 +26,11 @@
 {
     CGFloat height = 0;
     if (self.showName) {
-        height += 20;
+        height += 25;
     }
     CGSize containerSize = [self contentSize];
     height += containerSize.height;
-    height += 3 + 5;
-
-    if (height < 55)
-        height = 55;
-
+    height += 5;
     return height;
 }
 

@@ -25,7 +25,7 @@
     [super viewDidLoad];
     self.navigationItem.title = @"登录";
     
-    NSArray *titles = @[@"user_2",@"user_3",@"uer_5",@"user_23"];
+    NSArray *titles = @[@"user_66",@"user_67",@"uer_68",@"user_69"];
     for (NSInteger i = 0; i < titles.count; i++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         [btn setTitle:titles[i] forState:UIControlStateNormal];
@@ -43,7 +43,7 @@
 - (void)btnDidClick:(UIButton *)sender
 {
     NSInteger index = sender.tag - 100;
-    NSArray *tokens = @[@"jCTYRM47p2PrZljH2tT4rw==",@"89g3Is+0vDBz7grDz95N4A==",@"lxmxSxIG9jIJWyruS08tsg==",@"T3AmDPOTp7smtGUElDRw/A=="];
+    NSArray *tokens = @[@"tWvDfNV1at5expwjSrQ/6g==",@"+/HwKuJYYZynSc7mtC6p8w==",@"DT6F9XNqCh3DOJcHs+ps9g==",@"YNuic5tq3Ta49aVSkRVGmg=="];
     [[MSIMKit sharedInstance] login:tokens[index] succ:^{
         [self dismissViewControllerAnimated:YES completion:nil];
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;

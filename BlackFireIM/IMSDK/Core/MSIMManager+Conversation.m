@@ -107,18 +107,13 @@
         failed(ERR_USER_PARAMS_ERROR,@"参数异常");
         return;
     }
-    //有可能传过来的是自己发的消息id,从数据库中查找离它最近的对方发的消息id
-    NSInteger n_id = [self.messageStore latestMsgIDLessThan:msgID partner_id:user_id];
-    if (n_id == 0) return;
     MsgRead *request = [[MsgRead alloc]init];
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.toUid = user_id.integerValue;
-    request.msgId = n_id;
+    request.msgId = msgID;
     NSLog(@"[发送消息]标记消息已读：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeMsgread needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-        if (code == ERR_SUCC) {
-            
-        }
+        
     }];
 }
 

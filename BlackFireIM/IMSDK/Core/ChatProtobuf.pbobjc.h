@@ -69,6 +69,7 @@ GPB_FINAL @interface Ping : GPBMessage
 typedef GPB_ENUM(ImLogin_FieldNumber) {
   ImLogin_FieldNumber_Sign = 1,
   ImLogin_FieldNumber_Token = 2,
+  ImLogin_FieldNumber_Ct = 3,
 };
 
 /**
@@ -80,6 +81,9 @@ GPB_FINAL @interface ImLogin : GPBMessage
 
 /** 从应用方获取的imtoken */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *token;
+
+/** 客户端类型 0:Android   1:ios    2:web */
+@property(nonatomic, readwrite) int64_t ct;
 
 @end
 
@@ -360,7 +364,7 @@ GPB_FINAL @interface Revoke : GPBMessage
 /** 客户端自定义标识，服务器会原样返回 */
 @property(nonatomic, readwrite) int64_t sign;
 
-/** 谁发的消息 */
+/** 会话列表的对方id */
 @property(nonatomic, readwrite) int64_t toUid;
 
 /** 撤回的消息id */
@@ -714,6 +718,39 @@ typedef GPB_ENUM(UsrOffline_FieldNumber) {
 GPB_FINAL @interface UsrOffline : GPBMessage
 
 @property(nonatomic, readwrite) int64_t uid;
+
+@end
+
+#pragma mark - Signup
+
+typedef GPB_ENUM(Signup_FieldNumber) {
+  Signup_FieldNumber_Sign = 1,
+  Signup_FieldNumber_NickName = 2,
+  Signup_FieldNumber_Avatar = 3,
+  Signup_FieldNumber_Pic = 4,
+  Signup_FieldNumber_Gold = 5,
+  Signup_FieldNumber_Verified = 6,
+};
+
+/**
+ * 53 for demo：注册新用户
+ **/
+GPB_FINAL @interface Signup : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *nickName;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *avatar;
+
+/** 用户spark界面的封面图 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pic;
+
+/** 是否gold用户 */
+@property(nonatomic, readwrite) BOOL gold;
+
+/** 是否是认证用户 */
+@property(nonatomic, readwrite) BOOL verified;
 
 @end
 

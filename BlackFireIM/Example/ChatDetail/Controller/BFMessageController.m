@@ -8,8 +8,6 @@
 #import "BFMessageController.h"
 #import "BFHeader.h"
 #import "UIColor+BFDarkMode.h"
-#import "MSIMManager+Message.h"
-#import "MSIMManager+Conversation.h"
 #import "BFTextMessageCellData.h"
 #import "BFImageMessageCellData.h"
 #import "BFTextMessageCell.h"
@@ -17,12 +15,10 @@
 #import "BFSystemMessageCell.h"
 #import "BFVideoMessageCell.h"
 #import "MSIMSDK.h"
-#import "MSIMHeader.h"
 #import "BFSystemMessageCellData.h"
 #import "NSDate+MSKit.h"
 #import "NSBundle+BFKit.h"
 #import "UIView+Frame.h"
-#import "MSProfileProvider.h"
 #import "BFNoticeCountView.h"
 #import <SVProgressHUD.h>
 
@@ -75,7 +71,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self readedReport];
 }
 
 - (void)setupUI
@@ -84,6 +79,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusUpdate:) name:MSUIKitNotification_MessageSendStatusUpdate object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(recieveRevokeMessage:) name:MSUIKitNotification_MessageRecieveRevoke object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(recieveMessageReceipt:) name:MSUIKitNotification_MessageReceipt object:nil];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapViewController)];
     [self.view addGestureRecognizer:tap];
@@ -121,16 +117,20 @@
     self.countTipView.frame = CGRectMake(self.tableView.width-30-10, self.tableView.height-30-10, 30, 30);
 }
 
-- (void)readedReport
+- (void)readedReport:(NSArray<BFMessageCellData *> *)datas
 {
-    //取最后一条msg_id != 0的消息
-    MSIMElem *elem = [[MSIMManager sharedInstance].messageStore lastMessageID:self.partner_id];
-    if (elem == nil) return;
-    [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id lastMsgID:elem.msg_id succ:^{
-            
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            
-    }];
+    if (datas == nil) return;
+    for (NSInteger i = datas.count-1; i >= 0; i--) {
+        BFMessageCellData *data = datas[i];
+        if (data.elem.isSelf == NO) {
+            [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id lastMsgID:data.elem.msg_id succ:^{
+                    
+                } failed:^(NSInteger code, NSString * _Nonnull desc) {
+    
+            }];
+            break;
+        }
+    }
 }
 
 ///重发消息
@@ -180,6 +180,11 @@
                         visibleHeight -= 40;
                     }
                     [strongSelf.tableView scrollRectToVisible:CGRectMake(0, strongSelf.tableView.contentOffset.y + visibleHeight, strongSelf.tableView.frame.size.width, strongSelf.tableView.frame.size.height) animated:NO];
+                }else {
+                    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:self.partner_id];
+                    if (conv.unread_count > 0) {
+                        [strongSelf readedReport:uiMsgs];
+                    }
                 }
             }
             strongSelf.isLoadingMsg = NO;
@@ -274,6 +279,7 @@
         //适当增加些容错
         if (isAtBottom) {
             [self scrollToBottom:YES];
+            [self readedReport: uiMsgs];//标记已读
         }else {
             [self.countTipView increaseCount];
         }
@@ -294,6 +300,21 @@
     if (revokeData) {
         [self revokeMsg:revokeData];
     }
+}
+
+///收到对方发出的消息已读回执
+- (void)recieveMessageReceipt:(NSNotification *)note
+{
+    MSIMMessageReceipt *receipt = note.object;
+    if (![receipt.user_id isEqualToString:self.partner_id]) return;
+    for (BFMessageCellData *data in self.uiMsgs) {
+        if (data.elem.msg_id <= receipt.msg_id) {
+            data.elem.readStatus = BFIM_MSG_STATUS_READ;
+        }else {
+            data.elem.readStatus = BFIM_MSG_STATUS_UNREAD;
+        }
+    }
+    [self.tableView reloadData];
 }
 
 ///消息状态发生变化通知
@@ -381,7 +402,10 @@
         }
     }
     if (scrollView.contentOffset.y + scrollView.height + 20 >= scrollView.contentSize.height) {
-        [self.countTipView cleanCount];
+        if (self.countTipView.isHidden == NO) {
+            [self.countTipView cleanCount];
+            [self readedReport:self.uiMsgs];//标记已读
+        }
     }
 }
 

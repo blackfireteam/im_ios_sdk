@@ -21,8 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///向数据库中添加批量记录
 - (BOOL)addMessages:(NSArray<MSIMElem *> *)elems;
 
-///更新某条消息的已读状态
-- (BOOL)updateMessage:(NSInteger)msg_sign readStatus:(BFIMMessageReadStatus)status partnerID:(NSString *)partnerID;
+///将表中所有消息id <= last_msg_id标记为已读
+- (BOOL)markMessageAsRead:(NSInteger)last_msg_id partnerID:(NSString *)partnerID;
 
 ///更新消息发送状态为成功
 //- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign

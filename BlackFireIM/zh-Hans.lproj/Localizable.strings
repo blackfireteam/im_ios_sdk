@@ -33,7 +33,7 @@
 "YesterdayDateFormat" = "aHH:mm";
 
 "Read" = "已读";
-"Unread" = "未读";
+"Deliveried" = "已送达";
 
 "Copy" = "复制";
 "Delete" = "删除";
@@ -71,7 +71,6 @@
 "TUIKitMessageTipsRecallMessageFormat" = "\"%@\"撤回了一条消息";
 "TUIkitMessageTipsOthersRecallMessage" = "对方撤回了一条消息";
 "TUIkitMessageTipsUnknowMessage" = "不支持的消息类型，请升级SDK查看";
-
 
 "TUIkitMessageTypeImage" = "[图片]";
 "TUIKitMessageTypeVoice" = "[语音]";

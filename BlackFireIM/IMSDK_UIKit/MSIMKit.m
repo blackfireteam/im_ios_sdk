@@ -141,6 +141,12 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageRecieveRevoke object:elem];
 }
 
+///收到消息已读回执（仅单聊有效）
+- (void)onRecvC2CReadReceipt:(MSIMMessageReceipt *)receipt
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageReceipt object:receipt];
+}
+
 #pragma mark - MSIMProfileListener
 
 /**

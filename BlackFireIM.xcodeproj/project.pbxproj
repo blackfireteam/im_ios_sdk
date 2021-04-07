@@ -48,8 +48,9 @@
 		F011D65425E8C8410061F9D6 /* MSIMTools.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D65325E8C8410061F9D6 /* MSIMTools.m */; };
 		F011D66025E8DC4D0061F9D6 /* MSIMElem.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D65F25E8DC4D0061F9D6 /* MSIMElem.m */; };
 		F011D66925E8E7240061F9D6 /* MSIMManager+Message.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D66825E8E7240061F9D6 /* MSIMManager+Message.m */; };
-		F01E2BA0260DA25F004D4D92 /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F01E2B9E260DA25E004D4D92 /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F0278D7925F614D100B566D9 /* MSIMManager+Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = F0278D7825F614D100B566D9 /* MSIMManager+Conversation.m */; };
+		F02F434D261D86AC00374870 /* MSIMMessageReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = F02F434C261D86AC00374870 /* MSIMMessageReceipt.m */; };
+		F02F4353261DA97C00374870 /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F02F4352261DA97C00374870 /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F036362125FEEC9600E69D14 /* TUIKitResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F036361F25FEEC9500E69D14 /* TUIKitResource.bundle */; };
 		F036362225FEEC9600E69D14 /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F036362025FEEC9600E69D14 /* TUIKitFace.bundle */; };
 		F036362825FEF7DD00E69D14 /* MSDBProfileStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F036362725FEF7DD00E69D14 /* MSDBProfileStore.m */; };
@@ -236,10 +237,12 @@
 		F011D65F25E8DC4D0061F9D6 /* MSIMElem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSIMElem.m; sourceTree = "<group>"; };
 		F011D66725E8E7240061F9D6 /* MSIMManager+Message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MSIMManager+Message.h"; sourceTree = "<group>"; };
 		F011D66825E8E7240061F9D6 /* MSIMManager+Message.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MSIMManager+Message.m"; sourceTree = "<group>"; };
-		F01E2B9E260DA25E004D4D92 /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
-		F01E2B9F260DA25F004D4D92 /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
 		F0278D7725F614D100B566D9 /* MSIMManager+Conversation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MSIMManager+Conversation.h"; sourceTree = "<group>"; };
 		F0278D7825F614D100B566D9 /* MSIMManager+Conversation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MSIMManager+Conversation.m"; sourceTree = "<group>"; };
+		F02F434B261D86AC00374870 /* MSIMMessageReceipt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSIMMessageReceipt.h; sourceTree = "<group>"; };
+		F02F434C261D86AC00374870 /* MSIMMessageReceipt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSIMMessageReceipt.m; sourceTree = "<group>"; };
+		F02F4351261DA97C00374870 /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
+		F02F4352261DA97C00374870 /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
 		F036361F25FEEC9500E69D14 /* TUIKitResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitResource.bundle; sourceTree = "<group>"; };
 		F036362025FEEC9600E69D14 /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
 		F036362625FEF7DD00E69D14 /* MSDBProfileStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSDBProfileStore.h; sourceTree = "<group>"; };
@@ -657,8 +660,8 @@
 		F052EC7B25ECD2B800F35D74 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				F01E2B9F260DA25F004D4D92 /* ChatProtobuf.pbobjc.h */,
-				F01E2B9E260DA25E004D4D92 /* ChatProtobuf.pbobjc.m */,
+				F02F4351261DA97C00374870 /* ChatProtobuf.pbobjc.h */,
+				F02F4352261DA97C00374870 /* ChatProtobuf.pbobjc.m */,
 				F052ECAD25EE3B6E00F35D74 /* MSIMManagerListener.h */,
 				F011D62025E767B10061F9D6 /* IMSDKConfig.h */,
 				F011D62125E767B10061F9D6 /* IMSDKConfig.m */,
@@ -673,6 +676,8 @@
 				F0278D7825F614D100B566D9 /* MSIMManager+Conversation.m */,
 				F011D65E25E8DC4D0061F9D6 /* MSIMElem.h */,
 				F011D65F25E8DC4D0061F9D6 /* MSIMElem.m */,
+				F02F434B261D86AC00374870 /* MSIMMessageReceipt.h */,
+				F02F434C261D86AC00374870 /* MSIMMessageReceipt.m */,
 				F056711F25EF69AC00782F9C /* MSIMConversation.h */,
 				F056712025EF69AC00782F9C /* MSIMConversation.m */,
 				F036362C25FEF7FB00E69D14 /* MSProfileInfo.h */,
@@ -1214,7 +1219,6 @@
 				F058366B2602F71B0008C4FD /* BFUnreadView.m in Sources */,
 				F0DC81902616CA280042D4BD /* YBIBVideoTopBar.m in Sources */,
 				F09316B72609BFEC0099E39E /* BFFaceView.m in Sources */,
-				F01E2BA0260DA25F004D4D92 /* ChatProtobuf.pbobjc.m in Sources */,
 				F036365C260049A400E69D14 /* MSIMManager+Parse.m in Sources */,
 				F0DC81762616A7C30042D4BD /* BFVideoMessageCellData.m in Sources */,
 				F09316A52609BBF60099E39E /* BFFaceCollectionCell.m in Sources */,
@@ -1262,6 +1266,7 @@
 				F052ECA925EE1DB700F35D74 /* NSString+AES.m in Sources */,
 				F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */,
 				F0878A862608428500268122 /* BFSystemMessageCell.m in Sources */,
+				F02F4353261DA97C00374870 /* ChatProtobuf.pbobjc.m in Sources */,
 				F05671E125F21C1100782F9C /* BFImageMessageCell.m in Sources */,
 				F056712A25EF919600782F9C /* BFInputBarView.m in Sources */,
 				F0020B602614263E0080C005 /* YBIBToolViewHandler.m in Sources */,
@@ -1286,6 +1291,7 @@
 				F0020B542614263E0080C005 /* YBIBImageCache.m in Sources */,
 				F056716625F087D200782F9C /* UIView+BFExtension.m in Sources */,
 				F0DC818E2616CA280042D4BD /* YBIBVideoCell.m in Sources */,
+				F02F434D261D86AC00374870 /* MSIMMessageReceipt.m in Sources */,
 				F058365C2602EE810008C4FD /* BFNaviBarIndicatorView.m in Sources */,
 				F011D66025E8DC4D0061F9D6 /* MSIMElem.m in Sources */,
 				F056711225EF631F00782F9C /* NSString+Ext.m in Sources */,

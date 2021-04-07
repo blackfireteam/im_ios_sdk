@@ -56,7 +56,7 @@
             return TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
         }
     }
-    return @"";
+    return TUILocalizableString(TUIkitMessageTipsUnknowMessage);
 }
 
 @end

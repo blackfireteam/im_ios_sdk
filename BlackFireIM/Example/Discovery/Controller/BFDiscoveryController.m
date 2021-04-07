@@ -10,6 +10,7 @@
 #import "BFHeader.h"
 #import "BFUserListCell.h"
 #import "BFChatViewController.h"
+#import "MSIMSDK.h"
 
 
 @interface BFDiscoveryController ()
@@ -52,6 +53,7 @@
 - (void)userOnline:(NSNotification *)note
 {
     MSProfileInfo *info = note.object;
+    [[MSProfileProvider provider] updateProfile:info];
     [self.dataArray insertObject:info atIndex:0];
     [self.tableView reloadData];
 }

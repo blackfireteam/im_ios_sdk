@@ -74,6 +74,8 @@ typedef NS_ENUM(NSInteger ,BFIMMessageReadStatus){
 /** 消息类型*/
 typedef NS_ENUM(NSInteger ,BFIMMessageType){
     
+    BFIM_MSG_TYPE_UNKNOWN = -1, //未知消息
+    
     BFIM_MSG_TYPE_TEXT = 0, //文本消息
     
     BFIM_MSG_TYPE_IMAGE = 1,//图片消息

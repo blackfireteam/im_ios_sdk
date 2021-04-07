@@ -101,6 +101,15 @@ static NSString *ext_data = @"ext_data";
     return isOK;
 }
 
+///将表中所有消息id <= last_msg_id标记为已读
+- (BOOL)markMessageAsRead:(NSInteger)last_msg_id partnerID:(NSString *)partnerID
+{
+    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set read_status = '%zd' where msg_id <= '%zd'",tableName,BFIM_MSG_STATUS_READ,last_msg_id];
+    BOOL isOK = [self excuteSQL:sqlStr];
+    return isOK;
+}
+
 ///取最后一条msg_id
 - (MSIMElem *)lastMessageID:(NSString *)partner_id
 {
@@ -181,7 +190,7 @@ static NSString *ext_data = @"ext_data";
 - (BOOL)updateBlockID:(NSInteger)fromBlockID toBlockID:(NSInteger)toBlockID partnerID:(NSString *)partnerID
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set block_id = '%zd' where block_id = '%zd'",tableName,fromBlockID,toBlockID];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set block_id = '%zd' where block_id = '%zd'",tableName,toBlockID,fromBlockID];
     BOOL isOK = [self excuteSQL:sqlStr];
     return isOK;
 }
@@ -224,15 +233,6 @@ static NSString *ext_data = @"ext_data";
         [rsSet close];
     }];
     return elem;
-}
-
-///更新某条消息的已读状态
-- (BOOL)updateMessage:(NSInteger)msg_sign readStatus:(BFIMMessageReadStatus)status partnerID:(NSString *)partnerID
-{
-    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set read_status = '%zd' where msg_sign = '%zd'",tableName,status,msg_sign];
-    BOOL isOK = [self excuteSQL:sqlStr];
-    return isOK;
 }
 
 //- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
