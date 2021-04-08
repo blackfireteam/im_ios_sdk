@@ -13,9 +13,11 @@
 #import "MSIMSDK.h"
 
 
-@interface BFDiscoveryController ()
+@interface BFDiscoveryController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property(nonatomic,strong) NSMutableArray<MSProfileInfo *> *dataArray;
+
+@property(nonatomic,strong) UICollectionView *myCollectionView;
 
 @end
 
@@ -24,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = @"在线用户";
+    self.navigationItem.title = @"DISCOVERY";
     [self setupUI];
 }
 
@@ -55,7 +57,7 @@
     MSProfileInfo *info = note.object;
     [[MSProfileProvider provider] updateProfile:info];
     [self.dataArray insertObject:info atIndex:0];
-    [self.tableView reloadData];
+    [self.myCollectionView reloadData];
 }
 
 - (void)userOffline:(NSNotification *)note
@@ -68,38 +70,46 @@
             break;
         }
     }
-    [self.tableView reloadData];
+    [self.myCollectionView reloadData];
 }
 
 - (void)setupUI
 {
-    self.tableView.scrollsToTop = NO;
-    self.tableView.estimatedRowHeight = 0;
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    self.tableView.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
-    self.tableView.rowHeight = 80;
-    [self.tableView registerClass:[BFUserListCell class] forCellReuseIdentifier:@"userCell"];
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+    layout.itemSize = CGSizeMake((Screen_Width-15*3)*0.5, (Screen_Width-15*3)*0.5*1.3);
+    layout.sectionInset = UIEdgeInsetsMake(15, 15, 15, 15);
+    layout.minimumLineSpacing = 15;
+    layout.minimumInteritemSpacing = 15;
+    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    self.myCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height) collectionViewLayout:layout];
+    self.myCollectionView.delegate = self;
+    self.myCollectionView.dataSource = self;
+    self.myCollectionView.alwaysBounceVertical = YES;
+    self.myCollectionView.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
+    [self.myCollectionView registerClass:[BFUserListCell class] forCellWithReuseIdentifier:@"userCell"];
+    [self.view addSubview:self.myCollectionView];
 }
 
-#pragma mark - Table view data source
+#pragma mark - UICollection view data source
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.dataArray.count;
 }
 
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    BFUserListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"userCell" forIndexPath:indexPath];
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    BFUserListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"userCell" forIndexPath:indexPath];
     [cell configWithInfo:self.dataArray[indexPath.row]];
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     BFChatViewController *vc = [[BFChatViewController alloc]init];
     vc.partner_id = self.dataArray[indexPath.row].user_id;
     [self.navigationController pushViewController:vc animated:YES];
 }
+
 
 @end

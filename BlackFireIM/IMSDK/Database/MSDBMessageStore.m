@@ -49,8 +49,8 @@ static NSString *ext_data = @"ext_data";
             MSIMElem *nextElem = [self searchMessage:fid msg_id:elem.msg_id+1];
             MSIMElem *preElem = [self searchMessage:fid msg_id:elem.msg_id-1];
             if (nextElem && preElem) {
-                block_id = nextElem.block_id;
-                [self updateBlockID:preElem.block_id toBlockID:nextElem.block_id partnerID:fid];
+                block_id = MIN(nextElem.block_id, preElem.block_id);
+                [self updateBlockID:MAX(preElem.block_id, nextElem.block_id) toBlockID:block_id partnerID:fid];
             }else if (nextElem) {
                 block_id = nextElem.block_id;
             }else if (preElem) {

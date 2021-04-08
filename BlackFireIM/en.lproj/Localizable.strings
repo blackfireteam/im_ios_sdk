@@ -7,6 +7,12 @@
 */
 "TUIKitTipsMostSelectTextFormat" = "Select %ld at most";
 
+"Home_tab" = "Home";
+"Discovery_tab" = "Discovery";
+"Message_tab" = "Message";
+"Profile_tab" = "Profile";
+
+
 "Confirm" = "OK";
 "Cancel" = "Cancel";
 "Send" = "Send";
@@ -33,6 +39,8 @@
 
 "Read" = "Read";
 "Deliveried" = "Deliveried";
+"NotDeliveried" = "NotDeliveried";
+"Sending" = "Sending...";
 
 "Copy" = "Copy";
 "Delete" = "Delete";

@@ -27,6 +27,7 @@
     TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
     picker.allowPickingImage = YES;
     picker.allowPickingVideo = NO;
+    picker.autoDismiss = NO;
     [self presentViewController:picker animated:YES completion:nil];
 }
 
@@ -35,11 +36,14 @@
     TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
     picker.allowPickingImage = NO;
     picker.allowPickingVideo = YES;
+    picker.autoDismiss = NO;
     [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto
 {
+    [SVProgressHUD show];
+    
     UIImage *image = photos.firstObject;
     PHAsset *asset = assets.firstObject;
     if (image.size.width > 1920 || image.size.height > 1920) {
@@ -57,6 +61,9 @@
     NSString *path = [[NSFileManager pathForIMImage]stringByAppendingPathComponent:fileName];
     [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
     
+    [SVProgressHUD dismiss];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
     MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
     imageElem.type = BFIM_MSG_TYPE_IMAGE;
     imageElem.image = image;
@@ -69,6 +76,8 @@
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingVideo:(UIImage *)coverImage sourceAssets:(PHAsset *)asset
 {
+    [SVProgressHUD show];
+    
     if (coverImage.size.width > 1920 || coverImage.size.height > 1920) {
         CGFloat aspectRatio = MIN ( 1920 / coverImage.size.width, 1920 / coverImage.size.height );
         CGFloat aspectWidth = coverImage.size.width * aspectRatio;
@@ -86,6 +95,8 @@
     
     [[TZImageManager manager]getVideoOutputPathWithAsset:asset presetName:AVAssetExportPresetMediumQuality success:^(NSString *outputPath) {
             
+        [SVProgressHUD dismiss];
+        [picker dismissViewControllerAnimated:YES completion:nil];
         NSLog(@"视频导出到本地完成,沙盒路径为:%@",outputPath);
         MSIMVideoElem *videoElem = [[MSIMVideoElem alloc]init];
         videoElem.type = BFIM_MSG_TYPE_VIDEO;

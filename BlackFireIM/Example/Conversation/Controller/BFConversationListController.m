@@ -38,18 +38,18 @@
     [self setupNavigation];
     [self setupViews];
     [self loadConversation];
-    UIButton *moreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    [moreButton setImage:[UIImage imageNamed:TUIKitResource(@"more")] forState:UIControlStateNormal];
-    [moreButton addTarget:self action:@selector(rightBarButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *moreItem = [[UIBarButtonItem alloc] initWithCustomView:moreButton];
-    self.navigationItem.rightBarButtonItem = moreItem;
 }
 
-- (void)rightBarButtonClick
+- (instancetype)init
 {
-    BFChatViewController *vc = [[BFChatViewController alloc]init];
-    vc.partner_id = @"5";
-    [self.navigationController pushViewController:vc animated:YES];
+    if (self = [super init]) {
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNetworkChanged:) name:MSUIKitNotification_ConnListener object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
+    }
+    return self;
 }
 
 - (void)dealloc
@@ -60,14 +60,8 @@
 - (void)setupNavigation
 {
     _titleView = [[BFNaviBarIndicatorView alloc]init];
-    [_titleView setTitle:@"MS·IM"];
+    [_titleView setTitle:@"MESSAGE"];
     self.navigationItem.titleView = _titleView;
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNetworkChanged:) name:MSUIKitNotification_ConnListener object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
 }
 
 - (void)setupViews
@@ -76,11 +70,11 @@
     self.tableView = [[UITableView alloc]initWithFrame:self.view.bounds];
     self.tableView.tableFooterView = [UIView new];
     self.tableView.backgroundColor = self.view.backgroundColor;
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 8, 0);
     [self.tableView registerClass:[BFConversationListCell class] forCellReuseIdentifier:@"TConversationCell"];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.rowHeight = 80;
+    self.tableView.rowHeight = 103;
+    self.tableView.separatorColor = TCell_separatorColor;
     [self.view addSubview:self.tableView];
 }
 
@@ -161,7 +155,7 @@
     switch (status) {
         case IMNET_STATUS_SUCC:
             [_titleView stopAnimating];
-            [_titleView setTitle:@"MS·IM"];
+            [_titleView setTitle:@"MESSAGE"];
             break;
         case IMNET_STATUS_CONNECTING:
             [_titleView startAnimating];
@@ -169,11 +163,11 @@
             break;
         case IMNET_STATUS_DISCONNECT:
             [_titleView stopAnimating];
-            [_titleView setTitle:@"MS·IM(无网络)"];
+            [_titleView setTitle:@"MESSAGE(无网络)"];
             break;
         case IMNET_STATUS_CONNFAILED:
             [_titleView stopAnimating];
-            [_titleView setTitle:@"MS·IM(未连接)"];
+            [_titleView setTitle:@"MESSAGE(未连接)"];
             break;
         default:
             break;

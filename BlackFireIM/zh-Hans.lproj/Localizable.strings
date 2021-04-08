@@ -8,6 +8,11 @@
 
 "TUIKitTipsMostSelectTextFormat" = "最多选择%ld个";
 
+"Home_tab" = "首页";
+"Discovery_tab" = "探索";
+"Message_tab" = "消息";
+"Profile_tab" = "我的";
+
 "Confirm" = "确定";
 "Cancel" = "取消";
 "Send" = "发送";
@@ -34,6 +39,8 @@
 
 "Read" = "已读";
 "Deliveried" = "已送达";
+"NotDeliveried" = "未送达";
+"Sending" = "发送中...";
 
 "Copy" = "复制";
 "Delete" = "删除";

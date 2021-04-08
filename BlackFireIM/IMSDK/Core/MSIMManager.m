@@ -421,6 +421,16 @@ static MSIMManager *_manager;
 
 - (void)messageRsultHandler:(Result *)result
 {
+    if (result.code == ERR_LOGIN_KICKED_OFF_BY_OTHER) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.connListener && [self.connListener respondsToSelector:@selector(onForceOffline)]) {
+                [self.connListener onForceOffline];
+            }
+            //清空本地的token
+            [self cleanIMToken];
+        });
+    }
+    
     NSString *taskID = [self taskIDForMsgSeq:result.sign];
     if (taskID == nil) return;
     NSDictionary *dic = [self.callbackBlock objectForKey:taskID];
@@ -440,15 +450,6 @@ static MSIMManager *_manager;
             
         }
         [self sendMessageResponse:result.sign resultCode:result.code resultMsg:result.msg response:result];
-    }
-    if (result.code == ERR_LOGIN_KICKED_OFF_BY_OTHER) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.connListener && [self.connListener respondsToSelector:@selector(onForceOffline)]) {
-                [self.connListener onForceOffline];
-            }
-            //清空本地的token
-            [self cleanIMToken];
-        });
     }
 }
 

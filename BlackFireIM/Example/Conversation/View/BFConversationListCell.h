@@ -22,6 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) UILabel *timeLabel;
 
+@property(nonatomic,strong) UIImageView *goldIcon;
+
+@property(nonatomic,strong) UIImageView *matchIcon;
+
+@property(nonatomic,strong) UIImageView *verifyIcon;
+
 @property(nonatomic,strong) BFUnreadView *unReadView;
 
 - (void)configWithData:(BFConversationCellData *)convData;

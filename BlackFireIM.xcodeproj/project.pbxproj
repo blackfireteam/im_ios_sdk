@@ -112,6 +112,12 @@
 		F09316C3260AD8190099E39E /* MSConversationProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316C2260AD8190099E39E /* MSConversationProvider.m */; };
 		F09316DC260B81B80099E39E /* BFDiscoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316DB260B81B80099E39E /* BFDiscoveryController.m */; };
 		F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316E1260B82EE0099E39E /* BFUserListCell.m */; };
+		F0CF6429261ECE8400106697 /* UIButton+positon.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6428261ECE8400106697 /* UIButton+positon.m */; };
+		F0CF642F261ED60A00106697 /* BFHomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF642E261ED60A00106697 /* BFHomeController.m */; };
+		F0CF6432261EF80F00106697 /* BFDragConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6431261EF80E00106697 /* BFDragConfig.m */; };
+		F0CF6435261EF95100106697 /* BFDragCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6434261EF95100106697 /* BFDragCardView.m */; };
+		F0CF6438261EFA6F00106697 /* BFDragCardContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6437261EFA6F00106697 /* BFDragCardContainer.m */; };
+		F0CF643B261F044200106697 /* BFHomeCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF643A261F044200106697 /* BFHomeCardView.m */; };
 		F0DC8131261462DF0042D4BD /* BFUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC8130261462DF0042D4BD /* BFUploadManager.m */; };
 		F0DC81702616A7280042D4BD /* BFVideoMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC816F2616A7280042D4BD /* BFVideoMessageCell.m */; };
 		F0DC81762616A7C30042D4BD /* BFVideoMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC81752616A7C30042D4BD /* BFVideoMessageCellData.m */; };
@@ -369,6 +375,18 @@
 		F09316DB260B81B80099E39E /* BFDiscoveryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDiscoveryController.m; sourceTree = "<group>"; };
 		F09316E0260B82EE0099E39E /* BFUserListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUserListCell.h; sourceTree = "<group>"; };
 		F09316E1260B82EE0099E39E /* BFUserListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUserListCell.m; sourceTree = "<group>"; };
+		F0CF6427261ECE8400106697 /* UIButton+positon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+positon.h"; sourceTree = "<group>"; };
+		F0CF6428261ECE8400106697 /* UIButton+positon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+positon.m"; sourceTree = "<group>"; };
+		F0CF642D261ED60A00106697 /* BFHomeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFHomeController.h; sourceTree = "<group>"; };
+		F0CF642E261ED60A00106697 /* BFHomeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFHomeController.m; sourceTree = "<group>"; };
+		F0CF6430261EF80E00106697 /* BFDragConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFDragConfig.h; sourceTree = "<group>"; };
+		F0CF6431261EF80E00106697 /* BFDragConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDragConfig.m; sourceTree = "<group>"; };
+		F0CF6433261EF95100106697 /* BFDragCardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFDragCardView.h; sourceTree = "<group>"; };
+		F0CF6434261EF95100106697 /* BFDragCardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDragCardView.m; sourceTree = "<group>"; };
+		F0CF6436261EFA6F00106697 /* BFDragCardContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFDragCardContainer.h; sourceTree = "<group>"; };
+		F0CF6437261EFA6F00106697 /* BFDragCardContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDragCardContainer.m; sourceTree = "<group>"; };
+		F0CF6439261F044200106697 /* BFHomeCardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFHomeCardView.h; sourceTree = "<group>"; };
+		F0CF643A261F044200106697 /* BFHomeCardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFHomeCardView.m; sourceTree = "<group>"; };
 		F0DC812F261462DF0042D4BD /* BFUploadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUploadManager.h; sourceTree = "<group>"; };
 		F0DC8130261462DF0042D4BD /* BFUploadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUploadManager.m; sourceTree = "<group>"; };
 		F0DC816E2616A7280042D4BD /* BFVideoMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFVideoMessageCell.h; sourceTree = "<group>"; };
@@ -723,6 +741,7 @@
 		F056712525EF916800782F9C /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				F0CF642A261ED5E200106697 /* Home */,
 				F0020AFA261426090080C005 /* Lib */,
 				F0777BCF26130967006CA660 /* Profile */,
 				F0777BB82612FAE8006CA660 /* Login */,
@@ -744,6 +763,8 @@
 				F056713D25F077B700782F9C /* UIColor+BFDarkMode.m */,
 				F056714525F07A0C00782F9C /* UIImage+BFDarkMode.h */,
 				F056714625F07A0C00782F9C /* UIImage+BFDarkMode.m */,
+				F0CF6427261ECE8400106697 /* UIButton+positon.h */,
+				F0CF6428261ECE8400106697 /* UIButton+positon.m */,
 				F056715325F07BE500782F9C /* UIImage+BFKit.h */,
 				F056715425F07BE500782F9C /* UIImage+BFKit.m */,
 				F05671BB25F1D8F200782F9C /* UIView+Frame.h */,
@@ -1007,6 +1028,39 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		F0CF642A261ED5E200106697 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				F0CF642C261ED5F000106697 /* View */,
+				F0CF642B261ED5E900106697 /* Controller */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		F0CF642B261ED5E900106697 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F0CF642D261ED60A00106697 /* BFHomeController.h */,
+				F0CF642E261ED60A00106697 /* BFHomeController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F0CF642C261ED5F000106697 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F0CF6430261EF80E00106697 /* BFDragConfig.h */,
+				F0CF6431261EF80E00106697 /* BFDragConfig.m */,
+				F0CF6433261EF95100106697 /* BFDragCardView.h */,
+				F0CF6434261EF95100106697 /* BFDragCardView.m */,
+				F0CF6436261EFA6F00106697 /* BFDragCardContainer.h */,
+				F0CF6437261EFA6F00106697 /* BFDragCardContainer.m */,
+				F0CF6439261F044200106697 /* BFHomeCardView.h */,
+				F0CF643A261F044200106697 /* BFHomeCardView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		F0DC81802616CA280042D4BD /* Video */ = {
 			isa = PBXGroup;
 			children = (
@@ -1206,6 +1260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F056714725F07A0C00782F9C /* UIImage+BFDarkMode.m in Sources */,
+				F0CF6438261EFA6F00106697 /* BFDragCardContainer.m in Sources */,
 				F09316DC260B81B80099E39E /* BFDiscoveryController.m in Sources */,
 				F0020B5D2614263E0080C005 /* YBIBUtilities.m in Sources */,
 				F05671BD25F1D8F200782F9C /* UIView+Frame.m in Sources */,
@@ -1245,6 +1300,7 @@
 				F0020B5B2614263E0080C005 /* YBIBSentinel.m in Sources */,
 				F05836652602F6810008C4FD /* BFConversationListCell.m in Sources */,
 				F0020B622614263E0080C005 /* YBIBScreenRotationHandler.m in Sources */,
+				F0CF643B261F044200106697 /* BFHomeCardView.m in Sources */,
 				F0020B582614263E0080C005 /* YBIBLoadingView.m in Sources */,
 				F011D62825E768530061F9D6 /* MSIMManager.m in Sources */,
 				F09316BD2609DB8C0099E39E /* BFMenuView.m in Sources */,
@@ -1265,6 +1321,7 @@
 				F0878A802605EB0200268122 /* BFSystemMessageCellData.m in Sources */,
 				F052ECA925EE1DB700F35D74 /* NSString+AES.m in Sources */,
 				F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */,
+				F0CF642F261ED60A00106697 /* BFHomeController.m in Sources */,
 				F0878A862608428500268122 /* BFSystemMessageCell.m in Sources */,
 				F02F4353261DA97C00374870 /* ChatProtobuf.pbobjc.m in Sources */,
 				F05671E125F21C1100782F9C /* BFImageMessageCell.m in Sources */,
@@ -1278,9 +1335,11 @@
 				F011D62225E767B10061F9D6 /* IMSDKConfig.m in Sources */,
 				F0020B5F2614263E0080C005 /* YBIBTopView.m in Sources */,
 				F0878A952608DD8000268122 /* BFInputMoreCell.m in Sources */,
+				F0CF6429261ECE8400106697 /* UIButton+positon.m in Sources */,
 				F058369A26033D0E0008C4FD /* MSDBFileRecordStore.m in Sources */,
 				F0777BAE2611D418006CA660 /* BFFaceUtil.m in Sources */,
 				F036363525FEFB6E00E69D14 /* MSProfileProvider.m in Sources */,
+				F0CF6435261EF95100106697 /* BFDragCardView.m in Sources */,
 				F052EC9425EDDE2C00F35D74 /* MSDBMessageStore.m in Sources */,
 				F0777BBD2612FB56006CA660 /* BFLoginController.m in Sources */,
 				F0020B522614263E0080C005 /* YBIBInteractionProfile.m in Sources */,
@@ -1308,6 +1367,7 @@
 				F058367A2602FD950008C4FD /* BFConversationCellData.m in Sources */,
 				F036362825FEF7DD00E69D14 /* MSDBProfileStore.m in Sources */,
 				F05836352602E38E0008C4FD /* BFNavigationController.m in Sources */,
+				F0CF6432261EF80F00106697 /* BFDragConfig.m in Sources */,
 				F056715525F07BE500782F9C /* UIImage+BFKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,17 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BFUserListCell : UITableViewCell
+@interface BFUserListCell : UICollectionViewCell
 
-/**
- *  头像视图
- */
 @property (nonatomic, strong) UIImageView *avatarView;
 
-/**
- *  昵称标签
- */
 @property (nonatomic, strong) UILabel *nameLabel;
+
+@property(nonatomic,strong) UIImageView *liveIcon;
 
 - (void)configWithInfo:(MSProfileInfo *)info;
 

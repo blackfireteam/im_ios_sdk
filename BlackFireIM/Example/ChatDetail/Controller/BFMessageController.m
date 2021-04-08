@@ -213,12 +213,13 @@
         
         BFMessageCellData *data;
         if (elem.type == BFIM_MSG_TYPE_REVOKE) {// 撤回的消息
-            BFSystemMessageCellData *revoke = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
+            BFSystemMessageCellData *revoke = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             if (elem.isSelf) {
                 revoke.content = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
             }else {
                 revoke.content = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
             }
+            revoke.elem = elem;
             data = revoke;
         }else if (elem.type == BFIM_MSG_TYPE_TEXT) {
             MSIMTextElem *textElem = (MSIMTextElem *)elem;
@@ -238,8 +239,9 @@
             videoMsg.elem = elem;
             data = videoMsg;
         }else {
-            BFSystemMessageCellData *unknowData = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
+            BFSystemMessageCellData *unknowData = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);
+            unknowData.elem = elem;
             data = unknowData;
         }
         if (dateMsg) {
@@ -254,7 +256,7 @@
 - (BFSystemMessageCellData *)transSystemMsgFromDate:(NSInteger)date
 {
     if(self.msgForDate == nil || labs(date - self.msgForDate.msg_sign)/1000/1000 > MAX_MESSAGE_SEP_DLAY){
-        BFSystemMessageCellData *system = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionOutgoing];
+        BFSystemMessageCellData *system = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
         system.content = [[NSDate dateWithTimeIntervalSince1970:date/1000/1000] ms_messageString];
         return system;
     }
@@ -547,7 +549,7 @@
     }
     [self.tableView beginUpdates];
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    BFSystemMessageCellData *data = [[BFSystemMessageCellData alloc]initWithDirection:(msg.elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+    BFSystemMessageCellData *data = [[BFSystemMessageCellData alloc]initWithDirection:MsgDirectionIncoming];
     if (msg.elem.isSelf) {
         data.content = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
     }else {

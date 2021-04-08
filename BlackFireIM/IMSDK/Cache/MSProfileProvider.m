@@ -56,6 +56,7 @@ static MSProfileProvider *instance;
 - (void)providerProfile:(NSInteger)user_id
                complete:(void(^)(MSProfileInfo *profile))completed
 {
+    if (user_id <= 0) return;
     NSString *uid = [NSString stringWithFormat:@"%zd",user_id];
     MSProfileInfo *p = [self.mainCache objectForKey:uid];
     if (p) {

@@ -41,6 +41,20 @@
    return size;
 }
 
+- (CGFloat)heightOfWidth:(CGFloat)width
+{
+    CGFloat height = 0;
+    if (self.showName) {
+        height += 25;
+    }
+    CGSize containerSize = [self contentSize];
+    height += containerSize.height;
+    if (self.direction == MsgDirectionIncoming) {
+        height += 15;
+    }
+    height += 5 + 5;
+    return height;
+}
 
 - (NSString *)reuseId
 {

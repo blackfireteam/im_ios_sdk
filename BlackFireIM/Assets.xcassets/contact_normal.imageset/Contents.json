@@ -5,11 +5,12 @@
       "scale" : "1x"
     },
     {
+      "filename" : "icon_contacts_1@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "contact_normal.png",
+      "filename" : "icon_contacts_1@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

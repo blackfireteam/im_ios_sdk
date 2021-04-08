@@ -13,23 +13,31 @@
 
 @implementation BFUserListCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if(self) {
+    if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor d_colorWithColorLight:TCell_Nomal dark:TCell_Nomal_Dark];
+        self.layer.cornerRadius = 6;
+        self.layer.masksToBounds = YES;
+        self.layer.borderWidth = 1;
+        self.layer.borderColor = TCell_separatorColor.CGColor;
+        
         //head
         _avatarView = [[UIImageView alloc] init];
         _avatarView.contentMode = UIViewContentModeScaleAspectFill;
+        _avatarView.clipsToBounds = YES;
         [self.contentView addSubview:_avatarView];
 
         //nameLabel
         _nameLabel = [[UILabel alloc] init];
-        _nameLabel.font = [UIFont systemFontOfSize:16];
-        _nameLabel.textColor = [UIColor d_systemGrayColor];
+        _nameLabel.font = [UIFont boldSystemFontOfSize:16];
+        _nameLabel.textColor = [UIColor darkTextColor];
+        _nameLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_nameLabel];
         
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        _liveIcon = [[UIImageView alloc]init];
+        _liveIcon.image = [UIImage imageNamed:@"user_living"];
+        [self.contentView addSubview:_liveIcon];
     }
     return self;
 }
@@ -44,8 +52,9 @@
 {
     [super layoutSubviews];
     
-    self.avatarView.frame = CGRectMake(15, 12, self.height - 2*12, self.height - 2*12);
-    self.nameLabel.frame = CGRectMake(self.avatarView.maxX+10, self.avatarView.centerY-10, 200, 20);
+    self.avatarView.frame = CGRectMake(0, 0, self.width, self.height-40);
+    self.nameLabel.frame = CGRectMake(0, self.height-40, self.width, 40);
+    self.liveIcon.frame = CGRectMake(3, 3, 14, 14);
 }
 
 @end

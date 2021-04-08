@@ -102,14 +102,19 @@
         [_indicator stopAnimating];
         self.retryView.image = nil;
     }
-    if (self.messageData.direction == MsgDirectionOutgoing && self.messageData.elem.sendStatus == BFIM_MSG_STATUS_SEND_SUCC) {
-        
+    if (self.messageData.direction == MsgDirectionOutgoing) {
         self.readReceiptLabel.hidden = NO;
-        self.readReceiptLabel.text = self.messageData.elem.readStatus == BFIM_MSG_STATUS_UNREAD ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
-        [self.readReceiptLabel sizeToFit];
+        if (self.messageData.elem.sendStatus == BFIM_MSG_STATUS_SEND_SUCC) {
+            self.readReceiptLabel.text = self.messageData.elem.readStatus == BFIM_MSG_STATUS_UNREAD ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
+        }else if (self.messageData.elem.sendStatus == BFIM_MSG_STATUS_SENDING) {
+            self.readReceiptLabel.text = TUILocalizableString(Sending);
+        }else {
+            self.readReceiptLabel.text = TUILocalizableString(NotDeliveried);
+        }
     }else {
         self.readReceiptLabel.hidden = YES;
     }
+    [self.readReceiptLabel sizeToFit];
 }
 
 - (void)layoutSubviews
