@@ -56,7 +56,7 @@
 {
     MSProfileInfo *info = note.object;
     [[MSProfileProvider provider] updateProfile:info];
-    [self.dataArray insertObject:info atIndex:0];
+    [self.dataArray addObject:info];
     [self.myCollectionView reloadData];
 }
 

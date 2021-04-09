@@ -37,6 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///服务器返回的历史数据处理
 - (NSArray<MSIMElem *> *)chatHistoryHandler:(NSArray<ChatR *> *)responses;
 
+///服务器返回的删除会话的处理
+- (void)deleteChatHandler:(DelChat *)result; 
+
 - (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem increaseUnreadCount:(BOOL)increase;
 
 @end

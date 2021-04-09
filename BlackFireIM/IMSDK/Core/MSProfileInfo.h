@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class Profile;
+@class Spark;
 @interface MSProfileInfo : NSObject
 
 @property(nonatomic,copy) NSString *user_id;
@@ -24,7 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) BOOL verified;
 
+@property(nonatomic,copy) NSString *pic;
+
+
 + (MSProfileInfo *)createWithProto:(Profile *)profile;
+
++ (MSProfileInfo *)createWithSpark:(Spark *)spark;
 
 @end
 

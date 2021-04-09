@@ -121,20 +121,21 @@
 {
     [super layoutSubviews];
     
+    CGSize nameSize = [self.nameLabel sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
+    
     if (self.messageData.direction == MsgDirectionIncoming) {
         self.avatarView.x = 8;
         self.avatarView.y = 5;
         self.avatarView.width = 40;
         self.avatarView.height = 40;
         
-        self.nameLabel.x = self.avatarView.maxX+5;
-        self.nameLabel.y = self.avatarView.y;
+        
         if (self.messageData.showName) {
-            self.nameLabel.size = CGSizeMake(MAX(1, _nameLabel.width), MAX(20, _nameLabel.height));
+            self.nameLabel.frame = CGRectMake(self.avatarView.maxX+5, self.avatarView.y, nameSize.width, 20);
             self.nameLabel.hidden = NO;
         } else {
             self.nameLabel.hidden = YES;
-            self.nameLabel.height = 0;
+            self.nameLabel.frame = CGRectMake(self.avatarView.maxX+5, self.avatarView.y, nameSize.width, 0);
         }
         
         CGSize csize = [self.messageData contentSize];
@@ -153,14 +154,13 @@
         self.avatarView.y = 5;
         self.avatarView.maxX = self.contentView.width-8;
         
-        self.nameLabel.maxX = self.avatarView.x-5;
-        self.nameLabel.y = self.avatarView.y;
         if (self.messageData.showName) {
-            self.nameLabel.size = CGSizeMake(MAX(1, _nameLabel.width), MAX(20, _nameLabel.height));
+            self.nameLabel.frame = CGRectMake(self.avatarView.x-5-nameSize.width, self.avatarView.y, nameSize.width, 20);
             self.nameLabel.hidden = NO;
         } else {
             self.nameLabel.hidden = YES;
             self.nameLabel.height = 0;
+            self.nameLabel.frame = CGRectMake(self.avatarView.x-5-nameSize.width, self.avatarView.y, nameSize.width, 0);
         }
         
         CGSize csize = [self.messageData contentSize];
@@ -173,8 +173,8 @@
         self.indicator.x = self.container.x - 8 - self.indicator.width;
         self.retryView.frame = self.indicator.frame;
         
-        self.readReceiptLabel.centerY = self.container.centerY;
-        self.readReceiptLabel.x = self.container.x - 5 - self.readReceiptLabel.width;
+        CGSize receiptSize = [self.readReceiptLabel sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
+        self.readReceiptLabel.frame = CGRectMake(self.container.maxX-receiptSize.width, self.container.maxY+3, receiptSize.width, receiptSize.height);
     }
 }
 

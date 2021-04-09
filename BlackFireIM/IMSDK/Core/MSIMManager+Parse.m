@@ -297,4 +297,19 @@
     });
 }
 
+///服务器返回的删除会话的处理
+- (void)deleteChatHandler:(DelChat *)result
+{
+    [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"" response:result];
+    NSString *partner_id = [NSString stringWithFormat:@"%lld",result.toUid];
+    [[MSConversationProvider provider]deleteConversation: partner_id];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.convListener && [self.convListener respondsToSelector:@selector(conversationDidDelete:)]) {
+            [self.convListener conversationDidDelete:partner_id];
+        }
+    });
+    //更新会话更新时间
+    [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
+}
+
 @end

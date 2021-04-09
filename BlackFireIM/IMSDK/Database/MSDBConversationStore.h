@@ -34,9 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
                             count:(NSInteger)count
                          complete:(void(^)(NSArray<MSIMConversation *> *data,BOOL hasMore))complete;
 
-///删除某一条会话，不清空聊天记录
-- (BOOL)deleteConversation:(NSString *)conv_id;
-
+///更新会话的状态。status: 0 不显示  1 显示
+- (BOOL)updateConvesationStatus:(NSInteger)status conv_id:(NSString *)conv_id;
 @end
 
 NS_ASSUME_NONNULL_END

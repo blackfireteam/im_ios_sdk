@@ -368,9 +368,7 @@ static MSIMManager *_manager;
             NSError *error;
             DelChat *result = [[DelChat alloc]initWithData:package error:&error];
             if(error == nil && result != nil) {
-                [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"" response:result];
-                //更新会话更新时间
-                [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
+                [self deleteChatHandler:result];
             }else {
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
@@ -412,6 +410,18 @@ static MSIMManager *_manager;
                 NSLog(@"消息protobuf解析失败-- %@",error);
             }
             NSLog(@"[收到]有用户下线了***%@",offline);
+        }
+            break;
+        case XMChatProtoTypeGetSparkResponse: //获取首页sparks返回   for demo
+        {
+            NSError *error;
+            Sparks *datas = [[Sparks alloc]initWithData:package error:&error];
+            if(error == nil && datas != nil) {
+                [self sendMessageResponse:datas.sign resultCode:ERR_SUCC resultMsg:@"" response:datas];
+            }else {
+                NSLog(@"消息protobuf解析失败-- %@",error);
+            }
+            NSLog(@"[收到]首页Sparks数据***%@",datas);
         }
             break;
         default:

@@ -23,4 +23,14 @@
     return info;
 }
 
++ (MSProfileInfo *)createWithSpark:(Spark *)spark
+{
+    MSProfileInfo *info = [[MSProfileInfo alloc]init];
+    info.user_id = [NSString stringWithFormat:@"%lld",spark.uid];
+    info.nick_name = spark.nickName;
+    info.avatar = spark.avatar;
+    info.pic = spark.pic;
+    return info;
+}
+
 @end

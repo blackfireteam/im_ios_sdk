@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateConversations:(NSArray<MSIMConversation *> *)convs;
 
-- (void)deleteConversation:(NSString *)conv_id;
+- (void)deleteConversation:(NSString *)partner_id;
 
 - (void)clean;
 

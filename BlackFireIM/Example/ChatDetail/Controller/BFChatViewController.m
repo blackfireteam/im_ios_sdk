@@ -83,6 +83,7 @@
         
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
             NSLog(@"code = %zd,desc = %@",code,desc);
+            [SVProgressHUD showInfoWithStatus:desc];
     }];
 }
 

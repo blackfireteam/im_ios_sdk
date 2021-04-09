@@ -118,6 +118,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUpdate object:conversationList];
 }
 
+///会话被删除时
+- (void)conversationDidDelete:(NSString *)partner_id
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationDelete object:partner_id];
+}
 
 #pragma mark - MSIMMessageListener
 

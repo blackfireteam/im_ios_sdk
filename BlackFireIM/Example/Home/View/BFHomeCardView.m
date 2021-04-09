@@ -6,6 +6,8 @@
 //
 
 #import "BFHomeCardView.h"
+#import <SDWebImage.h>
+
 
 @interface BFHomeCardView()
 
@@ -37,6 +39,7 @@
     self.imageView = [[UIImageView alloc]init];
     self.imageView.layer.cornerRadius = 4.0f;
     self.imageView.layer.masksToBounds = YES;
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [self addSubview:self.imageView];
     
     self.title = [[UILabel alloc]init];
@@ -58,19 +61,18 @@
     
 }
 
-- (void)YFLDragCardViewLayoutSubviews
+- (void)dragCardViewLayoutSubviews
 {
-    self.imageView.frame = CGRectMake(5, 5, self.frame.size.width-10, self.frame.size.height-50);
-    self.title.frame = CGRectMake(0,self.imageView.frame.size.height+5, self.frame.size.width, 30);
+    self.imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height-30);
+    self.title.frame = CGRectMake(0,self.imageView.frame.size.height, self.frame.size.width, 30);
     self.like.frame = CGRectMake(16, 16, 75, 75);
     self.dislike.frame = CGRectMake(self.frame.size.width-21-75, 16, 75, 75);
 }
 
-- (void)setImage:(NSString*)imageName title:(NSString*)title
+- (void)configItem:(MSProfileInfo *)info
 {
-    self.imageView.image = [UIImage imageNamed:imageName];
-    self.title.text = title;
-    
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:info.pic]];
+    self.title.text = info.nick_name;
 }
 
 - (void)setAnimationwithDriection:(ContainerDragDirection)direction

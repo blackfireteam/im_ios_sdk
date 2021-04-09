@@ -282,7 +282,7 @@ static NSString *ext_data = @"ext_data";
 - (MSIMElem *)latestMessageIDBeforeMsgSign:(NSInteger)msg_sign partnerID:(NSString *)partnerID
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign <= '%zd' and msg_id != 0 order by msg_sign desc limit 1",tableName,msg_sign];
+    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_id != 0 order by msg_sign desc limit 1",tableName,msg_sign];
     __block MSIMElem *elem = nil;
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
@@ -311,7 +311,7 @@ static NSString *ext_data = @"ext_data";
 - (NSInteger)latestMsgIDLessThan:(NSInteger)msg_id partner_id:(NSString *)partner_id
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partner_id];
-    NSString *sqlStr = [NSString stringWithFormat:@"select msg_id from %@ where msg_id <= '%zd' and f_id = '%@' and msg_id != 0 order by msg_sign desc limit 1",tableName,msg_id,partner_id];
+    NSString *sqlStr = [NSString stringWithFormat:@"select msg_id from %@ where msg_id < '%zd' and f_id = '%@' and msg_id != 0 order by msg_sign desc limit 1",tableName,msg_id,partner_id];
     __block NSInteger minMsgID = 0;
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
@@ -334,48 +334,95 @@ static NSString *ext_data = @"ext_data";
     NSInteger msg_end = conv.msg_end;
     if (last_msg_sign == 0) {//第一页
         MSIMElem *lastElem = [self lastMessageID:partnerID];
+        NSInteger lastMsgSign = 0;
+        if (lastElem == nil) {
+            lastMsgSign = [self lastMessage:partnerID].msg_sign;
+        }
         if (msg_end <= lastElem.msg_id) {//直接本地取
-            NSArray<MSIMElem *> *arr = [self messageFromLocalByPartnerID:partnerID last_msg_id:last_msg_sign block_id:lastElem.block_id];
-            NSInteger minMsgID = [self minMsgIDInMessages:arr];
-            complete(arr,minMsgID > 1 ? YES : NO);
-        }else {
-            [self fetchHistoryMessageFromEnd:0 toStart:lastElem.msg_id partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
-                if (lastElem.msg_id == 0 || msg_end - lastElem.msg_id > count) {
-                    complete(msgs,YES);
+            WS(weakSelf)
+            [self messageFromLocalByPartnerID:partnerID last_msg_sign:last_msg_sign count:count block_id:lastElem.block_id result:^(NSArray<MSIMElem *> *arr, BOOL hasMore) {
+                NSInteger minMsgID = [weakSelf minMsgIDInMessages:arr];
+                if (hasMore) {
+                    complete(arr,YES);
                 }else {
-                    NSArray *arr = [self messageFromLocalByPartnerID:partnerID last_msg_id:last_msg_sign block_id:lastElem.block_id];
-                    NSInteger minMsgID = [self minMsgIDInMessages:arr];
-                    complete(arr,minMsgID > 1 ? YES : NO);
+                    if (minMsgID <= 1) {
+                        complete(arr,NO);
+                    }else {
+                        if (arr.count >= count) {
+                            complete(arr,YES);
+                        }else {
+                            NSInteger preMsgID = [weakSelf latestMsgIDLessThan:minMsgID partner_id:partnerID];
+                            [weakSelf requestHistoryMessageFromEnd:minMsgID toStart:preMsgID partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
+                                NSMutableArray *tempArr = [NSMutableArray array];
+                                [tempArr addObjectsFromArray:arr];
+                                [tempArr addObjectsFromArray:msgs];
+                                if (tempArr.count < count && msgs.lastObject.msg_id <= 1 && lastMsgSign == 0) {
+                                    complete(tempArr,NO);
+                                }else {
+                                    complete(tempArr,YES);
+                                }
+                            }];
+                        }
+                    }
+                }
+            }];
+        }else {
+            WS(weakSelf)
+            [self requestHistoryMessageFromEnd:0 toStart:lastElem.msg_id partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
+                NSInteger minMsgID = [weakSelf minMsgIDInMessages:msgs];
+                if (msgs.count >= count) {
+                    if (minMsgID <= 1 && lastMsgSign == 0) {
+                        complete(msgs,NO);
+                    }else {
+                        complete(msgs,YES);
+                    }
+                }else {
+                    [weakSelf messageFromLocalByPartnerID:partnerID last_msg_sign:msgs.lastObject.msg_sign count:count-msgs.count block_id:MAX(lastElem.block_id, 1) result:^(NSArray<MSIMElem *> *localElems, BOOL hasMore) {
+                        NSMutableArray *tempArr = [NSMutableArray array];
+                        [tempArr addObjectsFromArray:msgs];
+                        [tempArr addObjectsFromArray:localElems];
+                        if (hasMore) {
+                            complete(tempArr,YES);
+                        }else {
+                            if ([weakSelf minMsgIDInMessages:localElems] <= 1) {
+                                complete(tempArr,NO);
+                            }else {
+                                complete(tempArr,YES);
+                            }
+                        }
+                    }];
                 }
             }];
         }
     }else {
+        WS(weakSelf)
         MSIMElem *preElem = [self searchMessage:partnerID msg_sign:last_msg_sign];
-        NSArray<MSIMElem *> *arr = [self messageFromLocalByPartnerID:partnerID last_msg_id:last_msg_sign block_id:preElem.block_id];
-        if (arr.count > count) {
-            complete(arr,YES);
-        }else {
-            if (arr.count == 0) {
-                MSIMElem *greaterMsdID = [self greaterMessageIDBeforeMsgSign:last_msg_sign partnerID:partnerID];
-                NSInteger startID = count >= greaterMsdID.msg_id ? 0 : (greaterMsdID.msg_id-count);
-                [self fetchHistoryMessageFromEnd:greaterMsdID.msg_id toStart:startID partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
-                    complete(msgs,(greaterMsdID.msg_id > count ? YES : NO));
-                }];
+        [self messageFromLocalByPartnerID:partnerID last_msg_sign:last_msg_sign count:count block_id:preElem.block_id result:^(NSArray<MSIMElem *> *arr, BOOL hasMore) {
+            if (hasMore) {
+                complete(arr,YES);
             }else {
-                NSInteger minMsgID = [self minMsgIDInMessages:arr];
-                if (minMsgID <= 1) {
-                    complete(arr,NO);
-                }else {
-                    MSIMElem *lastMsdID = [self latestMessageIDBeforeMsgSign:arr.lastObject.msg_sign partnerID:partnerID];
-                    [self fetchHistoryMessageFromEnd:[self minMsgIDInMessages:arr] toStart:lastMsdID.msg_id partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
-                        NSMutableArray *tempArr = [NSMutableArray array];
-                        [tempArr addObjectsFromArray:arr];
-                        [tempArr addObjectsFromArray:msgs];
-                        complete(tempArr,YES);
+                if (arr.count == 0) {
+                    MSIMElem *greaterMsdID = [weakSelf greaterMessageIDBeforeMsgSign:last_msg_sign partnerID:partnerID];
+                    NSInteger startID = count >= greaterMsdID.msg_id ? 0 : (greaterMsdID.msg_id-count);
+                    [weakSelf requestHistoryMessageFromEnd:greaterMsdID.msg_id toStart:startID partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
+                        complete(msgs,(greaterMsdID.msg_id > count ? YES : NO));
                     }];
+                }else {
+                    NSInteger minMsgID = [weakSelf minMsgIDInMessages:arr];
+                    if (minMsgID <= 1) {
+                        complete(arr,NO);
+                    }else {
+                        MSIMElem *lastMsdID = [weakSelf latestMessageIDBeforeMsgSign:arr.lastObject.msg_sign partnerID:partnerID];
+                        [weakSelf requestHistoryMessageFromEnd:[weakSelf minMsgIDInMessages:arr] toStart:lastMsdID.msg_id partner_Id:partnerID result:^(NSArray<MSIMElem *> *msgs) {
+                            NSMutableArray *tempArr = [NSMutableArray array];
+                            [tempArr addObjectsFromArray:arr];
+                            [tempArr addObjectsFromArray:msgs];
+                            complete(tempArr,YES);
+                        }];
+                    }
                 }
             }
-        }
+        }];
     }
 }
 
@@ -392,7 +439,7 @@ static NSString *ext_data = @"ext_data";
     return msgID;
 }
 
-- (void)fetchHistoryMessageFromEnd:(NSInteger)msgEnd toStart:(NSInteger)msgStart partner_Id:(NSString *)partner_id result:(void(^)(NSArray<MSIMElem *> *))result
+- (void)requestHistoryMessageFromEnd:(NSInteger)msgEnd toStart:(NSInteger)msgStart partner_Id:(NSString *)partner_id result:(void(^)(NSArray<MSIMElem *> *elems))result
 {
     GetHistory *history = [[GetHistory alloc]init];
     history.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
@@ -419,16 +466,18 @@ static NSString *ext_data = @"ext_data";
 }
 
 
-- (NSArray<MSIMElem *> *)messageFromLocalByPartnerID:(NSString *)partnerID
-                                         last_msg_id:(NSInteger)last_msg_id
+- (void)messageFromLocalByPartnerID:(NSString *)partnerID
+                                       last_msg_sign:(NSInteger)last_msg_sign
+                                               count:(NSInteger)count
                                             block_id:(NSInteger)block_id
+                                              result:(void(^)(NSArray<MSIMElem *> *elems,BOOL hasMore))result
 {
     NSString *sqlStr;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    if (last_msg_id == 0) {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' and block_id = 1 order by msg_sign desc limit 21",tableName,BFIM_MSG_TYPE_NULL];
+    if (last_msg_sign == 0) {
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' and block_id = 1 order by msg_sign desc limit '%zd'",tableName,BFIM_MSG_TYPE_NULL,count+1];
     }else {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit 21",tableName,last_msg_id,BFIM_MSG_TYPE_NULL,block_id];
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,last_msg_sign,BFIM_MSG_TYPE_NULL,block_id,count+1];
     }
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
@@ -437,7 +486,12 @@ static NSString *ext_data = @"ext_data";
         }
         [rsSet close];
     }];
-    return data;
+    if (data.count > count) {
+        [data removeLastObject];
+        result(data,YES);
+    }else {
+        result(data,NO);
+    }
 }
 
 - (MSIMElem *)bf_componentElem:(FMResultSet *)rsSet

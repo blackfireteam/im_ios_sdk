@@ -30,6 +30,9 @@
     }
     CGSize containerSize = [self contentSize];
     height += containerSize.height;
+    if (self.direction == MsgDirectionOutgoing) {
+        height += 20;
+    }
     height += 5;
     return height;
 }

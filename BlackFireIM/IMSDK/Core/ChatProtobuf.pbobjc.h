@@ -31,6 +31,7 @@ CF_EXTERN_C_BEGIN
 @class ChatR;
 @class GetProfile;
 @class Profile;
+@class Spark;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -725,11 +726,12 @@ GPB_FINAL @interface UsrOffline : GPBMessage
 
 typedef GPB_ENUM(Signup_FieldNumber) {
   Signup_FieldNumber_Sign = 1,
-  Signup_FieldNumber_NickName = 2,
-  Signup_FieldNumber_Avatar = 3,
-  Signup_FieldNumber_Pic = 4,
-  Signup_FieldNumber_Gold = 5,
-  Signup_FieldNumber_Verified = 6,
+  Signup_FieldNumber_Phone = 2,
+  Signup_FieldNumber_NickName = 3,
+  Signup_FieldNumber_Avatar = 4,
+  Signup_FieldNumber_Pic = 5,
+  Signup_FieldNumber_Gold = 6,
+  Signup_FieldNumber_Verified = 7,
 };
 
 /**
@@ -738,6 +740,8 @@ typedef GPB_ENUM(Signup_FieldNumber) {
 GPB_FINAL @interface Signup : GPBMessage
 
 @property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite) int64_t phone;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *nickName;
 
@@ -751,6 +755,66 @@ GPB_FINAL @interface Signup : GPBMessage
 
 /** 是否是认证用户 */
 @property(nonatomic, readwrite) BOOL verified;
+
+@end
+
+#pragma mark - FetchSpark
+
+typedef GPB_ENUM(FetchSpark_FieldNumber) {
+  FetchSpark_FieldNumber_Sign = 1,
+};
+
+/**
+ * 54 for demo: 获取spark
+ **/
+GPB_FINAL @interface FetchSpark : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+@end
+
+#pragma mark - Spark
+
+typedef GPB_ENUM(Spark_FieldNumber) {
+  Spark_FieldNumber_Uid = 1,
+  Spark_FieldNumber_NickName = 2,
+  Spark_FieldNumber_Avatar = 3,
+  Spark_FieldNumber_Pic = 4,
+};
+
+/**
+ * 55 for demo: spark
+ **/
+GPB_FINAL @interface Spark : GPBMessage
+
+@property(nonatomic, readwrite) int64_t uid;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *nickName;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *avatar;
+
+/** 用户spark界面的封面图 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *pic;
+
+@end
+
+#pragma mark - Sparks
+
+typedef GPB_ENUM(Sparks_FieldNumber) {
+  Sparks_FieldNumber_Sign = 1,
+  Sparks_FieldNumber_SparksArray = 2,
+};
+
+/**
+ * 56 for demo: sparks
+ **/
+GPB_FINAL @interface Sparks : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<Spark*> *sparksArray;
+/** The number of items in @c sparksArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger sparksArray_Count;
 
 @end
 

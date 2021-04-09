@@ -40,6 +40,9 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
     
     XMChatProtoTypeProfileOnline = 50,//通知客户端用户上线事件
     XMChatProtoTypeProfileOffline = 52,//通知客户端用户下线事件
+    XMChatProtoTypeSignup = 53,//注册新用户  for demo
+    XMChatProtoTypeGetSpark = 54,//获取spark  for demo
+    XMChatProtoTypeGetSparkResponse = 56,//获取spark结果  for demo
     
 };
 

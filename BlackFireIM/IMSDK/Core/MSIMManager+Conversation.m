@@ -73,7 +73,7 @@
 }
 
 ///删除某一条会话
-///删除会话不会只会删除会话记录，不会删除会话对应的聊天内容
+///只更改会话的状态，不会真正的删除会话，也不会删除会话对应的聊天内容
 - (void)deleteConversation:(MSIMConversation *)conv
                       succ:(MSIMSucc)succed
                     failed:(MSIMFail)failed
@@ -88,7 +88,6 @@
     NSLog(@"[发送消息]删除会话：%@",delRequest);
     [self send:[delRequest data] protoType:XMChatProtoTypeDeleteChat needToEncry:NO sign:delRequest.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
-            [[MSConversationProvider provider]deleteConversation:conv.conversation_id];
             succed();
         }else {
             failed(ERR_SDK_DB_DEL_CONVERSATION_FAIL,@"删除会话失败");

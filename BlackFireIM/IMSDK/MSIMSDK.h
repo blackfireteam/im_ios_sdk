@@ -20,6 +20,6 @@
 #import "MSIMTools.h"
 #import "MSIMHeader.h"
 #import "MSIMMessageReceipt.h"
-
+#import "MSIMManager+Demo.h"
 
 #endif /* MSIMSDK_h */

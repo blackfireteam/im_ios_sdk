@@ -69,6 +69,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///新增会话或会话发生变化
 - (void)onUpdateConversations:(NSArray<MSIMConversation*> *) conversationList;
 
+///收到会话被删除时通知
+- (void)conversationDidDelete:(NSString *)partner_id;
+
 @end
 
 @protocol MSIMMessageListener <NSObject>

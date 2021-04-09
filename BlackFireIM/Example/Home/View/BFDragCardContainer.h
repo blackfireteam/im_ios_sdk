@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 
 /** 数据源个数 **/
-- (NSInteger)numberOfRowsInYFLDragCardContainer:(BFDragCardContainer *)container;
+- (NSInteger)numberOfRowsInDragCardContainer:(BFDragCardContainer *)container;
 
 /** 显示数据源 **/
 - (BFDragCardView *)container:(BFDragCardContainer *)container viewForRowsAtIndex:(NSInteger)index;

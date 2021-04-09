@@ -6,6 +6,7 @@
 //
 
 #import "BFDragCardView.h"
+#import "MSProfileInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -13,7 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setAnimationwithDriection:(ContainerDragDirection)direction;
 
-- (void)setImage:(NSString*)imageName title:(NSString*)title;
+- (void)configItem:(MSProfileInfo *)info;
+
 
 @end
 

@@ -89,14 +89,18 @@
     self.titleLabel.frame = CGRectMake(self.headImageView.maxX+14, 31, titleSize.width, 22);
     CGSize timeSize = [self.timeLabel sizeThatFits:CGSizeMake(200, 20)];
     self.timeLabel.frame = CGRectMake(self.contentView.width-15-timeSize.width, self.titleLabel.centerY-timeSize.height*0.5, timeSize.width, timeSize.height);
-    self.subTitleLabel.frame = CGRectMake(self.titleLabel.x, self.titleLabel.maxY+3, 250, 16);
+    self.subTitleLabel.frame = CGRectMake(self.titleLabel.x, self.titleLabel.maxY+5, 250, 16);
     self.unReadView.maxX = self.width-15;
     self.unReadView.y = self.subTitleLabel.y;
     
-    self.goldIcon.frame = CGRectMake(self.titleLabel.maxX+8, self.titleLabel.centerY-10, 20, 20);
     self.matchIcon.size = CGSizeMake(18, 18);
     self.matchIcon.center = CGPointMake(self.headImageView.maxX-8, self.headImageView.maxY-8);
-    self.verifyIcon.frame = CGRectMake(self.titleLabel.maxX+8, self.titleLabel.centerY-10, 20, 20);
+    if (self.verifyIcon.isHidden) {
+        self.goldIcon.frame = CGRectMake(self.titleLabel.maxX+8, self.titleLabel.centerY-10, 20, 20);
+    }else {
+        self.verifyIcon.frame = CGRectMake(self.titleLabel.maxX+8, self.titleLabel.centerY-10, 20, 20);
+        self.goldIcon.frame = CGRectMake(self.verifyIcon.maxX+5, self.titleLabel.centerY-10, 20, 20);
+    }
 }
 
 @end

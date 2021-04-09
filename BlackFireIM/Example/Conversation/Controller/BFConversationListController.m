@@ -48,6 +48,7 @@
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onConversationDelete:) name:MSUIKitNotification_ConversationDelete object:nil];
     }
     return self;
 }
@@ -139,16 +140,6 @@
     }];
 }
 
-- (void)removeData:(BFConversationCellData *)data
-{
-    [self.dataList removeObject:data];
-    [[MSIMManager sharedInstance] deleteConversation:data.conv succ:^{
-        
-    } failed:^(NSInteger code, NSString * _Nonnull desc) {
-        
-    }];
-}
-
 - (void)onNetworkChanged:(NSNotification *)notification
 {
     BFIMNetStatus status = [notification.object intValue];
@@ -206,6 +197,27 @@
     }
 }
 
+- (void)onConversationDelete:(NSNotification *)note
+{
+    NSString *partner_id = note.object;
+    for (NSInteger i = 0; i < self.dataList.count; i++) {
+        BFConversationCellData *data = self.dataList[i];
+        if ([data.conv.partner_id isEqualToString:partner_id]) {
+            [self removeConversation:data];
+            break;
+        }
+    }
+}
+
+- (void)removeConversation:(BFConversationCellData *)data
+{
+    [self.tableView beginUpdates];
+    NSInteger index = [self.dataList indexOfObject:data];
+    [self.dataList removeObject:data];
+    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+}
+
 - (void)logout
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -248,11 +260,13 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [tableView beginUpdates];
-        BFConversationCellData *convData = self.dataList[indexPath.row];
-        [self removeData:convData];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
-        [tableView endUpdates];
+        BFConversationCellData *data = self.dataList[indexPath.row];
+        [self removeConversation:data];
+        [[MSIMManager sharedInstance] deleteConversation:data.conv succ:^{
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            
+        }];
     }
 }
 

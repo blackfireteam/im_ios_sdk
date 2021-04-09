@@ -73,7 +73,7 @@
 
 - (void)addSubViews
 {
-    NSInteger sum = [self.dataSource numberOfRowsInYFLDragCardContainer:self];
+    NSInteger sum = [self.dataSource numberOfRowsInDragCardContainer:self];
     NSInteger preLoadViewCount = (sum <= self.config.visableCount) ? sum : self.config.visableCount;
     //预防越界
     if (self.loadedIndex <  sum){
@@ -240,7 +240,7 @@
 #pragma mark - Public Methods
 - (void)reloadData
 {
-    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfRowsInYFLDragCardContainer:)] && [self.dataSource respondsToSelector:@selector(container:viewForRowsAtIndex:)]) {
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfRowsInDragCardContainer:)] && [self.dataSource respondsToSelector:@selector(container:viewForRowsAtIndex:)]) {
         [self resetInitData];
         [self addSubViews];
         [self resetLayoutSubviews];

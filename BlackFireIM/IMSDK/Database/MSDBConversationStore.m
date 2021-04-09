@@ -23,7 +23,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     if (isOK == NO) {
         return NO;
     }
-    NSString *addSQL = @"REPLACE into %@ (conv_id,chat_type,f_id,msg_end,show_msg_sign,msg_last_read,unread_count,ext) VALUES (?,?,?,?,?,?,?,?)";
+    NSString *addSQL = @"REPLACE into %@ (conv_id,chat_type,f_id,msg_end,show_msg_sign,msg_last_read,unread_count,status,ext) VALUES (?,?,?,?,?,?,?,?,?)";
     NSString *sqlStr = [NSString stringWithFormat:addSQL,CONV_TABLE_NAME];
     NSArray *addParams = @[conv.conversation_id,
                            @(conv.chat_type),
@@ -32,6 +32,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
                            @(conv.show_msg_sign),
                            @(conv.msg_last_read),
                            @(conv.unread_count),
+                           @(1),
                            conv.extString];
     BOOL isAddOK = [self excuteSQL:sqlStr withArrParameter:addParams];
     return isAddOK;
@@ -39,7 +40,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 
 - (BOOL)createTable
 {
-    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(conv_id TEXT,chat_type INTEGER,f_id TEXT,msg_end INTEGER,show_msg_sign INTEGER,msg_last_read INTEGER,unread_count INTEGER,ext TEXT,PRIMARY KEY(conv_id))",CONV_TABLE_NAME];
+    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(conv_id TEXT,chat_type INTEGER,f_id TEXT,msg_end INTEGER,show_msg_sign INTEGER,msg_last_read INTEGER,unread_count INTEGER,status INTEGER DEFAULT 1,ext TEXT,PRIMARY KEY(conv_id))",CONV_TABLE_NAME];
     BOOL isOK = [self createTable:CONV_TABLE_NAME withSQL:createSQL];
     if (isOK == NO) {
         NSLog(@"创建表失败****%@",CONV_TABLE_NAME);
@@ -73,7 +74,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 - (NSArray<MSIMConversation *> *)allConvesations
 {
     __block NSMutableArray *convs = [[NSMutableArray alloc] init];
-    NSString *sqlString = [NSString stringWithFormat: @"SELECT * FROM %@ ORDER BY show_msg_sign DESC", CONV_TABLE_NAME];
+    NSString *sqlString = [NSString stringWithFormat: @"SELECT * FROM %@ where status = 1 ORDER BY show_msg_sign DESC", CONV_TABLE_NAME];
     
     [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
@@ -92,9 +93,9 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 {
     NSString *sqlStr;
     if (last_seq == 0) {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,count+1];
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where status = 1 order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,count+1];
     }else {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ where show_msg_sign < '%zd' order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,last_seq,count+1];
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where status = 1 and show_msg_sign < '%zd' order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,last_seq,count+1];
     }
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
@@ -141,10 +142,10 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     return conv;
 }
 
-///删除某一条会话，不清空聊天记录
-- (BOOL)deleteConversation:(NSString *)conv_id
+///更新会话的状态。status: 0 不显示  1 显示
+- (BOOL)updateConvesationStatus:(NSInteger)status conv_id:(NSString *)conv_id
 {
-    NSString *sqlString = [NSString stringWithFormat:@"DELETE FROM %@ WHERE conv_id = '%@'", CONV_TABLE_NAME, conv_id];
+    NSString *sqlString = [NSString stringWithFormat:@"UPDATE %@ SET status = '%zd' WHERE conv_id = '%@'", CONV_TABLE_NAME,status, conv_id];
     BOOL ok = [self excuteSQL:sqlString];
     return ok;
 }

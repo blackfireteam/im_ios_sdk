@@ -28,6 +28,7 @@ GPBObjCClassDeclaration(ChatItem);
 GPBObjCClassDeclaration(ChatR);
 GPBObjCClassDeclaration(GetProfile);
 GPBObjCClassDeclaration(Profile);
+GPBObjCClassDeclaration(Spark);
 
 #pragma mark - ChatProtobufRoot
 
@@ -1993,6 +1994,7 @@ typedef struct UsrOffline__storage_ {
 @implementation Signup
 
 @dynamic sign;
+@dynamic phone;
 @dynamic nickName;
 @dynamic avatar;
 @dynamic pic;
@@ -2005,6 +2007,7 @@ typedef struct Signup__storage_ {
   NSString *avatar;
   NSString *pic;
   int64_t sign;
+  int64_t phone;
 } Signup__storage_;
 
 // This method is threadsafe because it is initially called
@@ -2023,10 +2026,19 @@ typedef struct Signup__storage_ {
         .dataType = GPBDataTypeInt64,
       },
       {
+        .name = "phone",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Signup_FieldNumber_Phone,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(Signup__storage_, phone),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
         .name = "nickName",
         .dataTypeSpecific.clazz = Nil,
         .number = Signup_FieldNumber_NickName,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(Signup__storage_, nickName),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -2035,7 +2047,7 @@ typedef struct Signup__storage_ {
         .name = "avatar",
         .dataTypeSpecific.clazz = Nil,
         .number = Signup_FieldNumber_Avatar,
-        .hasIndex = 2,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(Signup__storage_, avatar),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -2044,7 +2056,7 @@ typedef struct Signup__storage_ {
         .name = "pic",
         .dataTypeSpecific.clazz = Nil,
         .number = Signup_FieldNumber_Pic,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(Signup__storage_, pic),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -2053,8 +2065,8 @@ typedef struct Signup__storage_ {
         .name = "gold",
         .dataTypeSpecific.clazz = Nil,
         .number = Signup_FieldNumber_Gold,
-        .hasIndex = 4,
-        .offset = 5,  // Stored in _has_storage_ to save space.
+        .hasIndex = 5,
+        .offset = 6,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -2062,8 +2074,8 @@ typedef struct Signup__storage_ {
         .name = "verified",
         .dataTypeSpecific.clazz = Nil,
         .number = Signup_FieldNumber_Verified,
-        .hasIndex = 6,
-        .offset = 7,  // Stored in _has_storage_ to save space.
+        .hasIndex = 7,
+        .offset = 8,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -2075,6 +2087,185 @@ typedef struct Signup__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(Signup__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - FetchSpark
+
+@implementation FetchSpark
+
+@dynamic sign;
+
+typedef struct FetchSpark__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t sign;
+} FetchSpark__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = FetchSpark_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(FetchSpark__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[FetchSpark class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(FetchSpark__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Spark
+
+@implementation Spark
+
+@dynamic uid;
+@dynamic nickName;
+@dynamic avatar;
+@dynamic pic;
+
+typedef struct Spark__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *nickName;
+  NSString *avatar;
+  NSString *pic;
+  int64_t uid;
+} Spark__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "uid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Spark_FieldNumber_Uid,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(Spark__storage_, uid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "nickName",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Spark_FieldNumber_NickName,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(Spark__storage_, nickName),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "avatar",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Spark_FieldNumber_Avatar,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(Spark__storage_, avatar),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "pic",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Spark_FieldNumber_Pic,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(Spark__storage_, pic),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[Spark class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(Spark__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - Sparks
+
+@implementation Sparks
+
+@dynamic sign;
+@dynamic sparksArray, sparksArray_Count;
+
+typedef struct Sparks__storage_ {
+  uint32_t _has_storage_[1];
+  NSMutableArray *sparksArray;
+  int64_t sign;
+} Sparks__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = Sparks_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(Sparks__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "sparksArray",
+        .dataTypeSpecific.clazz = GPBObjCClass(Spark),
+        .number = Sparks_FieldNumber_SparksArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(Sparks__storage_, sparksArray),
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[Sparks class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(Sparks__storage_)
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
