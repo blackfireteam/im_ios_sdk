@@ -28,7 +28,10 @@
     NSLog(@"[发送消息]同步会话列表：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
-        if (code == ERR_SUCC) {
+        if (code == ERR_CHAT_LIST_EMPTY) {//用户会话列表为空也代表同步会话成功
+            if (strongSelf.convListener && [strongSelf.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
+                [strongSelf.convListener onSyncServerFinish];
+            }
         }else {
             NSLog(@"建立链接与服务器同步会话列表失败.%@", error);
             if (strongSelf.convListener && [strongSelf.convListener respondsToSelector:@selector(onSyncServerFailed)]) {

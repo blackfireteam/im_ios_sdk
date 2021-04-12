@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
     XMChatProtoTypeSignup = 53,//注册新用户  for demo
     XMChatProtoTypeGetSpark = 54,//获取spark  for demo
     XMChatProtoTypeGetSparkResponse = 56,//获取spark结果  for demo
-    
+    CMChatProtoTypeGetImToken = 57,//获取用户token  for demo:
 };
 
 /** 消息发送状态*/

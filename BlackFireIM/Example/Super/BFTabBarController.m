@@ -12,6 +12,8 @@
 #import "BFNavigationController.h"
 #import "BFHomeController.h"
 #import "NSBundle+BFKit.h"
+#import "MSIMKit.h"
+#import "MSIMSDK.h"
 
 
 @interface BFTabBarController ()
@@ -25,8 +27,10 @@
     [super viewDidLoad];
     
     UITabBarItem *item = [UITabBarItem appearance];
-    [item setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor grayColor],NSFontAttributeName: [UIFont systemFontOfSize:12]} forState:UIControlStateNormal];
-    [item setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor darkGrayColor],NSFontAttributeName: [UIFont systemFontOfSize:12]} forState:UIControlStateSelected];
+    [[UITabBar appearance]setUnselectedItemTintColor:[UIColor grayColor]];
+    [[UITabBar appearance]setTintColor:[UIColor darkGrayColor]];
+    [item setTitleTextAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} forState:UIControlStateNormal];
+    [item setTitleTextAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} forState:UIControlStateSelected];
 
     BFHomeController *homeVC = [[BFHomeController alloc]init];
     homeVC.tabBarItem.title = TUILocalizableString(Home_tab);
@@ -55,8 +59,15 @@
     profileVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"myself_selected"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     BFNavigationController *profileNav = [[BFNavigationController alloc]initWithRootViewController:profileVC];
     [self addChildViewController:profileNav];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(conversationSyncFinish) name:MSUIKitNotification_ConversationSyncFinish object:nil];
 }
 
+- (void)conversationSyncFinish
+{
+    NSInteger count = [[MSConversationProvider provider]allUnreadCount];
+    self.tabBar.items[2].badgeValue = count ? (count > 99 ? @"99+" : [NSString stringWithFormat:@"%zd",count]) : nil;
+}
 
 
 @end

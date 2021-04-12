@@ -33,4 +33,50 @@
         }
     }];
 }
+
+///模拟获取用户的token  for demo
+- (void)getIMToken:(NSString *)phone
+              succ:(void(^)(NSString *userToken))succ
+            failed:(MSIMFail)fail
+{
+    GetImToken *token = [[GetImToken alloc]init];
+    token.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    token.phone = [phone integerValue];
+    NSLog(@"[发送消息]获取im-token：%@",token);
+    [self send:[token data] protoType:CMChatProtoTypeGetImToken needToEncry:NO sign:token.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+        Result *result = response;
+        if (code == ERR_SUCC) {
+            if (succ) succ(result.msg);
+        }else {
+            if (fail) fail(result.code,result.msg);
+        }
+    }];
+}
+
+///模拟用户注册
+- (void)userSignUp:(NSString *)phone
+          nickName:(NSString *)nickName
+            avatar:(NSString *)avatar
+              succ:(void(^)(NSString *userToken))succ
+            failed:(MSIMFail)fail
+{
+    Signup *request = [[Signup alloc]init];
+    request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    request.phone = [phone integerValue];
+    request.nickName = nickName;
+    request.avatar = avatar;
+    request.pic = avatar;
+    request.verified = YES;
+    request.gold = YES;
+    NSLog(@"[发送消息]用户注册signUp：%@",request);
+    [self send:[request data] protoType:XMChatProtoTypeSignup needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+        Result *result = response;
+        if (code == ERR_SUCC) {
+            if (succ) succ(result.msg);
+        }else {
+            if (fail) fail(result.code,result.msg);
+        }
+    }];
+}
+
 @end

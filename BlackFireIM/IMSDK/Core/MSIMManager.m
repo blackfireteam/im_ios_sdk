@@ -16,7 +16,6 @@
 #import "MSIMManager+Conversation.h"
 #import "MSProfileProvider.h"
 #import "MSIMManager+Parse.h"
-#import <RealReachability.h>
 
 #define kMsgMaxOutTime 30
 @interface MSIMManager()<GCDAsyncSocketDelegate>
@@ -67,12 +66,6 @@ static MSIMManager *_manager;
         _socket = [[GCDAsyncSocket alloc]initWithDelegate:self delegateQueue:self.socketQueue];
         _callbackTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(callbackHandler:) userInfo:nil repeats:true];
         [[NSRunLoop mainRunLoop]addTimer:_callbackTimer forMode:NSRunLoopCommonModes];
-        //监听网络变化
-        [GLobalRealReachability startNotifier];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(networkChanged:)
-                                                         name:kRealReachabilityChangedNotification
-                                                       object:nil];
     }
     return self;
 }
@@ -140,56 +133,49 @@ static MSIMManager *_manager;
     [self.socket disconnect];
 }
 
-- (void)networkChanged:(NSNotification *)note
-{
-    RealReachability *reachability = (RealReachability *)note.object;
-    ReachabilityStatus status = [reachability currentReachabilityStatus];
-    [self handlerNetwork:status];
-}
-
-- (void)handlerNetwork:(ReachabilityStatus)status
-{
-    switch (status){
-            case RealStatusUnknown:
-            {
-                NSLog(@"~~~~~~~~~~~~~RealStatusUnknown");
-                if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
-                    [self.connListener connectFailed:ERR_NET_NOT_CONNECT err:@"无网络"];
-                }
-                break;
-            }
-                
-            case RealStatusNotReachable:
-            {
-                NSLog(@"~~~~~~~~~~~~~RealStatusNotReachable");
-                if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
-                    [self.connListener connectFailed:ERR_NET_NOT_CONNECT err:@"无网络"];
-                }
-                break;
-            }
-                
-            case RealStatusViaWWAN:
-            {
-                NSLog(@"~~~~~~~~~~~~~RealStatusViaWWAN");
-                if (!self.socket.isConnected) {
-                    self.retryCount = 0;
-                    [self connectTCPToServer];
-                }
-                break;
-            }
-            case RealStatusViaWiFi:
-            {
-                NSLog(@"~~~~~~~~~~~~~RealStatusViaWiFi");
-                if (!self.socket.isConnected) {
-                    self.retryCount = 0;
-                    [self connectTCPToServer];
-                }
-                break;
-            }
-            default:
-                break;
-        }
-}
+//- (void)handlerNetwork:(ReachabilityStatus)status
+//{
+//    switch (status){
+//            case RealStatusUnknown:
+//            {
+//                NSLog(@"~~~~~~~~~~~~~RealStatusUnknown");
+//                if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
+//                    [self.connListener connectFailed:ERR_NET_NOT_CONNECT err:@"无网络"];
+//                }
+//                break;
+//            }
+//
+//            case RealStatusNotReachable:
+//            {
+//                NSLog(@"~~~~~~~~~~~~~RealStatusNotReachable");
+//                if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
+//                    [self.connListener connectFailed:ERR_NET_NOT_CONNECT err:@"无网络"];
+//                }
+//                break;
+//            }
+//
+//            case RealStatusViaWWAN:
+//            {
+//                NSLog(@"~~~~~~~~~~~~~RealStatusViaWWAN");
+//                if (!self.socket.isConnected) {
+//                    self.retryCount = 0;
+//                    [self connectTCPToServer];
+//                }
+//                break;
+//            }
+//            case RealStatusViaWiFi:
+//            {
+//                NSLog(@"~~~~~~~~~~~~~RealStatusViaWiFi");
+//                if (!self.socket.isConnected) {
+//                    self.retryCount = 0;
+//                    [self connectTCPToServer];
+//                }
+//                break;
+//            }
+//            default:
+//                break;
+//        }
+//}
 
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
@@ -563,9 +549,9 @@ static MSIMManager *_manager;
 /** 发送心跳*/
 - (void)sendHeart
 {
-    NSLog(@"*****heat beat ********");
     Ping *ping = [[Ping alloc]init];
     ping.type = 0;
+    NSLog(@"[发送消息-心跳包]:\n%@",ping);
     [self send:[ping data] protoType:XMChatProtoTypeHeadBeat needToEncry:NO sign:0 callback:nil];
 }
 

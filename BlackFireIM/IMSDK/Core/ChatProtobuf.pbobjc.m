@@ -2277,6 +2277,62 @@ typedef struct Sparks__storage_ {
 
 @end
 
+#pragma mark - GetImToken
+
+@implementation GetImToken
+
+@dynamic sign;
+@dynamic phone;
+
+typedef struct GetImToken__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t sign;
+  int64_t phone;
+} GetImToken__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetImToken_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(GetImToken__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "phone",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetImToken_FieldNumber_Phone,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(GetImToken__storage_, phone),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[GetImToken class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(GetImToken__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 #pragma clang diagnostic pop
 

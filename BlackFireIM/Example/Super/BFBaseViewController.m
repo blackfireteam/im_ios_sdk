@@ -6,6 +6,8 @@
 //
 
 #import "BFBaseViewController.h"
+#import "UIColor+BFDarkMode.h"
+
 
 @interface BFBaseViewController ()
 
@@ -19,6 +21,7 @@
     //修改返回按钮
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
         self.navigationItem.backBarButtonItem = backItem;
+    self.view.backgroundColor = [UIColor d_colorWithColorLight:[UIColor whiteColor] dark:[UIColor blackColor]];
 }
 
 - (void)dealloc

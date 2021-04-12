@@ -16,6 +16,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getSparks:(void(^)(NSArray<MSProfileInfo *> *sparks))succ
              fail:(MSIMFail)fail;
 
+
+///模拟获取用户的token  for demo
+- (void)getIMToken:(NSString *)phone
+              succ:(void(^)(NSString *userToken))succ
+            failed:(MSIMFail)fail;
+
+
+///模拟用户注册
+- (void)userSignUp:(NSString *)phone
+          nickName:(NSString *)nickName
+            avatar:(NSString *)avatar
+              succ:(void(^)(NSString *userToken))succ
+            failed:(MSIMFail)fail;
 @end
 
 NS_ASSUME_NONNULL_END

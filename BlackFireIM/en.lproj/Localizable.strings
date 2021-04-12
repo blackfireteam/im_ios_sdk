@@ -12,6 +12,12 @@
 "Message_tab" = "Message";
 "Profile_tab" = "Profile";
 
+"WelcomeBack" = "WELCOME BACK";
+"LOGIN" = "LOG IN";
+"You-phone-number" = "You phone number...";
+"You-nickname" = "Nickname";
+"Next-button" = "CONTINUE";
+
 
 "Confirm" = "OK";
 "Cancel" = "Cancel";

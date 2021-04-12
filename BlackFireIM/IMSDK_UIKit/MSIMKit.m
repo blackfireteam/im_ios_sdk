@@ -43,6 +43,7 @@
     [[MSIMManager sharedInstance] login:userSign succ:succ failed:fail];
 }
 
+
 #pragma mark - MSIMSDKListener
 /// 网络连接成功
 - (void)connectSucc
@@ -101,7 +102,7 @@
  */
 - (void)onSyncServerFinish
 {
-    ///
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationSyncFinish object:nil];
 }
 
 /**

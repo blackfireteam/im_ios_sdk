@@ -86,6 +86,7 @@
             [strongSelf.avatarView sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:data.defaultAvatar];
             strongSelf.nameLabel.text = [NSString stringWithFormat:@"%@--%zd",profile.nick_name,data.elem.msg_id];
             [strongSelf.nameLabel sizeToFit];
+            [strongSelf layoutIfNeeded];
         }];
     }
     

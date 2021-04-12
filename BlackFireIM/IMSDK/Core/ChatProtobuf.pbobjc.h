@@ -818,6 +818,24 @@ GPB_FINAL @interface Sparks : GPBMessage
 
 @end
 
+#pragma mark - GetImToken
+
+typedef GPB_ENUM(GetImToken_FieldNumber) {
+  GetImToken_FieldNumber_Sign = 1,
+  GetImToken_FieldNumber_Phone = 2,
+};
+
+/**
+ * 57 for demo: 获取用户token
+ **/
+GPB_FINAL @interface GetImToken : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite) int64_t phone;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

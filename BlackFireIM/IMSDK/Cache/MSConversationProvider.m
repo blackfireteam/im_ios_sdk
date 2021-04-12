@@ -88,6 +88,11 @@ static MSConversationProvider *instance;
     [self.store updateConvesationStatus:0 conv_id:conv_id];
 }
 
+- (NSInteger)allUnreadCount
+{
+    return [self.store allUnreadCount];
+}
+
 - (void)clean
 {
     [self.mainCache removeAllObjects];

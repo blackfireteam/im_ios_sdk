@@ -126,6 +126,20 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     return conv;
 }
 
+///所有未读数之和
+- (NSInteger)allUnreadCount
+{
+    __block NSInteger total = 0;
+    NSString *sqlString = [NSString stringWithFormat:@"SELECT SUM(unread_count) AS 'total' from %@", CONV_TABLE_NAME];
+    [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
+        while ([rsSet next]) {
+            total = [rsSet longLongIntForColumn:@"total"];
+        }
+        [rsSet close];
+    }];
+    return total;
+}
+
 - (MSIMConversation *)bf_component_conv:(FMResultSet *)rsSet
 {
     MSIMConversation *conv = [[MSIMConversation alloc]init];

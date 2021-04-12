@@ -16,6 +16,9 @@
 //会话列表有变更通知
 #define MSUIKitNotification_ConversationUpdate @"MSUIKitNotification_ConversationUpdate"
 
+//会话列表同步完成通知
+#define MSUIKitNotification_ConversationSyncFinish @"MSUIKitNotification_ConversationSyncFinish"
+
 //会话被删除时的通知
 #define MSUIKitNotification_ConversationDelete @"MSUIKitNotification_ConversationDelete"
 

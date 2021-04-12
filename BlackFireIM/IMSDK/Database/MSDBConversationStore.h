@@ -36,6 +36,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 ///更新会话的状态。status: 0 不显示  1 显示
 - (BOOL)updateConvesationStatus:(NSInteger)status conv_id:(NSString *)conv_id;
+
+///所有未读数之和
+- (NSInteger)allUnreadCount;
+
 @end
 
 NS_ASSUME_NONNULL_END

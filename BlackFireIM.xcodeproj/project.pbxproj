@@ -117,8 +117,11 @@
 		F0CF6435261EF95100106697 /* BFDragCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6434261EF95100106697 /* BFDragCardView.m */; };
 		F0CF6438261EFA6F00106697 /* BFDragCardContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6437261EFA6F00106697 /* BFDragCardContainer.m */; };
 		F0CF643B261F044200106697 /* BFHomeCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF643A261F044200106697 /* BFHomeCardView.m */; };
-		F0CF645126204DAB00106697 /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF645026204DAB00106697 /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F0CF645526204E3000106697 /* MSIMManager+Demo.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF645426204E3000106697 /* MSIMManager+Demo.m */; };
+		F0CF645B2623E8A500106697 /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF64592623E8A500106697 /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F0CF645E2623EE3500106697 /* BFSignInStepOneController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF645D2623EE3500106697 /* BFSignInStepOneController.m */; };
+		F0CF64622623F69900106697 /* BFRegisterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF64612623F69900106697 /* BFRegisterInfo.m */; };
+		F0CF6465262414A300106697 /* BFSignInStepTwoController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6464262414A300106697 /* BFSignInStepTwoController.m */; };
 		F0DC8131261462DF0042D4BD /* BFUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC8130261462DF0042D4BD /* BFUploadManager.m */; };
 		F0DC81702616A7280042D4BD /* BFVideoMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC816F2616A7280042D4BD /* BFVideoMessageCell.m */; };
 		F0DC81762616A7C30042D4BD /* BFVideoMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC81752616A7C30042D4BD /* BFVideoMessageCellData.m */; };
@@ -386,10 +389,16 @@
 		F0CF6437261EFA6F00106697 /* BFDragCardContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDragCardContainer.m; sourceTree = "<group>"; };
 		F0CF6439261F044200106697 /* BFHomeCardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFHomeCardView.h; sourceTree = "<group>"; };
 		F0CF643A261F044200106697 /* BFHomeCardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFHomeCardView.m; sourceTree = "<group>"; };
-		F0CF644F26204DAA00106697 /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
-		F0CF645026204DAB00106697 /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
 		F0CF645326204E3000106697 /* MSIMManager+Demo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MSIMManager+Demo.h"; sourceTree = "<group>"; };
 		F0CF645426204E3000106697 /* MSIMManager+Demo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MSIMManager+Demo.m"; sourceTree = "<group>"; };
+		F0CF64592623E8A500106697 /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
+		F0CF645A2623E8A500106697 /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
+		F0CF645C2623EE3500106697 /* BFSignInStepOneController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSignInStepOneController.h; sourceTree = "<group>"; };
+		F0CF645D2623EE3500106697 /* BFSignInStepOneController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSignInStepOneController.m; sourceTree = "<group>"; };
+		F0CF64602623F69900106697 /* BFRegisterInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFRegisterInfo.h; sourceTree = "<group>"; };
+		F0CF64612623F69900106697 /* BFRegisterInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFRegisterInfo.m; sourceTree = "<group>"; };
+		F0CF6463262414A300106697 /* BFSignInStepTwoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSignInStepTwoController.h; sourceTree = "<group>"; };
+		F0CF6464262414A300106697 /* BFSignInStepTwoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSignInStepTwoController.m; sourceTree = "<group>"; };
 		F0DC812F261462DF0042D4BD /* BFUploadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUploadManager.h; sourceTree = "<group>"; };
 		F0DC8130261462DF0042D4BD /* BFUploadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUploadManager.m; sourceTree = "<group>"; };
 		F0DC816E2616A7280042D4BD /* BFVideoMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFVideoMessageCell.h; sourceTree = "<group>"; };
@@ -681,9 +690,9 @@
 		F052EC7B25ECD2B800F35D74 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				F0CF645A2623E8A500106697 /* ChatProtobuf.pbobjc.h */,
+				F0CF64592623E8A500106697 /* ChatProtobuf.pbobjc.m */,
 				F052ECAD25EE3B6E00F35D74 /* MSIMManagerListener.h */,
-				F0CF644F26204DAA00106697 /* ChatProtobuf.pbobjc.h */,
-				F0CF645026204DAB00106697 /* ChatProtobuf.pbobjc.m */,
 				F011D62025E767B10061F9D6 /* IMSDKConfig.h */,
 				F011D62125E767B10061F9D6 /* IMSDKConfig.m */,
 				F052ECDC25EF214000F35D74 /* MSIMErrorCode.h */,
@@ -920,6 +929,7 @@
 		F0777BB82612FAE8006CA660 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				F0CF645F2623F67C00106697 /* Model */,
 				F0777BBA2612FAF9006CA660 /* Controller */,
 				F0777BB92612FAF2006CA660 /* View */,
 			);
@@ -938,6 +948,10 @@
 			children = (
 				F0777BBB2612FB56006CA660 /* BFLoginController.h */,
 				F0777BBC2612FB56006CA660 /* BFLoginController.m */,
+				F0CF645C2623EE3500106697 /* BFSignInStepOneController.h */,
+				F0CF645D2623EE3500106697 /* BFSignInStepOneController.m */,
+				F0CF6463262414A300106697 /* BFSignInStepTwoController.h */,
+				F0CF6464262414A300106697 /* BFSignInStepTwoController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1070,6 +1084,15 @@
 		F0CF645226204DD900106697 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F0CF645F2623F67C00106697 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F0CF64602623F69900106697 /* BFRegisterInfo.h */,
+				F0CF64612623F69900106697 /* BFRegisterInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1303,7 +1326,6 @@
 				F05671A025F1BC6200782F9C /* BFMessageCellData.m in Sources */,
 				F05671C325F1DD5B00782F9C /* BFBubbleMessageCell.m in Sources */,
 				F0DC81702616A7280042D4BD /* BFVideoMessageCell.m in Sources */,
-				F0CF645126204DAB00106697 /* ChatProtobuf.pbobjc.m in Sources */,
 				F0777BA82611CCD8006CA660 /* BFBaseViewController.m in Sources */,
 				F0020B662614263E0080C005 /* YBIBCollectionViewLayout.m in Sources */,
 				F056719925F0DDF600782F9C /* BFMessageCell.m in Sources */,
@@ -1335,6 +1357,7 @@
 				F0878A802605EB0200268122 /* BFSystemMessageCellData.m in Sources */,
 				F052ECA925EE1DB700F35D74 /* NSString+AES.m in Sources */,
 				F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */,
+				F0CF6465262414A300106697 /* BFSignInStepTwoController.m in Sources */,
 				F0CF642F261ED60A00106697 /* BFHomeController.m in Sources */,
 				F0878A862608428500268122 /* BFSystemMessageCell.m in Sources */,
 				F05671E125F21C1100782F9C /* BFImageMessageCell.m in Sources */,
@@ -1358,8 +1381,10 @@
 				F0777BBD2612FB56006CA660 /* BFLoginController.m in Sources */,
 				F0020B522614263E0080C005 /* YBIBInteractionProfile.m in Sources */,
 				F05836D42605A1750008C4FD /* NSDictionary+Ext.m in Sources */,
+				F0CF645B2623E8A500106697 /* ChatProtobuf.pbobjc.m in Sources */,
 				F0DC818F2616CA280042D4BD /* YBIBVideoData.m in Sources */,
 				F0020B4E2614263E0080C005 /* YBIBDefaultWebImageMediator.m in Sources */,
+				F0CF645E2623EE3500106697 /* BFSignInStepOneController.m in Sources */,
 				F036362E25FEF7FB00E69D14 /* MSProfileInfo.m in Sources */,
 				F0020B542614263E0080C005 /* YBIBImageCache.m in Sources */,
 				F056716625F087D200782F9C /* UIView+BFExtension.m in Sources */,
@@ -1375,6 +1400,7 @@
 				F0020B512614263E0080C005 /* YBImage.m in Sources */,
 				F058362F2602E22D0008C4FD /* BFProfileViewController.m in Sources */,
 				F056713325F06E1000782F9C /* BFResponderTextView.m in Sources */,
+				F0CF64622623F69900106697 /* BFRegisterInfo.m in Sources */,
 				F0020B682614263E0080C005 /* NSObject+YBImageBrowser.m in Sources */,
 				F0020B572614263E0080C005 /* YBIBToastView.m in Sources */,
 				F0020B532614263E0080C005 /* YBIBImageScrollView.m in Sources */,

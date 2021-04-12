@@ -216,6 +216,7 @@
     [self.dataList removeObject:data];
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
+    [self updateTabbarUnreadCount];
 }
 
 - (void)logout
@@ -228,6 +229,16 @@
 {
     NSArray<MSIMConversation *> *list = note.object;
     [self updateConversation:list];
+    [self updateTabbarUnreadCount];
+}
+
+- (void)updateTabbarUnreadCount
+{
+    NSInteger count = 0;
+    for (BFConversationCellData *data in self.dataList) {
+        count += data.conv.unread_count;
+    }
+    self.tabBarItem.badgeValue = count ? (count > 99 ? @"99+" : [NSString stringWithFormat:@"%zd",count]) : nil;
 }
 
 #pragma mark - UITableViewDataSource

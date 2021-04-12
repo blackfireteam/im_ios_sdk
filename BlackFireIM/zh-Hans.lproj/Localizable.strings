@@ -13,6 +13,12 @@
 "Message_tab" = "消息";
 "Profile_tab" = "我的";
 
+"WelcomeBack" = "登录";
+"LOGIN" = "登录";
+"You-phone-number" = "你的电话号码...";
+"You-nickname" = "你的昵称";
+"Next-button" = "下一步";
+
 "Confirm" = "确定";
 "Cancel" = "取消";
 "Send" = "发送";

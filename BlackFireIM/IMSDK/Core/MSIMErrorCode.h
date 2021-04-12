@@ -17,6 +17,10 @@ enum ERROR_CODE {
     
     // 通用错误码
     ERR_SUCC                                    = 0,///< 无错误。
+    ERR_IM_TOKEN_NOT_FIND                       = 4,///im token 未找到（不存在或失效）
+    ERR_USER_NOT_REGISTER                       = 9,///用户未注册
+    ERR_IM_LOGIN_ALREADY                        = 11,///用户已经登录
+    ERR_CHAT_LIST_EMPTY                         = 12,///用户的会话列表为空
     
     ERR_LOGIN_KICKED_OFF_BY_OTHER               = 2008,    ///< 其他终端登录同一个帐号，引起已登录的帐号被踢，需重新登录。
     ERR_USER_SIG_EXPIRED                        = 2009,    ///< UserSig 过期，请重新获取有效的 UserSig 后再重新登录。
