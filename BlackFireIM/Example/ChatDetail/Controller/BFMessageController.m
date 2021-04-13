@@ -10,10 +10,12 @@
 #import "UIColor+BFDarkMode.h"
 #import "BFTextMessageCellData.h"
 #import "BFImageMessageCellData.h"
+#import "BFWinkMessageCellData.h"
 #import "BFTextMessageCell.h"
 #import "BFImageMessageCell.h"
 #import "BFSystemMessageCell.h"
 #import "BFVideoMessageCell.h"
+#import "BFWinkMessageCell.h"
 #import "MSIMSDK.h"
 #import "BFSystemMessageCellData.h"
 #import "NSDate+MSKit.h"
@@ -21,13 +23,14 @@
 #import "UIView+Frame.h"
 #import "BFNoticeCountView.h"
 #import <SVProgressHUD.h>
+#import <MJRefresh.h>
+
 
 #define MAX_MESSAGE_SEP_DLAY (5 * 60)
 @interface BFMessageController ()<BFMessageCellDelegate,BFNoticeCountViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *uiMsgs;
 @property (nonatomic, strong) NSMutableArray *heightCache;
-@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
 
 @property (nonatomic, assign) BOOL isScrollBottom;
 @property (nonatomic, assign) BOOL firstLoad;
@@ -94,10 +97,14 @@
     [self.tableView registerClass:[BFImageMessageCell class] forCellReuseIdentifier:TImageMessageCell_ReuseId];
     [self.tableView registerClass:[BFSystemMessageCell class] forCellReuseIdentifier:TSystemMessageCell_ReuseId];
     [self.tableView registerClass:[BFVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
-    
-    _indicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 40)];
-    _indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    self.tableView.tableHeaderView = _indicatorView;
+    [self.tableView registerClass:[BFWinkMessageCell class] forCellReuseIdentifier:TWinkMessageCell_ReuseId];
+    WS(weakSelf)
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf loadMessages];
+    }];
+    header.lastUpdatedTimeLabel.hidden = YES;
+    header.stateLabel.hidden = YES;
+    self.tableView.mj_header = header;
     
     _countTipView = [[BFNoticeCountView alloc]init];
     [_countTipView setHidden:YES];
@@ -156,12 +163,13 @@
         [[MSIMManager sharedInstance] getC2CHistoryMessageList:self.partner_id count:msgCount lastMsg:self.last_msg_sign succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
             
             STRONG_SELF(strongSelf)
+            [strongSelf.tableView.mj_header endRefreshing];
             if (msgs.count != 0) {
                 strongSelf.last_msg_sign = msgs.lastObject.msg_sign;
             }
             if (isFinished) {
-                strongSelf.indicatorView.height = 0;
-                strongSelf.noMoreMsg = isFinished;
+                strongSelf.noMoreMsg = YES;
+                strongSelf.tableView.mj_header.hidden = YES;
             }
             NSMutableArray *uiMsgs = [strongSelf transUIMsgFromIMMsg:msgs];
             if (uiMsgs.count != 0) {
@@ -176,9 +184,6 @@
                         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
                         visibleHeight += [strongSelf tableView:strongSelf.tableView heightForRowAtIndexPath:indexPath];
                     }
-                    if(strongSelf.noMoreMsg){
-                        visibleHeight -= 40;
-                    }
                     [strongSelf.tableView scrollRectToVisible:CGRectMake(0, strongSelf.tableView.contentOffset.y + visibleHeight, strongSelf.tableView.frame.size.width, strongSelf.tableView.frame.size.height) animated:NO];
                 }else {
                     MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:self.partner_id];
@@ -189,14 +194,12 @@
             }
             strongSelf.isLoadingMsg = NO;
             strongSelf.firstLoad = NO;
-            [strongSelf.indicatorView stopAnimating];
-            
                 } fail:^(NSInteger code, NSString * _Nonnull desc) {
                     
                     STRONG_SELF(strongSelf)
                     strongSelf.isLoadingMsg = NO;
                     strongSelf.firstLoad = NO;
-                    [strongSelf.indicatorView stopAnimating];
+                    [strongSelf.tableView.mj_header endRefreshing];
                     
         }];
     }
@@ -238,6 +241,10 @@
             videoMsg.showName = YES;
             videoMsg.elem = elem;
             data = videoMsg;
+        }else if (elem.type == BFIM_MSG_TYPE_WINK) {
+            BFWinkMessageCellData *winkMsg = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+            winkMsg.elem = elem;
+            data = winkMsg;
         }else {
             BFSystemMessageCellData *unknowData = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);
@@ -394,27 +401,12 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (!self.noMoreMsg && scrollView.contentOffset.y <= self.indicatorView.height) {
-        if (!self.indicatorView.isAnimating) {
-            [self.indicatorView startAnimating];
-        }
-    }else {
-        if (self.indicatorView.isAnimating) {
-            [self.indicatorView stopAnimating];
-        }
-    }
+    NSLog(@"offset = %f",scrollView.contentOffset.y);
     if (scrollView.contentOffset.y + scrollView.height + 20 >= scrollView.contentSize.height) {
         if (self.countTipView.isHidden == NO) {
             [self.countTipView cleanCount];
             [self readedReport:self.uiMsgs];//标记已读
         }
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if (scrollView.contentOffset.y <= self.indicatorView.height) {
-        [self loadMessages];
     }
 }
 

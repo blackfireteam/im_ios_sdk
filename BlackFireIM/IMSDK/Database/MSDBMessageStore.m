@@ -524,6 +524,10 @@ static NSString *ext_data = @"ext_data";
         videoElem.duration = [dic[@"duration"] integerValue];
         videoElem.uuid = dic[@"uuid"];
         elem = videoElem;
+    }else if (type == BFIM_MSG_TYPE_WINK) {
+        MSIMCustomElem *customElem = [[MSIMCustomElem alloc]init];
+        customElem.data = dic[@"data"];
+        elem = customElem;
     }
     elem.msg_id = [rsSet longLongIntForColumn:@"msg_id"];
     elem.msg_sign = [rsSet longLongIntForColumn:@"msg_sign"];

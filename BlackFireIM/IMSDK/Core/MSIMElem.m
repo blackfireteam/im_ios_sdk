@@ -144,16 +144,21 @@
 
 @implementation MSIMCustomElem
 
-- (NSDictionary *)contentDic
-{
-    return @{};
-}
-
 - (id)copyWithZone:(NSZone *)zone
 {
     MSIMCustomElem *elem = [[[self class] allocWithZone:zone]init];
     elem.data = self.data;
     return elem;
+}
+
+- (NSDictionary *)contentDic
+{
+    return @{@"data": self.data};
+}
+
+- (NSString *)displayStr
+{
+    return @"[wink]";
 }
 
 @end

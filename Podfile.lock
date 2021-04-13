@@ -18,6 +18,8 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - lottie-ios (2.5.3)
+  - MJRefresh (3.5.0)
   - Protobuf (3.14.0)
   - QCloudCore/WithoutMTA (5.8.4)
   - QCloudCOSXML/Transfer (5.8.4):
@@ -35,6 +37,8 @@ DEPENDENCIES:
   - AFNetworking
   - CocoaAsyncSocket
   - FMDB
+  - lottie-ios (= 2.5.3)
+  - MJRefresh
   - Protobuf
   - QCloudCOSXML/Transfer
   - SDWebImage
@@ -47,6 +51,8 @@ SPEC REPOS:
     - AFNetworking
     - CocoaAsyncSocket
     - FMDB
+    - lottie-ios
+    - MJRefresh
     - Protobuf
     - QCloudCore
     - QCloudCOSXML
@@ -67,6 +73,8 @@ SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
+  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
   QCloudCore: 3dd29860235cab8d84342a6312e8319742520b6c
   QCloudCOSXML: e6b0028b5e7b89fdf59fc0413a7ccef2465be5d2
@@ -75,6 +83,6 @@ SPEC CHECKSUMS:
   TZImagePickerController: 7fd9702897ef8c0b7c951e5463f4bcf398296f9e
   YYImage: 20ec986d18a8d0ad421619d166a9e628097e2433
 
-PODFILE CHECKSUM: 70585f9364f58e6fdb96632812f7620c8b139240
+PODFILE CHECKSUM: f1a9623d332c2a9f0405d9e41c78ba452aa6d8b8
 
 COCOAPODS: 1.10.1

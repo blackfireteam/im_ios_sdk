@@ -36,6 +36,9 @@ typedef void (^BFIMMessageListSucc)(NSArray<MSIMElem *> * msgs,BOOL isFinished);
  */
 - (MSIMVideoElem *)createVideoMessage:(MSIMVideoElem *)elem;
 
+/** 创建自定义消息 */
+- (MSIMCustomElem *)createCustomMessage:(NSData *)data;
+
 /// 发送单聊消息
 /// @param elem 消息体
 /// @param reciever 接收者Uid

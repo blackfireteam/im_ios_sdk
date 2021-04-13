@@ -56,6 +56,19 @@
     return elem;
 }
 
+/** 创建自定义消息 */
+- (MSIMCustomElem *)createCustomMessage:(NSData *)data
+{
+    MSIMCustomElem *elem = [[MSIMCustomElem alloc]init];
+    elem.data = data;
+    elem.type = BFIM_MSG_TYPE_WINK;
+    elem.fromUid = [MSIMTools sharedInstance].user_id;
+    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
+    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
+    elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    return elem;
+}
+
 /// 发送单聊消息
 /// @param elem 消息体
 /// @param reciever 接收者Uid
@@ -90,6 +103,13 @@
         [self sendImageMessage:(MSIMImageElem *)elem isResend:NO successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
         [self sendVideoMessage:(MSIMVideoElem *)elem isResend:NO successed:success failed:failed];
+    }else if (elem.type == BFIM_MSG_TYPE_WINK) {
+        MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+        if (customElem.data == nil) {
+            failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+            return;
+        }
+        [self sendCustomMessage:(MSIMCustomElem *)elem isResend:NO successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"参数异常");
     }
@@ -114,7 +134,7 @@
     chats.body = elem.text;
     chats.toUid = elem.toUid.integerValue;
     WS(weakSelf)
-    NSLog(@"[发送消息]ChatS:\n%@",chats);
+    NSLog(@"[发送文本消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
@@ -222,7 +242,7 @@
     chats.width = elem.width;
     chats.height = elem.height;
     WS(weakSelf)
-    NSLog(@"[发送消息]ChatS:\n%@",chats);
+    NSLog(@"[发送图片消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == 0) {
@@ -334,7 +354,7 @@
     chats.height = elem.height;
     chats.duration = elem.duration;
     WS(weakSelf)
-    NSLog(@"[发送消息]ChatS:\n%@",chats);
+    NSLog(@"[发送视频消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == 0) {
@@ -345,6 +365,49 @@
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             success(result.msgId);
+        }else {
+            NSLog(@"发送失败");
+            failed(code,error);
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+            elem.code = code;
+            elem.reason = error;
+            [strongSelf.messageStore addMessage:elem];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        }
+    }];
+}
+
+/// 发送单聊自定义消息
+/// @param elem 自定义消息
+/// @param success 发送成功，返回消息的唯一标识ID
+/// @param failed 发送失败
+- (void)sendCustomMessage:(MSIMCustomElem *)elem
+                 isResend:(BOOL)isResend
+                successed:(void(^)(NSInteger msg_id))success
+                   failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    if (isResend == NO) {
+        [self.messageStore addMessage:elem];
+        [self.msgListener onNewMessages:@[elem]];
+    }
+    ChatS *chats = [[ChatS alloc]init];
+    chats.sign = elem.msg_sign;
+    chats.type = elem.type;
+    chats.body = [[NSString alloc]initWithData:elem.data encoding:NSUTF8StringEncoding];
+    chats.toUid = elem.toUid.integerValue;
+    WS(weakSelf)
+    NSLog(@"[发送自定义消息]ChatS:\n%@",chats);
+    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+        STRONG_SELF(strongSelf)
+        if (code == ERR_SUCC) {
+            ChatSR *result = response;
+            success(result.msgId);
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+            elem.msg_id = result.msgId;
+            [strongSelf.messageStore addMessage:elem];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }else {
             NSLog(@"发送失败");
             failed(code,error);
@@ -407,6 +470,8 @@
         [self sendImageMessage:(MSIMImageElem *)elem isResend:YES successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
         [self sendVideoMessage:(MSIMVideoElem *)elem isResend:YES successed:success failed:failed];
+    }else if (elem.type == BFIM_MSG_TYPE_WINK) {
+        [self sendCustomMessage:(MSIMCustomElem *)elem isResend:YES successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"参数异常");
     }
