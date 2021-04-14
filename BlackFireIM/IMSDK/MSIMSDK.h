@@ -13,6 +13,7 @@
 #import "MSIMManagerListener.h"
 #import "MSIMConst.h"
 #import "IMSDKConfig.h"
+#import "NSDictionary+Ext.h"
 #import "MSIMManager+Message.h"
 #import "MSIMManager+Conversation.h"
 #import "MSProfileProvider.h"

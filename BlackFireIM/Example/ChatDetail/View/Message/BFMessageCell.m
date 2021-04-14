@@ -61,12 +61,11 @@
         [_retryView addGestureRecognizer:resendTap];
         [self.contentView addSubview:_retryView];
         
-        //已读label,由于 indicator 和 error，所以默认隐藏，消息发送成功后进行显示
         _readReceiptLabel = [[UILabel alloc] init];
         _readReceiptLabel.hidden = YES;
         _readReceiptLabel.font = [UIFont systemFontOfSize:12];
         _readReceiptLabel.textColor = [UIColor d_systemGrayColor];
-        _readReceiptLabel.lineBreakMode = NSLineBreakByCharWrapping;
+        _readReceiptLabel.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_readReceiptLabel];
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -171,8 +170,7 @@
         self.indicator.x = self.container.x - 8 - self.indicator.width;
         self.retryView.frame = self.indicator.frame;
         
-        CGSize receiptSize = [self.readReceiptLabel sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
-        self.readReceiptLabel.frame = CGRectMake(self.container.maxX-receiptSize.width, self.container.maxY+3, receiptSize.width, receiptSize.height);
+        self.readReceiptLabel.frame = CGRectMake(self.container.maxX-80, self.container.maxY+3, 80, 12);
     }
 }
 

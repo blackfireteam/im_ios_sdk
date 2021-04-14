@@ -111,6 +111,13 @@ static MSProfileProvider *instance;
     [self.store addProfile:info];
 }
 
+///只更新用户信息到内存缓存
+- (void)updateProfileOnlyToMemory:(MSProfileInfo *)info
+{
+    if (info.user_id.length == 0) return;
+    [self.mainCache setObject:info forKey:info.user_id];
+}
+
 ///返回本地数据库中所有的用户信息
 - (NSArray<MSProfileInfo *> *)allProfiles
 {

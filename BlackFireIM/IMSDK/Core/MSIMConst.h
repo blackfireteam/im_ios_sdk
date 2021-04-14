@@ -93,9 +93,9 @@ typedef NS_ENUM(NSInteger ,BFIMMessageType){
     
     BFIM_MSG_TYPE_REVOKE = 31,//撤回消息
     
-    BFIM_MSG_TYPE_WINK  = 32,//媚眼消息
-    
     BFIM_MSG_TYPE_RECALL = 64,//消息撤回
+    
+    BFIM_MSG_TYPE_CUSTOM  = 100,//自定义消息
     
     BFIM_MSG_TYPE_NULL = 999,//空消息，用于占位
 };

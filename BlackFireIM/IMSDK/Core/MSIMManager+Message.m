@@ -61,7 +61,7 @@
 {
     MSIMCustomElem *elem = [[MSIMCustomElem alloc]init];
     elem.data = data;
-    elem.type = BFIM_MSG_TYPE_WINK;
+    elem.type = BFIM_MSG_TYPE_CUSTOM;
     elem.fromUid = [MSIMTools sharedInstance].user_id;
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
     elem.readStatus = BFIM_MSG_STATUS_UNREAD;
@@ -103,7 +103,7 @@
         [self sendImageMessage:(MSIMImageElem *)elem isResend:NO successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
         [self sendVideoMessage:(MSIMVideoElem *)elem isResend:NO successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_WINK) {
+    }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
         MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
         if (customElem.data == nil) {
             failed(ERR_USER_PARAMS_ERROR,@"参数异常");
@@ -127,6 +127,7 @@
     if (isResend == NO) {
         [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
     }
     ChatS *chats = [[ChatS alloc]init];
     chats.sign = elem.msg_sign;
@@ -390,6 +391,7 @@
     if (isResend == NO) {
         [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
     }
     ChatS *chats = [[ChatS alloc]init];
     chats.sign = elem.msg_sign;
@@ -470,7 +472,7 @@
         [self sendImageMessage:(MSIMImageElem *)elem isResend:YES successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
         [self sendVideoMessage:(MSIMVideoElem *)elem isResend:YES successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_WINK) {
+    }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
         [self sendCustomMessage:(MSIMCustomElem *)elem isResend:YES successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"参数异常");

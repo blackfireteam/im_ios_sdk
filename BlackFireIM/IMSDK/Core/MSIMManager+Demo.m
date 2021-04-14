@@ -8,7 +8,8 @@
 #import "MSIMManager+Demo.h"
 #import "MSIMTools.h"
 #import "MSIMErrorCode.h"
-#import "MSProfileInfo.h"
+#import "MSProfileProvider.h"
+
 
 @implementation MSIMManager (Demo)
 
@@ -26,6 +27,8 @@
             for (Spark *s in datas.sparksArray) {
                 MSProfileInfo *info = [MSProfileInfo createWithSpark:s];
                 [arr addObject:info];
+                //更新profile
+                [[MSProfileProvider provider]updateProfile:info];
             }
             if (succ) succ(arr);
         }else {

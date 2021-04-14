@@ -222,6 +222,11 @@
         }else if (response.type == BFIM_MSG_TYPE_REVOKE) {
             elem = [[MSIMElem alloc]init];
             elem.type = BFIM_MSG_TYPE_REVOKE;
+        }else if (response.type == BFIM_MSG_TYPE_CUSTOM) {
+            MSIMCustomElem *customElem = [[MSIMCustomElem alloc]init];
+            customElem.data = [response.body dataUsingEncoding:NSUTF8StringEncoding];
+            customElem.type = BFIM_MSG_TYPE_CUSTOM;
+            elem = customElem;
         }else {//未知消息
             MSIMElem *unknowElem = [[MSIMElem alloc]init];
             unknowElem.type = BFIM_MSG_TYPE_UNKNOWN;

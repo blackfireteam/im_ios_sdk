@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)el_convertJsonString;
 
+- (NSData *)el_convertData;
+
++ (NSDictionary *)el_convertFromData:(NSData *)data;
+
 @end
 
 NS_ASSUME_NONNULL_END

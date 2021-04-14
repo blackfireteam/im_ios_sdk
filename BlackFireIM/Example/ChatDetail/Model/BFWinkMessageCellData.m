@@ -26,7 +26,7 @@
 
 - (CGSize)contentSize
 {
-   return CGSizeMake(120, 120);
+   return CGSizeMake(150, 150);
 }
 
 - (CGFloat)heightOfWidth:(CGFloat)width

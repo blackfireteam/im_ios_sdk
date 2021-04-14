@@ -7,6 +7,9 @@
 
 #import "BFWinkMessageCell.h"
 #import "BFWinkMessageCellData.h"
+#import "UIView+Frame.h"
+#import "UIColor+BFDarkMode.h"
+
 
 @implementation BFWinkMessageCell
 
@@ -20,6 +23,13 @@
         _animationView.frame = self.container.bounds;
         _animationView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_animationView play];
+        
+        _noticeL = [[UILabel alloc]init];
+        _noticeL.font = [UIFont systemFontOfSize:12];
+        _noticeL.text = @"wink";
+        _noticeL.textAlignment = NSTextAlignmentRight;
+        _noticeL.textColor = [UIColor d_systemGrayColor];
+        [self.container addSubview:_noticeL];
     }
     return self;
 }
@@ -28,6 +38,12 @@
 {
     //set data
     [super fillWithData:data];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.noticeL.frame = CGRectMake(self.container.width-50, self.container.height-15, 50, 15);
 }
 
 @end

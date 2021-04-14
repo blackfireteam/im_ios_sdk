@@ -16,6 +16,7 @@
 #import "BFChatViewController.h"
 #import "MSIMSDK.h"
 
+
 @interface BFHomeController()<BFSparkCardViewDelegate,BFSparkCardViewDataSource,BFSparkCardCellDelegate>
 
 @property(nonatomic,strong) BFSparkCardView *containter;
@@ -34,16 +35,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     [self setupUI];
-}
-
-- (instancetype)init
-{
-    if (self = [super init]) {
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNetworkChanged:) name:MSUIKitNotification_ConnListener object:nil];
-    }
-    return self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadParksData];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -106,42 +101,18 @@
 - (void)loadParksData
 {
     [[MSIMManager sharedInstance] getSparks:^(NSArray<MSProfileInfo *> * sparks) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.dataList addObjectsFromArray:sparks];
-            [self.containter reloadData];
-            [self.loadingView stop];
-            self.loadingView.hidden = YES;
-            self.likeBtn.hidden = NO;
-            self.dislikeBtn.hidden = NO;
-        });
+        [self.dataList removeAllObjects];
+        [self.dataList addObjectsFromArray:sparks];
+        [self.containter reloadData];
+        [self.loadingView stop];
+        self.loadingView.hidden = YES;
+        self.likeBtn.hidden = NO;
+        self.dislikeBtn.hidden = NO;
         } fail:^(NSInteger code, NSString * _Nonnull desc) {
             [SVProgressHUD showInfoWithStatus:desc];
+            [self.loadingView stop];
+            self.loadingView.hidden = YES;
     }];
-}
-
-- (void)onNetworkChanged:(NSNotification *)notification
-{
-    BFIMNetStatus status = [notification.object intValue];
-    switch (status) {
-        case IMNET_STATUS_SUCC:
-        {
-            if (self.dataList.count == 0) {
-                [self loadParksData];
-            }
-        }
-            break;
-        case IMNET_STATUS_CONNECTING:
-            
-            break;
-        case IMNET_STATUS_DISCONNECT:
-            
-            break;
-        case IMNET_STATUS_CONNFAILED:
-            
-            break;
-        default:
-            break;
-    }
 }
 
 #pragma mark -- BFSparkCardViewDelegate,BFSparkCardViewDataSource
@@ -205,8 +176,8 @@
 - (void)winkBtnDidClick:(BFSparkCardCell *)cell
 {
     if (cell.user.user_id) {
-        NSString *text = @"wink";
-        MSIMCustomElem *customElem = [[MSIMManager sharedInstance]createCustomMessage:[text dataUsingEncoding:NSUTF8StringEncoding]];
+        NSDictionary *extDic = @{@"type": @(32),@"text": @"wink"};
+        MSIMCustomElem *customElem = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertData]];
         [[MSIMManager sharedInstance]sendC2CMessage:customElem toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
                     
                 } failed:^(NSInteger code, NSString * _Nonnull desc) {

@@ -8,7 +8,7 @@
 #import "MSIMElem.h"
 #import "MSIMTools.h"
 #import "NSBundle+BFKit.h"
-
+#import "NSDictionary+Ext.h"
 
 @implementation MSIMElem
 
@@ -25,9 +25,9 @@
     return self.isSelf ? self.toUid : self.fromUid;
 }
 
-- (NSDictionary *)contentDic
+- (NSData *)extData
 {
-    return @{};
+    return nil;
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -63,11 +63,6 @@
 
 @implementation MSIMTextElem
 
-- (NSDictionary *)contentDic
-{
-    return @{@"text": XMNoNilString(self.text)};
-}
-
 - (id)copyWithZone:(NSZone *)zone
 {
     MSIMTextElem *elem = [[[self class] allocWithZone:zone]init];
@@ -84,13 +79,20 @@
     }
 }
 
+- (NSData *)extData
+{
+    NSDictionary *dic = @{@"text": XMNoNilString(self.text)};
+    return [dic el_convertData];
+}
+
 @end
 
 @implementation MSIMImageElem
 
-- (NSDictionary *)contentDic
+- (NSData *)extData
 {
-    return @{@"url": XMNoNilString(self.url),@"width": @(self.width),@"height": @(self.height),@"path": XMNoNilString(self.path),@"size": @(self.size),@"uuid": XMNoNilString(self.uuid)};
+    NSDictionary *dic = @{@"url": XMNoNilString(self.url),@"width": @(self.width),@"height": @(self.height),@"path": XMNoNilString(self.path),@"size": @(self.size),@"uuid": XMNoNilString(self.uuid)};
+    return [dic el_convertData];
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -115,9 +117,10 @@
 
 @implementation MSIMVideoElem
 
-- (NSDictionary *)contentDic
+- (NSData *)extData
 {
-    return @{@"videoUrl": XMNoNilString(self.videoUrl),@"width": @(self.width),@"height": @(self.height),@"videoPath": XMNoNilString(self.videoPath),@"duration": @(self.duration),@"coverPath":XMNoNilString(self.coverUrl),@"coverUrl":XMNoNilString(self.coverUrl),@"uuid": XMNoNilString(self.uuid)};
+    NSDictionary *dic = @{@"videoUrl": XMNoNilString(self.videoUrl),@"width": @(self.width),@"height": @(self.height),@"videoPath": XMNoNilString(self.videoPath),@"duration": @(self.duration),@"coverPath":XMNoNilString(self.coverUrl),@"coverUrl":XMNoNilString(self.coverUrl),@"uuid": XMNoNilString(self.uuid)};
+    return [dic el_convertData];
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -151,9 +154,9 @@
     return elem;
 }
 
-- (NSDictionary *)contentDic
+- (NSData *)extData
 {
-    return @{@"data": self.data};
+    return  self.data;
 }
 
 - (NSString *)displayStr

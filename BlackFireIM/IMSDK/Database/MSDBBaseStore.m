@@ -20,7 +20,7 @@
 - (BOOL)createTable:(NSString *)tableName withSQL:(NSString *)sqlString
 {
     __block BOOL ok = YES;
-    [self.dbQueue inDatabase:^(FMDatabase *db) {
+    [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
         if(![db tableExists:tableName]){
             ok = [db executeUpdate:sqlString];
         }
@@ -35,7 +35,7 @@
 {
     __block BOOL ok = NO;
     if(self.dbQueue) {
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
             if(![db columnExists:columnName inTableWithName:tableName]) {
                 NSString *sql = [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ TEXT",tableName,columnName];
                 ok = [db executeUpdate:sql];
@@ -51,7 +51,7 @@
 {
     __block BOOL ok = NO;
     if (self.dbQueue) {
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
             ok = [db executeUpdate:sqlString withArgumentsInArray:arrParameter];
         }];
     }
@@ -62,7 +62,7 @@
 {
     __block BOOL ok = NO;
     if (self.dbQueue) {
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
             ok = [db executeUpdate:sqlString withParameterDictionary:dicParameter];
         }];
     }
@@ -77,7 +77,7 @@
         va_list *p_args;
         p_args = &args;
         va_start(args, sqlString);
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
             ok = [db executeUpdate:sqlString withVAList:*p_args];
         }];
         va_end(args);
@@ -88,7 +88,7 @@
 - (void)excuteQuerySQL:(NSString*)sqlStr resultBlock:(void(^)(FMResultSet * rsSet))resultBlock
 {
     if (self.dbQueue) {
-        [self.dbQueue inDatabase:^(FMDatabase *db) {
+        [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
             FMResultSet * retSet = [db executeQuery:sqlStr];
             if (resultBlock) {
                 resultBlock(retSet);

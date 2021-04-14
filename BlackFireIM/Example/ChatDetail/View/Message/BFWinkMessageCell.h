@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) LOTAnimationView *animationView;
 
+@property(nonatomic,strong) UILabel *noticeL;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -20,4 +20,20 @@
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
+- (NSData *)el_convertData
+{
+    if (self == nil) {
+        return nil;
+    }
+    NSError *parseError = nil;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&parseError];
+    return data;
+}
+
++ (NSDictionary *)el_convertFromData:(NSData *)data
+{
+    if (data == nil) return nil;
+    return [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+}
+
 @end

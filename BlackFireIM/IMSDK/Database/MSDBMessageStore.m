@@ -36,7 +36,7 @@ static NSString *ext_data = @"ext_data";
 {
     NSString *fid = elem.partner_id;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",fid];
-    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(msg_id INTEGER,msg_sign INTEGER NOT NULL,f_id TEXT,t_id TEXT,msg_type INTEGER,send_status INTEGER,read_status INTEGER,code INTEGER,reason TEXT,block_id INTEGER NOT NULL,ext_data TEXT,PRIMARY KEY(msg_sign))",tableName];
+    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(msg_id INTEGER,msg_sign INTEGER NOT NULL,f_id TEXT,t_id TEXT,msg_type INTEGER,send_status INTEGER,read_status INTEGER,code INTEGER,reason TEXT,block_id INTEGER NOT NULL,ext_data blob,PRIMARY KEY(msg_sign))",tableName];
     BOOL isOK = [self createTable:tableName withSQL:createSQL];
     if (isOK == NO) {
         NSLog(@"创建表失败****%@",tableName);
@@ -74,7 +74,7 @@ static NSString *ext_data = @"ext_data";
                            @(elem.code),
                            XMNoNilString(elem.reason),
                            @(block_id),
-                           XMNoNilString([elem.contentDic el_convertJsonString])];
+                           elem.extData ?:[NSNull  null]];
     BOOL isAddOK = [self excuteSQL:sqlStr withArrParameter:addParams];
     return isAddOK;
 }
@@ -234,36 +234,6 @@ static NSString *ext_data = @"ext_data";
     }];
     return elem;
 }
-
-//- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
-//                       msg_id:(NSInteger)msg_id
-//                    partnerID:(NSString *)partnerID
-//{
-//    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-//    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',msg_id = '%zd' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SEND_SUCC,msg_id,msg_sign];
-//    BOOL isOK = [self excuteSQL:sqlStr];
-//    return isOK;
-//}
-//
-//- (BOOL)updateMessageToFail:(NSInteger)msg_sign
-//                       code:(NSInteger)code
-//                     reason:(NSString *)reason
-//                  partnerID:(NSString *)partnerID
-//{
-//    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-//    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = '%zd',reason = '%@' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,code,XMNoNilString(reason),msg_sign];
-//    BOOL isOK = [self excuteSQL:sqlStr];
-//    return isOK;
-//}
-//
-//- (BOOL)updateMessageToSending:(NSInteger)msg_sign
-//                     partnerID:(NSString *)partnerID
-//{
-//    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-//    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd',code = 0,reason = '%@' where msg_sign = '%zd'",tableName,BFIM_MSG_STATUS_SENDING,@"",msg_sign];
-//    BOOL isOK = [self excuteSQL:sqlStr];
-//    return isOK;
-//}
 
 - (NSArray<MSIMElem *> *)localMessageGroupByBlockID:(NSInteger)blockID partnerID:(NSString *)partnerID maxCount:(NSInteger)count
 {
@@ -498,8 +468,8 @@ static NSString *ext_data = @"ext_data";
 {
     MSIMElem *elem = [[MSIMElem alloc]init];
     BFIMMessageType type = [rsSet intForColumn:msg_type];
-    NSString *contentJson = [rsSet stringForColumn:ext_data];
-    NSDictionary *dic = [contentJson el_convertToDictionary];
+    NSData *extData = [rsSet dataForColumn:@"ext_data"];
+    NSDictionary *dic = [NSDictionary el_convertFromData:extData];
     if (type == BFIM_MSG_TYPE_TEXT) {
         MSIMTextElem *textElem = [[MSIMTextElem alloc]init];
         textElem.text = dic[@"text"];
@@ -524,9 +494,9 @@ static NSString *ext_data = @"ext_data";
         videoElem.duration = [dic[@"duration"] integerValue];
         videoElem.uuid = dic[@"uuid"];
         elem = videoElem;
-    }else if (type == BFIM_MSG_TYPE_WINK) {
+    }else if (type == BFIM_MSG_TYPE_CUSTOM) {
         MSIMCustomElem *customElem = [[MSIMCustomElem alloc]init];
-        customElem.data = dic[@"data"];
+        customElem.data = extData;
         elem = customElem;
     }
     elem.msg_id = [rsSet longLongIntForColumn:@"msg_id"];

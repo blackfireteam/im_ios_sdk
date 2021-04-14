@@ -241,7 +241,7 @@
             videoMsg.showName = YES;
             videoMsg.elem = elem;
             data = videoMsg;
-        }else if (elem.type == BFIM_MSG_TYPE_WINK) {
+        }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
             BFWinkMessageCellData *winkMsg = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             winkMsg.elem = elem;
             data = winkMsg;
