@@ -7,10 +7,10 @@
 */
 "TUIKitTipsMostSelectTextFormat" = "Select %ld at most";
 
-"Home_tab" = "Home";
-"Discovery_tab" = "Discovery";
+"Home_tab" = "Spark";
+"Discovery_tab" = "Discover";
 "Message_tab" = "Message";
-"Profile_tab" = "Profile";
+"Profile_tab" = "Me";
 
 "WelcomeBack" = "WELCOME BACK";
 "LOGIN" = "LOG IN";

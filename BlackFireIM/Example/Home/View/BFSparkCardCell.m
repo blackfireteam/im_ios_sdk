@@ -10,6 +10,8 @@
 #import <SDWebImage.h>
 #import "BFHeader.h"
 #import "UIView+Frame.h"
+#import "UIDevice+Ext.h"
+
 
 @interface BFSparkCardCell()
 
@@ -53,6 +55,7 @@
 
         self.winkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.winkBtn setImage:[UIImage imageNamed:@"spark_wink"] forState:UIControlStateNormal];
+        [self.winkBtn setImage:[UIImage imageNamed:@"spark_wink_sel"] forState:UIControlStateSelected];
         [self.winkBtn addTarget:self action:@selector(winkBtnDidClick) forControlEvents:UIControlEventTouchUpInside];
         [self.imageView addSubview:self.winkBtn];
         
@@ -81,6 +84,7 @@
     if ([self.delegate respondsToSelector:@selector(winkBtnDidClick:)]) {
         [self.delegate winkBtnDidClick:self];
     }
+    [UIDevice impactFeedback];
 }
 
 - (void)chatBtnDidClick
@@ -88,6 +92,7 @@
     if ([self.delegate respondsToSelector:@selector(chatBtnDidClick:)]) {
         [self.delegate chatBtnDidClick:self];
     }
+    [UIDevice impactFeedback];
 }
 
 - (void)layoutSubviews

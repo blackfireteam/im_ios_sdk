@@ -64,23 +64,24 @@
 
 - (void)setupUI
 {
-    self.likeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.likeBtn setImage:[UIImage imageNamed:@"card_like"] forState:UIControlStateNormal];
-    [self.likeBtn addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.likeBtn.frame = CGRectMake(Screen_Width*0.5+30, Screen_Height-TabBar_Height-15-60, 60, 60);
-    self.likeBtn.hidden = YES;
-    [self.view addSubview:self.likeBtn];
+//    self.likeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.likeBtn setImage:[UIImage imageNamed:@"card_like"] forState:UIControlStateNormal];
+//    [self.likeBtn addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
+//    self.likeBtn.frame = CGRectMake(Screen_Width*0.5+30, Screen_Height-TabBar_Height-15-60, 60, 60);
+//    self.likeBtn.hidden = YES;
+//    [self.view addSubview:self.likeBtn];
+//
+//    self.dislikeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.dislikeBtn setImage:[UIImage imageNamed:@"card_dislike"] forState:UIControlStateNormal];
+//    [self.dislikeBtn addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
+//    self.dislikeBtn.frame = CGRectMake(Screen_Width*0.5-30-60, Screen_Height-TabBar_Height-15-60, 60, 60);
+//    self.dislikeBtn.hidden = YES;
+//    [self.view addSubview:self.dislikeBtn];
     
-    self.dislikeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.dislikeBtn setImage:[UIImage imageNamed:@"card_dislike"] forState:UIControlStateNormal];
-    [self.dislikeBtn addTarget:self action:@selector(dislikeAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.dislikeBtn.frame = CGRectMake(Screen_Width*0.5-30-60, Screen_Height-TabBar_Height-15-60, 60, 60);
-    self.dislikeBtn.hidden = YES;
-    [self.view addSubview:self.dislikeBtn];
-    
+    CGFloat maxH = Screen_Height-StatusBar_Height-10-TabBar_Height-10;
     CGFloat cardW = Screen_Width-30;
-    CGFloat cardH = cardW/0.6;
-    self.containter = [[BFSparkCardView alloc]initWithFrame:CGRectMake(15, StatusBar_Height + 10, cardW, cardH)];
+    CGFloat cardH = MIN(cardW/0.6, maxH);
+    self.containter = [[BFSparkCardView alloc]initWithFrame:CGRectMake(15, StatusBar_Height + 10 + (maxH-cardH)*0.5, cardW, cardH)];
     self.containter.delegate = self;
     self.containter.dataSource = self;
     self.containter.visibleCount = 3;
@@ -91,7 +92,8 @@
     [self.containter registerClass:[BFSparkCardCell class] forCellReuseIdentifier:@"cardCell"];
     [self.view addSubview:self.containter];
     
-    self.loadingView.frame = self.containter.frame;
+    self.loadingView.frame = CGRectMake(0, 0, cardW, cardW);
+    self.loadingView.center = self.containter.center;
     [self.view addSubview:self.loadingView];
     [self.loadingView play];
     
@@ -103,16 +105,29 @@
     [[MSIMManager sharedInstance] getSparks:^(NSArray<MSProfileInfo *> * sparks) {
         [self.dataList removeAllObjects];
         [self.dataList addObjectsFromArray:sparks];
-        [self.containter reloadData];
-        [self.loadingView stop];
-        self.loadingView.hidden = YES;
-        self.likeBtn.hidden = NO;
-        self.dislikeBtn.hidden = NO;
+        [self bf_reloadData];
         } fail:^(NSInteger code, NSString * _Nonnull desc) {
             [SVProgressHUD showInfoWithStatus:desc];
             [self.loadingView stop];
             self.loadingView.hidden = YES;
     }];
+}
+
+- (void)bf_reloadData
+{
+    self.containter.alpha = 0;
+    self.likeBtn.alpha = 0;
+    self.dislikeBtn.alpha = 0;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.loadingView.alpha = 0;
+        self.containter.alpha = 1;
+        self.likeBtn.alpha = 1;
+        self.dislikeBtn.alpha = 1;
+        
+    } completion:^(BOOL finished) {
+        [self.loadingView stop];
+    }];
+    [self.containter reloadData];
 }
 
 #pragma mark -- BFSparkCardViewDelegate,BFSparkCardViewDataSource
@@ -180,7 +195,9 @@
         MSIMCustomElem *customElem = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertData]];
         [[MSIMManager sharedInstance]sendC2CMessage:customElem toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
                     
-                } failed:^(NSInteger code, NSString * _Nonnull desc) {
+             cell.winkBtn.selected = YES;
+            
+            } failed:^(NSInteger code, NSString * _Nonnull desc) {
                     
         }];
     }

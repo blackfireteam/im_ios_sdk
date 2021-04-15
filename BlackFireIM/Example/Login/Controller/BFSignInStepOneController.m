@@ -67,7 +67,7 @@
 {
     [self.view endEditing:YES];
     NSString *nickname = [self.nickNameTF.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (nickname.length <= 3) {
+    if (nickname.length < 3) {
         self.errL.text = @"Nickname must contain at least 3 characters.";
         return;
     }

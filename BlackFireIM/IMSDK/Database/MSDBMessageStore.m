@@ -445,7 +445,7 @@ static NSString *ext_data = @"ext_data";
     NSString *sqlStr;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
     if (last_msg_sign == 0) {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' and block_id = 1 order by msg_sign desc limit '%zd'",tableName,BFIM_MSG_TYPE_NULL,count+1];
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,BFIM_MSG_TYPE_NULL,block_id,count+1];
     }else {
         sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,last_msg_sign,BFIM_MSG_TYPE_NULL,block_id,count+1];
     }

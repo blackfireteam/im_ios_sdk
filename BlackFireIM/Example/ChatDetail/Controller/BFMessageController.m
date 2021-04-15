@@ -401,7 +401,6 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"offset = %f",scrollView.contentOffset.y);
     if (scrollView.contentOffset.y + scrollView.height + 20 >= scrollView.contentSize.height) {
         if (self.countTipView.isHidden == NO) {
             [self.countTipView cleanCount];

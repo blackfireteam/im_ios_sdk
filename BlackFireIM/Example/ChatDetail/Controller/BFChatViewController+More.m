@@ -76,8 +76,11 @@
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingVideo:(UIImage *)coverImage sourceAssets:(PHAsset *)asset
 {
+    if (asset.duration > 3 * 60) {
+        [SVProgressHUD showInfoWithStatus:@"视频时长不能超过3分钟"];
+        return;
+    }
     [SVProgressHUD show];
-    
     if (coverImage.size.width > 1920 || coverImage.size.height > 1920) {
         CGFloat aspectRatio = MIN ( 1920 / coverImage.size.width, 1920 / coverImage.size.height );
         CGFloat aspectWidth = coverImage.size.width * aspectRatio;
@@ -93,7 +96,7 @@
     NSString *path = [[NSFileManager pathForIMImage]stringByAppendingPathComponent:fileName];
     [[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil];
     
-    [[TZImageManager manager]getVideoOutputPathWithAsset:asset presetName:AVAssetExportPresetMediumQuality success:^(NSString *outputPath) {
+    [[TZImageManager manager]getVideoOutputPathWithAsset:asset presetName:AVAssetExportPresetHighestQuality success:^(NSString *outputPath) {
             
         [SVProgressHUD dismiss];
         [picker dismissViewControllerAnimated:YES completion:nil];
@@ -115,6 +118,10 @@
     }];
 }
 
+- (void)tz_imagePickerControllerDidCancel:(TZImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)sendImage:(MSIMImageElem *)elem
 {

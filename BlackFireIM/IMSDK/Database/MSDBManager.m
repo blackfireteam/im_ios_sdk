@@ -9,7 +9,6 @@
 #import <FMDB.h>
 #import "MSIMTools.h"
 #import "NSFileManager+filePath.h"
-#import "MSDBMessageStore.h"
 #import "MSConversationProvider.h"
 
 
@@ -66,20 +65,19 @@ static MSDBManager *manager;
 - (void)scanAllTables
 {
     __block NSMutableArray *tables = [NSMutableArray array];
-    [self.messageQueue inDatabase:^(FMDatabase * _Nonnull db) {
+    [self.messageQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
         FMResultSet *resultSet = [db executeQuery:@"SELECT * FROM sqlite_master where type='table';"];
         while ([resultSet next]) {
             NSString *tableName = [resultSet stringForColumnIndex:1];
             [tables addObject:tableName];
         }
-        [resultSet close];
-    }];
-    MSDBMessageStore *msgStore = [[MSDBMessageStore alloc]init];
-    for (NSString *tableName in tables) {
-        if ([tableName hasPrefix:@"message_user_"]) {
-            [msgStore cleanAllSendingMessage:tableName];
+        for (NSString *tableName in tables) {
+            if ([tableName hasPrefix:@"message_user_"]) {
+                NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd' where send_status = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,BFIM_MSG_STATUS_SENDING];
+                [db executeQuery:sqlStr];
+            }
         }
-    }
+    }];
 }
 
 @end

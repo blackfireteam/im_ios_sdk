@@ -16,11 +16,17 @@
 #import "MSIMManager+Conversation.h"
 #import "MSProfileProvider.h"
 #import "MSIMManager+Parse.h"
+#import "Reachability.h"
+
 
 #define kMsgMaxOutTime 30
 @interface MSIMManager()<GCDAsyncSocketDelegate>
 
 @property(nonatomic,strong) IMSDKConfig *config;
+
+@property(nonatomic, strong) Reachability *reachability;
+
+@property(nonatomic,assign) NetworkStatus *netStatus;//当前的网络状态
 
 @property(nonatomic,strong) NSMutableData *buffer;// 接收缓冲区
 @property(nonatomic,assign) NSInteger bodyLength;//包体总长度
@@ -39,6 +45,8 @@
 @property(nonatomic,strong)dispatch_queue_t socketQueue;// 数据的串行队列
 
 @property(nonatomic,assign) NSInteger retryCount;//自动重连次数
+
+@property(nonatomic,assign) BOOL istcpConnecting;
 
 @property(nonatomic,copy) MSIMSucc loginSuccBlock;
 @property(nonatomic,copy) MSIMFail loginFailBlock;
@@ -66,6 +74,10 @@ static MSIMManager *_manager;
         _socket = [[GCDAsyncSocket alloc]initWithDelegate:self delegateQueue:self.socketQueue];
         _callbackTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(callbackHandler:) userInfo:nil repeats:true];
         [[NSRunLoop mainRunLoop]addTimer:_callbackTimer forMode:NSRunLoopCommonModes];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+        self.reachability = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+        [self.reachability startNotifier];
     }
     return self;
 }
@@ -111,8 +123,9 @@ static MSIMManager *_manager;
 
 - (void)connectTCPToServer
 {
-    if (!self.socket.isDisconnected) return;
+    if (!self.socket.isDisconnected || self.istcpConnecting) return;
     NSLog(@"请求建立TCP连接");
+    self.istcpConnecting = YES;
     NSError *error = nil;
     [self.socket connectToHost:self.config.ip onPort:self.config.port error:&error];
     if(error) {
@@ -120,6 +133,7 @@ static MSIMManager *_manager;
         if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
             [self.connListener connectFailed:error.code err:error.localizedDescription];
         }
+        self.istcpConnecting = NO;
     }else {
         if (self.connListener && [self.connListener respondsToSelector:@selector(onConnecting)]) {
             [self.connListener onConnecting];
@@ -133,54 +147,37 @@ static MSIMManager *_manager;
     [self.socket disconnect];
 }
 
-//- (void)handlerNetwork:(ReachabilityStatus)status
-//{
-//    switch (status){
-//            case RealStatusUnknown:
-//            {
-//                NSLog(@"~~~~~~~~~~~~~RealStatusUnknown");
-//                if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
-//                    [self.connListener connectFailed:ERR_NET_NOT_CONNECT err:@"无网络"];
-//                }
-//                break;
-//            }
-//
-//            case RealStatusNotReachable:
-//            {
-//                NSLog(@"~~~~~~~~~~~~~RealStatusNotReachable");
-//                if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
-//                    [self.connListener connectFailed:ERR_NET_NOT_CONNECT err:@"无网络"];
-//                }
-//                break;
-//            }
-//
-//            case RealStatusViaWWAN:
-//            {
-//                NSLog(@"~~~~~~~~~~~~~RealStatusViaWWAN");
-//                if (!self.socket.isConnected) {
-//                    self.retryCount = 0;
-//                    [self connectTCPToServer];
-//                }
-//                break;
-//            }
-//            case RealStatusViaWiFi:
-//            {
-//                NSLog(@"~~~~~~~~~~~~~RealStatusViaWiFi");
-//                if (!self.socket.isConnected) {
-//                    self.retryCount = 0;
-//                    [self connectTCPToServer];
-//                }
-//                break;
-//            }
-//            default:
-//                break;
-//        }
-//}
+- (void)reachabilityChanged:(NSNotification *)note
+{
+    Reachability *curReach = note.object;
+    NetworkStatus netStatus = [curReach currentReachabilityStatus];
+    switch (netStatus) {
+        case NotReachable:
+            NSLog(@"当前网络不能用");
+        {
+            if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
+                [self.connListener connectFailed:-99 err:@"当前网络不可用"];
+            }
+        }
+            break;
+        case ReachableViaWWAN:
+            NSLog(@"当前网络WAN");
+            [self connectTCPToServer];
+            break;
+        case ReachableViaWiFi:
+            NSLog(@"当前网络WIFI");
+            [self connectTCPToServer];
+            break;
+        default:
+            break;
+    }
+}
 
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
 {
     NSLog(@"****建立连接成功****");
+    self.istcpConnecting = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.connListener && [self.connListener respondsToSelector:@selector(connectSucc)]) {
             [self.connListener connectSucc];
@@ -199,20 +196,23 @@ static MSIMManager *_manager;
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
     NSLog(@"****连接断开****");
+    self.istcpConnecting = NO;
     [self closeTimer];
     [self.retryTimer invalidate];
     self.retryTimer = nil;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if(self.retryCount <= self.config.retryCount) {//断线重连
-            self.retryCount++;
-            self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:self.retryCount*self.retryCount target:self selector:@selector(connectTCPToServer) userInfo:nil repeats:true];
-            [[NSRunLoop mainRunLoop]addTimer:self.retryTimer forMode:NSRunLoopCommonModes];
-        }else {//断线重连失败
-            if (self.connListener && [self.connListener respondsToSelector:@selector(onReConnFailed:err:)]) {
-                [self.connListener onReConnFailed:err.code err:err.localizedDescription];
+    if (self.netStatus != NotReachable) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(self.retryCount <= self.config.retryCount) {//断线重连
+                self.retryCount++;
+                self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:self.retryCount*self.retryCount target:self selector:@selector(connectTCPToServer) userInfo:nil repeats:true];
+                [[NSRunLoop mainRunLoop]addTimer:self.retryTimer forMode:NSRunLoopCommonModes];
+            }else {//断线重连失败
+                if (self.connListener && [self.connListener respondsToSelector:@selector(onReConnFailed:err:)]) {
+                    [self.connListener onReConnFailed:err.code err:err.localizedDescription];
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
@@ -457,9 +457,9 @@ static MSIMManager *_manager;
         TCPBlock complete = dic[@"callback"];
         if(complete) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                complete(code,response,msg);
                 [self.callbackBlock removeObjectForKey:taskID];
                 [self.taskIDs removeObjectForKey:taskID];
+                complete(code,response,msg);
             });
         }
     }
@@ -572,7 +572,7 @@ static MSIMManager *_manager;
             [MSIMTools sharedInstance].user_sign = user_sign;
             [[MSIMTools sharedInstance] updateServerTime:result.nowTime*1000*1000];
             //将消息队列中的消息重新发送一遍
-//            [strongSelf resendAllMessages];
+            [strongSelf resendAllMessages];
             
             if (strongSelf.loginSuccBlock) strongSelf.loginSuccBlock();
             //同步会话列表
@@ -638,12 +638,14 @@ static MSIMManager *_manager;
 //断线重连成功后，将所有消息队列中的消息重新发送一遍
 - (void)resendAllMessages
 {
-    for (NSInteger i = 0; i < self.callbackBlock.allKeys.count; i++) {
-        NSString *taskID = self.callbackBlock.allKeys[i];
-        NSDictionary *dic = self.callbackBlock[taskID];
-        [self send:dic[@"data"] protoType:[dic[@"protoType"] integerValue] needToEncry:[dic[@"encry"] boolValue] sign:[self.taskIDs[taskID] integerValue] callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-                    
-        }];
+    NSDictionary *tempDic = self.callbackBlock.mutableCopy;
+    NSDictionary *tempTasks = self.taskIDs.mutableCopy;
+    [self.callbackBlock removeAllObjects];
+    [self.taskIDs removeAllObjects];
+    for (NSInteger i = 0; i < tempDic.allKeys.count; i++) {
+        NSString *taskID = tempDic.allKeys[i];
+        NSDictionary *dic = tempDic[taskID];
+        [self send:dic[@"data"] protoType:[dic[@"protoType"] integerValue] needToEncry:[dic[@"encry"] boolValue] sign:[tempTasks[taskID] integerValue] callback:dic[@"callback"]];
     }
 }
 

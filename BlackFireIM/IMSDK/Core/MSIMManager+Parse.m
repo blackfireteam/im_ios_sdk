@@ -79,12 +79,10 @@
         [[MSConversationProvider provider]updateConversations:self.convCaches];
         [self updateConvLastMessage:self.convCaches];
         //通知会话有更新
-        if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.convListener onUpdateConversations:self.convCaches];
-            });
-        }
         dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+                [self.convListener onUpdateConversations:self.convCaches];
+            }
             if ([self.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
                 [self.convListener onSyncServerFinish];
             }
