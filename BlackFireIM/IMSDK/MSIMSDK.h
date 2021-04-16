@@ -24,5 +24,4 @@
 #import "MSIMManager+Demo.h"
 #import "MSIMErrorCode.h"
 
-
 #endif /* MSIMSDK_h */

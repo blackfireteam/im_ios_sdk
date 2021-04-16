@@ -26,6 +26,7 @@
         self.backgroundColor = [UIColor d_colorWithColorLight:TCell_Nomal dark:TCell_Nomal_Dark];
         
         _headImageView = [[UIImageView alloc]init];
+        _headImageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:_headImageView];
         
         _timeLabel = [[UILabel alloc]init];

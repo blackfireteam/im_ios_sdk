@@ -26,7 +26,7 @@
 
 @property(nonatomic, strong) Reachability *reachability;
 
-@property(nonatomic,assign) NetworkStatus *netStatus;//当前的网络状态
+@property(nonatomic,assign) NetworkStatus netStatus;//当前的网络状态
 
 @property(nonatomic,strong) NSMutableData *buffer;// 接收缓冲区
 @property(nonatomic,assign) NSInteger bodyLength;//包体总长度
@@ -46,7 +46,7 @@
 
 @property(nonatomic,assign) NSInteger retryCount;//自动重连次数
 
-@property(nonatomic,assign) BOOL istcpConnecting;
+@property(nonatomic,assign) BFIMNetStatus connStatus;//tcp连接状态
 
 @property(nonatomic,copy) MSIMSucc loginSuccBlock;
 @property(nonatomic,copy) MSIMFail loginFailBlock;
@@ -123,17 +123,17 @@ static MSIMManager *_manager;
 
 - (void)connectTCPToServer
 {
-    if (!self.socket.isDisconnected || self.istcpConnecting) return;
-    NSLog(@"请求建立TCP连接");
-    self.istcpConnecting = YES;
+    if (self.connStatus == IMNET_STATUS_SUCC || self.connStatus == IMNET_STATUS_CONNECTING) return;
+    HDNormalLog(@"请求建立TCP连接");
+    self.connStatus = IMNET_STATUS_CONNECTING;
     NSError *error = nil;
     [self.socket connectToHost:self.config.ip onPort:self.config.port error:&error];
     if(error) {
-        NSLog(@"socket连接错误：%@", error);
+        HDErrorLog(@"socket连接错误：%@", error);
         if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
             [self.connListener connectFailed:error.code err:error.localizedDescription];
         }
-        self.istcpConnecting = NO;
+        self.connStatus = IMNET_STATUS_CONNFAILED;
     }else {
         if (self.connListener && [self.connListener respondsToSelector:@selector(onConnecting)]) {
             [self.connListener onConnecting];
@@ -143,7 +143,7 @@ static MSIMManager *_manager;
 
 - (void)disConnectTCP
 {
-    NSLog(@"请求断开TCP连接");
+    HDErrorLog(@"请求断开TCP连接");
     [self.socket disconnect];
 }
 
@@ -151,9 +151,10 @@ static MSIMManager *_manager;
 {
     Reachability *curReach = note.object;
     NetworkStatus netStatus = [curReach currentReachabilityStatus];
+    self.netStatus = netStatus;
     switch (netStatus) {
         case NotReachable:
-            NSLog(@"当前网络不能用");
+            HDErrorLog(@"当前网络不能用");
         {
             if (self.connListener && [self.connListener respondsToSelector:@selector(connectFailed:err:)]) {
                 [self.connListener connectFailed:-99 err:@"当前网络不可用"];
@@ -161,11 +162,11 @@ static MSIMManager *_manager;
         }
             break;
         case ReachableViaWWAN:
-            NSLog(@"当前网络WAN");
+            HDNormalLog(@"当前网络WAN");
             [self connectTCPToServer];
             break;
         case ReachableViaWiFi:
-            NSLog(@"当前网络WIFI");
+            HDNormalLog(@"当前网络WIFI");
             [self connectTCPToServer];
             break;
         default:
@@ -176,12 +177,12 @@ static MSIMManager *_manager;
 #pragma mark - GCDAsyncSocketDelegate
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
 {
-    NSLog(@"****建立连接成功****");
-    self.istcpConnecting = NO;
+    HDNormalLog(@"****建立连接成功****");
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.connListener && [self.connListener respondsToSelector:@selector(connectSucc)]) {
             [self.connListener connectSucc];
         }
+        self.connStatus = IMNET_STATUS_SUCC;
     });
     [self.socket readDataWithTimeout:-1 tag:100];
     self.retryCount = 0;
@@ -195,18 +196,20 @@ static MSIMManager *_manager;
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
-    NSLog(@"****连接断开****");
-    self.istcpConnecting = NO;
+    HDErrorLog(@"****连接断开****");
+    self.connStatus = IMNET_STATUS_CONNFAILED;
     [self closeTimer];
     [self.retryTimer invalidate];
     self.retryTimer = nil;
     if (self.netStatus != NotReachable) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if(self.retryCount <= self.config.retryCount) {//断线重连
+                HDErrorLog(@"断线重连");
                 self.retryCount++;
                 self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:self.retryCount*self.retryCount target:self selector:@selector(connectTCPToServer) userInfo:nil repeats:true];
                 [[NSRunLoop mainRunLoop]addTimer:self.retryTimer forMode:NSRunLoopCommonModes];
             }else {//断线重连失败
+                HDErrorLog(@"断线重连失败");
                 if (self.connListener && [self.connListener respondsToSelector:@selector(onReConnFailed:err:)]) {
                     [self.connListener onReConnFailed:err.code err:err.localizedDescription];
                 }
@@ -247,7 +250,7 @@ static MSIMManager *_manager;
                     [_buffer setLength:0];//清零
                     [_buffer appendData:tmp];
                 }@catch (NSException *exception) {
-                    NSLog(@"exception name is %@,reason is %@",exception.name,exception.reason);
+                    HDErrorLog(@"exception name is %@,reason is %@",exception.name,exception.reason);
                 }
                 
             }else {
@@ -273,9 +276,9 @@ static MSIMManager *_manager;
                 //更新会话更新时间
                 [[MSIMTools sharedInstance]updateConversationTime:result.msgTime];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"收到单条消息回执***%@",result);
+            HDNormalLog(@"收到单条消息回执***%@",result);
         }
             break;
         case XMChatProtoTypeRecieve: // 收到新消息
@@ -285,9 +288,9 @@ static MSIMManager *_manager;
             if (error == nil && recieve != nil) {
                 [self recieveMessage:recieve];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"[收到]新消息***%@",recieve);
+            HDNormalLog(@"[收到]新消息***%@",recieve);
         }
             break;
         case XMChatProtoTypeMassRecieve: //收到批量消息
@@ -297,10 +300,9 @@ static MSIMManager *_manager;
             if (error == nil && batch.msgsArray != nil) {
                 [self sendMessageResponse:batch.sign resultCode:ERR_SUCC resultMsg:@"收到历史消息" response:batch];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"[收到]历史消息");
-            NSLog(@"%@",batch);
+            HDNormalLog(@"[收到]历史消息:%@",batch);
         }
             break;
         case XMChatProtoTypeLastReadMsg: //消息已读状态发生变更通知（客户端收到这个才去变更）
@@ -312,7 +314,7 @@ static MSIMManager *_manager;
                 //更新会话更新时间
                 [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
             }
-            NSLog(@"[收到]消息已读状态发生变更通知***%@",result);
+            HDNormalLog(@"[收到]消息已读状态发生变更通知***%@",result);
         }
             break;
         case XMChatProtoTypeGetChatListResponse: //拉取会话列表结果
@@ -322,7 +324,7 @@ static MSIMManager *_manager;
             if (error == nil) {
                 [self chatListResultHandler:result];
             }
-            NSLog(@"[收到]会话列表***%@",result);
+            HDNormalLog(@"[收到]会话列表***%@",result);
         }
             break;
         case XMChatProtoTypeGetProfileResult: //返回的单个用户信息结果
@@ -332,9 +334,9 @@ static MSIMManager *_manager;
             if(error == nil && profile != nil) {
                 [self sendMessageResponse:profile.sign resultCode:ERR_SUCC resultMsg:@"" response:profile];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"[收到]用户信息***%@",profile);
+            HDNormalLog(@"[收到]用户信息***%@",profile);
         }
             break;
         case XMChatProtoTypeGetProfilesResult: //返回批量用户信息结果
@@ -344,9 +346,9 @@ static MSIMManager *_manager;
             if(error == nil && profiles != nil) {
                 [self profilesResultHandler:profiles];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"[收到]批量用户信息***%@",profiles);
+            HDNormalLog(@"[收到]批量用户信息***%@",profiles);
         }
             break;
         case XMChatProtoTypeDeleteChat: //删除一条会话成功通知
@@ -356,9 +358,9 @@ static MSIMManager *_manager;
             if(error == nil && result != nil) {
                 [self deleteChatHandler:result];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"[收到]删除一条会话成功通知***%@",result);
+            HDNormalLog(@"[收到]删除一条会话成功通知***%@",result);
         }
             break;
         case XMChatProtoTypeResult: //主动发起操作处理结果
@@ -368,9 +370,9 @@ static MSIMManager *_manager;
             if(error == nil && result != nil) {
                 [self messageRsultHandler:result];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"主动发起操作处理结果***%@",result);
+            HDNormalLog(@"主动发起操作处理结果***%@",result);
         }
             break;
         case XMChatProtoTypeProfileOnline: //有用户上线了
@@ -380,9 +382,9 @@ static MSIMManager *_manager;
             if (error == nil && online != nil) {
                 [self userOnLineHandler:online];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"[收到]有用户上线了***%@",online);
+            HDNormalLog(@"[收到]有用户上线了***%@",online);
         }
             break;
             
@@ -393,9 +395,9 @@ static MSIMManager *_manager;
             if (error == nil && offline != nil) {
                 [self userOfflineHandler:offline];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"[收到]有用户下线了***%@",offline);
+            HDNormalLog(@"[收到]有用户下线了***%@",offline);
         }
             break;
         case XMChatProtoTypeGetSparkResponse: //获取首页sparks返回   for demo
@@ -405,9 +407,9 @@ static MSIMManager *_manager;
             if(error == nil && datas != nil) {
                 [self sendMessageResponse:datas.sign resultCode:ERR_SUCC resultMsg:@"" response:datas];
             }else {
-                NSLog(@"消息protobuf解析失败-- %@",error);
+                HDErrorLog(@"消息protobuf解析失败-- %@",error);
             }
-            NSLog(@"[收到]首页Sparks数据***%@",datas);
+            HDDebugLog(@"[收到]首页Sparks数据***%@",datas);
         }
             break;
         default:
@@ -551,7 +553,7 @@ static MSIMManager *_manager;
 {
     Ping *ping = [[Ping alloc]init];
     ping.type = 0;
-    NSLog(@"[发送消息-心跳包]:\n%@",ping);
+    HDNormalLog(@"[发送消息-心跳包]:\n%@",ping);
     [self send:[ping data] protoType:XMChatProtoTypeHeadBeat needToEncry:NO sign:0 callback:nil];
 }
 
@@ -563,7 +565,7 @@ static MSIMManager *_manager;
     login.token = user_sign;
     login.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     login.ct = 1;
-    NSLog(@"[发送消息-login]:\n%@",login);
+    HDNormalLog(@"[发送消息-login]:\n%@",login);
     [self send:[login data] protoType:XMChatProtoTypeLogin needToEncry:false sign:login.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
@@ -575,6 +577,7 @@ static MSIMManager *_manager;
             [strongSelf resendAllMessages];
             
             if (strongSelf.loginSuccBlock) strongSelf.loginSuccBlock();
+            strongSelf.loginSuccBlock = nil;
             //同步会话列表
             [strongSelf.convCaches removeAllObjects];
             [strongSelf synchronizeConversationList];
@@ -584,8 +587,9 @@ static MSIMManager *_manager;
                     [strongSelf.connListener onUserSigExpired];
                 }
             }
-            NSLog(@"token 鉴权失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
+            HDErrorLog(@"token 鉴权失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
             if (strongSelf.loginFailBlock) strongSelf.loginFailBlock(code, error);
+            strongSelf.loginFailBlock = nil;
         }
     }];
 }
@@ -621,7 +625,7 @@ static MSIMManager *_manager;
     WS(weakSelf)
     ImLogout *logout = [[ImLogout alloc]init];
     logout.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
-    NSLog(@"[发送消息-logout]:\n%@",logout);
+    HDNormalLog(@"[发送消息-logout]:\n%@",logout);
     [self send:[logout data] protoType:XMChatProtoTypeLogout needToEncry:NO sign:logout.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
@@ -629,7 +633,7 @@ static MSIMManager *_manager;
             [strongSelf cleanIMToken];
             succ();
         }else {
-            NSLog(@"退出登录失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
+            HDErrorLog(@"退出登录失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
             fail(code, error);
         }
     }];

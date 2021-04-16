@@ -25,7 +25,7 @@
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.updateTime = [MSIMTools sharedInstance].convUpdateTime;
     WS(weakSelf)
-    NSLog(@"[发送消息]同步会话列表：%@",request);
+    HDNormalLog(@"[发送消息]同步会话列表：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_CHAT_LIST_EMPTY) {//如果用户一条会话都没有时，服务器会通过result直接返回错误码
@@ -34,7 +34,7 @@
             }
         }else if (code == ERR_SUCC){
         }else {
-            NSLog(@"建立链接与服务器同步会话列表失败.%@", error);
+            HDErrorLog(@"建立链接与服务器同步会话列表失败.%@", error);
             if (strongSelf.convListener && [strongSelf.convListener respondsToSelector:@selector(onSyncServerFailed)]) {
                 [strongSelf.convListener onSyncServerFailed];
             }
@@ -89,7 +89,7 @@
     DelChat *delRequest = [[DelChat alloc]init];
     delRequest.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     delRequest.toUid = conv.partner_id.integerValue;
-    NSLog(@"[发送消息]删除会话：%@",delRequest);
+    HDNormalLog(@"[发送消息]删除会话：%@",delRequest);
     [self send:[delRequest data] protoType:XMChatProtoTypeDeleteChat needToEncry:NO sign:delRequest.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
             succed();
@@ -114,7 +114,7 @@
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.toUid = user_id.integerValue;
     request.msgId = msgID;
-    NSLog(@"[发送消息]标记消息已读：%@",request);
+    HDNormalLog(@"[发送消息]标记消息已读：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeMsgread needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
     }];

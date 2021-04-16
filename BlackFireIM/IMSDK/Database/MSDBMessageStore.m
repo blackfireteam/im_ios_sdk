@@ -36,7 +36,7 @@ static NSString *ext_data = @"ext_data";
 {
     NSString *fid = elem.partner_id;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",fid];
-    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(msg_id INTEGER,msg_sign INTEGER NOT NULL,f_id TEXT,t_id TEXT,msg_type INTEGER,send_status INTEGER,read_status INTEGER,code INTEGER,reason TEXT,block_id INTEGER NOT NULL,ext_data blob,PRIMARY KEY(msg_sign))",tableName];
+    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(msg_id INTEGER UNIQUE,msg_sign INTEGER NOT NULL,f_id TEXT,t_id TEXT,msg_type INTEGER,send_status INTEGER,read_status INTEGER,code INTEGER,reason TEXT,block_id INTEGER NOT NULL,ext_data blob,PRIMARY KEY(msg_sign))",tableName];
     BOOL isOK = [self createTable:tableName withSQL:createSQL];
     if (isOK == NO) {
         NSLog(@"创建表失败****%@",tableName);
@@ -64,7 +64,7 @@ static NSString *ext_data = @"ext_data";
     }
     NSString *addSQL = @"replace into %@ (msg_id,msg_sign,f_id,t_id,msg_type,send_status,read_status,code,reason,block_id,ext_data) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     NSString *sqlStr = [NSString stringWithFormat:addSQL,tableName];
-    NSArray *addParams = @[@(elem.msg_id),
+    NSArray *addParams = @[(elem.msg_id ? @(elem.msg_id) : [NSNull null]),
                            @(elem.msg_sign),
                            elem.fromUid,
                            elem.toUid,

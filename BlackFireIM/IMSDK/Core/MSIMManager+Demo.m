@@ -19,7 +19,7 @@
 {
     FetchSpark *request = [[FetchSpark alloc]init];
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
-    NSLog(@"[发送消息]获取首页Sparks：%@",request);
+    HDNormalLog(@"[发送消息]获取首页Sparks：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeGetSpark needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
             Sparks *datas = response;
@@ -45,7 +45,7 @@
     GetImToken *token = [[GetImToken alloc]init];
     token.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     token.phone = [phone integerValue];
-    NSLog(@"[发送消息]获取im-token：%@",token);
+    HDNormalLog(@"[发送消息]获取im-token：%@",token);
     [self send:[token data] protoType:CMChatProtoTypeGetImToken needToEncry:NO sign:token.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         Result *result = response;
         if (code == ERR_SUCC) {
@@ -71,7 +71,7 @@
     request.pic = avatar;
     request.verified = YES;
     request.gold = YES;
-    NSLog(@"[发送消息]用户注册signUp：%@",request);
+    HDNormalLog(@"[发送消息]用户注册signUp：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeSignup needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         Result *result = response;
         if (code == ERR_SUCC) {

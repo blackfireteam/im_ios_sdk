@@ -7,7 +7,7 @@
 
 #ifndef MSIMConst_h
 #define MSIMConst_h
-
+#import "HDWindowLogger.h"
 
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 #define STRONG_SELF(strongSelf) if (!weakSelf) return; \
@@ -15,6 +15,7 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 
 
 #define XMNoNilString(str)  (str.length > 0 ? str : @"")
+
 
 //**proto编码对应表**
 typedef NS_ENUM(NSInteger, XMChatProtoType) {
@@ -102,7 +103,7 @@ typedef NS_ENUM(NSInteger ,BFIMMessageType){
 
 /** 网络连接状态*/
 typedef NS_ENUM(NSUInteger, BFIMNetStatus) {
-    IMNET_STATUS_SUCC,   //连接成功
+    IMNET_STATUS_SUCC = 1,   //连接成功
     IMNET_STATUS_CONNECTING,  //正在连接
     IMNET_STATUS_CONNFAILED,  //连接失败
     IMNET_STATUS_DISCONNECT,  //断开连接

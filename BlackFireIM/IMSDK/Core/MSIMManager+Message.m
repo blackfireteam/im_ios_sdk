@@ -135,7 +135,7 @@
     chats.body = elem.text;
     chats.toUid = elem.toUid.integerValue;
     WS(weakSelf)
-    NSLog(@"[发送文本消息]ChatS:\n%@",chats);
+    HDNormalLog(@"[发送文本消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
@@ -147,7 +147,7 @@
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }else {
-            NSLog(@"发送失败");
+            HDErrorLog(@"发送失败");
             failed(code,error);
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
@@ -243,7 +243,7 @@
     chats.width = elem.width;
     chats.height = elem.height;
     WS(weakSelf)
-    NSLog(@"[发送图片消息]ChatS:\n%@",chats);
+    HDNormalLog(@"[发送图片消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == 0) {
@@ -255,7 +255,7 @@
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             success(result.msgId);
         }else {
-            NSLog(@"发送失败");
+            HDErrorLog(@"发送失败");
             failed(code,error);
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
@@ -355,7 +355,7 @@
     chats.height = elem.height;
     chats.duration = elem.duration;
     WS(weakSelf)
-    NSLog(@"[发送视频消息]ChatS:\n%@",chats);
+    HDNormalLog(@"[发送视频消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == 0) {
@@ -367,7 +367,7 @@
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
             success(result.msgId);
         }else {
-            NSLog(@"发送失败");
+            HDErrorLog(@"发送失败");
             failed(code,error);
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
@@ -399,7 +399,7 @@
     chats.body = [[NSString alloc]initWithData:elem.data encoding:NSUTF8StringEncoding];
     chats.toUid = elem.toUid.integerValue;
     WS(weakSelf)
-    NSLog(@"[发送自定义消息]ChatS:\n%@",chats);
+    HDNormalLog(@"[发送自定义消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_SUCC) {
@@ -411,7 +411,7 @@
             [strongSelf.msgListener onMessageUpdateSendStatus:elem];
             [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
         }else {
-            NSLog(@"发送失败");
+            HDErrorLog(@"发送失败");
             failed(code,error);
             elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
             elem.code = code;
@@ -441,7 +441,7 @@
     revoke.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     revoke.toUid = reciever;
     revoke.msgId = msg_id;
-    NSLog(@"[发送消息]Revoke:\n%@",revoke);
+    HDNormalLog(@"[发送消息]Revoke:\n%@",revoke);
     [self send:[revoke data] protoType:XMChatProtoTypeRecall needToEncry:NO sign:revoke.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
         if (code == ERR_SUCC) {
