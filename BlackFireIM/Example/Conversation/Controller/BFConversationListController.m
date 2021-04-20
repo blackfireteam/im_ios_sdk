@@ -18,12 +18,16 @@
 #import "AppDelegate.h"
 #import "BFNavigationController.h"
 #import "BFLoginController.h"
+#import <MJRefresh.h>
+
 
 @interface BFConversationListController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,strong) BFNaviBarIndicatorView *titleView;
 
 @property(nonatomic,strong) UITableView *tableView;
+
+@property(nonatomic,assign) NSInteger lastConvSign;//分页摘取会话列表游标
 
 @property(nonatomic,strong) NSMutableArray<BFConversationCellData *> *dataList;
 
@@ -76,6 +80,11 @@
     self.tableView.dataSource = self;
     self.tableView.rowHeight = 103;
     self.tableView.separatorColor = TCell_separatorColor;
+    WS(weakSelf)
+    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [weakSelf loadConversation];
+    }];
+    self.tableView.mj_footer.hidden = YES;
     [self.view addSubview:self.tableView];
 }
 
@@ -100,10 +109,18 @@
 - (void)loadConversation
 {
     WS(weakSelf)
-    [[MSIMManager sharedInstance] getConversationList:0 count:INT_MAX succ:^(NSArray<MSIMConversation *> * _Nonnull convs, NSInteger nexSeq, BOOL isFinished) {
+    NSInteger start = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    [[MSIMManager sharedInstance] getConversationList:self.lastConvSign count:50 succ:^(NSArray<MSIMConversation *> * _Nonnull convs, NSInteger nexSeq, BOOL isFinished) {
+        weakSelf.lastConvSign = nexSeq;
         [weakSelf updateConversation: convs];
+        if (isFinished) {
+            [weakSelf.tableView.mj_footer endRefreshingWithNoMoreData];
+        }else {
+            [weakSelf.tableView.mj_footer endRefreshing];
+        }
+        NSLog(@"加载会话列表耗时 = %f s",([MSIMTools sharedInstance].adjustLocalTimeInterval-start)/1000.0/1000.0);
         } fail:^(NSInteger code, NSString * _Nonnull desc) {
-            
+            [weakSelf.tableView.mj_footer endRefreshing];
     }];
 }
 
@@ -129,7 +146,10 @@
     }
     // UI 会话列表根据 lastMessage 时间戳重新排序
     [self sortDataList:self.dataList];
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.tableView.mj_footer.hidden = self.dataList.count <= 10;
+        [self.tableView reloadData];
+    });
 }
 
 - (void)sortDataList:(NSMutableArray<BFConversationCellData *> *)dataList

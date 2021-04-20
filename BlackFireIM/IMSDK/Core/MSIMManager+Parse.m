@@ -19,9 +19,9 @@
 @implementation MSIMManager (Parse)
 
 
-- (void)profilesResultHandler:(ProfileList *)list
+- (void)profilesResultHandler:(NSArray<Profile *> *)list
 {
-    for (Profile *p in list.profilesArray) {
+    for (Profile *p in list) {
         MSProfileInfo *info = [MSProfileInfo createWithProto:p];
         [[MSProfileProvider provider] updateProfile:info];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -138,7 +138,9 @@
     for (MSIMConversation *conv in convs) {
         [self getC2CHistoryMessageList:conv.partner_id count:20 lastMsg:0 succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                MSIMElem *lastElem = msgs.firstObject;
+//                MSIMElem *lastElem = msgs.firstObject;
+                //重新取出数据表中最后一条消息
+                MSIMElem *lastElem = [weakSelf.messageStore lastShowMessage:conv.partner_id];
                 [weakSelf elemNeedToUpdateConversation:lastElem increaseUnreadCount:NO];
             });
                 } fail:^(NSInteger code, NSString * _Nonnull desc) {

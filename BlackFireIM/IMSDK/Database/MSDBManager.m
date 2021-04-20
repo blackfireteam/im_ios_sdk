@@ -65,20 +65,16 @@ static MSDBManager *manager;
 ///app启动或切换帐号时，扫描消息数据库中所有消息表，将消息发送中状态的消息改成发送失败
 - (void)scanAllTables
 {
-    __block NSMutableArray *tables = [NSMutableArray array];
-    MSDBMessageStore *store = [[MSDBMessageStore alloc]init];
     [self.messageQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
         FMResultSet *resultSet = [db executeQuery:@"SELECT * FROM sqlite_master where type='table';"];
         while ([resultSet next]) {
             NSString *tableName = [resultSet stringForColumnIndex:1];
-            [tables addObject:tableName];
+            if ([tableName hasPrefix:@"message_user_"]) {
+                NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd' where send_status = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,BFIM_MSG_STATUS_SENDING];
+                [db executeUpdate:sqlStr];
+            }
         }
     }];
-    for (NSString *tableName in tables) {
-        if ([tableName hasPrefix:@"message_user_"]) {
-            [store cleanAllSendingMessage:tableName];
-        }
-    }
 }
 
 @end

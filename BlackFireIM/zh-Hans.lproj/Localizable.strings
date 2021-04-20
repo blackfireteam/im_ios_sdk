@@ -107,4 +107,7 @@
 "TUIKitCallUsingSpeaker" = "使用扬声器";
 "TUIKitCallUsingHeadphone" = "使用听筒";
 
+"TUIKitNoMoreData" = "没有更多了~";
+"TUIKitRefresh" = "点击刷新试试";
+
 

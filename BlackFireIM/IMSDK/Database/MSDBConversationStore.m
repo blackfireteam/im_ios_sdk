@@ -107,7 +107,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     BOOL hasMore = NO;
     if (data.count == count + 1) {
         hasMore = YES;
-        [data removeObjectAtIndex:0];
+        [data removeLastObject];
     }
     complete(data,hasMore);
 }

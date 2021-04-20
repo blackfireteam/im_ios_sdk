@@ -7,7 +7,8 @@
 
 #ifndef MSIMConst_h
 #define MSIMConst_h
-#import "HDWindowLogger.h"
+#import "CXConsole.h"
+
 
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 #define STRONG_SELF(strongSelf) if (!weakSelf) return; \
@@ -16,6 +17,12 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 
 #define XMNoNilString(str)  (str.length > 0 ? str : @"")
 
+#ifdef DEBUG
+#define MSLog(format, ...) [CXConsole printLog: [NSString stringWithFormat:(format),##__VA_ARGS__]]
+
+#else
+#define MSLog(format, ...)
+#endif
 
 //**proto编码对应表**
 typedef NS_ENUM(NSInteger, XMChatProtoType) {

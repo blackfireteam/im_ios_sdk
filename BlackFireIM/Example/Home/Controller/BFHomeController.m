@@ -10,18 +10,20 @@
 #import "UIView+Frame.h"
 #import "MSIMSDK.h"
 #import <SVProgressHUD.h>
-#import <Lottie/Lottie.h>
 #import "BFSparkCardView.h"
 #import "BFSparkCardCell.h"
 #import "BFChatViewController.h"
 #import "MSIMSDK.h"
-
+#import "BFSparkLoadingView.h"
+#import "BFSparkEmptyView.h"
 
 @interface BFHomeController()<BFSparkCardViewDelegate,BFSparkCardViewDataSource,BFSparkCardCellDelegate>
 
 @property(nonatomic,strong) BFSparkCardView *containter;
 
-@property(nonatomic,strong) LOTAnimationView *loadingView;
+@property(nonatomic,strong) BFSparkLoadingView *loadingView;
+
+@property(nonatomic,strong) BFSparkEmptyView *emptyView;
 
 @property(nonatomic,strong) UIButton *likeBtn;
 
@@ -53,11 +55,10 @@
     [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
-- (LOTAnimationView *)loadingView
+- (BFSparkLoadingView *)loadingView
 {
     if (!_loadingView) {
-        _loadingView = [LOTAnimationView animationNamed:@"spark_loading"];
-        _loadingView.loopAnimation = YES;
+        _loadingView = [[BFSparkLoadingView alloc]init];
     }
     return _loadingView;
 }
@@ -78,6 +79,10 @@
 //    self.dislikeBtn.hidden = YES;
 //    [self.view addSubview:self.dislikeBtn];
     
+    self.loadingView.frame = CGRectMake(0, 0, Screen_Width, Screen_Height);
+    [self.view addSubview:self.loadingView];
+    [self.loadingView beginAnimating];
+    
     CGFloat maxH = Screen_Height-StatusBar_Height-10-TabBar_Height-10;
     CGFloat cardW = Screen_Width-30;
     CGFloat cardH = MIN(cardW/0.6, maxH);
@@ -92,10 +97,10 @@
     [self.containter registerClass:[BFSparkCardCell class] forCellReuseIdentifier:@"cardCell"];
     [self.view addSubview:self.containter];
     
-    self.loadingView.frame = CGRectMake(0, 0, cardW, cardW);
-    self.loadingView.center = self.containter.center;
-    [self.view addSubview:self.loadingView];
-    [self.loadingView play];
+    self.emptyView = [[BFSparkEmptyView alloc]initWithFrame:CGRectMake(0, Screen_Height*0.35, Screen_Width, 235)];
+    self.emptyView.hidden = YES;
+    [self.emptyView.retryBtn addTarget:self action:@selector(retryButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.emptyView];
     
     self.dataList = [NSMutableArray array];
 }
@@ -108,8 +113,8 @@
         [self bf_reloadData];
         } fail:^(NSInteger code, NSString * _Nonnull desc) {
             [SVProgressHUD showInfoWithStatus:desc];
-            [self.loadingView stop];
-            self.loadingView.hidden = YES;
+            [self.loadingView stopAnimating];
+            self.emptyView.hidden = NO;
     }];
 }
 
@@ -119,15 +124,20 @@
     self.likeBtn.alpha = 0;
     self.dislikeBtn.alpha = 0;
     [UIView animateWithDuration:0.5 animations:^{
-        self.loadingView.alpha = 0;
         self.containter.alpha = 1;
         self.likeBtn.alpha = 1;
         self.dislikeBtn.alpha = 1;
         
     } completion:^(BOOL finished) {
-        [self.loadingView stop];
+        [self.loadingView stopAnimating];
+        self.emptyView.hidden = self.dataList.count != 0;
     }];
     [self.containter reloadData];
+}
+
+- (void)retryButtonClick
+{
+    [self loadParksData];
 }
 
 #pragma mark -- BFSparkCardViewDelegate,BFSparkCardViewDataSource
@@ -198,7 +208,7 @@
              cell.winkBtn.selected = YES;
             
             } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                    
+                [SVProgressHUD showErrorWithStatus:desc];
         }];
     }
 }

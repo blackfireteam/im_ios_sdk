@@ -56,6 +56,7 @@
         self.winkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.winkBtn setImage:[UIImage imageNamed:@"spark_wink"] forState:UIControlStateNormal];
         [self.winkBtn setImage:[UIImage imageNamed:@"spark_wink_sel"] forState:UIControlStateSelected];
+        [self.winkBtn setImage:[UIImage imageNamed:@"spark_wink_sel"] forState:UIControlStateSelected | UIControlStateHighlighted];
         [self.winkBtn addTarget:self action:@selector(winkBtnDidClick) forControlEvents:UIControlEventTouchUpInside];
         [self.imageView addSubview:self.winkBtn];
         
@@ -77,6 +78,7 @@
     _user = info;
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:info.pic]];
     self.title.text = info.nick_name;
+    self.winkBtn.selected = NO;
 }
 
 - (void)winkBtnDidClick

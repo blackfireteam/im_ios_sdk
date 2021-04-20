@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ProfileList;
+@class Profile;
 @class ChatR;
 @class ChatList;
 @class ProfileOnline;
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)recieveMessage:(ChatR *)response;
 
 ///服务器返回的批量用户信息处理
-- (void)profilesResultHandler:(ProfileList *)list;
+- (void)profilesResultHandler:(NSArray<Profile *> *)list;
 
 ///服务器返回的会话列表数据处理 
 - (void)chatListResultHandler:(ChatList *)list;

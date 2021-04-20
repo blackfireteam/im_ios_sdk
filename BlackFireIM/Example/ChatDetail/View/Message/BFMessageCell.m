@@ -77,14 +77,11 @@
 {
     self.messageData = data;
     self.avatarView.image = data.defaultAvatar;
-    WS(weakSelf);
     NSInteger fromUid = data.elem.fromUid.integerValue;
     if (fromUid) {
-        [[MSProfileProvider provider]providerProfile:fromUid complete:^(MSProfileInfo * _Nonnull profile) {
-            STRONG_SELF(strongSelf)
-            [strongSelf.avatarView sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:data.defaultAvatar];
-            strongSelf.nameLabel.text = [NSString stringWithFormat:@"%@--%zd",profile.nick_name,data.elem.msg_id];
-        }];
+        MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:fromUid];
+        [self.avatarView sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:data.defaultAvatar];
+        self.nameLabel.text = [NSString stringWithFormat:@"%@--%zd",profile.nick_name,data.elem.msg_id];
     }
     
     self.avatarView.layer.masksToBounds = YES;

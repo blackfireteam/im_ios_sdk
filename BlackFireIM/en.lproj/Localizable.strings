@@ -125,3 +125,6 @@
 "TUIKitCallUsingSpeaker" = "Turn On Speaker";
 "TUIKitCallUsingHeadphone" = "Turn Off Speaker";
 
+
+"TUIKitNoMoreData" = "no more data ~";
+"TUIKitRefresh" = "click to retry";

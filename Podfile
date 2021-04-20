@@ -17,6 +17,5 @@ pod 'YYImage', :git => 'https://github.com/QiuYeHong90/YYImage.git'
 pod 'QCloudCOSXML/Transfer'
 
 pod 'Bugly'
-pod 'HDWindowLogger'
 
 end

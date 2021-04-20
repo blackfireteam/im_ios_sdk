@@ -46,6 +46,11 @@ static NSString *ext_data = @"ext_data";
     NSInteger block_id = 1;
     if (lastContainMsgIDElem) {
         if (elem.msg_id != 0) {
+//            ///如果收到msg_id存在的消息，不覆盖
+            MSIMElem *currentElem = [self searchMessage:fid msg_id:elem.msg_id];
+            if (currentElem) {
+                return YES;
+            }
             MSIMElem *nextElem = [self searchMessage:fid msg_id:elem.msg_id+1];
             MSIMElem *preElem = [self searchMessage:fid msg_id:elem.msg_id-1];
             if (nextElem && preElem) {
@@ -310,7 +315,7 @@ static NSString *ext_data = @"ext_data";
         }
         if (msg_end <= lastElem.msg_id) {//直接本地取
             WS(weakSelf)
-            [self messageFromLocalByPartnerID:partnerID last_msg_sign:last_msg_sign count:count block_id:lastElem.block_id result:^(NSArray<MSIMElem *> *arr, BOOL hasMore) {
+            [self messageFromLocalByPartnerID:partnerID last_msg_sign:last_msg_sign count:count block_id:MAX(lastElem.block_id, 1) result:^(NSArray<MSIMElem *> *arr, BOOL hasMore) {
                 NSInteger minMsgID = [weakSelf minMsgIDInMessages:arr];
                 if (hasMore) {
                     complete(arr,YES);

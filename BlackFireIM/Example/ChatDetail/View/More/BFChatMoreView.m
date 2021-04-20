@@ -68,7 +68,7 @@
     CGFloat collectionHeight = cellSize.height * _rowCount + 10 * (_rowCount - 1);
 
     _lineView.frame = CGRectMake(0, 0, self.frame.size.width, TLine_Heigh);
-    _moreCollectionView.frame = CGRectMake(0, _lineView.frame.origin.y + _lineView.frame.size.height + 10, self.frame.size.width, collectionHeight);
+    _moreCollectionView.frame = CGRectMake(0, _lineView.frame.origin.y + _lineView.frame.size.height + 25, self.frame.size.width, collectionHeight);
 
     if(_sectionCount > 1){
         _pageControl.frame = CGRectMake(0, _moreCollectionView.frame.origin.y + _moreCollectionView.frame.size.height, self.frame.size.width, 30);
@@ -83,7 +83,7 @@
     _moreFlowLayout.minimumLineSpacing = (_moreCollectionView.frame.size.width - cellSize.width * 4 - 2 * 30) / (4 - 1);
 
 
-    CGFloat height = _moreCollectionView.frame.origin.y + _moreCollectionView.frame.size.height + 10;
+    CGFloat height = _moreCollectionView.frame.origin.y + _moreCollectionView.frame.size.height + 25;
     if(_sectionCount > 1){
         height = _pageControl.frame.origin.y + _pageControl.frame.size.height;
     }

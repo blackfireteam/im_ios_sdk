@@ -8,6 +8,7 @@
 #ifndef BFHeader_h
 #define BFHeader_h
 
+
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 #define STRONG_SELF(strongSelf) if (!weakSelf) return; \
 __strong typeof(weakSelf) strongSelf = weakSelf;

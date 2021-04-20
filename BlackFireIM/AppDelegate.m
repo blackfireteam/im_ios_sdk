@@ -14,7 +14,6 @@
 #import "MSIMKit.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import <Bugly/Bugly.h>
-#import <HDWindowLogger.h>
 
 @interface AppDelegate ()<QCloudSignatureProvider>
 
@@ -49,8 +48,6 @@
     
     BuglyConfig *config = [[BuglyConfig alloc]init];
     [Bugly startWithAppId:@"f8db8c69b8" config:config];
-    
-//    [HDWindowLogger show];
     
     return YES;
 }

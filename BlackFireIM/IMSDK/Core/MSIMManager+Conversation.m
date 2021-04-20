@@ -25,7 +25,7 @@
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.updateTime = [MSIMTools sharedInstance].convUpdateTime;
     WS(weakSelf)
-    HDNormalLog(@"[发送消息]同步会话列表：%@",request);
+    MSLog(@"[发送消息]同步会话列表：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_CHAT_LIST_EMPTY) {//如果用户一条会话都没有时，服务器会通过result直接返回错误码
@@ -34,7 +34,7 @@
             }
         }else if (code == ERR_SUCC){
         }else {
-            HDErrorLog(@"建立链接与服务器同步会话列表失败.%@", error);
+            MSLog(@"建立链接与服务器同步会话列表失败.%@", error);
             if (strongSelf.convListener && [strongSelf.convListener respondsToSelector:@selector(onSyncServerFailed)]) {
                 [strongSelf.convListener onSyncServerFailed];
             }
@@ -56,24 +56,26 @@
         fail(ERR_USER_PARAMS_ERROR,@"参数异常");
         return;
     }
-    [self.convStore conversationsWithLast_seq:nextSeq count:count complete:^(NSArray<MSIMConversation *> * _Nonnull data, BOOL hasMore) {
-        //组装最后一条消息和头像昵称等信息
-        NSMutableArray *profiles = [NSMutableArray array];
-        for (MSIMConversation *conv in data) {
-            MSIMElem *elem = [self.messageStore searchMessage:conv.partner_id msg_sign:conv.show_msg_sign];
-            conv.show_msg = elem;
-            MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:conv.partner_id.integerValue];
-            if (info == nil) {
-                info = [[MSProfileInfo alloc]init];
-                info.user_id = conv.partner_id;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self.convStore conversationsWithLast_seq:nextSeq count:count complete:^(NSArray<MSIMConversation *> * _Nonnull data, BOOL hasMore) {
+            //组装最后一条消息和头像昵称等信息
+            NSMutableArray *profiles = [NSMutableArray array];
+            for (MSIMConversation *conv in data) {
+                MSIMElem *elem = [self.messageStore searchMessage:conv.partner_id msg_sign:conv.show_msg_sign];
+                conv.show_msg = elem;
+                MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:conv.partner_id.integerValue];
+                if (info == nil) {
+                    info = [[MSProfileInfo alloc]init];
+                    info.user_id = conv.partner_id;
+                }
+                [profiles addObject:info];
             }
-            [profiles addObject:info];
-        }
-        [[MSConversationProvider provider]updateConversations:data];
-        MSIMConversation *lastConv = data.lastObject;
-        NSInteger nextSign = lastConv.show_msg_sign;
-        succ(data,nextSign,hasMore ? NO : YES);
-    }];
+            [[MSConversationProvider provider]updateConversations:data];
+            MSIMConversation *lastConv = data.lastObject;
+            NSInteger nextSign = lastConv.show_msg_sign;
+            succ(data,nextSign,hasMore ? NO : YES);
+        }];
+    });
 }
 
 ///删除某一条会话
@@ -89,7 +91,7 @@
     DelChat *delRequest = [[DelChat alloc]init];
     delRequest.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     delRequest.toUid = conv.partner_id.integerValue;
-    HDNormalLog(@"[发送消息]删除会话：%@",delRequest);
+    MSLog(@"[发送消息]删除会话：%@",delRequest);
     [self send:[delRequest data] protoType:XMChatProtoTypeDeleteChat needToEncry:NO sign:delRequest.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
             succed();
@@ -114,7 +116,7 @@
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.toUid = user_id.integerValue;
     request.msgId = msgID;
-    HDNormalLog(@"[发送消息]标记消息已读：%@",request);
+    MSLog(@"[发送消息]标记消息已读：%@",request);
     [self send:[request data] protoType:XMChatProtoTypeMsgread needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
     }];
