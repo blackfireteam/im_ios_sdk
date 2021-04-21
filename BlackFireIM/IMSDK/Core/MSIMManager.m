@@ -410,7 +410,7 @@ static MSIMManager *_manager;
             }else {
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }
-            MSLog(@"[收到]首页Sparks数据***%@",datas);
+            MSLog(@"[收到]首页Sparks数据***");
         }
             break;
         default:

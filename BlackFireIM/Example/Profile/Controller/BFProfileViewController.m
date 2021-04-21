@@ -17,9 +17,9 @@
 #import "UIView+Frame.h"
 #import <SDWebImage.h>
 #import "BFProfileHeaderView.h"
-#import <AFNetworking.h>
 #import <TZImagePickerController.h>
 #import "BFUploadManager.h"
+#import "BFProfileService.h"
 
 
 @interface BFProfileViewController ()<UITableViewDelegate,UITableViewDataSource,TZImagePickerControllerDelegate>
@@ -104,21 +104,58 @@
 
 - (void)goldSwitchChange:(UISwitch *)sw
 {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:@"" parameters:@{} headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+    info.gold = sw.isOn;
+    info.gold_exp = [MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60;
+    [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
+        
+        [[MSProfileProvider provider]updateProfile:info];
+        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+        
+    } fail:^(NSError * _Nonnull error) {
+        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
     }];
 }
 
 - (void)verifySwitchChange:(UISwitch *)sw
 {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:@"" parameters:@{} headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+    info.verified = sw.isOn;
+    [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
+        
+        [[MSProfileProvider provider]updateProfile:info];
+        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+    } fail:^(NSError * _Nonnull error) {
+        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+    }];
+}
+
+- (void)editNickName:(NSString *)name
+{
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+    info.nick_name = name;
+    [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
+        
+        [[MSProfileProvider provider]updateProfile:info];
+        self.headerView.nickNameL.text = name;
+        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+    } fail:^(NSError * _Nonnull error) {
+        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+    }];
+}
+
+- (void)editAvatar:(NSString *)url
+{
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+    info.avatar = url;
+    [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
+        
+        [[MSProfileProvider provider]updateProfile:info];
+        [self.headerView.avatarIcon sd_setImageWithURL:[NSURL URLWithString:url]];
+        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+        
+    } fail:^(NSError * _Nonnull error) {
+        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
     }];
 }
 
@@ -172,7 +209,7 @@
                 [SVProgressHUD showErrorWithStatus:@"Nickname must contain at least 3 characters."];
                 return;
             }
-            weakSelf.headerView.nickNameL.text = nickname;
+            [weakSelf editNickName:nickname];
         }]];
         [alert addAction: [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
@@ -203,11 +240,8 @@
     [BFUploadManager uploadImageToCOS:imageElem uploadProgress:^(CGFloat progress) {
         
     } success:^(NSString * _Nonnull url) {
-        [SVProgressHUD showSuccessWithStatus:@"头像更换成功"];
-        MSProfileInfo *me = [[MSProfileProvider provider] providerProfileFromLocal:[[MSIMTools sharedInstance].user_id integerValue]];
-        me.avatar = url;
-        [[MSProfileProvider provider]updateProfile:me];
-        [self.headerView.avatarIcon sd_setImageWithURL:[NSURL URLWithString:url]];
+        [self editAvatar:url];
+        
     } failed:^(NSInteger code, NSString * _Nonnull desc) {
         [SVProgressHUD showErrorWithStatus:desc];
     }];

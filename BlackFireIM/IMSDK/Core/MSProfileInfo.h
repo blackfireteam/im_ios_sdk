@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) BOOL verified;
 
+@property(nonatomic,assign) NSInteger gold_exp;
+
 @property(nonatomic,copy) NSString *pic;
 
 

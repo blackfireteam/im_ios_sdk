@@ -103,6 +103,8 @@
 		F0850E7C262E6B08007C5589 /* BFSparkLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E7B262E6B08007C5589 /* BFSparkLoadingView.m */; };
 		F0850E7F262E6F80007C5589 /* BFSparkEmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E7E262E6F80007C5589 /* BFSparkEmptyView.m */; };
 		F0850E84262EA8CD007C5589 /* BFProfileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E83262EA8CD007C5589 /* BFProfileHeaderView.m */; };
+		F0850E87262FBF91007C5589 /* NSString+Encry.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E86262FBF91007C5589 /* NSString+Encry.m */; };
+		F0850E8A262FCC01007C5589 /* BFProfileService.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E89262FCC01007C5589 /* BFProfileService.m */; };
 		F0878A802605EB0200268122 /* BFSystemMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A7F2605EB0200268122 /* BFSystemMessageCellData.m */; };
 		F0878A862608428500268122 /* BFSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A852608428500268122 /* BFSystemMessageCell.m */; };
 		F0878A8F2608DCF900268122 /* BFChatMoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0878A8E2608DCF900268122 /* BFChatMoreView.m */; };
@@ -374,6 +376,10 @@
 		F0850E7E262E6F80007C5589 /* BFSparkEmptyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSparkEmptyView.m; sourceTree = "<group>"; };
 		F0850E82262EA8CD007C5589 /* BFProfileHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFProfileHeaderView.h; sourceTree = "<group>"; };
 		F0850E83262EA8CD007C5589 /* BFProfileHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFProfileHeaderView.m; sourceTree = "<group>"; };
+		F0850E85262FBF91007C5589 /* NSString+Encry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Encry.h"; sourceTree = "<group>"; };
+		F0850E86262FBF91007C5589 /* NSString+Encry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encry.m"; sourceTree = "<group>"; };
+		F0850E88262FCC01007C5589 /* BFProfileService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFProfileService.h; sourceTree = "<group>"; };
+		F0850E89262FCC01007C5589 /* BFProfileService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFProfileService.m; sourceTree = "<group>"; };
 		F0878A7E2605EB0200268122 /* BFSystemMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSystemMessageCellData.h; sourceTree = "<group>"; };
 		F0878A7F2605EB0200268122 /* BFSystemMessageCellData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSystemMessageCellData.m; sourceTree = "<group>"; };
 		F0878A842608428500268122 /* BFSystemMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSystemMessageCell.h; sourceTree = "<group>"; };
@@ -822,6 +828,8 @@
 				F056715425F07BE500782F9C /* UIImage+BFKit.m */,
 				F05671BB25F1D8F200782F9C /* UIView+Frame.h */,
 				F05671BC25F1D8F200782F9C /* UIView+Frame.m */,
+				F0850E85262FBF91007C5589 /* NSString+Encry.h */,
+				F0850E86262FBF91007C5589 /* NSString+Encry.m */,
 				F056715E25F07F1600782F9C /* NSBundle+BFKit.h */,
 				F056715F25F07F1600782F9C /* NSBundle+BFKit.m */,
 				F0D298FF2627D9B800F485CC /* UIDevice+Ext.h */,
@@ -1004,8 +1012,8 @@
 		F0777BCF26130967006CA660 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				F0850E81262EA8B2007C5589 /* View */,
 				F0850E80262EA8A7007C5589 /* Controller */,
+				F0850E81262EA8B2007C5589 /* View */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1015,6 +1023,8 @@
 			children = (
 				F058362D2602E22D0008C4FD /* BFProfileViewController.h */,
 				F058362E2602E22D0008C4FD /* BFProfileViewController.m */,
+				F0850E88262FCC01007C5589 /* BFProfileService.h */,
+				F0850E89262FCC01007C5589 /* BFProfileService.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1436,6 +1446,7 @@
 				F056719925F0DDF600782F9C /* BFMessageCell.m in Sources */,
 				F0020B5C2614263E0080C005 /* YBIBCopywriter.m in Sources */,
 				F011D58F25E736C10061F9D6 /* main.m in Sources */,
+				F0850E8A262FCC01007C5589 /* BFProfileService.m in Sources */,
 				F0020B562614263E0080C005 /* YBIBImageData.m in Sources */,
 				F0DC81922616CA280042D4BD /* YBIBVideoActionBar.m in Sources */,
 				F0020B5B2614263E0080C005 /* YBIBSentinel.m in Sources */,
@@ -1455,6 +1466,7 @@
 				F0020B4F2614263E0080C005 /* YBImageBrowser.m in Sources */,
 				F056716025F07F1600782F9C /* NSBundle+BFKit.m in Sources */,
 				F058361D260203680008C4FD /* BFTabBarController.m in Sources */,
+				F0850E87262FBF91007C5589 /* NSString+Encry.m in Sources */,
 				F011D66925E8E7240061F9D6 /* MSIMManager+Message.m in Sources */,
 				F0D29926262C79AC00F485CC /* CXConsoleController.m in Sources */,
 				F05836C1260479880008C4FD /* MSIMKit.m in Sources */,
