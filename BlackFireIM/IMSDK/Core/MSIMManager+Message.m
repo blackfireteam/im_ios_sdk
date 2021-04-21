@@ -30,7 +30,7 @@
     return elem;
 }
 
-/** 创建图片消息（图片文件最大支持 28 MB）
+/** 创建图片消息
     如果是系统相册拿的图片，需要先把图片导入 APP 的目录下
  */
 - (MSIMImageElem *)createImageMessage:(MSIMImageElem *)elem
@@ -43,7 +43,19 @@
     return elem;
 }
 
-/** 创建视频消息（视频文件最大支持 100 MB））
+/** 创建音频消息
+ */
+- (MSIMVoiceElem *)createVoiceMessage:(MSIMVoiceElem *)elem
+{
+    elem.type = BFIM_MSG_TYPE_VOICE;
+    elem.fromUid = [MSIMTools sharedInstance].user_id;
+    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
+    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
+    elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    return elem;
+}
+
+/** 创建视频消息
     如果是系统相册拿的视频，需要先把视频导入 APP 的目录下
  */
 - (MSIMVideoElem *)createVideoMessage:(MSIMVideoElem *)elem
@@ -89,26 +101,14 @@
     }
     elem.toUid = reciever;
     if (elem.type == BFIM_MSG_TYPE_TEXT) {
-        MSIMTextElem *textElem = (MSIMTextElem *)elem;
-        if (textElem.text.length == 0) {
-            failed(ERR_USER_PARAMS_ERROR,@"文本消息内容为空");
-            return;
-        }
-        if ([textElem.text dataUsingEncoding:NSUTF8StringEncoding].length > 8 * 1024) {
-            failed(ERR_IM_TEXT_MAX_ERROR,@"文本消息大小最大支持8k");
-            return;
-        }
         [self sendTextMessage:(MSIMTextElem *)elem isResend:NO successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
         [self sendImageMessage:(MSIMImageElem *)elem isResend:NO successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
         [self sendVideoMessage:(MSIMVideoElem *)elem isResend:NO successed:success failed:failed];
+    }else if (elem.type == BFIM_MSG_TYPE_VOICE) {
+        [self sendVoiceMessage:(MSIMVoiceElem *)elem isResend:NO successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
-        MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
-        if (customElem.data == nil) {
-            failed(ERR_USER_PARAMS_ERROR,@"参数异常");
-            return;
-        }
         [self sendCustomMessage:(MSIMCustomElem *)elem isResend:NO successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"参数异常");
@@ -124,6 +124,14 @@
               successed:(void(^)(NSInteger msg_id))success
                  failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
+    if (elem.text.length == 0) {
+        failed(ERR_USER_PARAMS_ERROR,@"文本消息内容为空");
+        return;
+    }
+    if ([elem.text dataUsingEncoding:NSUTF8StringEncoding].length > 8 * 1024) {
+        failed(ERR_IM_TEXT_MAX_ERROR,@"文本消息大小最大支持8k");
+        return;
+    }
     if (isResend == NO) {
         [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];
@@ -379,6 +387,91 @@
     }];
 }
 
+/// 发送单聊普通语音消息
+/// @param elem 语音消息
+/// @param success 发送成功，返回消息的唯一标识ID
+/// @param failed 发送失败
+- (void)sendVoiceMessage:(MSIMVoiceElem *)elem
+                isResend:(BOOL)isResend
+               successed:(void(^)(NSInteger msg_id))success
+                  failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    if (isResend == NO) {
+        [self.msgListener onNewMessages:@[elem]];
+        [self.messageStore addMessage:elem];
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+    }
+    if (elem.url.length == 0 || ![elem.url hasPrefix:@"http"]) {
+        [self uploadVoice:elem successed:success failed:failed];
+        return;
+    }
+    [self sendVoiceMessageByTCP:elem successed:success failed:failed];
+}
+
+- (void)uploadVoice:(MSIMVoiceElem *)elem
+          successed:(void(^)(NSInteger msg_id))success
+             failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    [BFUploadManager uploadVoiceToCOS:elem uploadProgress:^(CGFloat progress) {
+        
+        } success:^(NSString * _Nonnull url) {
+            
+            elem.url = url;
+            //上传成功，清除沙盒中的缓存
+            [[NSFileManager defaultManager]removeItemAtPath:elem.path error:nil];
+            
+            [self.messageStore addMessage:elem];
+            [self.msgListener onMessageUpdateSendStatus:elem];
+            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            [self sendVoiceMessageByTCP:elem successed:success failed:failed];
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+            elem.code = code;
+            elem.reason = desc;
+            [self.messageStore addMessage:elem];
+            [self.msgListener onMessageUpdateSendStatus:elem];
+            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            failed(code,desc);
+    }];
+}
+
+- (void)sendVoiceMessageByTCP:(MSIMVoiceElem *)elem
+                    successed:(void(^)(NSInteger msg_id))success
+                       failed:(void(^)(NSInteger code,NSString *errorString))failed
+{
+    ChatS *chats = [[ChatS alloc]init];
+    chats.sign = elem.msg_sign;
+    chats.type = elem.type;
+    chats.body = elem.url;
+    chats.duration = elem.duration;
+    chats.toUid = elem.toUid.integerValue;
+    WS(weakSelf)
+    MSLog(@"[发送语音消息]ChatS:\n%@",chats);
+    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+        STRONG_SELF(strongSelf)
+        if (code == 0) {
+            ChatSR *result = response;
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+            elem.msg_id = result.msgId;
+            [strongSelf.messageStore addMessage:elem];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            success(result.msgId);
+        }else {
+            MSLog(@"发送失败");
+            failed(code,error);
+            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+            elem.code = code;
+            elem.reason = error;
+            [strongSelf.messageStore addMessage:elem];
+            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        }
+    }];
+}
+
 /// 发送单聊自定义消息
 /// @param elem 自定义消息
 /// @param success 发送成功，返回消息的唯一标识ID
@@ -388,6 +481,10 @@
                 successed:(void(^)(NSInteger msg_id))success
                    failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
+    if (elem.data == nil) {
+        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+        return;
+    }
     if (isResend == NO) {
         [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];

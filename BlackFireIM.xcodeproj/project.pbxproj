@@ -36,6 +36,7 @@
 		F0020B672614263E0080C005 /* YBIBAnimatedTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = F0020B442614263E0080C005 /* YBIBAnimatedTransition.m */; };
 		F0020B682614263E0080C005 /* NSObject+YBImageBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F0020B482614263E0080C005 /* NSObject+YBImageBrowser.m */; };
 		F0020B692614263E0080C005 /* YBImageBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0020B4D2614263E0080C005 /* YBImageBrowser.bundle */; };
+		F0113C452630205200993BC0 /* BFRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0113C442630205200993BC0 /* BFRecordView.m */; };
 		F011D57E25E736BD0061F9D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D57D25E736BD0061F9D6 /* AppDelegate.m */; };
 		F011D58925E736C10061F9D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F011D58825E736C10061F9D6 /* Assets.xcassets */; };
 		F011D58C25E736C10061F9D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F011D58A25E736C10061F9D6 /* LaunchScreen.storyboard */; };
@@ -236,6 +237,8 @@
 		F0020B4B2614263E0080C005 /* YBIBAnimatedTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBIBAnimatedTransition.h; sourceTree = "<group>"; };
 		F0020B4C2614263E0080C005 /* YBImageBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBImageBrowser.h; sourceTree = "<group>"; };
 		F0020B4D2614263E0080C005 /* YBImageBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = YBImageBrowser.bundle; sourceTree = "<group>"; };
+		F0113C432630205200993BC0 /* BFRecordView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFRecordView.h; sourceTree = "<group>"; };
+		F0113C442630205200993BC0 /* BFRecordView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFRecordView.m; sourceTree = "<group>"; };
 		F011D57925E736BD0061F9D6 /* BlackFireIM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlackFireIM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F011D57C25E736BD0061F9D6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F011D57D25E736BD0061F9D6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -645,6 +648,15 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
+		F0113C422630203F00993BC0 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				F0113C432630205200993BC0 /* BFRecordView.h */,
+				F0113C442630205200993BC0 /* BFRecordView.m */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
 		F011D57025E736BD0061F9D6 = {
 			isa = PBXGroup;
 			children = (
@@ -937,6 +949,7 @@
 		F058368726032A800008C4FD /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F0113C422630203F00993BC0 /* Voice */,
 				F09316A22609BBAE0099E39E /* More */,
 				F09316A12609BB930099E39E /* Message */,
 				F09316A02609BB8C0099E39E /* Face */,
@@ -1506,6 +1519,7 @@
 				F0CF645B2623E8A500106697 /* ChatProtobuf.pbobjc.m in Sources */,
 				F0DC818F2616CA280042D4BD /* YBIBVideoData.m in Sources */,
 				F0D29924262C79AC00F485CC /* UIView+Console.m in Sources */,
+				F0113C452630205200993BC0 /* BFRecordView.m in Sources */,
 				F0020B4E2614263E0080C005 /* YBIBDefaultWebImageMediator.m in Sources */,
 				F0CF645E2623EE3500106697 /* BFSignInStepOneController.m in Sources */,
 				F036362E25FEF7FB00E69D14 /* MSProfileInfo.m in Sources */,

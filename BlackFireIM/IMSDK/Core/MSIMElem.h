@@ -102,6 +102,26 @@ NS_ASSUME_NONNULL_BEGIN
 //                      视频消息 Elem
 //
 /////////////////////////////////////////////////////////////////////////////////
+@interface MSIMVoiceElem : MSIMElem
+
+/** 语音本地地址*/
+@property(nonatomic,copy) NSString * path;
+/** 语音远程地址*/
+@property(nonatomic,copy) NSString *url;
+
+/** 语音数据大小*/
+@property(nonatomic,assign) NSInteger dataSize;
+
+/** 语音长度（秒）*/
+@property(nonatomic,assign) NSInteger duration;
+
+@end
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+//                      视频消息 Elem
+//
+/////////////////////////////////////////////////////////////////////////////////
 @interface MSIMVideoElem : MSIMElem
 
 /** 视频 ID，内部标识，可用于外部缓存key*/
@@ -126,6 +146,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) CGFloat progress;
 
 @end
+
 
 /////////////////////////////////////////////////////////////////////////////////
 //

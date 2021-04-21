@@ -25,13 +25,17 @@ typedef void (^BFIMMessageListSucc)(NSArray<MSIMElem *> * msgs,BOOL isFinished);
 /** 创建文本消息 文本最大支持 8k*/
 - (MSIMTextElem *)createTextMessage:(NSString *)text;
 
-/** 创建图片消息（图片文件最大支持 28 MB）
+/** 创建图片消息
     如果是系统相册拿的图片，需要先把图片导入 APP 的目录下
  */
 - (MSIMImageElem *)createImageMessage:(MSIMImageElem *)elem;
 
+/** 创建音频消息
+ */
+- (MSIMVoiceElem *)createVoiceMessage:(MSIMVoiceElem *)elem;
 
-/** 创建视频消息（视频文件最大支持 100 MB））
+
+/** 创建视频消息
     如果是系统相册拿的视频，需要先把视频导入 APP 的目录下
  */
 - (MSIMVideoElem *)createVideoMessage:(MSIMVideoElem *)elem;

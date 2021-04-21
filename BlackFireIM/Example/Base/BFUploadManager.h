@@ -25,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
                  success:(void(^)(NSString *coverUrl,NSString *videoUrl))success
                   failed:(void(^)(NSInteger code,NSString *desc))failed;
 
+///上传音频到cos
++ (void)uploadVoiceToCOS:(MSIMVoiceElem *)voiceElem
+          uploadProgress:(void(^)(CGFloat progress))progress
+                 success:(void(^)(NSString *url))success
+                  failed:(void(^)(NSInteger code,NSString *desc))failed;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -76,13 +76,31 @@
         }];
 }
 
-- (void)inputController:(BFInputViewController *)inputController didSendMessage:(NSString *)msg
+- (void)inputController:(BFInputViewController *)inputController didSendTextMessage:(NSString *)msg
 {
     MSIMTextElem *textElem = [[MSIMManager sharedInstance] createTextMessage:msg];
     [[MSIMManager sharedInstance] sendC2CMessage:textElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
         
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            NSLog(@"code = %zd,desc = %@",code,desc);
+            [SVProgressHUD showInfoWithStatus:desc];
+    }];
+}
+
+- (void)inputController:(BFInputViewController *)inputController didSendVoiceMessage:(NSString *)filePath
+{
+    NSURL *url = [NSURL fileURLWithPath:filePath];
+    AVURLAsset *audioAsset = [AVURLAsset URLAssetWithURL:url options:nil];
+    NSInteger duration = (NSInteger)CMTimeGetSeconds(audioAsset.duration);
+    NSInteger length = (NSInteger)[[[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil] fileSize];
+    
+    MSIMVoiceElem *voiceElem = [[MSIMVoiceElem alloc]init];
+    voiceElem.path = filePath;
+    voiceElem.duration = duration;
+    voiceElem.dataSize = length;
+    voiceElem = [[MSIMManager sharedInstance] createVoiceMessage:voiceElem];
+    [[MSIMManager sharedInstance] sendC2CMessage:voiceElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
             [SVProgressHUD showInfoWithStatus:desc];
     }];
 }

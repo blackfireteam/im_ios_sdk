@@ -234,13 +234,16 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 
 - (void)inputBar:(BFInputBarView *)textView didSendText:(NSString *)text
 {
-    if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendMessage:)]){
-        [_delegate inputController:self didSendMessage:text];
+    if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendTextMessage:)]){
+        [_delegate inputController:self didSendTextMessage:text];
     }
 }
 
 - (void)inputBar:(BFInputBarView *)textView didSendVoice:(NSString *)path
 {
+    if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendVoiceMessage:)]){
+        [_delegate inputController:self didSendVoiceMessage:path];
+    }
 }
 
 - (void)inputBarDidInputAt:(BFInputBarView *)textView

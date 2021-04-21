@@ -51,4 +51,18 @@
     return path;
 }
 
+///聊天音频保存地址
++ (NSString *)pathForIMVoice
+{
+    NSString *path = [NSString stringWithFormat:@"%@/MS/Voice/", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSError *error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
+        if (error) {
+            NSLog(@"File Create Failed: %@", path);
+        }
+    }
+    return path;
+}
+
 @end

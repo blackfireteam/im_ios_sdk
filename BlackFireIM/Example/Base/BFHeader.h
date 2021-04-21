@@ -143,5 +143,11 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TInput_Background_Color  RGBA(246, 246, 246, 1.0)
 #define TInput_Background_Color_Dark  RGBA(30, 30, 30, 1.0)
 
+//record
+#define Record_Background_Color RGBA(0, 0, 0, 0.6)
+#define Record_Background_Size CGSizeMake(Screen_Width * 0.4, Screen_Width * 0.4)
+#define Record_Title_Height 30
+#define Record_Title_Background_Color RGBA(186, 60, 65, 1.0)
+#define Record_Margin 8
 
 #endif /* BFHeader_h */

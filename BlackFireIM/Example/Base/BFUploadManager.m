@@ -151,4 +151,38 @@
     [[QCloudCOSTransferMangerService defaultCOSTransferManager]UploadObject:put];
 }
 
+///上传音频到cos
++ (void)uploadVoiceToCOS:(MSIMVoiceElem *)voiceElem
+          uploadProgress:(void(^)(CGFloat progress))progress
+                 success:(void(^)(NSString *url))success
+                  failed:(void(^)(NSInteger code,NSString *desc))failed
+{
+    QCloudCOSXMLUploadObjectRequest *put = [QCloudCOSXMLUploadObjectRequest new];
+    if([[NSFileManager defaultManager]fileExistsAtPath:voiceElem.path]) {
+        NSURL *url = [NSURL fileURLWithPath:voiceElem.path];
+        put.body = url;
+    }else {
+        failed(0,@"待上传的音频文件不存在");
+        return;
+    }
+    put.bucket = @"msim-1252460681";
+    put.object = [NSString stringWithFormat:@"im_voice/%@",[voiceElem.path lastPathComponent]];
+    [put setSendProcessBlock:^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (progress) progress(totalBytesSent*1.0/totalBytesExpectedToSend*1.0);
+        });
+    }];
+    [put setFinishBlock:^(QCloudUploadObjectResult * _Nullable result, NSError * _Nullable error) {
+            
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error == nil) {
+                if (success) success(result.location);
+            }else {
+                if (failed) failed(error.code,error.localizedDescription);
+            }
+        });
+    }];
+    [[QCloudCOSTransferMangerService defaultCOSTransferManager]UploadObject:put];
+}
+
 @end

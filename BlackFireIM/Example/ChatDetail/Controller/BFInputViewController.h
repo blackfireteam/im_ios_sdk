@@ -31,9 +31,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)inputController:(BFInputViewController *)inputController didChangeHeight:(CGFloat)height;
 
 /**
- *  当前 InputCOntroller 发送信息时的回调。
+ *  当前 InputCOntroller 发送文本消息时的回调。
  */
-- (void)inputController:(BFInputViewController *)inputController didSendMessage:(NSString *)msg;
+- (void)inputController:(BFInputViewController *)inputController didSendTextMessage:(NSString *)msg;
+
+/**
+ *  当前 InputCOntroller 发送语音信息时的回调。
+ */
+- (void)inputController:(BFInputViewController *)inputController didSendVoiceMessage:(NSString *)filePath;
 
 /**
  *  有 @ 字符输入

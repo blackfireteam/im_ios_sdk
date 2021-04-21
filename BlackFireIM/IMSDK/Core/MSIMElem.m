@@ -115,6 +115,32 @@
 
 @end
 
+@implementation MSIMVoiceElem
+
+- (NSData *)extData
+{
+    NSDictionary *dic = @{@"voiceUrl": XMNoNilString(self.url),@"voicePath": XMNoNilString(self.path),@"duration": @(self.duration),@"size":@(self.dataSize)};
+    return [dic el_convertData];
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    MSIMVoiceElem *elem = [[[self class] allocWithZone:zone]init];
+    elem.path = self.path;
+    elem.url = self.url;
+    elem.dataSize = self.dataSize;
+    elem.duration = self.duration;
+    return elem;
+}
+
+- (NSString *)displayStr
+{
+    return TUILocalizableString(TUIKitMessageTypeVoice);
+}
+
+
+@end
+
 @implementation MSIMVideoElem
 
 - (NSData *)extData
