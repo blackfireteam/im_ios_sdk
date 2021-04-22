@@ -31,6 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
                  success:(void(^)(NSString *url))success
                   failed:(void(^)(NSInteger code,NSString *desc))failed;
 
+///从COS下载文件
++ (void)downloadFileFromCOS:(NSString *)url
+                 toSavePath:(NSString *)savePath
+                   progress:(void(^)(CGFloat progress))progress
+                    success:(void(^)(void))success
+                     failed:(void(^)(NSInteger code,NSString *desc))failed;
+
 @end
 
 NS_ASSUME_NONNULL_END

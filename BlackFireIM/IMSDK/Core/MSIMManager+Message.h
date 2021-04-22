@@ -65,6 +65,7 @@ typedef void (^BFIMMessageListSucc)(NSArray<MSIMElem *> * msgs,BOOL isFinished);
             successed:(MSIMSucc)success
                failed:(MSIMFail)failed;
 
+
 /// 单聊消息重发
 /// @param elem 消息体
 /// @param reciever 接收者Uid
@@ -91,6 +92,7 @@ typedef void (^BFIMMessageListSucc)(NSArray<MSIMElem *> * msgs,BOOL isFinished);
                          lastMsg:(NSInteger)lastMsgID
                             succ:(BFIMMessageListSucc)succ
                             fail:(MSIMFail)fail;
+
 
 @end
 

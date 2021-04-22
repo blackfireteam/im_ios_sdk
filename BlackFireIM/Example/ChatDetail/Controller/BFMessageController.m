@@ -16,6 +16,7 @@
 #import "BFSystemMessageCell.h"
 #import "BFVideoMessageCell.h"
 #import "BFWinkMessageCell.h"
+#import "BFVoiceMessageCell.h"
 #import "MSIMSDK.h"
 #import "BFSystemMessageCellData.h"
 #import "NSDate+MSKit.h"
@@ -97,6 +98,7 @@
     [self.tableView registerClass:[BFImageMessageCell class] forCellReuseIdentifier:TImageMessageCell_ReuseId];
     [self.tableView registerClass:[BFSystemMessageCell class] forCellReuseIdentifier:TSystemMessageCell_ReuseId];
     [self.tableView registerClass:[BFVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
+    [self.tableView registerClass:[BFVoiceMessageCell class] forCellReuseIdentifier:TVoiceMessageCell_ReuseId];
     [self.tableView registerClass:[BFWinkMessageCell class] forCellReuseIdentifier:TWinkMessageCell_ReuseId];
     WS(weakSelf)
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -241,6 +243,11 @@
             videoMsg.showName = YES;
             videoMsg.elem = elem;
             data = videoMsg;
+        }else if (elem.type == BFIM_MSG_TYPE_VOICE) {
+            BFVoiceMessageCellData *voiceMsg = [[BFVoiceMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+            voiceMsg.showName = YES;
+            voiceMsg.elem = elem;
+            data = voiceMsg;
         }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
             BFWinkMessageCellData *winkMsg = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             winkMsg.elem = elem;
@@ -489,6 +496,25 @@
 
 - (void)onSelectMessage:(BFMessageCell *)cell
 {
+    if ([cell isKindOfClass:[BFVoiceMessageCell class]]) {//点击音频
+        BFVoiceMessageCell *voiceCell = (BFVoiceMessageCell *)cell;
+        for (NSInteger index = 0; index < self.uiMsgs.count; ++index) {
+            if(![self.uiMsgs[index] isKindOfClass:[BFVoiceMessageCellData class]]){
+                continue;
+            }
+            BFVoiceMessageCellData *uiMsg = _uiMsgs[index];
+            if(uiMsg == voiceCell.voiceData){
+                if (uiMsg.isPlaying) {
+                    [uiMsg stopVoiceMessage];
+                }else {
+                    [uiMsg playVoiceMessage];
+                }
+            }else{
+                [uiMsg stopVoiceMessage];
+            }
+        }
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(messageController:onSelectMessageContent:)]) {
         [self.delegate messageController:self onSelectMessageContent:cell];
     }
@@ -528,6 +554,7 @@
             
     }];
 }
+
 
 - (void)revokeMsg:(BFMessageCellData *)msg
 {

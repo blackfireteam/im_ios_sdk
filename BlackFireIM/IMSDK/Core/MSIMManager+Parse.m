@@ -219,6 +219,12 @@
             videoElem.duration = response.duration;
             videoElem.type = BFIM_MSG_TYPE_VIDEO;
             elem = videoElem;
+        }else if (response.type == BFIM_MSG_TYPE_VOICE) {
+            MSIMVoiceElem *voiceElem = [[MSIMVoiceElem alloc]init];
+            voiceElem.url = response.body;
+            voiceElem.duration = response.duration;
+            voiceElem.type = BFIM_MSG_TYPE_VOICE;
+            elem = voiceElem;
         }else if (response.type == BFIM_MSG_TYPE_REVOKE) {
             elem = [[MSIMElem alloc]init];
             elem.type = BFIM_MSG_TYPE_REVOKE;

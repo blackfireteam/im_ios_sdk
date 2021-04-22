@@ -53,7 +53,7 @@
                        fail:(MSIMFail)fail
 {
     if (nextSeq < 0 || count <= 0) {
-        fail(ERR_USER_PARAMS_ERROR,@"参数异常");
+        fail(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -85,7 +85,7 @@
                     failed:(MSIMFail)failed
 {
     if (conv == nil) {
-        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+        failed(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
     DelChat *delRequest = [[DelChat alloc]init];
@@ -109,7 +109,7 @@
                       failed:(MSIMFail)failed
 {
     if (user_id.length == 0 || msgID <= 0) {
-        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+        failed(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
     MsgRead *request = [[MsgRead alloc]init];

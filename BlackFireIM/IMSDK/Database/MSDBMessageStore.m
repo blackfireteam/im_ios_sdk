@@ -499,6 +499,13 @@ static NSString *ext_data = @"ext_data";
         videoElem.duration = [dic[@"duration"] integerValue];
         videoElem.uuid = dic[@"uuid"];
         elem = videoElem;
+    }else if (type == BFIM_MSG_TYPE_VOICE) {
+        MSIMVoiceElem *voiceElem = [[MSIMVoiceElem alloc]init];
+        voiceElem.url = dic[@"voiceUrl"];
+        voiceElem.path = [self fixLocalImagePath:dic[@"voicePath"]];
+        voiceElem.duration = [dic[@"duration"] integerValue];
+        voiceElem.dataSize = [dic[@"size"] integerValue];
+        elem = voiceElem;
     }else if (type == BFIM_MSG_TYPE_CUSTOM) {
         MSIMCustomElem *customElem = [[MSIMCustomElem alloc]init];
         customElem.data = extData;

@@ -7,6 +7,7 @@
 
 #import "BFUploadManager.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
+#import <QCloudCOSXML/QCloudCOSXMLDownloadObjectRequest.h>
 #import "NSString+Ext.h"
 
 
@@ -19,7 +20,7 @@
                   failed:(void(^)(NSInteger code,NSString *desc))failed
 {
     if (imageElem == nil) {
-        failed(0,@"待上传文件为空");
+        failed(-99,@"待上传文件为空");
         return;
     }
     QCloudCOSXMLUploadObjectRequest *put = [QCloudCOSXMLUploadObjectRequest new];
@@ -30,7 +31,7 @@
         NSData *imageData = UIImageJPEGRepresentation(imageElem.image, 0.7);
         put.body = imageData;
     }else {
-        failed(0,@"待上传文件不存在");
+        failed(-99,@"待上传文件不存在");
         return;
     }
     put.bucket = @"msim-1252460681";
@@ -60,7 +61,7 @@
                   failed:(void(^)(NSInteger code,NSString *desc))failed
 {
     if (videoElem == nil) {
-        failed(0,@"待上传文件为空");
+        failed(-99,@"待上传文件为空");
         return;
     }
     BOOL isVideoFinish = [videoElem.videoUrl hasPrefix:@"http"];
@@ -128,7 +129,7 @@
         NSURL *url = [NSURL fileURLWithPath:videoElem.videoPath];
         put.body = url;
     }else {
-        videoFailed(0,@"待上传的视频文件不存在");
+        videoFailed(-99,@"待上传的视频文件不存在");
         return;
     }
     put.bucket = @"msim-1252460681";
@@ -162,7 +163,7 @@
         NSURL *url = [NSURL fileURLWithPath:voiceElem.path];
         put.body = url;
     }else {
-        failed(0,@"待上传的音频文件不存在");
+        failed(-99,@"待上传的音频文件不存在");
         return;
     }
     put.bucket = @"msim-1252460681";
@@ -183,6 +184,34 @@
         });
     }];
     [[QCloudCOSTransferMangerService defaultCOSTransferManager]UploadObject:put];
+}
+
+///从COS下载文件
++ (void)downloadFileFromCOS:(NSString *)url
+                 toSavePath:(NSString *)savePath
+                   progress:(void(^)(CGFloat progress))progress
+                    success:(void(^)(void))success
+                     failed:(void(^)(NSInteger code,NSString *desc))failed
+{
+    if (![url hasPrefix:@"http"] || savePath.length == 0) {
+        failed(-99,@"待下载的文件地址非法");
+        return;
+    }
+    QCloudCOSXMLDownloadObjectRequest *request = [QCloudCOSXMLDownloadObjectRequest new];
+    request.bucket = @"msim-1252460681";
+    request.object = [NSString stringWithFormat:@"im_voice/%@",[url lastPathComponent]];
+    request.downloadingURL = [NSURL fileURLWithPath:savePath];
+    [request setFinishBlock:^(id  _Nullable outputObject, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (success) success();
+        });
+    }];
+    [request setDownProcessBlock:^(int64_t bytesDownload, int64_t totalBytesDownload, int64_t totalBytesExpectedToDownload) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (progress) progress(totalBytesDownload*1.0/totalBytesExpectedToDownload*1.0);
+        });
+    }];
+    [[QCloudCOSTransferMangerService defaultCOSTransferManager]DownloadObject:request];
 }
 
 @end

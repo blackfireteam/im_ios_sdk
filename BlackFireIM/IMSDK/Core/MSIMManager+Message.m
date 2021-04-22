@@ -96,7 +96,7 @@
         return;
     }
     if (reciever == nil || elem.msg_sign == 0) {
-        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+        failed(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
     elem.toUid = reciever;
@@ -111,7 +111,7 @@
     }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
         [self sendCustomMessage:(MSIMCustomElem *)elem isResend:NO successed:success failed:failed];
     }else {
-        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+        failed(ERR_USER_PARAMS_ERROR,@"params error");
     }
 }
 
@@ -482,7 +482,7 @@
                    failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
     if (elem.data == nil) {
-        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+        failed(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
     if (isResend == NO) {
@@ -531,7 +531,7 @@
                failed:(MSIMFail)failed
 {
     if (!reciever || !msg_id) {
-        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+        failed(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
     Revoke *revoke = [[Revoke alloc]init];
@@ -569,10 +569,12 @@
         [self sendImageMessage:(MSIMImageElem *)elem isResend:YES successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
         [self sendVideoMessage:(MSIMVideoElem *)elem isResend:YES successed:success failed:failed];
+    }else if (elem.type == BFIM_MSG_TYPE_VOICE) {
+        [self sendVoiceMessage:(MSIMVoiceElem *)elem isResend:YES successed:success failed:failed];
     }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
         [self sendCustomMessage:(MSIMCustomElem *)elem isResend:YES successed:success failed:failed];
     }else {
-        failed(ERR_USER_PARAMS_ERROR,@"参数异常");
+        failed(ERR_USER_PARAMS_ERROR,@"params error");
     }
 }
 /**
@@ -588,7 +590,7 @@
                             fail:(MSIMFail)fail
 {
     if (user_id.length == 0 || count <= 0) {
-        fail(ERR_USER_PARAMS_ERROR,@"参数异常");
+        fail(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
     [self.messageStore messageByPartnerID:user_id last_msg_sign:lastMsgID count:count complete:^(NSArray<MSIMElem *> * _Nonnull data, BOOL hasMore) {

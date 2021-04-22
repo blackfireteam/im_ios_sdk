@@ -357,8 +357,8 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
         return;
     }
     [_inputBar clearInput];
-    if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendMessage:)]){
-        [_delegate inputController:self didSendMessage:text];
+    if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendTextMessage:)]){
+        [_delegate inputController:self didSendTextMessage:text];
     }
 }
 
