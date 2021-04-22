@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateProfileOnlyToMemory:(MSProfileInfo *)info;
 
 ///比对update_time与服务器同步更新用户信息
-- (void)synchronizeProfiles:(NSArray<MSProfileInfo *> *)profiles;
+- (void)synchronizeProfiles:(NSMutableArray<MSProfileInfo *> *)profiles;
 
 ///返回本地数据库中所有的用户信息
 - (NSArray<MSProfileInfo *> *)allProfiles;

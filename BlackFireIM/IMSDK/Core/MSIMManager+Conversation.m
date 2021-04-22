@@ -73,7 +73,9 @@
             [[MSConversationProvider provider]updateConversations:data];
             MSIMConversation *lastConv = data.lastObject;
             NSInteger nextSign = lastConv.show_msg_sign;
-            succ(data,nextSign,hasMore ? NO : YES);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                succ(data,nextSign,hasMore ? NO : YES);
+            });
         }];
     });
 }
@@ -93,11 +95,13 @@
     delRequest.toUid = conv.partner_id.integerValue;
     MSLog(@"[发送消息]删除会话：%@",delRequest);
     [self send:[delRequest data] protoType:XMChatProtoTypeDeleteChat needToEncry:NO sign:delRequest.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-        if (code == ERR_SUCC) {
-            succed();
-        }else {
-            failed(ERR_SDK_DB_DEL_CONVERSATION_FAIL,@"删除会话失败");
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == ERR_SUCC) {
+                succed();
+            }else {
+                failed(ERR_SDK_DB_DEL_CONVERSATION_FAIL,@"删除会话失败");
+            }
+        });
     }];
 }
 

@@ -146,24 +146,26 @@
     MSLog(@"[发送文本消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
-        if (code == ERR_SUCC) {
-            ChatSR *result = response;
-            success(result.msgId);
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-            elem.msg_id = result.msgId;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-        }else {
-            MSLog(@"发送失败");
-            failed(code,error);
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-            elem.code = code;
-            elem.reason = error;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == ERR_SUCC) {
+                ChatSR *result = response;
+                success(result.msgId);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+                elem.msg_id = result.msgId;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            }else {
+                MSLog(@"发送失败");
+                failed(code,error);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+                elem.code = code;
+                elem.reason = error;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            }
+        });
     }];
 }
 
@@ -254,24 +256,26 @@
     MSLog(@"[发送图片消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
-        if (code == 0) {
-            ChatSR *result = response;
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-            elem.msg_id = result.msgId;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-            success(result.msgId);
-        }else {
-            MSLog(@"发送失败");
-            failed(code,error);
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-            elem.code = code;
-            elem.reason = error;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == 0) {
+                ChatSR *result = response;
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+                elem.msg_id = result.msgId;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                success(result.msgId);
+            }else {
+                MSLog(@"发送失败");
+                failed(code,error);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+                elem.code = code;
+                elem.reason = error;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            }
+        });
     }];
 }
 
@@ -366,24 +370,26 @@
     MSLog(@"[发送视频消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
-        if (code == 0) {
-            ChatSR *result = response;
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-            elem.msg_id = result.msgId;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-            success(result.msgId);
-        }else {
-            MSLog(@"发送失败");
-            failed(code,error);
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-            elem.code = code;
-            elem.reason = error;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == 0) {
+                ChatSR *result = response;
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+                elem.msg_id = result.msgId;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                success(result.msgId);
+            }else {
+                MSLog(@"发送失败");
+                failed(code,error);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+                elem.code = code;
+                elem.reason = error;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            }
+        });
     }];
 }
 
@@ -451,24 +457,26 @@
     MSLog(@"[发送语音消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
-        if (code == 0) {
-            ChatSR *result = response;
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-            elem.msg_id = result.msgId;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-            success(result.msgId);
-        }else {
-            MSLog(@"发送失败");
-            failed(code,error);
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-            elem.code = code;
-            elem.reason = error;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == 0) {
+                ChatSR *result = response;
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+                elem.msg_id = result.msgId;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                success(result.msgId);
+            }else {
+                MSLog(@"发送失败");
+                failed(code,error);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+                elem.code = code;
+                elem.reason = error;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            }
+        });
     }];
 }
 
@@ -499,24 +507,26 @@
     MSLog(@"[发送自定义消息]ChatS:\n%@",chats);
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
-        if (code == ERR_SUCC) {
-            ChatSR *result = response;
-            success(result.msgId);
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-            elem.msg_id = result.msgId;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-        }else {
-            MSLog(@"发送失败");
-            failed(code,error);
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-            elem.code = code;
-            elem.reason = error;
-            [strongSelf.messageStore addMessage:elem];
-            [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-            [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == ERR_SUCC) {
+                ChatSR *result = response;
+                success(result.msgId);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+                elem.msg_id = result.msgId;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            }else {
+                MSLog(@"发送失败");
+                failed(code,error);
+                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+                elem.code = code;
+                elem.reason = error;
+                [strongSelf.messageStore addMessage:elem];
+                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
+                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            }
+        });
     }];
 }
 
@@ -541,12 +551,14 @@
     MSLog(@"[发送消息]Revoke:\n%@",revoke);
     [self send:[revoke data] protoType:XMChatProtoTypeRecall needToEncry:NO sign:revoke.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
-        if (code == ERR_SUCC) {
-            
-            success();
-        }else {
-            failed(code,error);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == ERR_SUCC) {
+                
+                success();
+            }else {
+                failed(code,error);
+            }
+        });
     }];
 }
 
@@ -594,9 +606,11 @@
         return;
     }
     [self.messageStore messageByPartnerID:user_id last_msg_sign:lastMsgID count:count complete:^(NSArray<MSIMElem *> * _Nonnull data, BOOL hasMore) {
+        dispatch_async(dispatch_get_main_queue(), ^{
             if (succ) {
                 succ(data,hasMore ? NO : YES);
             }
+        });
     }];
 }
 

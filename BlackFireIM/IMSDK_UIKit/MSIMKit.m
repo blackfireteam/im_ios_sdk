@@ -48,19 +48,25 @@
 /// 网络连接成功
 - (void)connectSucc
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMNET_STATUS_SUCC]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMNET_STATUS_SUCC]];
+    });
 }
 
 /// 网络连接失败
 - (void)connectFailed:(NSInteger)code err:(NSString *)errString
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:(code == ERR_NET_NOT_CONNECT) ? IMNET_STATUS_DISCONNECT : IMNET_STATUS_CONNFAILED]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:(code == ERR_NET_NOT_CONNECT) ? IMNET_STATUS_DISCONNECT : IMNET_STATUS_CONNFAILED]];
+    });
 }
 
 /// 连接中
 - (void)onConnecting
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMNET_STATUS_CONNECTING]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMNET_STATUS_CONNECTING]];
+    });
 }
 
 /**
@@ -68,7 +74,9 @@
  */
 - (void)onForceOffline
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_FORCEOFFLINE]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_FORCEOFFLINE]];
+    });
 }
 
 /**
@@ -76,7 +84,9 @@
  */
 - (void)onReConnFailed:(NSInteger)code err:(NSString*)err
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_RECONNFAILD]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_RECONNFAILD]];
+    });
 }
 
 /**
@@ -84,7 +94,9 @@
  */
 - (void)onUserSigExpired
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_SIGEXPIRED]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_SIGEXPIRED]];
+    });
 }
 
 #pragma mark - MSIMConversationListener
@@ -102,7 +114,9 @@
  */
 - (void)onSyncServerFinish
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationSyncFinish object:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationSyncFinish object:nil];
+    });
 }
 
 /**
@@ -116,13 +130,17 @@
 ///新增会话或会话发生变化
 - (void)onUpdateConversations:(NSArray<MSIMConversation*> *) conversationList
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUpdate object:conversationList];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUpdate object:conversationList];
+    });
 }
 
 ///会话被删除时
 - (void)conversationDidDelete:(NSString *)partner_id
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationDelete object:partner_id];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationDelete object:partner_id];
+    });
 }
 
 #pragma mark - MSIMMessageListener
@@ -130,7 +148,9 @@
 /// 收到新消息
 - (void)onNewMessages:(NSArray<MSIMElem *> *)msgs
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageListener object:msgs];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageListener object:msgs];
+    });
 }
 
 /**
@@ -138,19 +158,25 @@
  */
 - (void)onMessageUpdateSendStatus:(MSIMElem *)elem
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageSendStatusUpdate object:elem];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageSendStatusUpdate object:elem];
+    });
 }
 
 ///收到一条对方撤回的消息
 - (void)onRevokeMessage:(MSIMElem *)elem
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageRecieveRevoke object:elem];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageRecieveRevoke object:elem];
+    });
 }
 
 ///收到消息已读回执（仅单聊有效）
 - (void)onRecvC2CReadReceipt:(MSIMMessageReceipt *)receipt
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageReceipt object:receipt];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageReceipt object:receipt];
+    });
 }
 
 #pragma mark - MSIMProfileListener
@@ -160,7 +186,9 @@
  */
 - (void)onProfileUpdate:(MSProfileInfo *)info
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ProfileUpdate object:info];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ProfileUpdate object:info];
+    });
 }
 
 @end

@@ -24,9 +24,7 @@
     for (Profile *p in list) {
         MSProfileInfo *info = [MSProfileInfo createWithProto:p];
         [[MSProfileProvider provider] updateProfile:info];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.profileListener onProfileUpdate:info];
-        });
+        [self.profileListener onProfileUpdate:info];
     }
 }
 
@@ -34,7 +32,6 @@
 - (void)chatListResultHandler:(ChatList *)list
 {
     NSArray *items = list.chatItemsArray;
-    NSMutableArray *profiles = [NSMutableArray array];
     for (ChatItem *item in items) {
         MSIMConversation *conv = [[MSIMConversation alloc]init];
         conv.chat_type = BFIM_CHAT_TYPE_C2C;
@@ -54,40 +51,38 @@
         [self.convCaches addObject:conv];
         MSProfileInfo *info = [[MSProfileProvider provider] providerProfileFromLocal:item.uid];
         if (info) {
-            [profiles addObject:info];
+            [self.profileCaches addObject:info];
         }else {
             MSProfileInfo *tempP = [[MSProfileInfo alloc]init];
             tempP.update_time = 0;
             tempP.user_id = [NSString stringWithFormat:@"%lld",item.uid];
-            [profiles addObject:tempP];
+            [self.profileCaches addObject:tempP];
         }
     }
-    //顺便同步下自己的Profile
-    MSProfileInfo *me = [[MSProfileProvider provider]providerProfileFromLocal:[[MSIMTools sharedInstance].user_id integerValue]];
-    if (!me) {
-        me = [[MSProfileInfo alloc]init];
-        me.user_id = [MSIMTools sharedInstance].user_id;
-    }
-    [profiles addObject:me];
-    
     NSInteger update_time = list.updateTime;
     if (update_time) {//批量下发的会话结束,写入数据库
+        //顺便同步下自己的Profile
+        MSProfileInfo *me = [[MSProfileProvider provider]providerProfileFromLocal:[[MSIMTools sharedInstance].user_id integerValue]];
+        if (!me) {
+            me = [[MSProfileInfo alloc]init];
+            me.user_id = [MSIMTools sharedInstance].user_id;
+        }
+        [self.profileCaches addObject:me];
         [[MSIMTools sharedInstance] updateConversationTime:update_time];
         //更新Profile信息
-        [[MSProfileProvider provider] synchronizeProfiles:profiles];
+        [[MSProfileProvider provider] synchronizeProfiles:self.profileCaches];
         //更新会话缓存
         [[MSConversationProvider provider]updateConversations:self.convCaches];
         [self updateConvLastMessage:self.convCaches];
         //通知会话有更新
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-                [self.convListener onUpdateConversations:self.convCaches];
-            }
-            if ([self.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
-                [self.convListener onSyncServerFinish];
-            }
-        });
+        if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+            [self.convListener onUpdateConversations:self.convCaches];
+        }
+        if ([self.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
+            [self.convListener onSyncServerFinish];
+        }
         [self.convCaches removeAllObjects];
+        [self.profileCaches removeAllObjects];
     }
 }
 
@@ -109,7 +104,7 @@
         if (profile == nil) {
             MSProfileInfo *info = [[MSProfileInfo alloc]init];
             info.user_id = elem.partner_id;
-            [[MSProfileProvider provider]synchronizeProfiles:@[info]];
+            [[MSProfileProvider provider]synchronizeProfiles:@[info].mutableCopy];
         }
         [self.convListener onUpdateConversations:@[conv]];
         [[MSConversationProvider provider]updateConversation:conv];
@@ -136,14 +131,10 @@
     //拉取最后一页聊天记录
     WS(weakSelf)
     for (MSIMConversation *conv in convs) {
-        [self getC2CHistoryMessageList:conv.partner_id count:20 lastMsg:0 succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-//                MSIMElem *lastElem = msgs.firstObject;
-                //重新取出数据表中最后一条消息
-                MSIMElem *lastElem = [weakSelf.messageStore lastShowMessage:conv.partner_id];
-                [weakSelf elemNeedToUpdateConversation:lastElem increaseUnreadCount:NO];
-            });
-                } fail:^(NSInteger code, NSString * _Nonnull desc) {
+        [self.messageStore messageByPartnerID:conv.partner_id last_msg_sign:0 count:20 complete:^(NSArray<MSIMElem *> * _Nonnull data, BOOL hasMore) {
+            //重新取出数据表中最后一条消息
+            MSIMElem *lastElem = [weakSelf.messageStore lastShowMessage:conv.partner_id];
+            [weakSelf elemNeedToUpdateConversation:lastElem increaseUnreadCount:NO];
         }];
     }
 }
@@ -152,18 +143,16 @@
 - (void)recieveMessage:(ChatR *)response
 {
     MSIMElem *elem = [self chatHistoryHandler:@[response]].lastObject;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (elem.type == BFIM_MSG_TYPE_NULL) {
-            MSIMElem *showElem = [self.messageStore lastShowMessage:elem.partner_id];
-            showElem.msg_id = elem.msg_id;
-            [self elemNeedToUpdateConversation:showElem increaseUnreadCount:NO];
-        }else {
-            if ([self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
-                [self.msgListener onNewMessages:@[elem]];
-            }
-            [self elemNeedToUpdateConversation:elem increaseUnreadCount:(elem.isSelf ? NO : YES)];
+    if (elem.type == BFIM_MSG_TYPE_NULL) {
+        MSIMElem *showElem = [self.messageStore lastShowMessage:elem.partner_id];
+        showElem.msg_id = elem.msg_id;
+        [self elemNeedToUpdateConversation:showElem increaseUnreadCount:NO];
+    }else {
+        if ([self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
+            [self.msgListener onNewMessages:@[elem]];
         }
-    });
+        [self elemNeedToUpdateConversation:elem increaseUnreadCount:(elem.isSelf ? NO : YES)];
+    }
     //更新会话更新时间
     [[MSIMTools sharedInstance]updateConversationTime:elem.msg_sign];
     //更新profile
@@ -172,7 +161,7 @@
         fromProfile = [[MSProfileInfo alloc]init];
     }
     if (fromProfile.update_time < response.sput) {
-        [[MSProfileProvider provider]synchronizeProfiles:@[fromProfile]];
+        [[MSProfileProvider provider]synchronizeProfiles:@[fromProfile].mutableCopy];
     }
 }
 
@@ -192,11 +181,10 @@
             elem.revoke_msg_id = response.body.integerValue;
             [self.messageStore updateMessageRevoke:elem.revoke_msg_id partnerID:elem.partner_id];
             [self sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([self.msgListener respondsToSelector:@selector(onRevokeMessage:)]) {
-                    [self.msgListener onRevokeMessage:elem];
-                }
-            });
+            
+            if ([self.msgListener respondsToSelector:@selector(onRevokeMessage:)]) {
+                [self.msgListener onRevokeMessage:elem];
+            }
         }else if (response.type == BFIM_MSG_TYPE_TEXT) {
             MSIMTextElem *textElem = [[MSIMTextElem alloc]init];
             textElem.text = response.body;
@@ -263,23 +251,21 @@
         conv.msg_last_read = result.msgId;
         [[MSConversationProvider provider]updateConversation:conv];
         [self.messageStore markMessageAsRead:result.msgId partnerID:fromUid];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            MSIMMessageReceipt *receipt = [[MSIMMessageReceipt alloc]init];
-            receipt.msg_id = result.msgId;
-            receipt.user_id = fromUid;
-            if (self.msgListener && [self.convListener respondsToSelector:@selector(onRecvC2CReadReceipt:)]) {
-                [self.msgListener onRecvC2CReadReceipt:receipt];
-            }
-        });
+        
+        MSIMMessageReceipt *receipt = [[MSIMMessageReceipt alloc]init];
+        receipt.msg_id = result.msgId;
+        receipt.user_id = fromUid;
+        if (self.msgListener && [self.convListener respondsToSelector:@selector(onRecvC2CReadReceipt:)]) {
+            [self.msgListener onRecvC2CReadReceipt:receipt];
+        }
+        
     }else {//我主动发起的标记消息已读
         MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:fromUid];
         conv.unread_count = result.unread;
         [[MSConversationProvider provider]updateConversation:conv];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-                [self.convListener onUpdateConversations:@[conv]];
-            }
-        });
+        if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+            [self.convListener onUpdateConversations:@[conv]];
+        }
     }
     //更新会话更新时间
     [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
@@ -314,11 +300,9 @@
     [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"" response:result];
     NSString *partner_id = [NSString stringWithFormat:@"%lld",result.toUid];
     [[MSConversationProvider provider]deleteConversation: partner_id];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.convListener && [self.convListener respondsToSelector:@selector(conversationDidDelete:)]) {
-            [self.convListener conversationDidDelete:partner_id];
-        }
-    });
+    if (self.convListener && [self.convListener respondsToSelector:@selector(conversationDidDelete:)]) {
+        [self.convListener conversationDidDelete:partner_id];
+    }
     //更新会话更新时间
     [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
 }

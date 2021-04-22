@@ -75,13 +75,15 @@ static MSProfileProvider *instance;
             getP.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
             MSLog(@"[发送消息]GetProfile: %@",getP);
             [[MSIMManager sharedInstance]send:[getP data] protoType:XMChatProtoTypeGetProfile needToEncry:NO sign:getP.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-                            if (code == ERR_SUCC) {
-                                Profile *profile = response;
-                                MSProfileInfo *info = [MSProfileInfo createWithProto:profile];
-                                if (completed) completed(info);
-                            }else {
-                                if (completed) completed(nil);
-                            }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (code == ERR_SUCC) {
+                        Profile *profile = response;
+                        MSProfileInfo *info = [MSProfileInfo createWithProto:profile];
+                        if (completed) completed(info);
+                    }else {
+                        if (completed) completed(nil);
+                    }
+                });
             }];
         }
     }
@@ -124,30 +126,29 @@ static MSProfileProvider *instance;
 
 ///比对update_time与服务器同步更新用户信息
 ///批量请求，100个一组
-- (void)synchronizeProfiles:(NSArray<MSProfileInfo *> *)profiles
+- (void)synchronizeProfiles:(NSMutableArray<MSProfileInfo *> *)profiles
 {
     [self componentRequestWithProfiles:profiles];
 }
 
-- (void)componentRequestWithProfiles:(NSArray *)arr
+- (void)componentRequestWithProfiles:(NSMutableArray *)arr
 {
     if (arr.count <= 0) {
         return;
     }
-    NSArray *plitArr;
-    if (arr.count > 100) {
-        plitArr = [arr subarrayWithRange:NSMakeRange(0, 100)];
-    }else {
-        plitArr = arr;
-    }
     NSMutableArray *pArr = [NSMutableArray array];
     GetProfiles *request = [[GetProfiles alloc]init];
-    for (MSProfileInfo *info in plitArr) {
+    for (NSInteger i = 0; i < arr.count; i++) {
+        if (i >= 100) {
+            break;
+        }
+        MSProfileInfo *info = arr[i];
         GetProfile *pR = [[GetProfile alloc]init];
         pR.updateTime = info.update_time;
         pR.uid = [info.user_id integerValue];
         [pArr addObject:pR];
     }
+    [arr removeObjectsInRange:NSMakeRange(0, pArr.count)];
     request.getProfilesArray = pArr;
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     MSLog(@"[发送消息]GetProfiles:\n%@",request);
@@ -156,9 +157,8 @@ static MSProfileProvider *instance;
             
         }
     }];
-    if (arr.count > 100) {
-        NSArray *leftArr = [arr subarrayWithRange:NSMakeRange(100, arr.count-100)];
-        [self componentRequestWithProfiles:leftArr];
+    if (arr.count > 0) {
+        [self componentRequestWithProfiles:arr];
     }
 }
 

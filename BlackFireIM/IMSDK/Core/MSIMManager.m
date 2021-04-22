@@ -106,6 +106,14 @@ static MSIMManager *_manager;
     return _convCaches;
 }
 
+- (NSMutableArray *)profileCaches
+{
+    if (!_profileCaches) {
+        _profileCaches = [NSMutableArray array];
+    }
+    return _profileCaches;
+}
+
 - (dispatch_queue_t)socketQueue
 {
     if(!_socketQueue) {
@@ -178,12 +186,10 @@ static MSIMManager *_manager;
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port
 {
     MSLog(@"****建立连接成功****");
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.connListener && [self.connListener respondsToSelector:@selector(connectSucc)]) {
-            [self.connListener connectSucc];
-        }
-        self.connStatus = IMNET_STATUS_SUCC;
-    });
+    if (self.connListener && [self.connListener respondsToSelector:@selector(connectSucc)]) {
+        [self.connListener connectSucc];
+    }
+    self.connStatus = IMNET_STATUS_SUCC;
     [self.socket readDataWithTimeout:-1 tag:100];
     self.retryCount = 0;
     [self.retryTimer invalidate];
@@ -421,13 +427,11 @@ static MSIMManager *_manager;
 - (void)messageRsultHandler:(Result *)result
 {
     if (result.code == ERR_LOGIN_KICKED_OFF_BY_OTHER) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.connListener && [self.connListener respondsToSelector:@selector(onForceOffline)]) {
-                [self.connListener onForceOffline];
-            }
-            //清空本地的token
-            [self cleanIMToken];
-        });
+        if (self.connListener && [self.connListener respondsToSelector:@selector(onForceOffline)]) {
+            [self.connListener onForceOffline];
+        }
+        //清空本地的token
+        [self cleanIMToken];
     }
     
     NSString *taskID = [self taskIDForMsgSeq:result.sign];
@@ -459,11 +463,9 @@ static MSIMManager *_manager;
         NSDictionary *dic = [self.callbackBlock objectForKey:taskID];
         TCPBlock complete = dic[@"callback"];
         if(complete) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.callbackBlock removeObjectForKey:taskID];
-                [self.taskIDs removeObjectForKey:taskID];
-                complete(code,response,msg);
-            });
+            [self.callbackBlock removeObjectForKey:taskID];
+            [self.taskIDs removeObjectForKey:taskID];
+            complete(code,response,msg);
         }
     }
 }

@@ -31,6 +31,9 @@ typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 ///暂时缓存服务器返回的会话列表，当接收到服务器返回的所有会话时，再写入数据库
 @property(nonatomic,strong) NSMutableArray *convCaches;
 
+///当接收到服务器返回的所有会话时,批量同步profile信息，再写入数据库
+@property(nonatomic,strong) NSMutableArray *profileCaches;
+
 ///记录上次同步会话的时间戳
 @property(nonatomic,assign) NSInteger chatUpdateTime;
 
