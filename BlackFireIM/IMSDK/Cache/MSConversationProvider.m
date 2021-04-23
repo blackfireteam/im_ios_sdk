@@ -65,18 +65,12 @@ static MSConversationProvider *instance;
     return nil;
 }
 
-- (void)updateConversation:(MSIMConversation *)conv
-{
-    if (!conv) return;
-    [self.mainCache setObject:conv forKey:conv.conversation_id];
-    [self.store addConversation:conv];
-}
-
 - (void)updateConversations:(NSArray<MSIMConversation *> *)convs
 {
-    for (MSIMConversation *con in convs) {
-        [self updateConversation:con];
+    for (MSIMConversation *conv in convs) {
+        [self.mainCache setObject:conv forKey:conv.conversation_id];
     }
+    [self.store addConversations:convs];
 }
 
 ///删除会话

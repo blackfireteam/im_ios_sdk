@@ -7,6 +7,9 @@
 
 #import "BFSparkLoadingView.h"
 #import "BFHeader.h"
+#import "MSIMSDK.h"
+#import <SDWebImage.h>
+
 
 @interface BFSparkLoadingView()
 
@@ -34,7 +37,11 @@
         [self addSubview:self.maskImg];
         
         self.headImg = [UIImageView new];
-        self.headImg.image = [UIImage imageNamed:@"loadinghead"];
+        self.headImg.image = [UIImage imageNamed:@""];
+        MSProfileInfo *me = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+        if (me) {
+            [self.headImg sd_setImageWithURL:[NSURL URLWithString:me.avatar]];
+        }
         [self addSubview:self.headImg];
         self.alpha = 0;
     }

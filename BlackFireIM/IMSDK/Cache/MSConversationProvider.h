@@ -18,8 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (MSIMConversation *)providerConversation:(NSString *)partner_id;
 
-- (void)updateConversation:(MSIMConversation *)conv;
-
 - (void)updateConversations:(NSArray<MSIMConversation *> *)convs;
 
 - (void)deleteConversation:(NSString *)partner_id;

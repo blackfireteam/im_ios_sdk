@@ -13,31 +13,6 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 
 @implementation MSDBConversationStore
 
-///添加会话记录
-- (BOOL)addConversation:(MSIMConversation *)conv
-{
-    if (conv == nil || conv.conversation_id.length == 0) {
-        return NO;
-    }
-    BOOL isOK = [self createTable];
-    if (isOK == NO) {
-        return NO;
-    }
-    NSString *addSQL = @"REPLACE into %@ (conv_id,chat_type,f_id,msg_end,show_msg_sign,msg_last_read,unread_count,status,ext) VALUES (?,?,?,?,?,?,?,?,?)";
-    NSString *sqlStr = [NSString stringWithFormat:addSQL,CONV_TABLE_NAME];
-    NSArray *addParams = @[conv.conversation_id,
-                           @(conv.chat_type),
-                           conv.partner_id,
-                           @(conv.msg_end),
-                           @(conv.show_msg_sign),
-                           @(conv.msg_last_read),
-                           @(conv.unread_count),
-                           @(1),
-                           conv.extString];
-    BOOL isAddOK = [self excuteSQL:sqlStr withArrParameter:addParams];
-    return isAddOK;
-}
-
 - (BOOL)createTable
 {
     NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(conv_id TEXT,chat_type INTEGER,f_id TEXT,msg_end INTEGER,show_msg_sign INTEGER,msg_last_read INTEGER,unread_count INTEGER,status INTEGER DEFAULT 1,ext TEXT,PRIMARY KEY(conv_id))",CONV_TABLE_NAME];
@@ -49,16 +24,25 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 }
 
 ///批量添加会话记录
-- (BOOL)addConversations:(NSArray<MSIMConversation *> *)convs
+- (void)addConversations:(NSArray<MSIMConversation *> *)convs
 {
-    BOOL isOK = YES;
-    for (MSIMConversation *conv in convs) {
-        BOOL isAdd = [self addConversation:conv];
-        if (isAdd == NO) {
-            isOK = isAdd;
+    [self createTable];
+    [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
+        NSString *addSQL = @"REPLACE into %@ (conv_id,chat_type,f_id,msg_end,show_msg_sign,msg_last_read,unread_count,status,ext) VALUES (?,?,?,?,?,?,?,?,?)";
+        NSString *sqlStr = [NSString stringWithFormat:addSQL,CONV_TABLE_NAME];
+        for (MSIMConversation *conv in convs) {
+            NSArray *addParams = @[conv.conversation_id,
+                                   @(conv.chat_type),
+                                   conv.partner_id,
+                                   @(conv.msg_end),
+                                   @(conv.show_msg_sign),
+                                   @(conv.msg_last_read),
+                                   @(conv.unread_count),
+                                   @(1),
+                                   conv.extString];
+            [db executeUpdate:sqlStr withArgumentsInArray:addParams];
         }
-    }
-    return isOK;
+    }];
 }
 
 ///更新会话记录未读数
@@ -75,10 +59,10 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 {
     __block NSMutableArray *convs = [[NSMutableArray alloc] init];
     NSString *sqlString = [NSString stringWithFormat: @"SELECT * FROM %@ where status = 1 ORDER BY show_msg_sign DESC", CONV_TABLE_NAME];
-    
+    WS(weakSelf)
     [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            MSIMConversation *conv = [self bf_component_conv:rsSet];
+            MSIMConversation *conv = [weakSelf bf_component_conv:rsSet];
             [convs addObject:conv];
         }
         [rsSet close];
@@ -98,9 +82,10 @@ static NSString *CONV_TABLE_NAME = @"conversation";
         sqlStr = [NSString stringWithFormat:@"select * from %@ where status = 1 and show_msg_sign < '%zd' order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,last_seq,count+1];
     }
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
+    WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            [data addObject:[self bf_component_conv:rsSet]];
+            [data addObject:[weakSelf bf_component_conv:rsSet]];
         }
         [rsSet close];
     }];
@@ -117,9 +102,10 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 {
     __block MSIMConversation *conv = nil;
     NSString *sqlString = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE conv_id = '%@'", CONV_TABLE_NAME,conv_id];
+    WS(weakSelf)
     [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            conv = [self bf_component_conv:rsSet];
+            conv = [weakSelf bf_component_conv:rsSet];
         }
         [rsSet close];
     }];

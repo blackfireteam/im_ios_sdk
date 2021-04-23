@@ -17,6 +17,7 @@
 #import "MSIMConversation.h"
 #import "MSConversationProvider.h"
 #import "MSIMManager+Parse.h"
+#import "MSDBManager.h"
 
 static NSString *msg_id = @"msg_id";
 static NSString *msg_sign = @"msg_sign";
@@ -29,44 +30,124 @@ static NSString *block_id = @"block_id";
 static NSString *code = @"code";
 static NSString *reason = @"reason";
 static NSString *ext_data = @"ext_data";
+
+@interface MSDBMessageStore()
+
+@end
 @implementation MSDBMessageStore
 
-///向数据库中添加一条记录
-- (BOOL)addMessage:(MSIMElem *)elem
+- (BOOL)createTableWithName:(NSString *)name
 {
-    NSString *fid = elem.partner_id;
-    NSString *tableName = [NSString stringWithFormat:@"message_user_%@",fid];
-    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(msg_id INTEGER UNIQUE,msg_sign INTEGER NOT NULL,f_id TEXT,t_id TEXT,msg_type INTEGER,send_status INTEGER,read_status INTEGER,code INTEGER,reason TEXT,block_id INTEGER NOT NULL,ext_data blob,PRIMARY KEY(msg_sign))",tableName];
-    BOOL isOK = [self createTable:tableName withSQL:createSQL];
+    if (name == nil) return NO;
+    NSNumber *isExist = [[MSDBManager sharedInstance].tableCache objectForKey:name];
+    if (isExist.boolValue) return YES;
+    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(msg_id INTEGER UNIQUE,msg_sign INTEGER NOT NULL,f_id TEXT,t_id TEXT,msg_type INTEGER,send_status INTEGER,read_status INTEGER,code INTEGER,reason TEXT,block_id INTEGER NOT NULL,ext_data blob,PRIMARY KEY(msg_sign))",name];
+    BOOL isOK = [self createTable:name withSQL:createSQL];
     if (isOK == NO) {
-        NSLog(@"创建表失败****%@",tableName);
+        NSLog(@"创建表失败****%@",name);
         return NO;
     }
-    MSIMElem *lastContainMsgIDElem = [self lastMessageID:fid];
+    [[MSDBManager sharedInstance].tableCache setObject:@(YES) forKey:name];
+    return YES;
+}
+
+- (NSInteger)createBlock_idWithElem:(MSIMElem *)elem tableName:(NSString *)tableName database:(FMDatabase *)db
+{
     NSInteger block_id = 1;
-    if (lastContainMsgIDElem) {
-        if (elem.msg_id != 0) {
-//            ///如果收到msg_id存在的消息，不覆盖
-            MSIMElem *currentElem = [self searchMessage:fid msg_id:elem.msg_id];
-            if (currentElem) {
-                return YES;
-            }
-            MSIMElem *nextElem = [self searchMessage:fid msg_id:elem.msg_id+1];
-            MSIMElem *preElem = [self searchMessage:fid msg_id:elem.msg_id-1];
-            if (nextElem && preElem) {
+    if (elem.msg_id != 0) {
+        ///如果收到msg_id存在的消息，不覆盖
+        NSString *searchNextSQL = [NSString stringWithFormat:@"select * from %@ where msg_id = '%zd'",tableName,elem.msg_id+1];
+        FMResultSet *searchNextSet = [db executeQuery:searchNextSQL];
+        MSIMElem *nextElem;
+        while ([searchNextSet next]) {
+            nextElem = [self bf_componentElem:searchNextSet];
+            NSString *searchPreSQL = [NSString stringWithFormat:@"select * from %@ where msg_id = '%zd'",tableName,elem.msg_id-1];
+            FMResultSet *searchPreSet = [db executeQuery:searchPreSQL];
+            MSIMElem *preElem;
+            while ([searchPreSet next]) {
+                preElem = [self bf_componentElem:searchPreSet];
                 block_id = MIN(nextElem.block_id, preElem.block_id);
-                [self updateBlockID:MAX(preElem.block_id, nextElem.block_id) toBlockID:block_id partnerID:fid];
-            }else if (nextElem) {
-                block_id = nextElem.block_id;
-            }else if (preElem) {
-                block_id = preElem.block_id;
-            }else {
-                block_id = [self maxBlockID:fid] + 1;
+                NSString *updateBlockSQL = [NSString stringWithFormat:@"update %@ set block_id = '%zd' where block_id = '%zd'",tableName,block_id,MAX(preElem.block_id, nextElem.block_id)];
+                [db executeUpdate:updateBlockSQL];
             }
-        }else {
-            block_id = [self maxBlockID:fid];
+            if (preElem == nil) {
+                block_id = nextElem.block_id;
+            }
+        }
+        if (nextElem == nil) {
+            NSString *searchPreSQL = [NSString stringWithFormat:@"select * from %@ where msg_id = '%zd'",tableName,elem.msg_id-1];
+            FMResultSet *searchPreSet = [db executeQuery:searchPreSQL];
+            MSIMElem *preElem;
+            while ([searchPreSet next]) {
+                preElem = [self bf_componentElem:searchPreSet];
+                block_id = preElem.block_id;
+            }
+            if (preElem == nil) {
+                NSString *maxBlockIDSQL = [NSString stringWithFormat:@"select block_id from %@ order by block_id desc limit 1",tableName];
+                FMResultSet *maxBlockSet = [db executeQuery:maxBlockIDSQL];
+                while ([maxBlockSet next]) {
+                    block_id = [maxBlockSet intForColumn:@"block_id"] + 1;
+                }
+            }
         }
     }
+    return block_id;
+}
+
+///向数据库中添加批量记录
+- (void)addMessages:(NSArray<MSIMElem *> *)elems
+{
+    for (MSIMElem *elem in elems) {
+        NSString *tableName = [NSString stringWithFormat:@"message_user_%@",elem.partner_id];
+        BOOL isTableExist = [self createTableWithName:tableName];
+        if (isTableExist == NO) return;
+    }
+    WS(weakSelf)
+    [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
+        for (MSIMElem *elem in elems) {
+            NSString *tableName = [NSString stringWithFormat:@"message_user_%@",elem.partner_id];
+            NSString *lastMessageIDSQL = [NSString stringWithFormat:@"select * from %@ where msg_id > 0 order by msg_id desc limit 1",tableName];
+            FMResultSet *lastMessageIDSet = [db executeQuery:lastMessageIDSQL];
+            MSIMElem *lastContainMsgIDElem;
+            while ([lastMessageIDSet next]) {
+                lastContainMsgIDElem = [weakSelf bf_componentElem:lastMessageIDSet];
+                if (elem.msg_id != 0) {
+                    ///如果收到msg_id存在的消息，不覆盖
+                    NSString *searchCurrentSQL = [NSString stringWithFormat:@"select * from %@ where msg_id = '%zd'",tableName,elem.msg_id];
+                    FMResultSet *searchCurrentSet = [db executeQuery:searchCurrentSQL];
+                    MSIMElem *currentElem;
+                    while ([searchCurrentSet next]) {
+                        currentElem = [weakSelf bf_componentElem:searchCurrentSet];
+                        continue;
+                    }
+                    if (currentElem == nil) {
+                        NSInteger blockId = [weakSelf createBlock_idWithElem:elem tableName:tableName database:db];
+                        [weakSelf addMessageToDB:elem block_id:blockId tableName:tableName database:db];
+                    }
+                }else {
+                    NSString *maxBlockIDSQL = [NSString stringWithFormat:@"select block_id from %@ order by block_id desc limit 1",tableName];
+                    FMResultSet *maxBlockSet = [db executeQuery:maxBlockIDSQL];
+                    while ([maxBlockSet next]) {
+                        NSInteger block_id = [maxBlockSet intForColumn:@"block_id"];
+                        [weakSelf addMessageToDB:elem block_id:block_id tableName:tableName database:db];
+                    }
+                }
+            }
+            if (lastContainMsgIDElem == nil) {
+                [weakSelf addMessageToDB:elem block_id:1 tableName:tableName database:db];
+            }
+        }
+    }];
+}
+
+///向数据库中添加一条记录
+- (void)addMessage:(MSIMElem *)elem
+{
+    [self addMessages:@[elem]];
+}
+
+- (void)addMessageToDB:(MSIMElem *)elem block_id:(NSInteger)block_id tableName:(NSString *)tableName database:(FMDatabase *)db
+{
     NSString *addSQL = @"replace into %@ (msg_id,msg_sign,f_id,t_id,msg_type,send_status,read_status,code,reason,block_id,ext_data) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     NSString *sqlStr = [NSString stringWithFormat:addSQL,tableName];
     NSArray *addParams = @[(elem.msg_id ? @(elem.msg_id) : [NSNull null]),
@@ -80,21 +161,7 @@ static NSString *ext_data = @"ext_data";
                            XMNoNilString(elem.reason),
                            @(block_id),
                            elem.extData ?:[NSNull  null]];
-    BOOL isAddOK = [self excuteSQL:sqlStr withArrParameter:addParams];
-    return isAddOK;
-}
-
-///向数据库中添加批量记录
-- (BOOL)addMessages:(NSArray<MSIMElem *> *)elems
-{
-    BOOL isOK = YES;
-    for (MSIMElem *elem in elems) {
-        BOOL isAdd = [self addMessage:elem];
-        if (isAdd == NO) {
-            isOK = isAdd;
-        }
-    }
-    return isOK;
+    [db executeUpdate:sqlStr withArgumentsInArray:addParams];
 }
 
 ///标记某一条消息为撤回消息
@@ -124,9 +191,10 @@ static NSString *ext_data = @"ext_data";
     __block MSIMElem *elem = nil;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partner_id];
     NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_id > 0 order by msg_id desc limit 1",tableName];
+    WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            elem = [self bf_componentElem:rsSet];
+            elem = [weakSelf bf_componentElem:rsSet];
         }
         [rsSet close];
     }];
@@ -245,9 +313,10 @@ static NSString *ext_data = @"ext_data";
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
     NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,blockID,count];
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
+    WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            [data addObject:[self bf_componentElem:rsSet]];
+            [data addObject:[weakSelf bf_componentElem:rsSet]];
         }
         [rsSet close];
     }];
@@ -259,9 +328,10 @@ static NSString *ext_data = @"ext_data";
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
     NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_id != 0 order by msg_sign desc limit 1",tableName,msg_sign];
     __block MSIMElem *elem = nil;
+    WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            elem = [self bf_componentElem:rsSet];
+            elem = [weakSelf bf_componentElem:rsSet];
         }
         [rsSet close];
     }];
@@ -273,9 +343,10 @@ static NSString *ext_data = @"ext_data";
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
     NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign >= '%zd' and msg_id != 0 order by msg_sign asc limit 1",tableName,msg_sign];
     __block MSIMElem *elem = nil;
+    WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            elem = [self bf_componentElem:rsSet];
+            elem = [weakSelf bf_componentElem:rsSet];
         }
         [rsSet close];
     }];
@@ -455,9 +526,10 @@ static NSString *ext_data = @"ext_data";
         sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,last_msg_sign,BFIM_MSG_TYPE_NULL,block_id,count+1];
     }
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
+    WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            [data addObject:[self bf_componentElem:rsSet]];
+            [data addObject:[weakSelf bf_componentElem:rsSet]];
         }
         [rsSet close];
     }];

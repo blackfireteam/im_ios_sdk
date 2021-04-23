@@ -103,12 +103,16 @@ static MSProfileProvider *instance;
     return nil;
 }
 
-///更新用户信息
-- (void)updateProfile:(MSProfileInfo *)info
+///批量更新用户信息
+- (void)updateProfiles:(NSArray<MSProfileInfo *> *)infos
 {
-    if (info.user_id.length == 0) return;
-    [self.mainCache setObject:info forKey:info.user_id];
-    [self.store addProfile:info];
+    for (MSProfileInfo *info in infos) {
+        if (info.user_id.length == 0) {
+            continue;
+        }
+        [self.mainCache setObject:info forKey:info.user_id];
+    }
+    [self.store addProfiles:infos];
 }
 
 ///只更新用户信息到内存缓存

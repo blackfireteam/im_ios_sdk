@@ -14,11 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSIMConversation;
 @interface MSDBConversationStore : MSDBBaseStore
 
-///添加会话记录
-- (BOOL)addConversation:(MSIMConversation *)conv;
-
 ///批量添加会话记录
-- (BOOL)addConversations:(NSArray<MSIMConversation *> *)convs;
+- (void)addConversations:(NSArray<MSIMConversation *> *)convs;
 
 ///更新会话记录未读数
 - (BOOL)updateConvesation:(NSString *)conv_id unread_count:(NSInteger)count;

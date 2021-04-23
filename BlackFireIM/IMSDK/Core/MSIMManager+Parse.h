@@ -40,7 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///服务器返回的删除会话的处理
 - (void)deleteChatHandler:(DelChat *)result; 
 
-- (BOOL)elemNeedToUpdateConversation:(MSIMElem *)elem increaseUnreadCount:(BOOL)increase;
+- (void)elemNeedToUpdateConversations:(NSArray<MSIMElem *> *)elem increaseUnreadCount:(NSArray<NSNumber *> *)increases;
+
 
 @end
 

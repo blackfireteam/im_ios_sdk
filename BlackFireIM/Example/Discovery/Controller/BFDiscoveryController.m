@@ -33,8 +33,8 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userOnline:) name:@"MSUIKitNotification_Profile_online" object:nil];
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userOffline:) name:@"MSUIKitNotification_Profile_offline" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userOnline:) name:@"MSUIKitNotification_Profile_online" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userOffline:) name:@"MSUIKitNotification_Profile_offline" object:nil];
     }
     return self;
 }
@@ -55,7 +55,7 @@
 - (void)userOnline:(NSNotification *)note
 {
     MSProfileInfo *info = note.object;
-    [[MSProfileProvider provider] updateProfile:info];
+    [[MSProfileProvider provider] updateProfiles:@[info]];
     [self.dataArray addObject:info];
     [self.myCollectionView reloadData];
 }

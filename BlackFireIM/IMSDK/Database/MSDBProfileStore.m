@@ -8,6 +8,7 @@
 #import "MSDBProfileStore.h"
 #import <FMDB.h>
 #import "MSDBManager.h"
+#import "MSIMConst.h"
 
 
 static NSString *PROFILE_TABLE_NAME = @"profile";
@@ -19,39 +20,29 @@ static NSString *PROFILE_TABLE_NAME = @"profile";
     return [MSDBManager sharedInstance].commonQueue;
 }
 
-///向数据库中添加一条记录
-- (BOOL)addProfile:(MSProfileInfo *)profile
+///向数据库中添加批量记录
+- (void)addProfiles:(NSArray<MSProfileInfo *> *)profiles
 {
     NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(uid TEXT,update_time INTEGER,nick_name TEXT,avatar TEXT,gold bool,verified bool,ext TEXT,PRIMARY KEY(uid))",PROFILE_TABLE_NAME];
     BOOL isOK = [self createTable:PROFILE_TABLE_NAME withSQL:createSQL];
     if (isOK == NO) {
         NSLog(@"创建表失败****%@",PROFILE_TABLE_NAME);
-        return NO;
+        return;
     }
-    NSString *addSQL = @"REPLACE into %@ (uid,update_time,nick_name,avatar,gold,verified,ext) VALUES (?,?,?,?,?,?,?)";
-    NSString *sqlStr = [NSString stringWithFormat:addSQL,PROFILE_TABLE_NAME];
-    NSArray *addParams = @[profile.user_id,
-                           @(profile.update_time),
-                           profile.nick_name,
-                           profile.avatar,
-                           @(profile.gold),
-                           @(profile.verified),
-                           @""];
-    BOOL isAddOK = [self excuteSQL:sqlStr withArrParameter:addParams];
-    return isAddOK;
-}
-
-///向数据库中添加批量记录
-- (BOOL)addProfiles:(NSArray<MSProfileInfo *> *)profiles
-{
-    BOOL isOK = YES;
-    for (MSProfileInfo *profile in profiles) {
-        BOOL isAdd = [self addProfile:profile];
-        if (isAdd == NO) {
-            isOK = isAdd;
+    [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
+        NSString *addSQL = @"replace into %@ (uid,update_time,nick_name,avatar,gold,verified,ext) VALUES (?,?,?,?,?,?,?)";
+        NSString *sqlStr = [NSString stringWithFormat:addSQL,PROFILE_TABLE_NAME];
+        for (MSProfileInfo *profile in profiles) {
+            NSArray *addParams = @[profile.user_id,
+                                   @(profile.update_time),
+                                   profile.nick_name,
+                                   profile.avatar,
+                                   @(profile.gold),
+                                   @(profile.verified),
+                                   @""];
+            [db executeUpdate:sqlStr withArgumentsInArray:addParams];
         }
-    }
-    return isOK;
+    }];
 }
 
 ///查找某一条prifle
@@ -59,9 +50,10 @@ static NSString *PROFILE_TABLE_NAME = @"profile";
 {
     NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where uid = '%@'",PROFILE_TABLE_NAME,user_id];
     __block MSProfileInfo *profile = nil;
+    WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            profile = [self ms_component:rsSet];
+            profile = [weakSelf ms_component:rsSet];
         }
         [rsSet close];
     }];
@@ -73,9 +65,10 @@ static NSString *PROFILE_TABLE_NAME = @"profile";
 {
     NSString *sqlStr = [NSString stringWithFormat:@"select * from %@",PROFILE_TABLE_NAME];
     __block NSMutableArray *profiles = [NSMutableArray array];
+    WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
-            MSProfileInfo *info = [self ms_component:rsSet];
+            MSProfileInfo *info = [weakSelf ms_component:rsSet];
             [profiles addObject:info];
         }
         [rsSet close];

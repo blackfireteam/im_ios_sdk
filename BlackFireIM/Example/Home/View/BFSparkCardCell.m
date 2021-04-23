@@ -76,7 +76,7 @@
 - (void)configItem:(MSProfileInfo *)info
 {
     _user = info;
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:info.pic]];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:info.pic] placeholderImage:nil options:SDWebImageRetryFailed | SDWebImageAllowInvalidSSLCertificates];
     self.title.text = info.nick_name;
     self.winkBtn.selected = NO;
 }

@@ -13,12 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSDBProfileStore : MSDBBaseStore
 
-
-///向数据库中添加一条记录
-- (BOOL)addProfile:(MSProfileInfo *)profile;
-
 ///向数据库中添加批量记录
-- (BOOL)addProfiles:(NSArray<MSProfileInfo *> *)profiles;
+- (void)addProfiles:(NSArray<MSProfileInfo *> *)profiles;
 
 ///查找某一条prifle
 - (MSProfileInfo *)searchProfile:(NSString *)user_id;

@@ -16,28 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSDBMessageStore : MSDBBaseStore
 
 ///向数据库中添加一条记录
-- (BOOL)addMessage:(MSIMElem *)elem;
+- (void)addMessage:(MSIMElem *)elem;
 
 ///向数据库中添加批量记录
-- (BOOL)addMessages:(NSArray<MSIMElem *> *)elems;
+- (void)addMessages:(NSArray<MSIMElem *> *)elems;
 
 ///将表中所有消息id <= last_msg_id标记为已读
 - (BOOL)markMessageAsRead:(NSInteger)last_msg_id partnerID:(NSString *)partnerID;
-
-///更新消息发送状态为成功
-//- (BOOL)updateMessageToSuccss:(NSInteger)msg_sign
-//                       msg_id:(NSInteger)msg_id
-//                    partnerID:(NSString *)partnerID;
-//
-/////更新消息发送状态为失败
-//- (BOOL)updateMessageToFail:(NSInteger)msg_sign
-//                 code:(NSInteger)code
-//               reason:(NSString *)reason
-//            partnerID:(NSString *)partnerID;
-//
-/////更新消息发送状态为发送中
-//- (BOOL)updateMessageToSending:(NSInteger)msg_sign
-//                     partnerID:(NSString *)partnerID;
 
 ///标记某一条消息为撤回消息
 - (BOOL)updateMessageRevoke:(NSInteger)msg_id partnerID:(NSString *)partnerID;

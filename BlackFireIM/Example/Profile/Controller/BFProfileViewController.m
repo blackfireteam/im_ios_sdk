@@ -109,11 +109,12 @@
     info.gold_exp = [MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
-        [[MSProfileProvider provider]updateProfile:info];
+        [[MSProfileProvider provider]updateProfiles:@[info]];
         [SVProgressHUD showSuccessWithStatus:@"修改成功"];
         
     } fail:^(NSError * _Nonnull error) {
         [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        sw.on = !sw.isOn;
     }];
 }
 
@@ -123,10 +124,11 @@
     info.verified = sw.isOn;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
-        [[MSProfileProvider provider]updateProfile:info];
+        [[MSProfileProvider provider]updateProfiles:@[info]];
         [SVProgressHUD showSuccessWithStatus:@"修改成功"];
     } fail:^(NSError * _Nonnull error) {
         [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        sw.on = !sw.isOn;
     }];
 }
 
@@ -136,7 +138,7 @@
     info.nick_name = name;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
-        [[MSProfileProvider provider]updateProfile:info];
+        [[MSProfileProvider provider]updateProfiles:@[info]];
         self.headerView.nickNameL.text = name;
         [SVProgressHUD showSuccessWithStatus:@"修改成功"];
     } fail:^(NSError * _Nonnull error) {
@@ -150,7 +152,7 @@
     info.avatar = url;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
-        [[MSProfileProvider provider]updateProfile:info];
+        [[MSProfileProvider provider]updateProfiles:@[info]];
         [self.headerView.avatarIcon sd_setImageWithURL:[NSURL URLWithString:url]];
         [SVProgressHUD showSuccessWithStatus:@"修改成功"];
         

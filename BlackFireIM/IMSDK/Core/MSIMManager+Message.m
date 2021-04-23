@@ -135,7 +135,7 @@
     if (isResend == NO) {
         [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];
-        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
     }
     ChatS *chats = [[ChatS alloc]init];
     chats.sign = elem.msg_sign;
@@ -154,7 +154,7 @@
                 elem.msg_id = result.msgId;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             }else {
                 MSLog(@"发送失败");
                 failed(code,error);
@@ -163,7 +163,7 @@
                 elem.reason = error;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             }
         });
     }];
@@ -181,7 +181,7 @@
     if (isResend == NO) {
         [self.msgListener onNewMessages:@[elem]];
         [self.messageStore addMessage:elem];
-        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
     }
     if (elem.url.length == 0 || ![elem.url hasPrefix:@"http"]) {
         if (elem.uuid.length > 0) {
@@ -225,7 +225,7 @@
             
             [self.messageStore addMessage:elem];
             [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             [self sendImageMessageByTCP:elem successed:success failed:failed];
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
@@ -236,7 +236,7 @@
             elem.reason = desc;
             [self.messageStore addMessage:elem];
             [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             failed(code,desc);
     }];
 }
@@ -263,7 +263,7 @@
                 elem.msg_id = result.msgId;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
                 success(result.msgId);
             }else {
                 MSLog(@"发送失败");
@@ -273,7 +273,7 @@
                 elem.reason = error;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             }
         });
     }];
@@ -291,7 +291,7 @@
     if (isResend == NO) {
         [self.msgListener onNewMessages:@[elem]];
         [self.messageStore addMessage:elem];
-        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
     }
     if (!([elem.videoUrl hasPrefix:@"http"] && [elem.coverUrl hasPrefix:@"http"])) {
         if (elem.uuid.length > 0) {
@@ -336,7 +336,7 @@
         
         [self.messageStore addMessage:elem];
         [self.msgListener onMessageUpdateSendStatus:elem];
-        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
         [self sendVideoMessageByTCP:elem successed:success failed:failed];
         
     } failed:^(NSInteger code, NSString * _Nonnull desc) {
@@ -347,7 +347,7 @@
         elem.reason = desc;
         [self.messageStore addMessage:elem];
         [self.msgListener onMessageUpdateSendStatus:elem];
-        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
         failed(code,desc);
         
     }];
@@ -377,7 +377,7 @@
                 elem.msg_id = result.msgId;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
                 success(result.msgId);
             }else {
                 MSLog(@"发送失败");
@@ -387,7 +387,7 @@
                 elem.reason = error;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             }
         });
     }];
@@ -405,7 +405,7 @@
     if (isResend == NO) {
         [self.msgListener onNewMessages:@[elem]];
         [self.messageStore addMessage:elem];
-        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
     }
     if (elem.url.length == 0 || ![elem.url hasPrefix:@"http"]) {
         [self uploadVoice:elem successed:success failed:failed];
@@ -428,7 +428,7 @@
             
             [self.messageStore addMessage:elem];
             [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             [self sendVoiceMessageByTCP:elem successed:success failed:failed];
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
@@ -438,7 +438,7 @@
             elem.reason = desc;
             [self.messageStore addMessage:elem];
             [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             failed(code,desc);
     }];
 }
@@ -464,7 +464,7 @@
                 elem.msg_id = result.msgId;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
                 success(result.msgId);
             }else {
                 MSLog(@"发送失败");
@@ -474,7 +474,7 @@
                 elem.reason = error;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             }
         });
     }];
@@ -496,7 +496,7 @@
     if (isResend == NO) {
         [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];
-        [self elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
     }
     ChatS *chats = [[ChatS alloc]init];
     chats.sign = elem.msg_sign;
@@ -515,7 +515,7 @@
                 elem.msg_id = result.msgId;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             }else {
                 MSLog(@"发送失败");
                 failed(code,error);
@@ -524,7 +524,7 @@
                 elem.reason = error;
                 [strongSelf.messageStore addMessage:elem];
                 [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversation:elem increaseUnreadCount:NO];
+                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
             }
         });
     }];

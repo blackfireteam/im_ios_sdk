@@ -26,8 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///只从本地查询用户的个人信息
 - (MSProfileInfo *)providerProfileFromLocal:(NSInteger)user_id;
 
-///更新用户信息
-- (void)updateProfile:(MSProfileInfo *)info;
+///批量更新用户信息
+- (void)updateProfiles:(NSArray<MSProfileInfo *> *)infos;
 
 ///只更新用户信息到内存缓存
 - (void)updateProfileOnlyToMemory:(MSProfileInfo *)info;

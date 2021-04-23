@@ -29,6 +29,14 @@ static MSDBManager *manager;
     return manager;
 }
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _tableCache = [[NSCache alloc]init];
+    }
+    return self;
+}
+
 - (FMDatabaseQueue *)messageQueue
 {
     if(!_messageQueue) {

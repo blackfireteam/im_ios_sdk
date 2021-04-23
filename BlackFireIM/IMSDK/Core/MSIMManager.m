@@ -571,29 +571,31 @@ static MSIMManager *_manager;
     MSLog(@"[发送消息-login]:\n%@",login);
     [self send:[login data] protoType:XMChatProtoTypeLogin needToEncry:false sign:login.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
-        if (code == ERR_SUCC) {
-            Result *result = response;
-            [MSIMTools sharedInstance].user_id = [NSString stringWithFormat:@"%lld",result.uid];
-            [MSIMTools sharedInstance].user_sign = user_sign;
-            [[MSIMTools sharedInstance] updateServerTime:result.nowTime*1000*1000];
-            //将消息队列中的消息重新发送一遍
-            [strongSelf resendAllMessages];
-            
-            if (strongSelf.loginSuccBlock) strongSelf.loginSuccBlock();
-            strongSelf.loginSuccBlock = nil;
-            //同步会话列表
-            [strongSelf.convCaches removeAllObjects];
-            [strongSelf synchronizeConversationList];
-        }else {
-            if (code == ERR_USER_SIG_EXPIRED) {
-                if (strongSelf.connListener && [strongSelf.connListener respondsToSelector:@selector(onUserSigExpired)]) {
-                    [strongSelf.connListener onUserSigExpired];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == ERR_SUCC) {
+                Result *result = response;
+                [MSIMTools sharedInstance].user_id = [NSString stringWithFormat:@"%lld",result.uid];
+                [MSIMTools sharedInstance].user_sign = user_sign;
+                [[MSIMTools sharedInstance] updateServerTime:result.nowTime*1000*1000];
+                //将消息队列中的消息重新发送一遍
+                [strongSelf resendAllMessages];
+                
+                if (strongSelf.loginSuccBlock) strongSelf.loginSuccBlock();
+                strongSelf.loginSuccBlock = nil;
+                //同步会话列表
+                [strongSelf.convCaches removeAllObjects];
+                [strongSelf synchronizeConversationList];
+            }else {
+                if (code == ERR_USER_SIG_EXPIRED) {
+                    if (strongSelf.connListener && [strongSelf.connListener respondsToSelector:@selector(onUserSigExpired)]) {
+                        [strongSelf.connListener onUserSigExpired];
+                    }
                 }
+                MSLog(@"token 鉴权失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
+                if (strongSelf.loginFailBlock) strongSelf.loginFailBlock(code, error);
+                strongSelf.loginFailBlock = nil;
             }
-            MSLog(@"token 鉴权失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
-            if (strongSelf.loginFailBlock) strongSelf.loginFailBlock(code, error);
-            strongSelf.loginFailBlock = nil;
-        }
+        });
     }];
 }
 
@@ -631,14 +633,15 @@ static MSIMManager *_manager;
     MSLog(@"[发送消息-logout]:\n%@",logout);
     [self send:[logout data] protoType:XMChatProtoTypeLogout needToEncry:NO sign:logout.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
-        if (code == ERR_SUCC) {
-//            Result *result = response;
-            [strongSelf cleanIMToken];
-            succ();
-        }else {
-            MSLog(@"退出登录失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
-            fail(code, error);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (code == ERR_SUCC) {
+                [strongSelf cleanIMToken];
+                succ();
+            }else {
+                MSLog(@"退出登录失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
+                fail(code, error);
+            }
+        });
     }];
 }
 
