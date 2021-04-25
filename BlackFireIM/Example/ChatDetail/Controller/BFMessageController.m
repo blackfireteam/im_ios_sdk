@@ -79,11 +79,22 @@
 
 - (void)setupUI
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewMessage:) name:MSUIKitNotification_MessageListener object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageStatusUpdate:) name:MSUIKitNotification_MessageSendStatusUpdate object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(recieveRevokeMessage:) name:MSUIKitNotification_MessageRecieveRevoke object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(recieveMessageReceipt:) name:MSUIKitNotification_MessageReceipt object:nil];
+    WS(weakSelf)
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+       [weakSelf onNewMessage:note];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageSendStatusUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf messageStatusUpdate:note];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_ProfileUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf profileUpdate:note];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageRecieveRevoke object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf recieveRevokeMessage:note];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageReceipt object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf recieveMessageReceipt:note];
+    }];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapViewController)];
     [self.view addGestureRecognizer:tap];
@@ -100,7 +111,7 @@
     [self.tableView registerClass:[BFVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
     [self.tableView registerClass:[BFVoiceMessageCell class] forCellReuseIdentifier:TVoiceMessageCell_ReuseId];
     [self.tableView registerClass:[BFWinkMessageCell class] forCellReuseIdentifier:TWinkMessageCell_ReuseId];
-    WS(weakSelf)
+ 
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf loadMessages];
     }];
@@ -351,12 +362,14 @@
 ///用户个人信息更新通知
 - (void)profileUpdate:(NSNotification *)note
 {
-    MSProfileInfo *profile = note.object;
-    if ([profile.user_id isEqualToString:self.partner_id] || [profile.user_id isEqualToString:[MSIMTools sharedInstance].user_id]) {
-        [self.tableView reloadData];
-    }
-    if ([profile.user_id isEqualToString:self.partner_id]) {
-        self.navigationItem.title = profile.nick_name;
+    NSArray<MSProfileInfo *> *profiles = note.object;
+    for (MSProfileInfo *info in profiles) {
+        if ([info.user_id isEqualToString:self.partner_id] || [info.user_id isEqualToString:[MSIMTools sharedInstance].user_id]) {
+            [self.tableView reloadData];
+        }
+        if ([info.user_id isEqualToString:self.partner_id]) {
+            self.navigationItem.title = info.nick_name;
+        }
     }
 }
 

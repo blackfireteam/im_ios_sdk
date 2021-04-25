@@ -163,6 +163,8 @@ static MSProfileProvider *instance;
     }];
     if (arr.count > 0) {
         [self componentRequestWithProfiles:arr];
+    }else {
+        NSLog(@"批量同步profile完成");
     }
 }
 

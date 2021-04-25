@@ -117,7 +117,7 @@ static MSIMManager *_manager;
 - (dispatch_queue_t)socketQueue
 {
     if(!_socketQueue) {
-        _socketQueue = dispatch_queue_create("com.sendSocket", DISPATCH_QUEUE_SERIAL);
+        _socketQueue = dispatch_get_global_queue(0, 0);
     }
     return _socketQueue;
 }

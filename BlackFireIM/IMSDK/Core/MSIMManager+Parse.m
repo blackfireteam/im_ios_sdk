@@ -21,13 +21,14 @@
 
 - (void)profilesResultHandler:(NSArray<Profile *> *)list
 {
+    NSLog(@"收到的批量profile count = %zd",list.count);
     NSMutableArray *arr = [NSMutableArray array];
     for (Profile *p in list) {
         MSProfileInfo *info = [MSProfileInfo createWithProto:p];
         [arr addObject:info];
-        [self.profileListener onProfileUpdate:info];
     }
     [[MSProfileProvider provider] updateProfiles:arr];
+    [self.profileListener onProfileUpdates:arr];
 }
 
 ///服务器返回的会话列表数据处理
@@ -70,12 +71,13 @@
             me.user_id = [MSIMTools sharedInstance].user_id;
         }
         [self.profileCaches addObject:me];
-        [[MSIMTools sharedInstance] updateConversationTime:update_time];
+        
         //更新Profile信息
         [[MSProfileProvider provider] synchronizeProfiles:self.profileCaches];
         //更新会话缓存
         [[MSConversationProvider provider]updateConversations:self.convCaches];
         [self updateConvLastMessage:self.convCaches];
+        [[MSIMTools sharedInstance] updateConversationTime:update_time];
         //通知会话有更新
         if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
             [self.convListener onUpdateConversations:self.convCaches];
@@ -139,6 +141,8 @@
     WS(weakSelf)
     NSMutableArray *tempConvs = [NSMutableArray array];
     NSMutableArray *tempIncreases = [NSMutableArray array];
+    NSInteger convsCount = convs.count;
+    __block NSInteger total = 0;
     for (MSIMConversation *conv in convs) {
         [self.messageStore messageByPartnerID:conv.partner_id last_msg_sign:0 count:20 complete:^(NSArray<MSIMElem *> * _Nonnull data, BOOL hasMore) {
             //重新取出数据表中最后一条消息
@@ -146,7 +150,12 @@
             if (lastElem) {
                 [tempConvs addObject:lastElem];
                 [tempIncreases addObject:@(NO)];
-                [self elemNeedToUpdateConversations:@[lastElem] increaseUnreadCount:@[@(NO)]];
+            }
+            total += 1;
+            if (total%100 == 0 || total >= convsCount) {
+                [weakSelf elemNeedToUpdateConversations:tempConvs increaseUnreadCount:tempIncreases];
+                [tempConvs removeAllObjects];
+                [tempIncreases removeAllObjects];
             }
         }];
     }

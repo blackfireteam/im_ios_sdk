@@ -130,17 +130,13 @@
 ///新增会话或会话发生变化
 - (void)onUpdateConversations:(NSArray<MSIMConversation*> *) conversationList
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUpdate object:conversationList];
-    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUpdate object:conversationList];
 }
 
 ///会话被删除时
 - (void)conversationDidDelete:(NSString *)partner_id
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationDelete object:partner_id];
-    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationDelete object:partner_id];
 }
 
 #pragma mark - MSIMMessageListener
@@ -148,9 +144,7 @@
 /// 收到新消息
 - (void)onNewMessages:(NSArray<MSIMElem *> *)msgs
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageListener object:msgs];
-    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageListener object:msgs];
 }
 
 /**
@@ -158,25 +152,19 @@
  */
 - (void)onMessageUpdateSendStatus:(MSIMElem *)elem
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageSendStatusUpdate object:elem];
-    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageSendStatusUpdate object:elem];
 }
 
 ///收到一条对方撤回的消息
 - (void)onRevokeMessage:(MSIMElem *)elem
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageRecieveRevoke object:elem];
-    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageRecieveRevoke object:elem];
 }
 
 ///收到消息已读回执（仅单聊有效）
 - (void)onRecvC2CReadReceipt:(MSIMMessageReceipt *)receipt
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageReceipt object:receipt];
-    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_MessageReceipt object:receipt];
 }
 
 #pragma mark - MSIMProfileListener
@@ -184,11 +172,9 @@
 /**
  *  用户头像昵称等修改通知
  */
-- (void)onProfileUpdate:(MSProfileInfo *)info
+- (void)onProfileUpdates:(NSArray<MSProfileInfo *> *)infos
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ProfileUpdate object:info];
-    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ProfileUpdate object:infos];
 }
 
 @end

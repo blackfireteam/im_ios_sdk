@@ -50,9 +50,14 @@
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNetworkChanged:) name:MSUIKitNotification_ConnListener object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
         
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(profileUpdate:) name:MSUIKitNotification_ProfileUpdate object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onConversationDelete:) name:MSUIKitNotification_ConversationDelete object:nil];
+        WS(weakSelf)
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
+        [[NSNotificationCenter defaultCenter]addObserverForName:MSUIKitNotification_ProfileUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            [weakSelf profileUpdate:note];
+        }];
+        [[NSNotificationCenter defaultCenter]addObserverForName:MSUIKitNotification_ConversationDelete object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            [weakSelf onConversationDelete:note];
+        }];
     }
     return self;
 }
@@ -98,12 +103,7 @@
 
 - (void)profileUpdate:(NSNotification *)note
 {
-    MSProfileInfo *profile = note.object;
-    for (BFConversationCellData *data in self.dataList) {
-        if ([data.conv.partner_id isEqualToString: profile.user_id]) {
-            [self.tableView reloadData];
-        }
-    }
+    [self.tableView reloadData];
 }
 
 - (void)loadConversation
@@ -258,7 +258,9 @@
     for (BFConversationCellData *data in self.dataList) {
         count += data.conv.unread_count;
     }
-    self.tabBarItem.badgeValue = count ? (count > 99 ? @"99+" : [NSString stringWithFormat:@"%zd",count]) : nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.tabBarItem.badgeValue = count ? (count > 99 ? @"99+" : [NSString stringWithFormat:@"%zd",count]) : nil;
+    });
 }
 
 #pragma mark - UITableViewDataSource

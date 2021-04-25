@@ -101,9 +101,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  用户头像昵称等修改通知
  *
- *  @param info 用户数据
+ *  @param infos 用户数据
  */
-- (void)onProfileUpdate:(MSProfileInfo *)info;
+- (void)onProfileUpdates:(NSArray<MSProfileInfo *> *)infos;
 
 @end
 
