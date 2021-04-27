@@ -11,6 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^profileBlock)(MSProfileInfo * __nullable profile);
+
 @interface MSProfileProvider : NSObject
 
 ///单例
@@ -21,16 +23,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param user_id 用户uid
 /// @param completed 异步返回查询结果。
 - (void)providerProfile:(NSInteger)user_id
-               complete:(void(^)(MSProfileInfo *profile))completed;
+               complete:(profileBlock)completed;
 
 ///只从本地查询用户的个人信息
 - (MSProfileInfo *)providerProfileFromLocal:(NSInteger)user_id;
 
 ///批量更新用户信息
 - (void)updateProfiles:(NSArray<MSProfileInfo *> *)infos;
-
-///只更新用户信息到内存缓存
-- (void)updateProfileOnlyToMemory:(MSProfileInfo *)info;
 
 ///比对update_time与服务器同步更新用户信息
 - (void)synchronizeProfiles:(NSMutableArray<MSProfileInfo *> *)profiles;

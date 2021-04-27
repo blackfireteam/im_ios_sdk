@@ -17,6 +17,9 @@
 @property(nonatomic,strong) NSCache *mainCache;
 @property(nonatomic,strong) MSDBProfileStore *store;
 
+///针对相同的查询个人profile请求，去重。
+@property(nonatomic,strong) NSMutableDictionary *requestCache;
+
 @end
 @implementation MSProfileProvider
 
@@ -42,6 +45,14 @@ static MSProfileProvider *instance;
     return _mainCache;
 }
 
+- (NSMutableDictionary *)requestCache
+{
+    if (!_requestCache) {
+        _requestCache = [NSMutableDictionary dictionary];
+    }
+    return _requestCache;
+}
+
 - (MSDBProfileStore *)store
 {
     if (!_store) {
@@ -54,7 +65,7 @@ static MSProfileProvider *instance;
 /// @param user_id 用户uid
 /// @param completed 异步返回查询结果。
 - (void)providerProfile:(NSInteger)user_id
-               complete:(void(^)(MSProfileInfo *profile))completed
+               complete:(profileBlock)completed
 {
     if (user_id <= 0) return;
     NSString *uid = [NSString stringWithFormat:@"%zd",user_id];
@@ -69,6 +80,15 @@ static MSProfileProvider *instance;
             [self.mainCache setObject:p1 forKey:uid];
         }else {
             //服务器请求
+            NSMutableArray *blocks = [self.requestCache valueForKey:uid];
+            if (blocks) {
+                [blocks addObject:completed];
+                return;
+            }
+            blocks = [NSMutableArray array];
+            [blocks addObject:completed];
+            [self.requestCache setValue:blocks forKey:uid];
+            
             GetProfile *getP = [[GetProfile alloc]init];
             getP.uid = [uid integerValue];
             getP.updateTime = 0;
@@ -76,13 +96,16 @@ static MSProfileProvider *instance;
             MSLog(@"[发送消息]GetProfile: %@",getP);
             [[MSIMManager sharedInstance]send:[getP data] protoType:XMChatProtoTypeGetProfile needToEncry:NO sign:getP.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    MSProfileInfo *info;
                     if (code == ERR_SUCC) {
                         Profile *profile = response;
-                        MSProfileInfo *info = [MSProfileInfo createWithProto:profile];
-                        if (completed) completed(info);
-                    }else {
-                        if (completed) completed(nil);
+                        info = [MSProfileInfo createWithProto:profile];
                     }
+                    NSArray *tempBlocks = [self.requestCache valueForKey:uid];
+                    for (profileBlock block in tempBlocks) {
+                        if (block) block(info);
+                    }
+                    [self.requestCache removeObjectForKey:uid];
                 });
             }];
         }
@@ -113,13 +136,6 @@ static MSProfileProvider *instance;
         [self.mainCache setObject:info forKey:info.user_id];
     }
     [self.store addProfiles:infos];
-}
-
-///只更新用户信息到内存缓存
-- (void)updateProfileOnlyToMemory:(MSProfileInfo *)info
-{
-    if (info.user_id.length == 0) return;
-    [self.mainCache setObject:info forKey:info.user_id];
 }
 
 ///返回本地数据库中所有的用户信息

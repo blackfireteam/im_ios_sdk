@@ -142,7 +142,7 @@
     if (datas == nil) return;
     for (NSInteger i = datas.count-1; i >= 0; i--) {
         BFMessageCellData *data = datas[i];
-        if (data.elem.isSelf == NO) {
+        if (data.elem && data.elem.isSelf == NO) {
             [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id lastMsgID:data.elem.msg_id succ:^{
                     
                 } failed:^(NSInteger code, NSString * _Nonnull desc) {
@@ -261,6 +261,7 @@
             data = voiceMsg;
         }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
             BFWinkMessageCellData *winkMsg = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+            winkMsg.showName = YES;
             winkMsg.elem = elem;
             data = winkMsg;
         }else {
@@ -436,13 +437,17 @@
     }
 }
 
--(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_isScrollBottom == NO) {
         [self scrollToBottom:NO];
         if (indexPath.row == _uiMsgs.count-1) {
             _isScrollBottom = YES;
         }
+    }
+    //当滚动到第二个时，自动触发加载下一页
+    if (self.noMoreMsg == NO && indexPath.row == 0) {
+        [self loadMessages];
     }
 }
 

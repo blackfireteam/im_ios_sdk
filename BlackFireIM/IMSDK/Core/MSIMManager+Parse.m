@@ -79,9 +79,9 @@
         [self updateConvLastMessage:self.convCaches];
         [[MSIMTools sharedInstance] updateConversationTime:update_time];
         //通知会话有更新
-        if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-            [self.convListener onUpdateConversations:self.convCaches];
-        }
+//        if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+//            [self.convListener onUpdateConversations:self.convCaches];
+//        }
         if ([self.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
             [self.convListener onSyncServerFinish];
         }
