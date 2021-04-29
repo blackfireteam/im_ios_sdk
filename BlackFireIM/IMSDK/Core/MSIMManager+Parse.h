@@ -42,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)elemNeedToUpdateConversations:(NSArray<MSIMElem *> *)elem increaseUnreadCount:(NSArray<NSNumber *> *)increases;
 
+///同步最后一页聊天记录
+- (void)updateConvLastMessage:(NSArray *)convs;
 
 @end
 

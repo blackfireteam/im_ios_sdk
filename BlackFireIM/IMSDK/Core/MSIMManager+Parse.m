@@ -40,8 +40,10 @@
         conv.chat_type = BFIM_CHAT_TYPE_C2C;
         conv.partner_id = [NSString stringWithFormat:@"%lld",item.uid];
         conv.msg_end = item.msgEnd;
+        conv.show_msg_sign = item.showMsgTime;
         conv.msg_last_read = item.msgLastRead;
         conv.unread_count = item.unread;
+        conv.deleted = item.deleted;
         MSCustomExt *ext = [[MSCustomExt alloc]init];
         ext.matched = item.matched;
         ext.i_block_u = item.iBlockU;
@@ -53,14 +55,12 @@
         conv.ext = ext;
         [self.convCaches addObject:conv];
         MSProfileInfo *info = [[MSProfileProvider provider] providerProfileFromLocal:item.uid];
-        if (info) {
-            [self.profileCaches addObject:info];
-        }else {
-            MSProfileInfo *tempP = [[MSProfileInfo alloc]init];
-            tempP.update_time = 0;
-            tempP.user_id = [NSString stringWithFormat:@"%lld",item.uid];
-            [self.profileCaches addObject:tempP];
+        if (info == nil) {
+            info = [[MSProfileInfo alloc]init];
+            info.update_time = 0;
+            info.user_id = [NSString stringWithFormat:@"%lld",item.uid];
         }
+        [self.profileCaches addObject:info];
     }
     NSInteger update_time = list.updateTime;
     if (update_time) {//批量下发的会话结束,写入数据库
@@ -76,12 +76,18 @@
         [[MSProfileProvider provider] synchronizeProfiles:self.profileCaches];
         //更新会话缓存
         [[MSConversationProvider provider]updateConversations:self.convCaches];
-        [self updateConvLastMessage:self.convCaches];
+        //同步最后一页聊天数据,如果需要同步的会话太多时，只同步最多50条
+        if (self.convCaches.count > 100) {
+            [self updateConvLastMessage:[self.convCaches subarrayWithRange:NSMakeRange(0, 100)]];
+        }else {
+            [self updateConvLastMessage:self.convCaches];
+        }
+        
         [[MSIMTools sharedInstance] updateConversationTime:update_time];
         //通知会话有更新
-//        if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-//            [self.convListener onUpdateConversations:self.convCaches];
-//        }
+        if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+            [self.convListener onUpdateConversations:self.convCaches];
+        }
         if ([self.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
             [self.convListener onSyncServerFinish];
         }
@@ -116,12 +122,13 @@
             }
             [needConvs addObject:conv];
         }
-        if(elem.msg_sign > conv.show_msg_sign) {
+        if(elem.msg_sign >= conv.show_msg_sign) {
             conv.show_msg_sign = elem.msg_sign;
             conv.show_msg = elem;
             if (elem.msg_id > conv.msg_end) {
                 conv.msg_end = elem.msg_id;
             }
+            conv.deleted = 0;
             if (increase) {
                 conv.unread_count += 1;
             }
@@ -130,8 +137,8 @@
     }
     [[MSProfileProvider provider]synchronizeProfiles:needProfiles];
     if (needConvs.count) {
-        [self.convListener onUpdateConversations:needConvs];
         [[MSConversationProvider provider]updateConversations:needConvs];
+        [self.convListener onUpdateConversations:needConvs];
     }
 }
 
@@ -152,7 +159,7 @@
                 [tempIncreases addObject:@(NO)];
             }
             total += 1;
-            if (total%100 == 0 || total >= convsCount) {
+            if (total >= convsCount) {
                 [weakSelf elemNeedToUpdateConversations:tempConvs increaseUnreadCount:tempIncreases];
                 [tempConvs removeAllObjects];
                 [tempIncreases removeAllObjects];
@@ -301,7 +308,9 @@
     info.nick_name = online.nickName;
     info.avatar = online.avatar;
     info.gold = online.gold;
+    info.update_time = online.updateTime;
     info.verified = online.verified;
+    [[MSProfileProvider provider] updateProfiles:@[info]];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_online" object:info];
     });

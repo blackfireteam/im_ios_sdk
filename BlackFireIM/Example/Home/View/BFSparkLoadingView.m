@@ -37,6 +37,9 @@
         [self addSubview:self.maskImg];
         
         self.headImg = [UIImageView new];
+        self.headImg.contentMode = UIViewContentModeScaleAspectFill;
+        self.headImg.layer.cornerRadius = 4;
+        self.headImg.layer.masksToBounds = YES;
         MSProfileInfo *me = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
         if (me) {
             [self.headImg sd_setImageWithURL:[NSURL URLWithString:me.avatar]];

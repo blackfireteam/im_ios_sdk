@@ -112,16 +112,16 @@ typedef NS_ENUM(NSInteger ,BFIMMessageType){
 
 /** 网络连接状态*/
 typedef NS_ENUM(NSUInteger, BFIMNetStatus) {
-    IMNET_STATUS_SUCC = 1,   //连接成功
+    IMNET_STATUS_SUCC = 1,    //连接成功
     IMNET_STATUS_CONNECTING,  //正在连接
     IMNET_STATUS_CONNFAILED,  //连接失败
     IMNET_STATUS_DISCONNECT,  //断开连接
+    IMNET_STATUS_RECONNFAILD  //重连失败
 };
 
 /** 用户在线状态*/
 typedef NS_ENUM(NSUInteger, BFIMUserStatus) {
     IMUSER_STATUS_FORCEOFFLINE,  //用户被强制下线
-    IMUSER_STATUS_RECONNFAILD,   //用户重连失败
     IMUSER_STATUS_SIGEXPIRED,    //用户身份（usersig）过期
 };
 

@@ -11,7 +11,7 @@
 #import "MSIMErrorCode.h"
 #import "MSProfileProvider.h"
 #import "MSConversationProvider.h"
-
+#import "MSIMManager+Parse.h"
 
 @implementation MSIMManager (Conversation)
 
@@ -56,13 +56,19 @@
         fail(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
+    WS(weakSelf)
     [self.convStore conversationsWithLast_seq:nextSeq count:count complete:^(NSArray<MSIMConversation *> * _Nonnull data, BOOL hasMore) {
         //组装最后一条消息和头像昵称等信息
+        NSMutableArray *tempConvs = [NSMutableArray array];
         for (MSIMConversation *conv in data) {
-            MSIMElem *elem = [self.messageStore searchMessage:conv.partner_id msg_sign:conv.show_msg_sign];
+            MSIMElem *elem = [weakSelf.messageStore searchMessage:conv.partner_id msg_sign:conv.show_msg_sign];
             conv.show_msg = elem;
+            if (nextSeq && elem == nil) {
+                [tempConvs addObject:conv];
+            }
         }
         [[MSConversationProvider provider]updateConversations:data];
+        [self updateConvLastMessage:tempConvs];
         MSIMConversation *lastConv = data.lastObject;
         NSInteger nextSign = lastConv.show_msg_sign;
         succ(data,nextSign,hasMore ? NO : YES);
@@ -88,7 +94,7 @@
             if (code == ERR_SUCC) {
                 succed();
             }else {
-                failed(ERR_SDK_DB_DEL_CONVERSATION_FAIL,@"删除会话失败");
+                failed(ERR_SDK_DB_DEL_CONVERSATION_FAIL,error);
             }
         });
     }];

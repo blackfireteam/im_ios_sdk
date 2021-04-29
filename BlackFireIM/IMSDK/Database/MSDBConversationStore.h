@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
                             count:(NSInteger)count
                          complete:(void(^)(NSArray<MSIMConversation *> *data,BOOL hasMore))complete;
 
-///更新会话的状态。status: 0 不显示  1 显示
+///更新会话的状态。status: 0 显示  1 不显示
 - (BOOL)updateConvesationStatus:(NSInteger)status conv_id:(NSString *)conv_id;
 
 ///所有未读数之和

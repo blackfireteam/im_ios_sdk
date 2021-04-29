@@ -36,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///未读数
 @property(nonatomic,assign) NSInteger unread_count;
 
+///会话已删除
+@property(nonatomic,assign) NSInteger deleted;
+
 ///用户信息
 @property(nonatomic,strong,readonly) MSProfileInfo *userInfo;
 

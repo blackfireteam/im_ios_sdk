@@ -149,21 +149,11 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {
                 ChatSR *result = response;
-                success(result.msgId);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-                elem.msg_id = result.msgId;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+                if (success) success(result.msgId);
+                [strongSelf sendMessageSuccessHandler:elem response:result];
             }else {
-                MSLog(@"发送失败");
-                failed(code,error);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-                elem.code = code;
-                elem.reason = error;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+                if (failed) failed(code,error);
+                [strongSelf sendMessageFailedHandler:elem code:code error:error];
             }
         });
     }];
@@ -231,13 +221,8 @@
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
             
             elem.progress = 0;
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-            elem.code = code;
-            elem.reason = desc;
-            [self.messageStore addMessage:elem];
-            [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
-            failed(code,desc);
+            [self sendMessageFailedHandler:elem code:code error:desc];
+            if (failed) failed(code,desc);
     }];
 }
 
@@ -259,21 +244,11 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == 0) {
                 ChatSR *result = response;
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-                elem.msg_id = result.msgId;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
-                success(result.msgId);
+                [strongSelf sendMessageSuccessHandler:elem response:result];
+                if (success) success(result.msgId);
             }else {
-                MSLog(@"发送失败");
-                failed(code,error);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-                elem.code = code;
-                elem.reason = error;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+                if (failed) failed(code,error);
+                [strongSelf sendMessageFailedHandler:elem code:code error:error];
             }
         });
     }];
@@ -342,13 +317,8 @@
     } failed:^(NSInteger code, NSString * _Nonnull desc) {
         
         elem.progress = 0;
-        elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-        elem.code = code;
-        elem.reason = desc;
-        [self.messageStore addMessage:elem];
-        [self.msgListener onMessageUpdateSendStatus:elem];
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
-        failed(code,desc);
+        [self sendMessageFailedHandler:elem code:code error:desc];
+        if (failed) failed(code,desc);
         
     }];
 }
@@ -373,21 +343,11 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == 0) {
                 ChatSR *result = response;
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-                elem.msg_id = result.msgId;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
-                success(result.msgId);
+                [strongSelf sendMessageSuccessHandler:elem response:result];
+                if (success) success(result.msgId);
             }else {
-                MSLog(@"发送失败");
-                failed(code,error);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-                elem.code = code;
-                elem.reason = error;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+                if (failed) failed(code,error);
+                [strongSelf sendMessageFailedHandler:elem code:code error:error];
             }
         });
     }];
@@ -433,13 +393,8 @@
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
             
-            elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-            elem.code = code;
-            elem.reason = desc;
-            [self.messageStore addMessage:elem];
-            [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
-            failed(code,desc);
+            [self sendMessageFailedHandler:elem code:code error:desc];
+            if (failed) failed(code,desc);
     }];
 }
 
@@ -460,21 +415,11 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == 0) {
                 ChatSR *result = response;
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-                elem.msg_id = result.msgId;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
-                success(result.msgId);
+                [strongSelf sendMessageSuccessHandler:elem response:result];
+                if (success) success(result.msgId);
             }else {
-                MSLog(@"发送失败");
-                failed(code,error);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-                elem.code = code;
-                elem.reason = error;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+                [strongSelf sendMessageFailedHandler:elem code:code error:error];
+                if (failed) failed(code,error);
             }
         });
     }];
@@ -509,25 +454,34 @@
         STRONG_SELF(strongSelf)
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {
-                ChatSR *result = response;
-                success(result.msgId);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
-                elem.msg_id = result.msgId;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+                ChatSR *result = (ChatSR *)response;
+                [strongSelf sendMessageSuccessHandler:elem response:result];
+                if (success) success(result.msgId);
             }else {
-                MSLog(@"发送失败");
-                failed(code,error);
-                elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
-                elem.code = code;
-                elem.reason = error;
-                [strongSelf.messageStore addMessage:elem];
-                [strongSelf.msgListener onMessageUpdateSendStatus:elem];
-                [strongSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+                [strongSelf sendMessageFailedHandler:elem code:code error:error];
+                if (failed) failed(code,error);
             }
         });
     }];
+}
+
+- (void)sendMessageSuccessHandler:(MSIMElem *)elem response:(ChatSR *)response
+{
+    elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+    elem.msg_id = response.msgId;
+    [self.messageStore addMessage:elem];
+    [self.msgListener onMessageUpdateSendStatus:elem];
+    [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+}
+
+- (void)sendMessageFailedHandler:(MSIMElem *)elem code:(NSInteger)code error:(NSString *)error
+{
+    elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+    elem.code = code;
+    elem.reason = error;
+    [self.messageStore addMessage:elem];
+    [self.msgListener onMessageUpdateSendStatus:elem];
+    [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
 }
 
 /// 请求撤回某一条消息

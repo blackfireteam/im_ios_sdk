@@ -86,8 +86,8 @@
 {
     [super layoutSubviews];
     self.headImageView.frame = CGRectMake(15, 17, 68, 68);
-    CGSize titleSize = [self.titleLabel sizeThatFits:CGSizeMake(200, 30)];
-    self.titleLabel.frame = CGRectMake(self.headImageView.maxX+14, 31, titleSize.width, 22);
+    CGSize titleSize = [self.titleLabel sizeThatFits:CGSizeZero];
+    self.titleLabel.frame = CGRectMake(self.headImageView.maxX+14, 31, MIN(titleSize.width, 150), 22);
     CGSize timeSize = [self.timeLabel sizeThatFits:CGSizeMake(200, 20)];
     self.timeLabel.frame = CGRectMake(self.contentView.width-15-timeSize.width, self.titleLabel.centerY-timeSize.height*0.5, timeSize.width, timeSize.height);
     self.subTitleLabel.frame = CGRectMake(self.titleLabel.x, self.titleLabel.maxY+5, 250, 16);

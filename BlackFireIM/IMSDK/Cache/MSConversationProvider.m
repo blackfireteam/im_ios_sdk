@@ -56,8 +56,6 @@ static MSConversationProvider *instance;
         return conv;
     }
     MSIMConversation *con = [self.store searchConversation:conv_id];
-    //当有需要查询会话信息时，必定是需要显示出会话来
-    [self.store updateConvesationStatus:1 conv_id:conv_id];
     if (con) {
         [self.mainCache setObject:con forKey:conv_id];
         return con;
@@ -79,7 +77,7 @@ static MSConversationProvider *instance;
     if (!partner_id) return;
     NSString *conv_id = [NSString stringWithFormat:@"c2c_%@",partner_id];
     [self.mainCache removeObjectForKey:conv_id];
-    [self.store updateConvesationStatus:0 conv_id:conv_id];
+    [self.store updateConvesationStatus:1 conv_id:conv_id];
 }
 
 - (NSInteger)allUnreadCount

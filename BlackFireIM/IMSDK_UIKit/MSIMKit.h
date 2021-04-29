@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)initWithConfig:(IMSDKConfig *)config;
 
-
 ///登录需要用户签名 token
 - (void)login:(NSString *)userSign
          succ:(MSIMSucc)succ

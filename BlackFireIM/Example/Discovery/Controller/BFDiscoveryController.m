@@ -55,7 +55,6 @@
 - (void)userOnline:(NSNotification *)note
 {
     MSProfileInfo *info = note.object;
-    [[MSProfileProvider provider] updateProfiles:@[info]];
     [self.dataArray addObject:info];
     [self.myCollectionView reloadData];
 }

@@ -476,19 +476,22 @@ GPB_FINAL @interface GetChatList : GPBMessage
 
 typedef GPB_ENUM(ChatItem_FieldNumber) {
   ChatItem_FieldNumber_Uid = 1,
-  ChatItem_FieldNumber_MsgStart = 2,
   ChatItem_FieldNumber_MsgEnd = 3,
   ChatItem_FieldNumber_MsgLastRead = 4,
   ChatItem_FieldNumber_ShowMsgId = 5,
-  ChatItem_FieldNumber_Unread = 6,
-  ChatItem_FieldNumber_Matched = 7,
-  ChatItem_FieldNumber_NewMsg = 8,
-  ChatItem_FieldNumber_MyMove = 9,
-  ChatItem_FieldNumber_IceBreak = 10,
-  ChatItem_FieldNumber_TipFree = 11,
-  ChatItem_FieldNumber_TopAlbum = 12,
-  ChatItem_FieldNumber_IBlockU = 13,
-  ChatItem_FieldNumber_Connected = 14,
+  ChatItem_FieldNumber_ShowMsgType = 6,
+  ChatItem_FieldNumber_ShowMsg = 7,
+  ChatItem_FieldNumber_ShowMsgTime = 8,
+  ChatItem_FieldNumber_Unread = 9,
+  ChatItem_FieldNumber_Matched = 10,
+  ChatItem_FieldNumber_NewMsg = 11,
+  ChatItem_FieldNumber_MyMove = 12,
+  ChatItem_FieldNumber_IceBreak = 13,
+  ChatItem_FieldNumber_TipFree = 14,
+  ChatItem_FieldNumber_TopAlbum = 15,
+  ChatItem_FieldNumber_IBlockU = 16,
+  ChatItem_FieldNumber_Connected = 17,
+  ChatItem_FieldNumber_Deleted = 18,
 };
 
 /**
@@ -498,13 +501,19 @@ GPB_FINAL @interface ChatItem : GPBMessage
 
 @property(nonatomic, readwrite) int64_t uid;
 
-@property(nonatomic, readwrite) int64_t msgStart;
-
 @property(nonatomic, readwrite) int64_t msgEnd;
 
 @property(nonatomic, readwrite) int64_t msgLastRead;
 
 @property(nonatomic, readwrite) int64_t showMsgId;
+
+/** 仅websocket端 返回 */
+@property(nonatomic, readwrite) int64_t showMsgType;
+
+/** 仅websocket端 返回 */
+@property(nonatomic, readwrite, copy, null_resettable) NSString *showMsg;
+
+@property(nonatomic, readwrite) int64_t showMsgTime;
 
 @property(nonatomic, readwrite) int64_t unread;
 
@@ -524,6 +533,9 @@ GPB_FINAL @interface ChatItem : GPBMessage
 
 /** 双方互发过消息了 */
 @property(nonatomic, readwrite) BOOL connected;
+
+/** 该会话已删除 */
+@property(nonatomic, readwrite) BOOL deleted;
 
 @end
 

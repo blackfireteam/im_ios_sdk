@@ -14,7 +14,8 @@
 #import "NSBundle+BFKit.h"
 #import "MSIMKit.h"
 #import "MSIMSDK.h"
-
+#import "AppDelegate.h"
+#import "BFLoginController.h"
 
 @interface BFTabBarController ()
 
@@ -61,6 +62,7 @@
     [self addChildViewController:profileNav];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(conversationSyncFinish) name:MSUIKitNotification_ConversationSyncFinish object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
 }
 
 - (void)conversationSyncFinish
@@ -69,5 +71,41 @@
     self.tabBar.items[2].badgeValue = count ? (count > 99 ? @"99+" : [NSString stringWithFormat:@"%zd",count]) : nil;
 }
 
+- (void)onUserLogStatusChanged:(NSNotification *)notification
+{
+    BFIMUserStatus status = [notification.object intValue];
+    switch (status) {
+        case IMUSER_STATUS_FORCEOFFLINE://用户被强制下线
+        {
+            WS(weakSelf)
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:@"您的帐号已经在其它的设备上登录" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf logout];
+            }];
+            [alert addAction:action1];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+            break;
+        case IMUSER_STATUS_SIGEXPIRED:
+        {
+            WS(weakSelf)
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提醒" message:@"您的登录授权已过期，请重新登录" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf logout];
+            }];
+            [alert addAction:action1];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)logout
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
+}
 
 @end

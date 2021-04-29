@@ -85,7 +85,7 @@
 - (void)onReConnFailed:(NSInteger)code err:(NSString*)err
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_UserStatusListener object:[NSNumber numberWithInt:IMUSER_STATUS_RECONNFAILD]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMNET_STATUS_RECONNFAILD]];
     });
 }
 
