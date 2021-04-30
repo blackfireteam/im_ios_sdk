@@ -280,7 +280,7 @@ static MSIMManager *_manager;
             if (error == nil && result != nil) {
                 [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"单条消息已发送到服务器" response:result];
                 //更新会话更新时间
-                [[MSIMTools sharedInstance]updateConversationTime:result.msgTime];
+                [self updateChatListUpdateTime:result.msgTime];
             }else {
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }
@@ -309,18 +309,6 @@ static MSIMManager *_manager;
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }
             MSLog(@"[收到]历史消息:%@",batch);
-        }
-            break;
-        case XMChatProtoTypeLastReadMsg: //消息已读状态发生变更通知（客户端收到这个才去变更）
-        {
-            NSError *error;
-            LastReadMsg *result = [[LastReadMsg alloc]initWithData:package error:&error];
-            if (error == nil) {
-                [self chatUnreadCountChanged:result];
-                //更新会话更新时间
-                [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
-            }
-            MSLog(@"[收到]消息已读状态发生变更通知***%@",result);
         }
             break;
         case XMChatProtoTypeGetChatListResponse: //拉取会话列表结果
@@ -358,18 +346,6 @@ static MSIMManager *_manager;
             MSLog(@"[收到]批量用户信息***%@",profiles);
         }
             break;
-        case XMChatProtoTypeDeleteChat: //删除一条会话成功通知
-        {
-            NSError *error;
-            DelChat *result = [[DelChat alloc]initWithData:package error:&error];
-            if(error == nil && result != nil) {
-                [self deleteChatHandler:result];
-            }else {
-                MSLog(@"消息protobuf解析失败-- %@",error);
-            }
-            MSLog(@"[收到]删除一条会话成功通知***%@",result);
-        }
-            break;
         case XMChatProtoTypeResult: //主动发起操作处理结果
         {
             NSError *error;
@@ -405,6 +381,17 @@ static MSIMManager *_manager;
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }
             MSLog(@"[收到]有用户下线了***%@",offline);
+        }
+            break;
+        case XMChatProtoTypeChatListChanged: //会话某些属性发生变更
+        {
+            NSError *error;
+            ChatItemUpdate *item = [[ChatItemUpdate alloc]initWithData:package error:&error];
+            if (error == nil && item != nil) {
+                [self chatListChanged:item];
+            }else {
+                MSLog(@"消息protobuf解析失败-- %@",error);
+            }
         }
             break;
         case XMChatProtoTypeGetSparkResponse: //获取首页sparks返回   for demo
@@ -663,8 +650,20 @@ static MSIMManager *_manager;
     }
 }
 
+///更新同步会话时间
+- (void)updateChatListUpdateTime:(NSInteger)updateTime
+{
+    if (self.isChatListResult == NO) {
+        self.chatUpdateTime = updateTime;
+    }else {
+        [[MSIMTools sharedInstance]updateConversationTime:updateTime];
+        self.chatUpdateTime = 0;
+    }
+}
+
 - (void)cleanIMToken
 {
+    self.chatUpdateTime = 0;
     [MSIMTools sharedInstance].user_id = nil;
     [MSIMTools sharedInstance].user_sign = nil;
     [[MSDBManager sharedInstance] accountChanged];

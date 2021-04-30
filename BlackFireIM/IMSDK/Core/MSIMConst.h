@@ -39,9 +39,9 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
     XMChatProtoTypeGetHistoryMsg = 8,//请求历史消息
     XMChatProtoTypeRecall = 9,//消息撤回
     XMChatProtoTypeMsgread = 10,//发送消息已读
-    XMChatProtoTypeLastReadMsg = 11,//消息已读状态发生变更通知（客户端收到这个才去变更）
-    XMChatProtoTypeDeleteChat = 12,//删除某一会话
-    XMChatProtoTypeGetChatList = 13,//拉会话记录
+    XMChatProtoTypeDeleteChat = 11,//删除某一会话
+    XMChatProtoTypeGetChatList = 12,//拉会话记录
+    XMChatProtoTypeChatListChanged = 14,//会话某些属性发生变更
     XMChatProtoTypeGetChatListResponse = 15,//会话记录结果
     XMChatProtoTypeGetProfile = 16,//请求用户信息
     XMChatProtoTypeGetProfiles = 17,//批量请求用户信息

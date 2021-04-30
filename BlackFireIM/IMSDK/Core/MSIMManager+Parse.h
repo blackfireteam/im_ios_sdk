@@ -25,20 +25,17 @@ NS_ASSUME_NONNULL_BEGIN
 ///服务器返回的会话列表数据处理 
 - (void)chatListResultHandler:(ChatList *)list;
 
-///服务器返回的未读数结果处理
-- (void)chatUnreadCountChanged:(LastReadMsg *)result;
-
 ///服务器返回的用户上线通知处理
 - (void)userOnLineHandler:(ProfileOnline *)online;
 
 ///服务器返回的用户下线通知处理
 - (void)userOfflineHandler:(UsrOffline *)offline;
 
+///会话某些属性发生变更
+- (void)chatListChanged:(ChatItemUpdate *)item;
+
 ///服务器返回的历史数据处理
 - (NSArray<MSIMElem *> *)chatHistoryHandler:(NSArray<ChatR *> *)responses;
-
-///服务器返回的删除会话的处理
-- (void)deleteChatHandler:(DelChat *)result; 
 
 - (void)elemNeedToUpdateConversations:(NSArray<MSIMElem *> *)elem increaseUnreadCount:(NSArray<NSNumber *> *)increases;
 

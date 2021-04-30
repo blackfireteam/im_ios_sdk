@@ -28,6 +28,8 @@ typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 
 @property(nonatomic,strong) MSDBConversationStore *convStore;
 
+@property(nonatomic,strong,readonly) IMSDKConfig *config;
+
 ///暂时缓存服务器返回的会话列表，当接收到服务器返回的所有会话时，再写入数据库
 @property(nonatomic,strong) NSMutableArray *convCaches;
 
@@ -36,6 +38,12 @@ typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 
 ///记录上次同步会话的时间戳
 @property(nonatomic,assign) NSInteger chatUpdateTime;
+
+///同步会话列表是否完成
+@property(nonatomic,assign) BOOL isChatListResult;
+
+///更新同步会话时间
+- (void)updateChatListUpdateTime:(NSInteger)updateTime;
 
 + (instancetype)sharedInstance;
 
@@ -54,7 +62,6 @@ typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 ///初始化 SDK 并设置 V2TIMSDKListener 的监听对象
 ///initSDK 后 SDK 会自动连接网络，网络连接状态可以在 V2TIMSDKListener 回调里面监听
 - (void)initWithConfig:(IMSDKConfig *)config listener:(id<MSIMSDKListener>)listener;
-
 
 ///  发送消息
 /// @param sendData 消息体

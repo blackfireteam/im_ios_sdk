@@ -81,6 +81,10 @@
             Result *result = response;
             if (code == ERR_SUCC) {
                 if (succ) succ(result.msg);
+                //注册成功,同步下自己的Profile
+                MSProfileInfo *me = [[MSProfileInfo alloc]init];
+                me.user_id = [MSIMTools sharedInstance].user_id;
+                [[MSProfileProvider provider]synchronizeProfiles:@[me]];
             }else {
                 if (fail) fail(result.code,result.msg);
             }

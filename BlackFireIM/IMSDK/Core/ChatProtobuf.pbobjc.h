@@ -397,47 +397,15 @@ GPB_FINAL @interface MsgRead : GPBMessage
 
 @end
 
-#pragma mark - LastReadMsg
-
-typedef GPB_ENUM(LastReadMsg_FieldNumber) {
-  LastReadMsg_FieldNumber_Sign = 1,
-  LastReadMsg_FieldNumber_FromUid = 2,
-  LastReadMsg_FieldNumber_MsgId = 3,
-  LastReadMsg_FieldNumber_Unread = 4,
-  LastReadMsg_FieldNumber_UpdateTime = 5,
-};
-
-/**
- * 11 消息已读状态发生变更通知（客户端收到这个才去变更）
- **/
-GPB_FINAL @interface LastReadMsg : GPBMessage
-
-@property(nonatomic, readwrite) int64_t sign;
-
-/** 谁的会话 */
-@property(nonatomic, readwrite) int64_t fromUid;
-
-/** 我发给对方的消息中，最后一条已读消息（被动通知 会有这个） */
-@property(nonatomic, readwrite) int64_t msgId;
-
-/** 对方发给我的消息中，还有多少条未读消息（主动调用MsgRead 一方会收到这个） */
-@property(nonatomic, readwrite) int64_t unread;
-
-/** 服务器收到已读回执的时间，用于标记会话列表的最后一次变动时间（精确到百万分之一秒的时间戳） */
-@property(nonatomic, readwrite) int64_t updateTime;
-
-@end
-
 #pragma mark - DelChat
 
 typedef GPB_ENUM(DelChat_FieldNumber) {
   DelChat_FieldNumber_Sign = 1,
   DelChat_FieldNumber_ToUid = 2,
-  DelChat_FieldNumber_UpdateTime = 3,
 };
 
 /**
- * 12 该proto 既是请求，也是返回，返回时带update_time, 请求时不带update_time
+ * 11 删除会话
  **/
 GPB_FINAL @interface DelChat : GPBMessage
 
@@ -446,9 +414,6 @@ GPB_FINAL @interface DelChat : GPBMessage
 
 /** 删除谁的 */
 @property(nonatomic, readwrite) int64_t toUid;
-
-/** 服务器删除会话的时间，用于标记会话列表的最后一次变动时间（精确到百万分之一秒的时间戳） */
-@property(nonatomic, readwrite) int64_t updateTime;
 
 @end
 
@@ -460,7 +425,7 @@ typedef GPB_ENUM(GetChatList_FieldNumber) {
 };
 
 /**
- * 13
+ * 12
  **/
 GPB_FINAL @interface GetChatList : GPBMessage
 
@@ -495,7 +460,7 @@ typedef GPB_ENUM(ChatItem_FieldNumber) {
 };
 
 /**
- * 14
+ * 13
  **/
 GPB_FINAL @interface ChatItem : GPBMessage
 
@@ -535,6 +500,44 @@ GPB_FINAL @interface ChatItem : GPBMessage
 @property(nonatomic, readwrite) BOOL connected;
 
 /** 该会话已删除 */
+@property(nonatomic, readwrite) BOOL deleted;
+
+@end
+
+#pragma mark - ChatItemUpdate
+
+typedef GPB_ENUM(ChatItemUpdate_FieldNumber) {
+  ChatItemUpdate_FieldNumber_Sign = 1,
+  ChatItemUpdate_FieldNumber_Uid = 2,
+  ChatItemUpdate_FieldNumber_Event = 3,
+  ChatItemUpdate_FieldNumber_UpdateTime = 4,
+  ChatItemUpdate_FieldNumber_MsgLastRead = 5,
+  ChatItemUpdate_FieldNumber_Unread = 6,
+  ChatItemUpdate_FieldNumber_IBlockU = 7,
+  ChatItemUpdate_FieldNumber_Deleted = 8,
+};
+
+/**
+ * 14
+ **/
+GPB_FINAL @interface ChatItemUpdate : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+/** 变动的哪个uid */
+@property(nonatomic, readwrite) int64_t uid;
+
+/** 0 msg_last_read 变动    1 unread 数变动    2 i_block_u 变动   3 deleted 变动 */
+@property(nonatomic, readwrite) int64_t event;
+
+@property(nonatomic, readwrite) int64_t updateTime;
+
+@property(nonatomic, readwrite) int64_t msgLastRead;
+
+@property(nonatomic, readwrite) int64_t unread;
+
+@property(nonatomic, readwrite) BOOL iBlockU;
+
 @property(nonatomic, readwrite) BOOL deleted;
 
 @end
@@ -653,38 +656,6 @@ GPB_FINAL @interface ProfileList : GPBMessage
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<Profile*> *profilesArray;
 /** The number of items in @c profilesArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger profilesArray_Count;
-
-@end
-
-#pragma mark - BlockU
-
-typedef GPB_ENUM(BlockU_FieldNumber) {
-  BlockU_FieldNumber_ToUid = 1,
-};
-
-/**
- * 20
- **/
-GPB_FINAL @interface BlockU : GPBMessage
-
-/** block谁 */
-@property(nonatomic, readwrite) int64_t toUid;
-
-@end
-
-#pragma mark - UnblockU
-
-typedef GPB_ENUM(UnblockU_FieldNumber) {
-  UnblockU_FieldNumber_ToUid = 1,
-};
-
-/**
- * 21
- **/
-GPB_FINAL @interface UnblockU : GPBMessage
-
-/** unblock谁 */
-@property(nonatomic, readwrite) int64_t toUid;
 
 @end
 

@@ -107,7 +107,7 @@
 {
     WS(weakSelf)
     NSInteger start = [MSIMTools sharedInstance].adjustLocalTimeInterval;
-    [[MSIMManager sharedInstance] getConversationList:self.lastConvSign count:50 succ:^(NSArray<MSIMConversation *> * _Nonnull convs, NSInteger nexSeq, BOOL isFinished) {
+    [[MSIMManager sharedInstance] getConversationList:self.lastConvSign succ:^(NSArray<MSIMConversation *> * _Nonnull convs, NSInteger nexSeq, BOOL isFinished) {
         weakSelf.lastConvSign = nexSeq;
         [weakSelf updateConversation: convs];
         if (isFinished) {

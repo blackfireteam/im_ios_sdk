@@ -77,16 +77,13 @@
         //更新会话缓存
         [[MSConversationProvider provider]updateConversations:self.convCaches];
         //同步最后一页聊天数据,如果需要同步的会话太多时，只同步最多50条
-        if (self.convCaches.count > 100) {
-            [self updateConvLastMessage:[self.convCaches subarrayWithRange:NSMakeRange(0, 100)]];
-        }else {
-            [self updateConvLastMessage:self.convCaches];
-        }
-        
-        [[MSIMTools sharedInstance] updateConversationTime:update_time];
+        NSArray *firstPageConvs = (self.convCaches.count > self.config.chatListPageCount ? [self.convCaches subarrayWithRange:NSMakeRange(0, self.config.chatListPageCount)] : self.convCaches);
+        [self updateConvLastMessage:firstPageConvs];
+        self.isChatListResult = YES;
+        [self updateChatListUpdateTime:MAX(self.chatUpdateTime, update_time)];
         //通知会话有更新
         if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-            [self.convListener onUpdateConversations:self.convCaches];
+            [self.convListener onUpdateConversations:firstPageConvs];
         }
         if ([self.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
             [self.convListener onSyncServerFinish];
@@ -111,9 +108,6 @@
             conv.show_msg = elem;
             conv.show_msg_sign = elem.msg_sign;
             conv.msg_end = elem.msg_id;
-            if (increase) {
-                conv.unread_count += 1;
-            }
             MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:elem.partner_id.integerValue];
             if (profile == nil) {
                 MSProfileInfo *info = [[MSProfileInfo alloc]init];
@@ -157,6 +151,8 @@
             if (lastElem) {
                 [tempConvs addObject:lastElem];
                 [tempIncreases addObject:@(NO)];
+            }else {
+                MSLog(@"拉取最后一页聊天记录失败");
             }
             total += 1;
             if (total >= convsCount) {
@@ -183,7 +179,7 @@
         [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:(elem.isSelf ? @[@(NO)] : @[@(YES)])];
     }
     //更新会话更新时间
-    [[MSIMTools sharedInstance]updateConversationTime:elem.msg_sign];
+    [self updateChatListUpdateTime:elem.msg_sign];
     //更新profile
     MSProfileInfo *fromProfile = [[MSProfileProvider provider]providerProfileFromLocal:response.fromUid];
     if (!fromProfile) {
@@ -272,34 +268,6 @@
     return recieves;
 }
 
-- (void)chatUnreadCountChanged:(LastReadMsg *)result
-{
-    NSString *fromUid = [NSString stringWithFormat:@"%lld",result.fromUid];
-    if (result.msgId) {//对方发起的标记消息已读
-        MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:fromUid];
-        conv.msg_last_read = result.msgId;
-        [[MSConversationProvider provider]updateConversations:@[conv]];
-        [self.messageStore markMessageAsRead:result.msgId partnerID:fromUid];
-        
-        MSIMMessageReceipt *receipt = [[MSIMMessageReceipt alloc]init];
-        receipt.msg_id = result.msgId;
-        receipt.user_id = fromUid;
-        if (self.msgListener && [self.convListener respondsToSelector:@selector(onRecvC2CReadReceipt:)]) {
-            [self.msgListener onRecvC2CReadReceipt:receipt];
-        }
-        
-    }else {//我主动发起的标记消息已读
-        MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:fromUid];
-        conv.unread_count = result.unread;
-        [[MSConversationProvider provider]updateConversations:@[conv]];
-        if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-            [self.convListener onUpdateConversations:@[conv]];
-        }
-    }
-    //更新会话更新时间
-    [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
-}
-
 ///服务器返回的用户上线通知处理
 - (void)userOnLineHandler:(ProfileOnline *)online
 {
@@ -325,17 +293,79 @@
     });
 }
 
+///会话某些属性发生变更
+- (void)chatListChanged:(ChatItemUpdate *)item
+{
+    if (item.event == 0) {//msg_last_read 变动
+        
+        [self chatMarkReadChanged:item];
+        MSLog(@"[收到]msg_last_read 变动 : %@",item);
+    }else if (item.event == 1) {//unread 数变动
+        
+        [self chatUnreadCountChanged:item];
+        MSLog(@"[收到]unread 数变动 : %@",item);
+    }else if (item.event == 2) {//i_block_u 变动
+        
+        [self chatListBlockChanged:item];
+        MSLog(@"[收到]i_block_u 变动 : %@",item);
+    }else if (item.event == 3) {//deleted 变动
+        
+        [self deleteChatHandler:item];
+        MSLog(@"[收到]deleted 变动 : %@",item);
+    }
+}
+
 ///服务器返回的删除会话的处理
-- (void)deleteChatHandler:(DelChat *)result
+- (void)deleteChatHandler:(ChatItemUpdate *)result
 {
     [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"" response:result];
-    NSString *partner_id = [NSString stringWithFormat:@"%lld",result.toUid];
+    NSString *partner_id = [NSString stringWithFormat:@"%lld",result.uid];
     [[MSConversationProvider provider]deleteConversation: partner_id];
     if (self.convListener && [self.convListener respondsToSelector:@selector(conversationDidDelete:)]) {
         [self.convListener conversationDidDelete:partner_id];
     }
     //更新会话更新时间
-    [[MSIMTools sharedInstance]updateConversationTime:result.updateTime];
+    [self updateChatListUpdateTime:result.updateTime];
+}
+
+- (void)chatListBlockChanged:(ChatItemUpdate *)result
+{
+    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:[NSString stringWithFormat:@"%lld",result.uid]];
+    conv.ext.i_block_u = result.iBlockU;
+    [[MSConversationProvider provider]updateConversations:@[conv]];
+    [self.convListener onUpdateConversations:@[conv]];
+    [self updateChatListUpdateTime:result.updateTime];
+}
+
+//我主动发起的标记消息已读
+- (void)chatUnreadCountChanged:(ChatItemUpdate *)result
+{
+    NSString *fromUid = [NSString stringWithFormat:@"%lld",result.uid];
+    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:fromUid];
+    conv.unread_count = result.unread;
+    [[MSConversationProvider provider]updateConversations:@[conv]];
+    if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+        [self.convListener onUpdateConversations:@[conv]];
+    }
+    [self updateChatListUpdateTime:result.updateTime];
+}
+
+//对方发起的标记消息已读
+- (void)chatMarkReadChanged:(ChatItemUpdate *)result
+{
+    NSString *fromUid = [NSString stringWithFormat:@"%lld",result.uid];
+    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:fromUid];
+    conv.msg_last_read = result.msgLastRead;
+    [[MSConversationProvider provider]updateConversations:@[conv]];
+    [self.messageStore markMessageAsRead:result.msgLastRead partnerID:fromUid];
+    
+    MSIMMessageReceipt *receipt = [[MSIMMessageReceipt alloc]init];
+    receipt.msg_id = result.msgLastRead;
+    receipt.user_id = fromUid;
+    if (self.msgListener && [self.convListener respondsToSelector:@selector(onRecvC2CReadReceipt:)]) {
+        [self.msgListener onRecvC2CReadReceipt:receipt];
+    }
+    [self updateChatListUpdateTime:result.updateTime];
 }
 
 @end

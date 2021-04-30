@@ -103,7 +103,7 @@
 		F0777BAE2611D418006CA660 /* BFFaceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BAD2611D418006CA660 /* BFFaceUtil.m */; };
 		F0777BB42612C2C6006CA660 /* BFNoticeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BB32612C2C6006CA660 /* BFNoticeCountView.m */; };
 		F0777BBD2612FB56006CA660 /* BFLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BBC2612FB56006CA660 /* BFLoginController.m */; };
-		F08046C92639608600829FBF /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F08046C72639608600829FBF /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F08046D2263BACC300829FBF /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F08046D1263BACC300829FBF /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F0850E7C262E6B08007C5589 /* BFSparkLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E7B262E6B08007C5589 /* BFSparkLoadingView.m */; };
 		F0850E7F262E6F80007C5589 /* BFSparkEmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E7E262E6F80007C5589 /* BFSparkEmptyView.m */; };
 		F0850E84262EA8CD007C5589 /* BFProfileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E83262EA8CD007C5589 /* BFProfileHeaderView.m */; };
@@ -379,8 +379,8 @@
 		F0777BB32612C2C6006CA660 /* BFNoticeCountView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFNoticeCountView.m; sourceTree = "<group>"; };
 		F0777BBB2612FB56006CA660 /* BFLoginController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFLoginController.h; sourceTree = "<group>"; };
 		F0777BBC2612FB56006CA660 /* BFLoginController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFLoginController.m; sourceTree = "<group>"; };
-		F08046C72639608600829FBF /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
-		F08046C82639608600829FBF /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
+		F08046D0263BACC200829FBF /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
+		F08046D1263BACC300829FBF /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
 		F0850E7A262E6B08007C5589 /* BFSparkLoadingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSparkLoadingView.h; sourceTree = "<group>"; };
 		F0850E7B262E6B08007C5589 /* BFSparkLoadingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSparkLoadingView.m; sourceTree = "<group>"; };
 		F0850E7D262E6F80007C5589 /* BFSparkEmptyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSparkEmptyView.h; sourceTree = "<group>"; };
@@ -751,8 +751,8 @@
 		F052EC7B25ECD2B800F35D74 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				F08046C82639608600829FBF /* ChatProtobuf.pbobjc.h */,
-				F08046C72639608600829FBF /* ChatProtobuf.pbobjc.m */,
+				F08046D0263BACC200829FBF /* ChatProtobuf.pbobjc.h */,
+				F08046D1263BACC300829FBF /* ChatProtobuf.pbobjc.m */,
 				F052ECAD25EE3B6E00F35D74 /* MSIMManagerListener.h */,
 				F011D62025E767B10061F9D6 /* IMSDKConfig.h */,
 				F011D62125E767B10061F9D6 /* IMSDKConfig.m */,
@@ -1472,7 +1472,7 @@
 				F0850E8A262FCC01007C5589 /* BFProfileService.m in Sources */,
 				F0020B562614263E0080C005 /* YBIBImageData.m in Sources */,
 				F0DC81922616CA280042D4BD /* YBIBVideoActionBar.m in Sources */,
-				F08046C92639608600829FBF /* ChatProtobuf.pbobjc.m in Sources */,
+				F08046D2263BACC300829FBF /* ChatProtobuf.pbobjc.m in Sources */,
 				F0020B5B2614263E0080C005 /* YBIBSentinel.m in Sources */,
 				F0D298F626257E2E00F485CC /* BFSparkCardCell.m in Sources */,
 				F05836652602F6810008C4FD /* BFConversationListCell.m in Sources */,

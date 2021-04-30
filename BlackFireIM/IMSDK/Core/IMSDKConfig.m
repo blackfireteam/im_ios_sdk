@@ -17,6 +17,7 @@
     config.port = 18888;
     config.heartDuration = 30;
     config.retryCount = 5;
+    config.chatListPageCount = 50;
     return config;
 }
 

@@ -24,11 +24,9 @@ typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSI
 
 /// 分页拉取会话列表
 /// @param nextSeq 分页拉取游标，第一次默认取传 0，后续分页拉传上一次分页拉取回调里的 nextSeq
-/// @param count 分页拉取的个数，一次分页拉取不宜太多，会影响拉取的速度，建议每次拉取 100 个会话
 /// @param succ 拉取成功
 /// @param fail 拉取失败
 - (void)getConversationList:(NSInteger)nextSeq
-                      count:(int)count
                        succ:(MSIMConversationListSucc)succ
                        fail:(MSIMFail)fail;
 

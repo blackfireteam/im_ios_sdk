@@ -123,6 +123,7 @@
     self.containter.alpha = 0;
     self.likeBtn.alpha = 0;
     self.dislikeBtn.alpha = 0;
+    self.emptyView.hidden = YES;
     [UIView animateWithDuration:0.5 animations:^{
         self.containter.alpha = 1;
         self.likeBtn.alpha = 1;
@@ -162,7 +163,7 @@
 
 - (void)cardView:(BFSparkCardView *)cardView didRemoveLastCell:(BFSparkCardCell *)cell forRowAtIndex:(NSInteger)index
 {
-    
+    self.emptyView.hidden = NO;
 }
 
 - (void)cardView:(BFSparkCardView *)cardView didDisplayCell:(BFSparkCardCell *)cell forRowAtIndex:(NSInteger)index

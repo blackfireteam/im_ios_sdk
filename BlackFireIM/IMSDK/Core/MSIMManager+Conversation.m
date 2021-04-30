@@ -18,6 +18,7 @@
 
 - (void)synchronizeConversationList
 {
+    self.isChatListResult = NO;
     if (self.convListener && [self.convListener respondsToSelector:@selector(onSyncServerStart)]) {
         [self.convListener onSyncServerStart];
     }
@@ -29,6 +30,7 @@
     [self send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_CHAT_LIST_EMPTY) {//如果用户一条会话都没有时，服务器会通过result直接返回错误码
+            strongSelf.isChatListResult = YES;
             if (strongSelf.convListener && [strongSelf.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
                 [strongSelf.convListener onSyncServerFinish];
             }
@@ -44,14 +46,13 @@
 
 /// 分页拉取会话列表
 /// @param nextSeq 分页拉取游标，第一次默认取传 0，后续分页拉传上一次分页拉取回调里的 nextSeq
-/// @param count 分页拉取的个数，一次分页拉取不宜太多，会影响拉取的速度，建议每次拉取 100 个会话
 /// @param succ 拉取成功
 /// @param fail 拉取失败
 - (void)getConversationList:(NSInteger)nextSeq
-                      count:(int)count
                        succ:(MSIMConversationListSucc)succ
                        fail:(MSIMFail)fail
 {
+    NSInteger count = [MSIMManager sharedInstance].config.chatListPageCount;
     if (nextSeq < 0 || count <= 0) {
         fail(ERR_USER_PARAMS_ERROR,@"params error");
         return;
@@ -63,7 +64,7 @@
         for (MSIMConversation *conv in data) {
             MSIMElem *elem = [weakSelf.messageStore searchMessage:conv.partner_id msg_sign:conv.show_msg_sign];
             conv.show_msg = elem;
-            if (nextSeq && elem == nil) {
+            if (elem == nil) {
                 [tempConvs addObject:conv];
             }
         }

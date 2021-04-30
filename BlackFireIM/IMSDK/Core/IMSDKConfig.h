@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 链接断开，自动重连次数,默认：5次，min: 1次*/
 @property(nonatomic,assign) NSInteger retryCount;
 
+/** 会话列表分页拉取数量,默认：50个*/
+@property(nonatomic,assign) NSInteger chatListPageCount;
+
 + (instancetype)defaultConfig;
 
 @end
