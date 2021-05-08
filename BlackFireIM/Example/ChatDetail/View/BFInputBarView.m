@@ -92,6 +92,7 @@
     [_inputTextView.layer setMasksToBounds:YES];
     [_inputTextView.layer setCornerRadius:4.0f];
     [_inputTextView.layer setBorderWidth:0.5f];
+    _inputTextView.enablesReturnKeyAutomatically = YES;
     [_inputTextView.layer setBorderColor:[UIColor d_colorWithColorLight:TLine_Color dark:TLine_Color_Dark].CGColor];
     [_inputTextView setReturnKeyType:UIReturnKeySend];
     [self addSubview:_inputTextView];

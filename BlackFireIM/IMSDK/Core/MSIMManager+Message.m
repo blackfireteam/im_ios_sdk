@@ -235,7 +235,7 @@
     [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (code == 0) {
+            if (code == ERR_SUCC) {
                 ChatSR *result = response;
                 [strongSelf sendMessageSuccessHandler:elem response:result];
                 if (success) success(result.msgId);

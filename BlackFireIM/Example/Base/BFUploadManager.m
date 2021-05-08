@@ -203,7 +203,11 @@
     request.downloadingURL = [NSURL fileURLWithPath:savePath];
     [request setFinishBlock:^(id  _Nullable outputObject, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (success) success();
+            if (error == nil) {
+                if (success) success();
+            }else {
+                if (failed) failed(error.code,error.localizedDescription);
+            }
         });
     }];
     [request setDownProcessBlock:^(int64_t bytesDownload, int64_t totalBytesDownload, int64_t totalBytesExpectedToDownload) {

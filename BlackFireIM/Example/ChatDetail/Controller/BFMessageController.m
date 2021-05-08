@@ -602,6 +602,7 @@
 {
     [self.countTipView cleanCount];
     [self scrollToBottom:YES];
+    [self readedReport:self.uiMsgs];//标记已读
 }
 
 @end
