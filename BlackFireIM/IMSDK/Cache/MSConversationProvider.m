@@ -32,8 +32,6 @@ static MSConversationProvider *instance;
 {
     if (!_mainCache) {
         _mainCache = [[NSCache alloc] init];
-        _mainCache.countLimit = 1000; // 限制个数，默认是0，无限空间
-        _mainCache.totalCostLimit = 0; // 设置大小设置，默认是0，无限空间
         _mainCache.name = @"conv_cache";
     }
     return _mainCache;

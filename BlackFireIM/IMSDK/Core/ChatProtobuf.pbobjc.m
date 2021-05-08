@@ -1093,11 +1093,13 @@ typedef struct DelChat__storage_ {
 
 @dynamic sign;
 @dynamic updateTime;
+@dynamic uid;
 
 typedef struct GetChatList__storage_ {
   uint32_t _has_storage_[1];
   int64_t sign;
   int64_t updateTime;
+  int64_t uid;
 } GetChatList__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1121,6 +1123,15 @@ typedef struct GetChatList__storage_ {
         .number = GetChatList_FieldNumber_UpdateTime,
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(GetChatList__storage_, updateTime),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "uid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetChatList_FieldNumber_Uid,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(GetChatList__storage_, uid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
       },
@@ -1479,12 +1490,15 @@ typedef struct ChatItemUpdate__storage_ {
 
 @implementation ChatList
 
+@dynamic sign;
 @dynamic chatItemsArray, chatItemsArray_Count;
 @dynamic updateTime;
+@dynamic hasMore;
 
 typedef struct ChatList__storage_ {
   uint32_t _has_storage_[1];
   NSMutableArray *chatItemsArray;
+  int64_t sign;
   int64_t updateTime;
 } ChatList__storage_;
 
@@ -1494,6 +1508,15 @@ typedef struct ChatList__storage_ {
   static GPBDescriptor *descriptor = nil;
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatList_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ChatList__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
       {
         .name = "chatItemsArray",
         .dataTypeSpecific.clazz = GPBObjCClass(ChatItem),
@@ -1507,10 +1530,19 @@ typedef struct ChatList__storage_ {
         .name = "updateTime",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatList_FieldNumber_UpdateTime,
-        .hasIndex = 0,
+        .hasIndex = 1,
         .offset = (uint32_t)offsetof(ChatList__storage_, updateTime),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "hasMore",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatList_FieldNumber_HasMore,
+        .hasIndex = 2,
+        .offset = 3,  // Stored in _has_storage_ to save space.
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBool,
       },
     };
     GPBDescriptor *localDescriptor =

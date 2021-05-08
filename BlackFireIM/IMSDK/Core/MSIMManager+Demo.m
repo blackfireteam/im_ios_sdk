@@ -29,8 +29,7 @@
                     MSProfileInfo *info = [MSProfileInfo createWithSpark:s];
                     [arr addObject:info];
                 }
-                //更新profile
-                [[MSProfileProvider provider]updateProfiles:arr];
+                [[MSProfileProvider provider]updateSparkProfiles:arr];
                 if (succ) succ(arr);
             }else {
                 if (fail) fail(code,error);
@@ -84,7 +83,7 @@
                 //注册成功,同步下自己的Profile
                 MSProfileInfo *me = [[MSProfileInfo alloc]init];
                 me.user_id = [MSIMTools sharedInstance].user_id;
-                [[MSProfileProvider provider]synchronizeProfiles:@[me]];
+                [[MSProfileProvider provider]synchronizeProfiles:@[me].mutableCopy];
             }else {
                 if (fail) fail(result.code,result.msg);
             }

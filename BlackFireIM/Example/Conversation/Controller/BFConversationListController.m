@@ -41,7 +41,14 @@
     [self setupNavigation];
     [self setupViews];
     [self loadConversation];
-    [self addNotifications];
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        [self addNotifications];
+    }
+    return self;
 }
 
 - (void)addNotifications
@@ -193,6 +200,7 @@
 - (void)conversationSyncFinish
 {
     [self.titleView setTitle:@"MESSAGE"];
+    [self updateTabbarUnreadCount];
 }
 
 - (void)onConversationDelete:(NSNotification *)note

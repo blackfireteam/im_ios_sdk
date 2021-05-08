@@ -53,8 +53,6 @@ NS_ASSUME_NONNULL_BEGIN
 ///取出小于或等于msg_id的对方发出的消息的msg_id
 - (NSInteger)latestMsgIDLessThan:(NSInteger)msg_id partner_id:(NSString *)partner_id;
 
-///将所有的发送中的消息置为发送失败
-- (BOOL)cleanAllSendingMessage:(NSString *)tableName;
 
 @end
 

@@ -96,11 +96,10 @@
         [SVProgressHUD showSuccessWithStatus:@"注册成功"];
         weakSelf.info.userToken = userToken;
         
-        [[MSIMKit sharedInstance]login:weakSelf.info.userToken succ:^{
-            
+        [[MSIMManager sharedInstance]login:weakSelf.info.userToken succ:^{
+                    
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
-            
                 } failed:^(NSInteger code, NSString * _Nonnull desc) {
                     [SVProgressHUD showInfoWithStatus:desc];
         }];

@@ -15,7 +15,7 @@
 
 @interface BFDiscoveryController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
-@property(nonatomic,strong) NSMutableArray<MSProfileInfo *> *dataArray;
+@property(nonatomic,strong) NSMutableArray<NSNumber *> *dataArray;
 
 @property(nonatomic,strong) UICollectionView *myCollectionView;
 
@@ -44,7 +44,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (NSMutableArray<MSProfileInfo *> *)dataArray
+- (NSMutableArray<NSNumber *> *)dataArray
 {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -54,21 +54,17 @@
 
 - (void)userOnline:(NSNotification *)note
 {
-    MSProfileInfo *info = note.object;
-    [self.dataArray addObject:info];
-    [self.myCollectionView reloadData];
+    NSNumber *uid = note.object;
+    if (![self.dataArray containsObject:uid]) {
+        [self.dataArray addObject:uid];
+        [self.myCollectionView reloadData];
+    }
 }
 
 - (void)userOffline:(NSNotification *)note
 {
-    NSString *user_id = note.object;
-    for (NSInteger i = 0; i < self.dataArray.count; i++) {
-        MSProfileInfo *info = self.dataArray[i];
-        if ([info.user_id isEqualToString:user_id]) {
-            [self.dataArray removeObject:info];
-            break;
-        }
-    }
+    NSNumber *uid = note.object;
+    [self.dataArray removeObject:uid];
     [self.myCollectionView reloadData];
 }
 
@@ -99,14 +95,15 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     BFUserListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"userCell" forIndexPath:indexPath];
-    [cell configWithInfo:self.dataArray[indexPath.row]];
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:self.dataArray[indexPath.row].integerValue];
+    [cell configWithInfo:info];
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     BFChatViewController *vc = [[BFChatViewController alloc]init];
-    vc.partner_id = self.dataArray[indexPath.row].user_id;
+    vc.partner_id = [NSString stringWithFormat:@"%@",self.dataArray[indexPath.row]];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

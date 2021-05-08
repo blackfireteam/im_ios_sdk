@@ -61,15 +61,23 @@
     [self.convStore conversationsWithLast_seq:nextSeq count:count complete:^(NSArray<MSIMConversation *> * _Nonnull data, BOOL hasMore) {
         //组装最后一条消息和头像昵称等信息
         NSMutableArray *tempConvs = [NSMutableArray array];
+        NSMutableArray *tempProfiles = [NSMutableArray array];
         for (MSIMConversation *conv in data) {
             MSIMElem *elem = [weakSelf.messageStore searchMessage:conv.partner_id msg_sign:conv.show_msg_sign];
             conv.show_msg = elem;
             if (elem == nil) {
                 [tempConvs addObject:conv];
             }
+            MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:conv.partner_id.integerValue];
+            if (info == nil || info.update_time == 0) {
+                info = [[MSProfileInfo alloc]init];
+                info.user_id = conv.partner_id;
+                [tempProfiles addObject:info];
+            }
         }
         [[MSConversationProvider provider]updateConversations:data];
         [self updateConvLastMessage:tempConvs];
+        [[MSProfileProvider provider]synchronizeProfiles:tempProfiles];
         MSIMConversation *lastConv = data.lastObject;
         NSInteger nextSign = lastConv.show_msg_sign;
         succ(data,nextSign,hasMore ? NO : YES);

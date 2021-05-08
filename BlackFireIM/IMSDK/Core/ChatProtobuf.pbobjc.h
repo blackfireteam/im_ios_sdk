@@ -422,6 +422,7 @@ GPB_FINAL @interface DelChat : GPBMessage
 typedef GPB_ENUM(GetChatList_FieldNumber) {
   GetChatList_FieldNumber_Sign = 1,
   GetChatList_FieldNumber_UpdateTime = 2,
+  GetChatList_FieldNumber_Uid = 3,
 };
 
 /**
@@ -434,6 +435,9 @@ GPB_FINAL @interface GetChatList : GPBMessage
 
 /** 客户端本地保存的会话列表的最新一个会话的变动时间（精确到百万分之一秒的时间戳） */
 @property(nonatomic, readwrite) int64_t updateTime;
+
+/** websocket 端传此值, 作为分页指针 */
+@property(nonatomic, readwrite) int64_t uid;
 
 @end
 
@@ -545,8 +549,10 @@ GPB_FINAL @interface ChatItemUpdate : GPBMessage
 #pragma mark - ChatList
 
 typedef GPB_ENUM(ChatList_FieldNumber) {
-  ChatList_FieldNumber_ChatItemsArray = 1,
-  ChatList_FieldNumber_UpdateTime = 2,
+  ChatList_FieldNumber_Sign = 1,
+  ChatList_FieldNumber_ChatItemsArray = 2,
+  ChatList_FieldNumber_UpdateTime = 3,
+  ChatList_FieldNumber_HasMore = 4,
 };
 
 /**
@@ -554,12 +560,18 @@ typedef GPB_ENUM(ChatList_FieldNumber) {
  **/
 GPB_FINAL @interface ChatList : GPBMessage
 
+/** websocket 会返回该值 */
+@property(nonatomic, readwrite) int64_t sign;
+
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<ChatItem*> *chatItemsArray;
 /** The number of items in @c chatItemsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger chatItemsArray_Count;
 
-/** 有该值说明 会话列表发送完毕，且会话列表中的最新更新时间会是这个值（精确到百万分之一秒的时间戳） */
+/** app会返回，有该值说明 会话列表发送完毕，且会话列表中的最新更新时间会是这个值（精确到百万分之一秒的时间戳） */
 @property(nonatomic, readwrite) int64_t updateTime;
+
+/** websocket 会返回该值，说明还有下一页 */
+@property(nonatomic, readwrite) BOOL hasMore;
 
 @end
 

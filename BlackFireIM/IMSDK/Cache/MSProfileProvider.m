@@ -121,9 +121,11 @@ static MSProfileProvider *instance;
         return p;
     }else {
         MSProfileInfo *p1 = [self.store searchProfile:uid];
+        if (p1) {
+            [self.mainCache setObject:p1 forKey:uid];
+        }
         return p1;
     }
-    return nil;
 }
 
 ///批量更新用户信息
@@ -136,6 +138,17 @@ static MSProfileProvider *instance;
         [self.mainCache setObject:info forKey:info.user_id];
     }
     [self.store addProfiles:infos];
+}
+
+- (void)updateSparkProfiles:(NSArray<MSProfileInfo *> *)infos
+{
+    for (MSProfileInfo *info in infos) {
+        MSProfileInfo *cacheInfo = [self providerProfileFromLocal:info.user_id.integerValue];
+        if (cacheInfo == nil) {
+            [self.mainCache setObject:info forKey:info.user_id];
+            [self.store addProfiles:@[info]];
+        }
+    }
 }
 
 ///返回本地数据库中所有的用户信息

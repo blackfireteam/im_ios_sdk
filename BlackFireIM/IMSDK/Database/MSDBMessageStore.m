@@ -596,13 +596,6 @@ static NSString *ext_data = @"ext_data";
     return elem;
 }
 
-///将所有的发送中的消息置为发送失败
-- (BOOL)cleanAllSendingMessage:(NSString *)tableName
-{
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd' where send_status = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,BFIM_MSG_STATUS_SENDING];
-    BOOL isOK = [self excuteSQL:sqlStr];
-    return isOK;
-}
 
 - (NSString *)fixLocalImagePath:(NSString *)path
 {

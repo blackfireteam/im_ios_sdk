@@ -82,11 +82,10 @@
     [[MSIMManager sharedInstance]getIMToken:phone succ:^(NSString * _Nonnull userToken) {
         //2.登录
         weakSelf.registerInfo.userToken = userToken;
-        [[MSIMKit sharedInstance]login:userToken succ:^{
-            
+        [[MSIMManager sharedInstance]login:userToken succ:^{
+                    
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
-            
                 } failed:^(NSInteger code, NSString * _Nonnull desc) {
                     [SVProgressHUD showInfoWithStatus:desc];
         }];

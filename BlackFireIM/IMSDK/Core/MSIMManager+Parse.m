@@ -21,7 +21,6 @@
 
 - (void)profilesResultHandler:(NSArray<Profile *> *)list
 {
-    NSLog(@"收到的批量profile count = %zd",list.count);
     NSMutableArray *arr = [NSMutableArray array];
     for (Profile *p in list) {
         MSProfileInfo *info = [MSProfileInfo createWithProto:p];
@@ -109,7 +108,7 @@
             conv.show_msg_sign = elem.msg_sign;
             conv.msg_end = elem.msg_id;
             MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:elem.partner_id.integerValue];
-            if (profile == nil) {
+            if (profile == nil || profile.update_time == 0) {
                 MSProfileInfo *info = [[MSProfileInfo alloc]init];
                 info.user_id = elem.partner_id;
                 [needProfiles addObject:info];
@@ -280,7 +279,7 @@
     info.verified = online.verified;
     [[MSProfileProvider provider] updateProfiles:@[info]];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_online" object:info];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_online" object:@(online.uid)];
     });
 }
 
@@ -288,8 +287,7 @@
 - (void)userOfflineHandler:(UsrOffline *)offline
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *user_id = [NSString stringWithFormat:@"%lld",offline.uid];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_offline" object:user_id];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_offline" object:@(offline.uid)];
     });
 }
 

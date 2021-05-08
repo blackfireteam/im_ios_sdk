@@ -23,10 +23,7 @@
     MSIMTextElem *elem = [[MSIMTextElem alloc]init];
     elem.text = text;
     elem.type = BFIM_MSG_TYPE_TEXT;
-    elem.fromUid = [MSIMTools sharedInstance].user_id;
-    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
-    elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    [self initDefault:elem];
     return elem;
 }
 
@@ -36,10 +33,7 @@
 - (MSIMImageElem *)createImageMessage:(MSIMImageElem *)elem
 {
     elem.type = BFIM_MSG_TYPE_IMAGE;
-    elem.fromUid = [MSIMTools sharedInstance].user_id;
-    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
-    elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    [self initDefault:elem];
     return elem;
 }
 
@@ -48,10 +42,7 @@
 - (MSIMVoiceElem *)createVoiceMessage:(MSIMVoiceElem *)elem
 {
     elem.type = BFIM_MSG_TYPE_VOICE;
-    elem.fromUid = [MSIMTools sharedInstance].user_id;
-    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
-    elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    [self initDefault:elem];
     return elem;
 }
 
@@ -61,10 +52,7 @@
 - (MSIMVideoElem *)createVideoMessage:(MSIMVideoElem *)elem
 {
     elem.type = BFIM_MSG_TYPE_VIDEO;
-    elem.fromUid = [MSIMTools sharedInstance].user_id;
-    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
-    elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    [self initDefault:elem];
     return elem;
 }
 
@@ -74,11 +62,16 @@
     MSIMCustomElem *elem = [[MSIMCustomElem alloc]init];
     elem.data = data;
     elem.type = BFIM_MSG_TYPE_CUSTOM;
+    [self initDefault:elem];
+    return elem;
+}
+
+- (void)initDefault:(MSIMElem *)elem
+{
     elem.fromUid = [MSIMTools sharedInstance].user_id;
     elem.sendStatus = BFIM_MSG_STATUS_SENDING;
     elem.readStatus = BFIM_MSG_STATUS_UNREAD;
     elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
-    return elem;
 }
 
 /// 发送单聊消息

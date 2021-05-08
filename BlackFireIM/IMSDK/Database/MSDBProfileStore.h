@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///向数据库中添加批量记录
 - (void)addProfiles:(NSArray<MSProfileInfo *> *)profiles;
 
-///查找某一条prifle
+///查找某一条profle
 - (MSProfileInfo *)searchProfile:(NSString *)user_id;
 
 ///返回数据库中所有的记录

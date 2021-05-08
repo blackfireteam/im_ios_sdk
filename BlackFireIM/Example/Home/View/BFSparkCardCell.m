@@ -101,7 +101,7 @@
 {
     [super layoutSubviews];
     self.imageView.frame = self.bounds;
-    self.gradientLayer.frame = CGRectMake(0, self.height-250, self.width, 250);
+    self.gradientLayer.frame = CGRectMake(0, self.imageView.height-250, self.imageView.width, 250);
     self.title.frame = CGRectMake(20,self.height-120, 200, 30);
     self.like.frame = CGRectMake(16, 16, 75, 75);
     self.dislike.frame = CGRectMake(self.frame.size.width-21-75, 16, 75, 75);

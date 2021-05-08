@@ -7,7 +7,6 @@
 
 #ifndef MSIMConst_h
 #define MSIMConst_h
-#import "CXConsole.h"
 
 
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
@@ -18,7 +17,6 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define XMNoNilString(str)  (str.length > 0 ? str : @"")
 
 #ifdef DEBUG
-//#define MSLog(format, ...) [CXConsole printLog: [NSString stringWithFormat:(format),##__VA_ARGS__]]
 
 #define MSLog(format, ...) NSLog(format, ## __VA_ARGS__)
 

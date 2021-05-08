@@ -392,6 +392,7 @@ static MSIMManager *_manager;
             }else {
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }
+            MSLog(@"[收到]会话某些属性发生变更***%@",item);
         }
             break;
         case XMChatProtoTypeGetSparkResponse: //获取首页sparks返回   for demo

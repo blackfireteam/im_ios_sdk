@@ -31,6 +31,9 @@ typedef void (^profileBlock)(MSProfileInfo * __nullable profile);
 ///批量更新用户信息
 - (void)updateProfiles:(NSArray<MSProfileInfo *> *)infos;
 
+///批量缓存spark返回的用户信息，因为spark返回的用户信息字段不全，故特殊处理
+- (void)updateSparkProfiles:(NSArray<MSProfileInfo *> *)infos;
+
 ///比对update_time与服务器同步更新用户信息
 - (void)synchronizeProfiles:(NSMutableArray<MSProfileInfo *> *)profiles;
 

@@ -61,14 +61,7 @@
     BFNavigationController *profileNav = [[BFNavigationController alloc]initWithRootViewController:profileVC];
     [self addChildViewController:profileNav];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(conversationSyncFinish) name:MSUIKitNotification_ConversationSyncFinish object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
-}
-
-- (void)conversationSyncFinish
-{
-    NSInteger count = [[MSConversationProvider provider]allUnreadCount];
-    self.tabBar.items[2].badgeValue = count ? (count > 99 ? @"99+" : [NSString stringWithFormat:@"%zd",count]) : nil;
 }
 
 - (void)onUserLogStatusChanged:(NSNotification *)notification

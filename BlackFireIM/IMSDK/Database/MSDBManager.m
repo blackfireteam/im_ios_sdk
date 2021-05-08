@@ -43,9 +43,7 @@ static MSDBManager *manager;
         if([MSIMTools sharedInstance].user_id) {
             NSString *messageQueuePath = [NSFileManager pathDBMessage];
             _messageQueue = [FMDatabaseQueue databaseQueueWithPath:messageQueuePath];
-        }
-        if ([MSIMTools sharedInstance].user_id) {
-            [[MSDBManager sharedInstance] scanAllTables];
+            [self scanAllTables];
         }
     }
     return _messageQueue;
