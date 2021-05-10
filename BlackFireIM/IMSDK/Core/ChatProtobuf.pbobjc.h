@@ -444,7 +444,8 @@ GPB_FINAL @interface GetChatList : GPBMessage
 #pragma mark - ChatItem
 
 typedef GPB_ENUM(ChatItem_FieldNumber) {
-  ChatItem_FieldNumber_Uid = 1,
+  ChatItem_FieldNumber_Sign = 1,
+  ChatItem_FieldNumber_Uid = 2,
   ChatItem_FieldNumber_MsgEnd = 3,
   ChatItem_FieldNumber_MsgLastRead = 4,
   ChatItem_FieldNumber_ShowMsgId = 5,
@@ -467,6 +468,8 @@ typedef GPB_ENUM(ChatItem_FieldNumber) {
  * 13
  **/
 GPB_FINAL @interface ChatItem : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
 
 @property(nonatomic, readwrite) int64_t uid;
 
@@ -668,6 +671,24 @@ GPB_FINAL @interface ProfileList : GPBMessage
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<Profile*> *profilesArray;
 /** The number of items in @c profilesArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger profilesArray_Count;
+
+@end
+
+#pragma mark - GetChat
+
+typedef GPB_ENUM(GetChat_FieldNumber) {
+  GetChat_FieldNumber_Sign = 1,
+  GetChat_FieldNumber_Uid = 2,
+};
+
+/**
+ * 20
+ **/
+GPB_FINAL @interface GetChat : GPBMessage
+
+@property(nonatomic, readwrite) int64_t sign;
+
+@property(nonatomic, readwrite) int64_t uid;
 
 @end
 

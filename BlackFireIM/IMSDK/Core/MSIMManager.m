@@ -593,7 +593,6 @@ static MSIMManager *_manager;
     
 }
 
-///登录需要设置用户名 userID 和用户签名 token
 - (void)login:(NSString *)userSign
          succ:(MSIMSucc)succ
        failed:(MSIMFail)fail

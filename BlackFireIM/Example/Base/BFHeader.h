@@ -139,10 +139,6 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TCell_OnTop RGB(247, 247, 247)
 #define TCell_OnTop_Dark RGB(47, 47, 47)
 
-// input view commom color
-#define TInput_Background_Color  RGBA(246, 246, 246, 1.0)
-#define TInput_Background_Color_Dark  RGBA(30, 30, 30, 1.0)
-
 //record
 #define Record_Background_Color RGBA(0, 0, 0, 0.6)
 #define Record_Background_Size CGSizeMake(Screen_Width * 0.4, Screen_Width * 0.4)

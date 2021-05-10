@@ -128,7 +128,7 @@
     if (isResend == NO) {
         [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
     }
     ChatS *chats = [[ChatS alloc]init];
     chats.sign = elem.msg_sign;
@@ -164,7 +164,7 @@
     if (isResend == NO) {
         [self.msgListener onNewMessages:@[elem]];
         [self.messageStore addMessage:elem];
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
     }
     if (elem.url.length == 0 || ![elem.url hasPrefix:@"http"]) {
         if (elem.uuid.length > 0) {
@@ -208,7 +208,7 @@
             
             [self.messageStore addMessage:elem];
             [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
             [self sendImageMessageByTCP:elem successed:success failed:failed];
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
@@ -259,7 +259,7 @@
     if (isResend == NO) {
         [self.msgListener onNewMessages:@[elem]];
         [self.messageStore addMessage:elem];
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
     }
     if (!([elem.videoUrl hasPrefix:@"http"] && [elem.coverUrl hasPrefix:@"http"])) {
         if (elem.uuid.length > 0) {
@@ -304,7 +304,7 @@
         
         [self.messageStore addMessage:elem];
         [self.msgListener onMessageUpdateSendStatus:elem];
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
         [self sendVideoMessageByTCP:elem successed:success failed:failed];
         
     } failed:^(NSInteger code, NSString * _Nonnull desc) {
@@ -358,7 +358,7 @@
     if (isResend == NO) {
         [self.msgListener onNewMessages:@[elem]];
         [self.messageStore addMessage:elem];
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
     }
     if (elem.url.length == 0 || ![elem.url hasPrefix:@"http"]) {
         [self uploadVoice:elem successed:success failed:failed];
@@ -381,7 +381,7 @@
             
             [self.messageStore addMessage:elem];
             [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
             [self sendVoiceMessageByTCP:elem successed:success failed:failed];
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
@@ -434,7 +434,7 @@
     if (isResend == NO) {
         [self.messageStore addMessage:elem];
         [self.msgListener onNewMessages:@[elem]];
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
     }
     ChatS *chats = [[ChatS alloc]init];
     chats.sign = elem.msg_sign;
@@ -464,7 +464,7 @@
     elem.msg_id = response.msgId;
     [self.messageStore addMessage:elem];
     [self.msgListener onMessageUpdateSendStatus:elem];
-    [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+    [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
 }
 
 - (void)sendMessageFailedHandler:(MSIMElem *)elem code:(NSInteger)code error:(NSString *)error
@@ -474,7 +474,7 @@
     elem.reason = error;
     [self.messageStore addMessage:elem];
     [self.msgListener onMessageUpdateSendStatus:elem];
-    [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)]];
+    [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
 }
 
 /// 请求撤回某一条消息

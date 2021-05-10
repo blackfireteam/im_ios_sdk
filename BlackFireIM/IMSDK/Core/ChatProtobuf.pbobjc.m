@@ -1158,6 +1158,7 @@ typedef struct GetChatList__storage_ {
 
 @implementation ChatItem
 
+@dynamic sign;
 @dynamic uid;
 @dynamic msgEnd;
 @dynamic msgLastRead;
@@ -1179,6 +1180,7 @@ typedef struct GetChatList__storage_ {
 typedef struct ChatItem__storage_ {
   uint32_t _has_storage_[1];
   NSString *showMsg;
+  int64_t sign;
   int64_t uid;
   int64_t msgEnd;
   int64_t msgLastRead;
@@ -1195,10 +1197,19 @@ typedef struct ChatItem__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ChatItem_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ChatItem__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
         .name = "uid",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_Uid,
-        .hasIndex = 0,
+        .hasIndex = 1,
         .offset = (uint32_t)offsetof(ChatItem__storage_, uid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -1207,7 +1218,7 @@ typedef struct ChatItem__storage_ {
         .name = "msgEnd",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_MsgEnd,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(ChatItem__storage_, msgEnd),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -1216,7 +1227,7 @@ typedef struct ChatItem__storage_ {
         .name = "msgLastRead",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_MsgLastRead,
-        .hasIndex = 2,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(ChatItem__storage_, msgLastRead),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -1225,7 +1236,7 @@ typedef struct ChatItem__storage_ {
         .name = "showMsgId",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_ShowMsgId,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(ChatItem__storage_, showMsgId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -1234,7 +1245,7 @@ typedef struct ChatItem__storage_ {
         .name = "showMsgType",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_ShowMsgType,
-        .hasIndex = 4,
+        .hasIndex = 5,
         .offset = (uint32_t)offsetof(ChatItem__storage_, showMsgType),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -1243,7 +1254,7 @@ typedef struct ChatItem__storage_ {
         .name = "showMsg",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_ShowMsg,
-        .hasIndex = 5,
+        .hasIndex = 6,
         .offset = (uint32_t)offsetof(ChatItem__storage_, showMsg),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -1252,7 +1263,7 @@ typedef struct ChatItem__storage_ {
         .name = "showMsgTime",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_ShowMsgTime,
-        .hasIndex = 6,
+        .hasIndex = 7,
         .offset = (uint32_t)offsetof(ChatItem__storage_, showMsgTime),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -1261,7 +1272,7 @@ typedef struct ChatItem__storage_ {
         .name = "unread",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_Unread,
-        .hasIndex = 7,
+        .hasIndex = 8,
         .offset = (uint32_t)offsetof(ChatItem__storage_, unread),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt64,
@@ -1270,8 +1281,8 @@ typedef struct ChatItem__storage_ {
         .name = "matched",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_Matched,
-        .hasIndex = 8,
-        .offset = 9,  // Stored in _has_storage_ to save space.
+        .hasIndex = 9,
+        .offset = 10,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1279,8 +1290,8 @@ typedef struct ChatItem__storage_ {
         .name = "newMsg",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_NewMsg,
-        .hasIndex = 10,
-        .offset = 11,  // Stored in _has_storage_ to save space.
+        .hasIndex = 11,
+        .offset = 12,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1288,8 +1299,8 @@ typedef struct ChatItem__storage_ {
         .name = "myMove",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_MyMove,
-        .hasIndex = 12,
-        .offset = 13,  // Stored in _has_storage_ to save space.
+        .hasIndex = 13,
+        .offset = 14,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1297,8 +1308,8 @@ typedef struct ChatItem__storage_ {
         .name = "iceBreak",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_IceBreak,
-        .hasIndex = 14,
-        .offset = 15,  // Stored in _has_storage_ to save space.
+        .hasIndex = 15,
+        .offset = 16,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1306,8 +1317,8 @@ typedef struct ChatItem__storage_ {
         .name = "tipFree",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_TipFree,
-        .hasIndex = 16,
-        .offset = 17,  // Stored in _has_storage_ to save space.
+        .hasIndex = 17,
+        .offset = 18,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1315,8 +1326,8 @@ typedef struct ChatItem__storage_ {
         .name = "topAlbum",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_TopAlbum,
-        .hasIndex = 18,
-        .offset = 19,  // Stored in _has_storage_ to save space.
+        .hasIndex = 19,
+        .offset = 20,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1324,8 +1335,8 @@ typedef struct ChatItem__storage_ {
         .name = "iBlockU",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_IBlockU,
-        .hasIndex = 20,
-        .offset = 21,  // Stored in _has_storage_ to save space.
+        .hasIndex = 21,
+        .offset = 22,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1333,8 +1344,8 @@ typedef struct ChatItem__storage_ {
         .name = "connected",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_Connected,
-        .hasIndex = 22,
-        .offset = 23,  // Stored in _has_storage_ to save space.
+        .hasIndex = 23,
+        .offset = 24,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1342,8 +1353,8 @@ typedef struct ChatItem__storage_ {
         .name = "deleted",
         .dataTypeSpecific.clazz = Nil,
         .number = ChatItem_FieldNumber_Deleted,
-        .hasIndex = 24,
-        .offset = 25,  // Stored in _has_storage_ to save space.
+        .hasIndex = 25,
+        .offset = 26,  // Stored in _has_storage_ to save space.
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBool,
       },
@@ -1829,6 +1840,62 @@ typedef struct ProfileList__storage_ {
                                         fields:fields
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(ProfileList__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - GetChat
+
+@implementation GetChat
+
+@dynamic sign;
+@dynamic uid;
+
+typedef struct GetChat__storage_ {
+  uint32_t _has_storage_[1];
+  int64_t sign;
+  int64_t uid;
+} GetChat__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "sign",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetChat_FieldNumber_Sign,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(GetChat__storage_, sign),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+      {
+        .name = "uid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = GetChat_FieldNumber_Uid,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(GetChat__storage_, uid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt64,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[GetChat class]
+                                     rootClass:[ChatProtobufRoot class]
+                                          file:ChatProtobufRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(GetChat__storage_)
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");

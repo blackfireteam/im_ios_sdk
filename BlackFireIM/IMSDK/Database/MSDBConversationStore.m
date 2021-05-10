@@ -116,7 +116,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 - (NSInteger)allUnreadCount
 {
     __block NSInteger total = 0;
-    NSString *sqlString = [NSString stringWithFormat:@"SELECT SUM(unread_count) AS 'total' from %@", CONV_TABLE_NAME];
+    NSString *sqlString = [NSString stringWithFormat:@"SELECT SUM(unread_count) AS 'total' from %@ WHERE status = 0", CONV_TABLE_NAME];
     [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
             total = [rsSet longLongIntForColumn:@"total"];

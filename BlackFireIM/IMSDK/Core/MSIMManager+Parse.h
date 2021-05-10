@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///服务器返回的历史数据处理
 - (NSArray<MSIMElem *> *)chatHistoryHandler:(NSArray<ChatR *> *)responses;
 
-- (void)elemNeedToUpdateConversations:(NSArray<MSIMElem *> *)elem increaseUnreadCount:(NSArray<NSNumber *> *)increases;
+- (void)elemNeedToUpdateConversations:(NSArray<MSIMElem *> *)elem increaseUnreadCount:(NSArray<NSNumber *> *)increases isConvLastMessage:(BOOL)isConvLastMessage;
 
 ///同步最后一页聊天记录
 - (void)updateConvLastMessage:(NSArray *)convs;

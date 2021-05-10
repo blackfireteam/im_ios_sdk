@@ -103,7 +103,7 @@
 		F0777BAE2611D418006CA660 /* BFFaceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BAD2611D418006CA660 /* BFFaceUtil.m */; };
 		F0777BB42612C2C6006CA660 /* BFNoticeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BB32612C2C6006CA660 /* BFNoticeCountView.m */; };
 		F0777BBD2612FB56006CA660 /* BFLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0777BBC2612FB56006CA660 /* BFLoginController.m */; };
-		F08047CC2644F8E200829FBF /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F08047CB2644F8E200829FBF /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F08048142649108000829FBF /* ChatProtobuf.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = F08048132649107F00829FBF /* ChatProtobuf.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F0850E7C262E6B08007C5589 /* BFSparkLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E7B262E6B08007C5589 /* BFSparkLoadingView.m */; };
 		F0850E7F262E6F80007C5589 /* BFSparkEmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E7E262E6F80007C5589 /* BFSparkEmptyView.m */; };
 		F0850E84262EA8CD007C5589 /* BFProfileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0850E83262EA8CD007C5589 /* BFProfileHeaderView.m */; };
@@ -373,8 +373,8 @@
 		F0777BB32612C2C6006CA660 /* BFNoticeCountView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFNoticeCountView.m; sourceTree = "<group>"; };
 		F0777BBB2612FB56006CA660 /* BFLoginController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFLoginController.h; sourceTree = "<group>"; };
 		F0777BBC2612FB56006CA660 /* BFLoginController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFLoginController.m; sourceTree = "<group>"; };
-		F08047CA2644F8E100829FBF /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
-		F08047CB2644F8E200829FBF /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
+		F08048122649107E00829FBF /* ChatProtobuf.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatProtobuf.pbobjc.h; sourceTree = "<group>"; };
+		F08048132649107F00829FBF /* ChatProtobuf.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatProtobuf.pbobjc.m; sourceTree = "<group>"; };
 		F0850E7A262E6B08007C5589 /* BFSparkLoadingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSparkLoadingView.h; sourceTree = "<group>"; };
 		F0850E7B262E6B08007C5589 /* BFSparkLoadingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSparkLoadingView.m; sourceTree = "<group>"; };
 		F0850E7D262E6F80007C5589 /* BFSparkEmptyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSparkEmptyView.h; sourceTree = "<group>"; };
@@ -734,8 +734,8 @@
 			isa = PBXGroup;
 			children = (
 				F052ECAD25EE3B6E00F35D74 /* MSIMManagerListener.h */,
-				F08047CA2644F8E100829FBF /* ChatProtobuf.pbobjc.h */,
-				F08047CB2644F8E200829FBF /* ChatProtobuf.pbobjc.m */,
+				F08048122649107E00829FBF /* ChatProtobuf.pbobjc.h */,
+				F08048132649107F00829FBF /* ChatProtobuf.pbobjc.m */,
 				F011D62025E767B10061F9D6 /* IMSDKConfig.h */,
 				F011D62125E767B10061F9D6 /* IMSDKConfig.m */,
 				F052ECDC25EF214000F35D74 /* MSIMErrorCode.h */,
@@ -1494,7 +1494,7 @@
 				F056716625F087D200782F9C /* UIView+BFExtension.m in Sources */,
 				F0DC818E2616CA280042D4BD /* YBIBVideoCell.m in Sources */,
 				F02F434D261D86AC00374870 /* MSIMMessageReceipt.m in Sources */,
-				F08047CC2644F8E200829FBF /* ChatProtobuf.pbobjc.m in Sources */,
+				F08048142649108000829FBF /* ChatProtobuf.pbobjc.m in Sources */,
 				F058365C2602EE810008C4FD /* BFNaviBarIndicatorView.m in Sources */,
 				F011D66025E8DC4D0061F9D6 /* MSIMElem.m in Sources */,
 				F056711225EF631F00782F9C /* NSString+Ext.m in Sources */,

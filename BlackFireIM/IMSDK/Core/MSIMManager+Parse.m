@@ -92,7 +92,7 @@
     }
 }
 
-- (void)elemNeedToUpdateConversations:(NSArray<MSIMElem *> *)elems increaseUnreadCount:(NSArray<NSNumber *> *)increases
+- (void)elemNeedToUpdateConversations:(NSArray<MSIMElem *> *)elems increaseUnreadCount:(NSArray<NSNumber *> *)increases isConvLastMessage:(BOOL)isConvLastMessage
 {
     NSMutableArray *needConvs = [NSMutableArray array];
     NSMutableArray *needProfiles = [NSMutableArray array];
@@ -121,9 +121,11 @@
             if (elem.msg_id > conv.msg_end) {
                 conv.msg_end = elem.msg_id;
             }
-            conv.deleted = 0;
             if (increase) {
                 conv.unread_count += 1;
+            }
+            if (isConvLastMessage == NO) {
+                conv.deleted = 0;
             }
             [needConvs addObject:conv];
         }
@@ -155,7 +157,7 @@
             }
             total += 1;
             if (total >= convsCount) {
-                [weakSelf elemNeedToUpdateConversations:tempConvs increaseUnreadCount:tempIncreases];
+                [weakSelf elemNeedToUpdateConversations:tempConvs increaseUnreadCount:tempIncreases isConvLastMessage: YES];
                 [tempConvs removeAllObjects];
                 [tempIncreases removeAllObjects];
             }
@@ -170,12 +172,12 @@
     if (elem.type == BFIM_MSG_TYPE_NULL) {
         MSIMElem *showElem = [self.messageStore lastShowMessage:elem.partner_id];
         showElem.msg_id = elem.msg_id;
-        [self elemNeedToUpdateConversations:@[showElem] increaseUnreadCount:@[@(NO)]];
+        [self elemNeedToUpdateConversations:@[showElem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
     }else {
         if ([self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
             [self.msgListener onNewMessages:@[elem]];
         }
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:(elem.isSelf ? @[@(NO)] : @[@(YES)])];
+        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:(elem.isSelf ? @[@(NO)] : @[@(YES)]) isConvLastMessage:NO];
     }
     //更新会话更新时间
     [self updateChatListUpdateTime:elem.msg_sign];
@@ -183,6 +185,7 @@
     MSProfileInfo *fromProfile = [[MSProfileProvider provider]providerProfileFromLocal:response.fromUid];
     if (!fromProfile) {
         fromProfile = [[MSProfileInfo alloc]init];
+        fromProfile.user_id = [NSString stringWithFormat:@"%lld",response.fromUid];
     }
     if (fromProfile.update_time < response.sput) {
         [[MSProfileProvider provider]synchronizeProfiles:@[fromProfile].mutableCopy];

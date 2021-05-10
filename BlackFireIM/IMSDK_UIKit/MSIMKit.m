@@ -7,7 +7,7 @@
 
 #import "MSIMKit.h"
 #import "MSIMErrorCode.h"
-
+#import "MSIMConversation.h"
 
 @interface MSIMKit()<MSIMMessageListener,MSIMProfileListener,MSIMConversationListener,MSIMSDKListener>
 
@@ -123,7 +123,16 @@
 ///新增会话或会话发生变化
 - (void)onUpdateConversations:(NSArray<MSIMConversation*> *) conversationList
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUpdate object:conversationList];
+    //将被删除的会话过滤
+    NSMutableArray *arr = [NSMutableArray array];
+    for (MSIMConversation *conv in conversationList) {
+        if (!conv.deleted) {
+            [arr addObject:conv];
+        }
+    }
+    if (arr.count > 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConversationUpdate object:arr];
+    }
 }
 
 ///会话被删除时
