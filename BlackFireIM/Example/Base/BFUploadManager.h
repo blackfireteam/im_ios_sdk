@@ -6,37 +6,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MSIMElem.h"
-
+#import "MSIMSDK.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BFUploadManager : NSObject
+@interface BFUploadManager : NSObject<MSUploadMediator>
 
-///上传图片到cos
-+ (void)uploadImageToCOS:(MSIMImageElem *)imageElem
-          uploadProgress:(void(^)(CGFloat progress))progress
-                 success:(void(^)(NSString *url))success
-                  failed:(void(^)(NSInteger code,NSString *desc))failed;
-
-///上传视频到cos
-+ (void)uploadVideoToCOS:(MSIMVideoElem *)videoElem
-          uploadProgress:(void(^)(CGFloat progress))progress
-                 success:(void(^)(NSString *coverUrl,NSString *videoUrl))success
-                  failed:(void(^)(NSInteger code,NSString *desc))failed;
-
-///上传音频到cos
-+ (void)uploadVoiceToCOS:(MSIMVoiceElem *)voiceElem
-          uploadProgress:(void(^)(CGFloat progress))progress
-                 success:(void(^)(NSString *url))success
-                  failed:(void(^)(NSInteger code,NSString *desc))failed;
-
-///从COS下载文件
-+ (void)downloadFileFromCOS:(NSString *)url
-                 toSavePath:(NSString *)savePath
-                   progress:(void(^)(CGFloat progress))progress
-                    success:(void(^)(void))success
-                     failed:(void(^)(NSInteger code,NSString *desc))failed;
++ (instancetype)sharedInstance;
 
 @end
 

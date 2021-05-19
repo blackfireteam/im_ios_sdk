@@ -76,6 +76,8 @@
     _titleView = [[BFNaviBarIndicatorView alloc]init];
     [_titleView setTitle:@"MESSAGE"];
     self.navigationItem.titleView = _titleView;
+
+    [self updateTitleViewWith:MSIMManager.sharedInstance.connStatus];
 }
 
 - (void)setupViews
@@ -113,7 +115,6 @@
 - (void)loadConversation
 {
     WS(weakSelf)
-    NSInteger start = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     [[MSIMManager sharedInstance] getConversationList:self.lastConvSign succ:^(NSArray<MSIMConversation *> * _Nonnull convs, NSInteger nexSeq, BOOL isFinished) {
         weakSelf.lastConvSign = nexSeq;
         [weakSelf updateConversation: convs];
@@ -122,7 +123,6 @@
         }else {
             [weakSelf.tableView.mj_footer endRefreshing];
         }
-        NSLog(@"加载会话列表耗时 = %f s",([MSIMTools sharedInstance].adjustLocalTimeInterval-start)/1000.0/1000.0);
         } fail:^(NSInteger code, NSString * _Nonnull desc) {
             [weakSelf.tableView.mj_footer endRefreshing];
     }];
@@ -167,6 +167,11 @@
 - (void)onNetworkChanged:(NSNotification *)notification
 {
     BFIMNetStatus status = [notification.object intValue];
+    [self updateTitleViewWith:status];
+}
+
+- (void)updateTitleViewWith:(BFIMNetStatus)status
+{
     switch (status) {
         case IMNET_STATUS_SUCC:
             [_titleView stopAnimating];

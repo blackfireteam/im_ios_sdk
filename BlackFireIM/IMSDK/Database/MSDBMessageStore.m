@@ -493,7 +493,7 @@ static NSString *ext_data = @"ext_data";
     history.msgEnd = msgEnd;
     history.msgStart = msgStart;
     NSLog(@"[发送消息]GetHistory:\n%@",history);
-    [[MSIMManager sharedInstance]send:[history data] protoType:XMChatProtoTypeGetHistoryMsg needToEncry:NO sign:history.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [[MSIMManager sharedInstance].socket send:[history data] protoType:XMChatProtoTypeGetHistoryMsg needToEncry:NO sign:history.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
             ChatRBatch *batch = response;
             NSArray<MSIMElem *> *msgs = [[MSIMManager sharedInstance] chatHistoryHandler:batch.msgsArray];
@@ -580,7 +580,7 @@ static NSString *ext_data = @"ext_data";
         elem = voiceElem;
     }else if (type == BFIM_MSG_TYPE_CUSTOM) {
         MSIMCustomElem *customElem = [[MSIMCustomElem alloc]init];
-        customElem.data = extData;
+        customElem.jsonStr = [[NSString alloc]initWithData:extData encoding:NSUTF8StringEncoding];
         elem = customElem;
     }
     elem.msg_id = [rsSet longLongIntForColumn:@"msg_id"];

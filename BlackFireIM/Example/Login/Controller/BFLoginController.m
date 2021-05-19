@@ -17,6 +17,8 @@
 #import "MSIMKit.h"
 #import "BFSignInStepOneController.h"
 #import "BFRegisterInfo.h"
+#import "BFProfileService.h"
+
 
 @interface BFLoginController ()
 
@@ -72,15 +74,20 @@
 {
     [self.view endEditing:YES];
     NSString *phone = [self.phoneTF.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (phone.length != 11) {
-        [SVProgressHUD showErrorWithStatus:@"请输入完整手机号"];
-        return;
-    }
+//    if (phone.length != 11) {
+//        [SVProgressHUD showErrorWithStatus:@"请输入完整手机号"];
+//        return;
+//    }
     self.registerInfo.phone = phone;
     //1.获取IM—token
     WS(weakSelf)
-    [[MSIMManager sharedInstance]getIMToken:phone succ:^(NSString * _Nonnull userToken) {
+    if ([MSIMManager sharedInstance].connStatus != IMNET_STATUS_SUCC) {
+        [SVProgressHUD showInfoWithStatus:@"正在建立TCP连接"];
+        return;
+    }
+    [BFProfileService requestIMToken:phone success:^(NSDictionary * _Nonnull dic) {
         //2.登录
+        NSString *userToken = dic[@"token"];
         weakSelf.registerInfo.userToken = userToken;
         [[MSIMManager sharedInstance]login:userToken succ:^{
                     
@@ -89,17 +96,15 @@
                 } failed:^(NSInteger code, NSString * _Nonnull desc) {
                     [SVProgressHUD showInfoWithStatus:desc];
         }];
-        
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            
-            if (code == ERR_USER_NOT_REGISTER) {//未注册，起注册流程
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"手机号未注册，现在注册吗?" preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [weakSelf needToSignIn];
-                }]];
-                [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
-                [weakSelf presentViewController:alert animated:YES completion:nil];
-            }
+    } fail:^(NSError * _Nonnull error) {
+        if (error.code == ERR_USER_NOT_REGISTER) {//未注册，起注册流程
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"手机号未注册，现在注册吗?" preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf needToSignIn];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }
     }];
 }
 

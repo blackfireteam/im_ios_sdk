@@ -34,6 +34,7 @@
 @property (nonatomic, strong) NSMutableArray *heightCache;
 
 @property (nonatomic, assign) BOOL isScrollBottom;
+@property(nonatomic,assign) BOOL isShowKeyboard;
 @property (nonatomic, assign) BOOL firstLoad;
 @property (nonatomic, assign) BOOL isLoadingMsg;
 @property (nonatomic, assign) BOOL noMoreMsg;
@@ -96,6 +97,9 @@
         [weakSelf recieveMessageReceipt:note];
     }];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHidden) name:UIKeyboardWillHideNotification object:nil];
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapViewController)];
     [self.view addGestureRecognizer:tap];
     
@@ -139,18 +143,11 @@
 
 - (void)readedReport:(NSArray<BFMessageCellData *> *)datas
 {
-    if (datas == nil) return;
-    for (NSInteger i = datas.count-1; i >= 0; i--) {
-        BFMessageCellData *data = datas[i];
-        if (data.elem && data.elem.isSelf == NO) {
-            [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id lastMsgID:data.elem.msg_id succ:^{
-                    
-                } failed:^(NSInteger code, NSString * _Nonnull desc) {
-    
-            }];
-            break;
-        }
-    }
+    [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id succ:^{
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+
+    }];
 }
 
 ///重发消息
@@ -223,7 +220,6 @@
     NSMutableArray *uiMsgs = [NSMutableArray array];
     for (NSInteger k = elems.count-1; k >= 0; --k) {
         MSIMElem *elem = elems[k];
-        if (![elem.partner_id isEqualToString:self.partner_id]) continue;
         // 时间信息
         BFSystemMessageCellData *dateMsg = [self transSystemMsgFromDate: elem.msg_sign];
         
@@ -281,9 +277,9 @@
 
 - (BFSystemMessageCellData *)transSystemMsgFromDate:(NSInteger)date
 {
-    if(self.msgForDate == nil || labs(date - self.msgForDate.msg_sign)/1000/1000 > MAX_MESSAGE_SEP_DLAY){
+    if(self.msgForDate == nil || labs(date - self.msgForDate.msg_sign)/1000/1000/10 > MAX_MESSAGE_SEP_DLAY){
         BFSystemMessageCellData *system = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
-        system.content = [[NSDate dateWithTimeIntervalSince1970:date/1000/1000] ms_messageString];
+        system.content = [[NSDate dateWithTimeIntervalSince1970:date/1000/1000/10] ms_messageString];
         return system;
     }
     return nil;
@@ -293,23 +289,41 @@
 - (void)onNewMessage:(NSNotification *)note
 {
     NSArray *elems = note.object;
-    NSMutableArray *uiMsgs = [self transUIMsgFromIMMsg:elems];
+    //消息去重
+    NSMutableArray *tempArr = [NSMutableArray array];
+    for (MSIMElem *elem in elems) {
+        if (![elem.partner_id isEqualToString:self.partner_id]) return;
+        BOOL isExsit = NO;
+        for (BFMessageCellData *data in self.uiMsgs) {
+            if (elem.msg_id > 0 && elem.msg_id == data.elem.msg_id) {
+                isExsit = YES;
+                break;
+            }
+            if (elem.msg_sign == data.elem.msg_sign) {
+                isExsit = YES;
+                data.elem = elem;
+                [self.tableView reloadData];
+                break;
+            }
+        }
+        if (isExsit == NO) {
+            [tempArr addObject:elem];
+        }
+    }
+    
+    NSMutableArray *uiMsgs = [self transUIMsgFromIMMsg:tempArr];
     if (uiMsgs.count) {
         //当前列表是否停留在底部
         BOOL isAtBottom = (self.tableView.contentOffset.y + self.tableView.height + 20 >= self.tableView.contentSize.height);
-        [self.tableView beginUpdates];
-        for (BFMessageCellData *data in uiMsgs) {
-            [self.uiMsgs addObject:data];
-            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_uiMsgs.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        }
-        [self.tableView endUpdates];
+        [self.uiMsgs addObjectsFromArray:uiMsgs];
+        [self.tableView reloadData];
         //当列表没有停留在底部时，不自动滚动显示出新消息。会在底部显示未读数，点击滚动到底部。
         //适当增加些容错
-        if (isAtBottom) {
+        if (isAtBottom || self.isShowKeyboard) {
             [self scrollToBottom:YES];
             [self readedReport: uiMsgs];//标记已读
         }else {
-            [self.countTipView increaseCount];
+            [self.countTipView increaseCount: tempArr.count];
         }
     }
 }
@@ -372,6 +386,16 @@
             self.navigationItem.title = info.nick_name;
         }
     }
+}
+
+- (void)keyboardWillShow
+{
+    self.isShowKeyboard = YES;
+}
+
+- (void)keyboardWillHidden
+{
+    self.isShowKeyboard = NO;
 }
 
 - (void)scrollToBottom:(BOOL)animate
@@ -473,7 +497,7 @@
     if ([data isKindOfClass:[BFTextMessageCellData class]]) {
         [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Copy) action:@selector(onCopyMsg:)]];
     }
-    if (data.elem.isSelf && data.elem.sendStatus == BFIM_MSG_STATUS_SEND_SUCC) {
+    if (data.elem.isSelf && data.elem.sendStatus == BFIM_MSG_STATUS_SEND_SUCC && data.elem.type != BFIM_MSG_TYPE_CUSTOM) {
         [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Revoke) action:@selector(onRevoke:)]];
     }
     UIMenuController *vc = [UIMenuController sharedMenuController];

@@ -36,10 +36,8 @@ typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSI
                       succ:(MSIMSucc)succed
                     failed:(MSIMFail)failed;
 
-///标记消息已读状态
-///msgID 标记为已读的消息的最后一条 id
+///标记消息已读
 - (void)markC2CMessageAsRead:(NSString *)user_id
-                   lastMsgID:(NSInteger)msgID
                         succ:(MSIMSucc)succed
                       failed:(MSIMFail)failed;
 

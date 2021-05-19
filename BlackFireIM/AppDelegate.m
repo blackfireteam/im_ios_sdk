@@ -8,10 +8,9 @@
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
 #import "BFLoginController.h"
-#import "MSIMTools.h"
 #import "BFNavigationController.h"
-#import "MSIMManager.h"
 #import "MSIMKit.h"
+#import "BFUploadManager.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import <Bugly/Bugly.h>
 
@@ -28,7 +27,10 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    [[MSIMKit sharedInstance] initWithConfig:[IMSDKConfig defaultConfig]];
+    IMSDKConfig *imConfig = [IMSDKConfig defaultConfig];
+    imConfig.uploadMediator = [BFUploadManager sharedInstance];
+    [[MSIMKit sharedInstance] initWithConfig:imConfig];
+    
     if ([MSIMTools sharedInstance].user_sign) {
         self.window.rootViewController = [[BFTabBarController alloc] init];
     }else {

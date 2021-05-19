@@ -39,7 +39,6 @@
         conv.chat_type = BFIM_CHAT_TYPE_C2C;
         conv.partner_id = [NSString stringWithFormat:@"%lld",item.uid];
         conv.msg_end = item.msgEnd;
-        conv.show_msg_sign = item.showMsgTime;
         conv.msg_last_read = item.msgLastRead;
         conv.unread_count = item.unread;
         conv.deleted = item.deleted;
@@ -76,7 +75,7 @@
         //更新会话缓存
         [[MSConversationProvider provider]updateConversations:self.convCaches];
         //同步最后一页聊天数据,如果需要同步的会话太多时，只同步最多50条
-        NSArray *firstPageConvs = (self.convCaches.count > self.config.chatListPageCount ? [self.convCaches subarrayWithRange:NSMakeRange(0, self.config.chatListPageCount)] : self.convCaches);
+        NSArray *firstPageConvs = (self.convCaches.count > self.socket.config.chatListPageCount ? [self.convCaches subarrayWithRange:NSMakeRange(0, self.socket.config.chatListPageCount)] : self.convCaches);
         [self updateConvLastMessage:firstPageConvs];
         self.isChatListResult = YES;
         [self updateChatListUpdateTime:MAX(self.chatUpdateTime, update_time)];
@@ -161,6 +160,10 @@
                 [tempConvs removeAllObjects];
                 [tempIncreases removeAllObjects];
             }
+            //与服务器同步下来的聊天记录，通知聊天详情页刷新。很有可能会有消息重复，详情页需要做去重
+            if ([self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
+                [self.msgListener onNewMessages:data];
+            }
         }];
     }
 }
@@ -168,7 +171,7 @@
 ///收到服务器下发的消息处理
 - (void)recieveMessage:(ChatR *)response
 {
-    MSIMElem *elem = [self chatHistoryHandler:@[response]].lastObject;
+    MSIMElem *elem = [self transferChatItem:@[response] isHistory:NO].lastObject;
     if (elem.type == BFIM_MSG_TYPE_NULL) {
         MSIMElem *showElem = [self.messageStore lastShowMessage:elem.partner_id];
         showElem.msg_id = elem.msg_id;
@@ -179,8 +182,6 @@
         }
         [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:(elem.isSelf ? @[@(NO)] : @[@(YES)]) isConvLastMessage:NO];
     }
-    //更新会话更新时间
-    [self updateChatListUpdateTime:elem.msg_sign];
     //更新profile
     MSProfileInfo *fromProfile = [[MSProfileProvider provider]providerProfileFromLocal:response.fromUid];
     if (!fromProfile) {
@@ -195,6 +196,12 @@
 ///服务器返回的历史数据处理
 - (NSArray<MSIMElem *> *)chatHistoryHandler:(NSArray<ChatR *> *)responses
 {
+    NSArray *arr = [self transferChatItem:responses isHistory: YES];
+    return arr;
+}
+
+- (NSArray<MSIMElem *> *)transferChatItem:(NSArray<ChatR *> *)responses isHistory:(BOOL)isHistory
+{
     NSMutableArray *recieves = [NSMutableArray array];
     for (ChatR *response in responses) {
         MSIMElem *elem = nil;
@@ -207,7 +214,7 @@
             elem.toUid = [NSString stringWithFormat:@"%lld",response.toUid];
             elem.revoke_msg_id = response.body.integerValue;
             [self.messageStore updateMessageRevoke:elem.revoke_msg_id partnerID:elem.partner_id];
-            [self sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
+            [self.socket sendMessageResponse:response.sign resultCode:ERR_SUCC resultMsg:@"消息已撤回" response:response];
             
             if ([self.msgListener respondsToSelector:@selector(onRevokeMessage:)]) {
                 [self.msgListener onRevokeMessage:elem];
@@ -245,7 +252,7 @@
             elem.type = BFIM_MSG_TYPE_REVOKE;
         }else if (response.type == BFIM_MSG_TYPE_CUSTOM) {
             MSIMCustomElem *customElem = [[MSIMCustomElem alloc]init];
-            customElem.data = [response.body dataUsingEncoding:NSUTF8StringEncoding];
+            customElem.jsonStr = response.body;
             customElem.type = BFIM_MSG_TYPE_CUSTOM;
             elem = customElem;
         }else {//未知消息
@@ -256,7 +263,11 @@
         elem.fromUid = [NSString stringWithFormat:@"%lld",response.fromUid];
         elem.toUid = [NSString stringWithFormat:@"%lld",response.toUid];
         elem.msg_id = response.msgId;
-        elem.msg_sign = response.msgTime;
+        if (response.sign > 0) {
+            elem.msg_sign = response.sign;
+        }else {
+            elem.msg_sign = response.msgTime*10;
+        }
         elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
         MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:elem.partner_id];
         if (elem.isSelf && elem.msg_id > conv.msg_last_read) {
@@ -265,6 +276,10 @@
             elem.readStatus = BFIM_MSG_STATUS_READ;
         }
         [recieves addObject:elem];
+        //更新会话更新时间
+        if (isHistory == NO) {
+            [self updateChatListUpdateTime:response.msgTime];
+        }
     }
     [self.messageStore addMessages:recieves];
     return recieves;
@@ -319,7 +334,7 @@
 ///服务器返回的删除会话的处理
 - (void)deleteChatHandler:(ChatItemUpdate *)result
 {
-    [self sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"" response:result];
+    [self.socket sendMessageResponse:result.sign resultCode:ERR_SUCC resultMsg:@"" response:result];
     NSString *partner_id = [NSString stringWithFormat:@"%lld",result.uid];
     [[MSConversationProvider provider]deleteConversation: partner_id];
     if (self.convListener && [self.convListener respondsToSelector:@selector(conversationDidDelete:)]) {

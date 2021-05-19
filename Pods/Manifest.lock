@@ -16,6 +16,9 @@ PODS:
     - AFNetworking/NSURLSession
   - Bugly (2.5.90)
   - CocoaAsyncSocket (7.6.5)
+  - CocoaLumberjack (3.7.2):
+    - CocoaLumberjack/Core (= 3.7.2)
+  - CocoaLumberjack/Core (3.7.2)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -30,14 +33,12 @@ PODS:
   - SDWebImage/Core (5.9.0)
   - SVProgressHUD (2.2.5)
   - TZImagePickerController (3.5.8)
-  - YYImage (1.0.4):
-    - YYImage/Core (= 1.0.4)
-  - YYImage/Core (1.0.4)
 
 DEPENDENCIES:
   - AFNetworking
   - Bugly
   - CocoaAsyncSocket
+  - CocoaLumberjack
   - FMDB
   - lottie-ios (= 2.5.3)
   - MJRefresh
@@ -46,13 +47,13 @@ DEPENDENCIES:
   - SDWebImage
   - SVProgressHUD
   - TZImagePickerController
-  - YYImage (from `https://github.com/QiuYeHong90/YYImage.git`)
 
 SPEC REPOS:
   trunk:
     - AFNetworking
     - Bugly
     - CocoaAsyncSocket
+    - CocoaLumberjack
     - FMDB
     - lottie-ios
     - MJRefresh
@@ -63,19 +64,11 @@ SPEC REPOS:
     - SVProgressHUD
     - TZImagePickerController
 
-EXTERNAL SOURCES:
-  YYImage:
-    :git: https://github.com/QiuYeHong90/YYImage.git
-
-CHECKOUT OPTIONS:
-  YYImage:
-    :commit: 4164acb76e8979c0612530bd874e099a1fa51e9d
-    :git: https://github.com/QiuYeHong90/YYImage.git
-
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   Bugly: 88bc32c0acc6fef7b74d610f0319ee7560d6b9fe
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
@@ -85,8 +78,7 @@ SPEC CHECKSUMS:
   SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   TZImagePickerController: 7fd9702897ef8c0b7c951e5463f4bcf398296f9e
-  YYImage: 20ec986d18a8d0ad421619d166a9e628097e2433
 
-PODFILE CHECKSUM: 4e55ffb4874e205a83ef4c003d53d0766811abeb
+PODFILE CHECKSUM: 8d79d347af1d9f4b38155702dd96b0f0f40026c1
 
 COCOAPODS: 1.10.1

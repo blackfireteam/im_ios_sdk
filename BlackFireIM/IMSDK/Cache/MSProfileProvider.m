@@ -94,7 +94,7 @@ static MSProfileProvider *instance;
             getP.updateTime = 0;
             getP.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
             MSLog(@"[发送消息]GetProfile: %@",getP);
-            [[MSIMManager sharedInstance]send:[getP data] protoType:XMChatProtoTypeGetProfile needToEncry:NO sign:getP.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+            [[MSIMManager sharedInstance].socket send:[getP data] protoType:XMChatProtoTypeGetProfile needToEncry:NO sign:getP.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     MSProfileInfo *info;
                     if (code == ERR_SUCC) {
@@ -185,7 +185,7 @@ static MSProfileProvider *instance;
     request.getProfilesArray = pArr;
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     MSLog(@"[发送消息]GetProfiles:\n%@",request);
-    [[MSIMManager sharedInstance]send:[request data] protoType:XMChatProtoTypeGetProfiles needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [[MSIMManager sharedInstance].socket send:[request data] protoType:XMChatProtoTypeGetProfiles needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         if (code == ERR_SUCC) {
             
         }

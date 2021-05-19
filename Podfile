@@ -13,9 +13,9 @@ pod 'lottie-ios','2.5.3'
 pod 'MJRefresh'
 pod 'SDWebImage'
 pod 'SVProgressHUD'
-pod 'YYImage', :git => 'https://github.com/QiuYeHong90/YYImage.git'
 pod 'QCloudCOSXML/Transfer'
 
+pod 'CocoaLumberjack'
 pod 'Bugly'
 
 end

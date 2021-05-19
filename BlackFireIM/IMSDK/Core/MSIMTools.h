@@ -29,6 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///获取会话列表更新时间
 - (NSInteger)convUpdateTime;
 
+///清空会话列表更新时间
+- (void)cleanConvUpdateTime;
+
 @end
 
 NS_ASSUME_NONNULL_END

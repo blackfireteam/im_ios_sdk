@@ -48,7 +48,7 @@
     
     self.errL = [[UILabel alloc]initWithFrame:CGRectMake(self.nickNameTF.x, lineView.maxY+8, self.nickNameTF.width, 20)];
     self.errL.font = [UIFont systemFontOfSize:15];
-    self.errL.textColor = RGB(153, 153, 153);
+    self.errL.textColor = [UIColor redColor];
     [self.view addSubview:self.errL];
     
     self.nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];

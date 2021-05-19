@@ -12,7 +12,6 @@
 #import <TZImagePickerController.h>
 #import "BFRegisterInfo.h"
 #import <SVProgressHUD.h>
-#import "BFUploadManager.h"
 #import "MSIMSDK.h"
 #import "MSIMKit.h"
 #import "AppDelegate.h"
@@ -78,14 +77,17 @@
     [SVProgressHUD show];
     MSIMImageElem *elem = [[MSIMImageElem alloc]init];
     elem.image = self.info.avatarImage;
-    [BFUploadManager uploadImageToCOS:elem uploadProgress:^(CGFloat progress) {
+    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:elem.image fileType:BFIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
         
-    } success:^(NSString * _Nonnull url) {
+    } succ:^(NSString * _Nonnull url) {
+        
         self.info.avatarUrl = url;
         [self reqeustToSignUp];
         
-    } failed:^(NSInteger code, NSString * _Nonnull desc) {
+    } fail:^(NSInteger code, NSString * _Nonnull desc) {
+        
         [SVProgressHUD showErrorWithStatus:desc];
+        
     }];
 }
 

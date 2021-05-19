@@ -176,18 +176,18 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     MSIMCustomElem *elem = [[[self class] allocWithZone:zone]init];
-    elem.data = self.data;
+    elem.jsonStr = self.jsonStr;
     return elem;
 }
 
 - (NSData *)extData
 {
-    return  self.data;
+    return  [self.jsonStr dataUsingEncoding:NSUTF8StringEncoding];
 }
 
 - (NSString *)displayStr
 {
-    return @"[wink]";
+    return @"[like]";
 }
 
 @end

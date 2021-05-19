@@ -13,7 +13,6 @@
 #import "BFHomeController.h"
 #import "NSBundle+BFKit.h"
 #import "MSIMKit.h"
-#import "MSIMSDK.h"
 #import "AppDelegate.h"
 #import "BFLoginController.h"
 

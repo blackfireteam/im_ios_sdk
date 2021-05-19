@@ -6,8 +6,8 @@
 //
 
 #import "MSIMKit.h"
-#import "MSIMErrorCode.h"
-#import "MSIMConversation.h"
+
+
 
 @interface MSIMKit()<MSIMMessageListener,MSIMProfileListener,MSIMConversationListener,MSIMSDKListener>
 
@@ -27,11 +27,12 @@
 
 - (void)initWithConfig:(IMSDKConfig *)config
 {
-    [[MSIMManager sharedInstance] initWithConfig:config listener:self];
+    [[MSIMManager sharedInstance] initSDK:config listener:self];
     [MSIMManager sharedInstance].msgListener = self;
     [MSIMManager sharedInstance].connListener = self;
     [MSIMManager sharedInstance].convListener = self;
     [MSIMManager sharedInstance].profileListener = self;
+    [MSIMManager sharedInstance].uploadMediator = config.uploadMediator;
 }
 
 

@@ -81,6 +81,7 @@
     if (fromUid) {
         MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:fromUid];
         [self.avatarView sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:data.defaultAvatar];
+//        self.nameLabel.text = [NSString stringWithFormat:@"%@",profile.nick_name];
         self.nameLabel.text = [NSString stringWithFormat:@"%@--%zd",profile.nick_name,data.elem.msg_id];
     }
     

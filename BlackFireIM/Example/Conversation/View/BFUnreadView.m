@@ -25,7 +25,7 @@
         unReadStr = @"99+";
     }
     _unReadLabel.text = unReadStr;
-    self.hidden = (num == 0? YES: NO);
+    self.hidden = (num <= 0? YES: NO);
     [self defaultLayout];
 }
 

@@ -18,7 +18,6 @@
 #import <SDWebImage.h>
 #import "BFProfileHeaderView.h"
 #import <TZImagePickerController.h>
-#import "BFUploadManager.h"
 #import "BFProfileService.h"
 
 
@@ -106,7 +105,7 @@
 {
     MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
     info.gold = sw.isOn;
-    info.gold_exp = [MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60;
+    info.gold_exp = [MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000/10 + 7*24*60*60;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
@@ -223,7 +222,7 @@
     UIImage *image = photos.firstObject;
     PHAsset *asset = assets.firstObject;
     if (image.size.width > 1920 || image.size.height > 1920) {
-        CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height );
+        CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height);
         CGFloat aspectWidth = image.size.width * aspectRatio;
         CGFloat aspectHeight = image.size.height * aspectRatio;
 
@@ -239,13 +238,16 @@
     imageElem.height = image.size.height;
     imageElem.uuid = asset.localIdentifier;
     
-    [BFUploadManager uploadImageToCOS:imageElem uploadProgress:^(CGFloat progress) {
+    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:BFIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
         
-    } success:^(NSString * _Nonnull url) {
+    } succ:^(NSString * _Nonnull url) {
+        
         [self editAvatar:url];
         
-    } failed:^(NSInteger code, NSString * _Nonnull desc) {
+    } fail:^(NSInteger code, NSString * _Nonnull desc) {
+        
         [SVProgressHUD showErrorWithStatus:desc];
+        
     }];
 }
 

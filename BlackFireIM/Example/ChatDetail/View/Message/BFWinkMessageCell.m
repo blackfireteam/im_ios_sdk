@@ -26,7 +26,7 @@
         
         _noticeL = [[UILabel alloc]init];
         _noticeL.font = [UIFont systemFontOfSize:12];
-        _noticeL.text = @"wink";
+        _noticeL.text = @"like";
         _noticeL.textAlignment = NSTextAlignmentRight;
         _noticeL.textColor = [UIColor d_systemGrayColor];
         [self.container addSubview:_noticeL];

@@ -14,6 +14,7 @@
 #import "MSIMConst.h"
 #import "IMSDKConfig.h"
 #import "NSDictionary+Ext.h"
+#import "NSString+Ext.h"
 #import "MSIMManager+Message.h"
 #import "MSIMManager+Conversation.h"
 #import "MSProfileProvider.h"
@@ -23,7 +24,6 @@
 #import "MSIMMessageReceipt.h"
 #import "MSIMManager+Demo.h"
 #import "MSIMErrorCode.h"
-
 
 
 #endif /* MSIMSDK_h */

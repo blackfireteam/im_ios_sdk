@@ -57,10 +57,10 @@
 }
 
 /** 创建自定义消息 */
-- (MSIMCustomElem *)createCustomMessage:(NSData *)data
+- (MSIMCustomElem *)createCustomMessage:(NSString *)jsonStr
 {
     MSIMCustomElem *elem = [[MSIMCustomElem alloc]init];
-    elem.data = data;
+    elem.jsonStr = jsonStr;
     elem.type = BFIM_MSG_TYPE_CUSTOM;
     [self initDefault:elem];
     return elem;
@@ -137,7 +137,7 @@
     chats.toUid = elem.toUid.integerValue;
     WS(weakSelf)
     MSLog(@"[发送文本消息]ChatS:\n%@",chats);
-    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {
@@ -188,34 +188,35 @@
           successed:(void(^)(NSInteger msg_id))success
              failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
-    [BFUploadManager uploadImageToCOS:elem uploadProgress:^(CGFloat progress) {
+    WS(weakSelf)
+    [self.uploadMediator ms_uploadWithObject:elem.image ? elem.image : elem.path
+                                    fileType:BFIM_MSG_TYPE_IMAGE
+                                    progress:^(CGFloat progress) {
+        elem.progress = progress;
+        [weakSelf.msgListener onMessageUpdateSendStatus:elem];
+    }
+                                        succ:^(NSString * _Nonnull url) {
+        elem.progress = 1;
+        elem.url = url;
+        if (elem.uuid.length) {
+            MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
+            MSFileInfo *info = [[MSFileInfo alloc]init];
+            info.uuid = elem.uuid;
+            info.url = elem.url;
+            [store addRecord:info];
+        }
+        //上传成功，清除沙盒中的缓存
+        [[NSFileManager defaultManager]removeItemAtPath:elem.path error:nil];
         
-         elem.progress = progress;
-         [self.msgListener onMessageUpdateSendStatus:elem];
-        } success:^(NSString * _Nonnull url) {
-            
-            elem.progress = 1;
-            elem.url = url;
-            if (elem.uuid.length) {
-                MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
-                MSFileInfo *info = [[MSFileInfo alloc]init];
-                info.uuid = elem.uuid;
-                info.url = elem.url;
-                [store addRecord:info];
-            }
-            //上传成功，清除沙盒中的缓存
-            [[NSFileManager defaultManager]removeItemAtPath:elem.path error:nil];
-            
-            [self.messageStore addMessage:elem];
-            [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
-            [self sendImageMessageByTCP:elem successed:success failed:failed];
-            
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            
-            elem.progress = 0;
-            [self sendMessageFailedHandler:elem code:code error:desc];
-            if (failed) failed(code,desc);
+        [weakSelf.messageStore addMessage:elem];
+        [weakSelf.msgListener onMessageUpdateSendStatus:elem];
+        [weakSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
+        [weakSelf sendImageMessageByTCP:elem successed:success failed:failed];
+    }
+                                        fail:^(NSInteger code, NSString * _Nonnull desc) {
+        elem.progress = 0;
+        [weakSelf sendMessageFailedHandler:elem code:code error:desc];
+        if (failed) failed(code,desc);
     }];
 }
 
@@ -232,7 +233,7 @@
     chats.height = elem.height;
     WS(weakSelf)
     MSLog(@"[发送图片消息]ChatS:\n%@",chats);
-    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {
@@ -281,39 +282,84 @@
           successed:(void(^)(NSInteger msg_id))success
              failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
-    [BFUploadManager uploadVideoToCOS:elem uploadProgress:^(CGFloat progress) {
-        
-        elem.progress = progress;
-        [self.msgListener onMessageUpdateSendStatus:elem];
-        
-    } success:^(NSString * _Nonnull coverUrl, NSString * _Nonnull videoUrl) {
-        
-        elem.progress = 1;
-        elem.coverUrl = coverUrl;
-        elem.videoUrl = videoUrl;
-        if (elem.uuid.length) {
-            MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
-            MSFileInfo *info = [[MSFileInfo alloc]init];
-            info.uuid = elem.uuid;
-            info.url = elem.videoUrl;
-            [store addRecord:info];
+    WS(weakSelf)
+    if ([elem.videoUrl hasPrefix:@"http"]) {
+        //只需要上传图片
+        [self.uploadMediator ms_uploadWithObject:elem.coverImage ? elem.coverImage : elem.coverPath
+                                        fileType:BFIM_MSG_TYPE_IMAGE
+                                        progress:^(CGFloat progress) {
+            elem.progress = progress;
+            [weakSelf.msgListener onMessageUpdateSendStatus:elem];
         }
-        //上传成功，清除沙盒中的缓存
-        [[NSFileManager defaultManager]removeItemAtPath:elem.coverPath error:nil];
-        [[NSFileManager defaultManager]removeItemAtPath:elem.videoPath error:nil];
-        
-        [self.messageStore addMessage:elem];
-        [self.msgListener onMessageUpdateSendStatus:elem];
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
-        [self sendVideoMessageByTCP:elem successed:success failed:failed];
-        
-    } failed:^(NSInteger code, NSString * _Nonnull desc) {
-        
-        elem.progress = 0;
-        [self sendMessageFailedHandler:elem code:code error:desc];
-        if (failed) failed(code,desc);
-        
-    }];
+                                            succ:^(NSString * _Nonnull url) {
+            elem.progress = 1;
+            elem.coverUrl = url;
+            if (elem.uuid.length) {
+                MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
+                MSFileInfo *info = [[MSFileInfo alloc]init];
+                info.uuid = elem.uuid;
+                info.url = elem.videoUrl;
+                [store addRecord:info];
+            }
+            //上传成功，清除沙盒中的缓存
+            [[NSFileManager defaultManager]removeItemAtPath:elem.coverPath error:nil];
+            [[NSFileManager defaultManager]removeItemAtPath:elem.videoPath error:nil];
+            
+            [weakSelf.messageStore addMessage:elem];
+            [weakSelf.msgListener onMessageUpdateSendStatus:elem];
+            [weakSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
+            [weakSelf sendVideoMessageByTCP:elem successed:success failed:failed];
+        }
+                                            fail:^(NSInteger code, NSString * _Nonnull desc) {
+            elem.progress = 0;
+            [weakSelf sendMessageFailedHandler:elem code:code error:desc];
+            if (failed) failed(code,desc);
+        }];
+    }else {
+        //先上传图片
+        [self.uploadMediator ms_uploadWithObject:elem.coverImage ? elem.coverImage : elem.coverPath
+                                        fileType:BFIM_MSG_TYPE_IMAGE
+                                        progress:^(CGFloat coverProgress) {
+            elem.progress = coverProgress*0.2;
+            [weakSelf.msgListener onMessageUpdateSendStatus:elem];
+        }
+                                            succ:^(NSString * _Nonnull coverUrl) {
+            elem.progress = 0.2;
+            elem.coverUrl = coverUrl;
+            //再上传视频
+            [self.uploadMediator ms_uploadWithObject:elem.videoPath fileType:BFIM_MSG_TYPE_VIDEO progress:^(CGFloat videoProgress) {
+                elem.progress = 0.2 + videoProgress*0.8;
+                [weakSelf.msgListener onMessageUpdateSendStatus:elem];
+            } succ:^(NSString * _Nonnull videoUrl) {
+                
+                elem.videoUrl = videoUrl;
+                if (elem.uuid.length) {
+                    MSDBFileRecordStore *store = [[MSDBFileRecordStore alloc]init];
+                    MSFileInfo *info = [[MSFileInfo alloc]init];
+                    info.uuid = elem.uuid;
+                    info.url = elem.videoUrl;
+                    [store addRecord:info];
+                }
+                //上传成功，清除沙盒中的缓存
+                [[NSFileManager defaultManager]removeItemAtPath:elem.coverPath error:nil];
+                [[NSFileManager defaultManager]removeItemAtPath:elem.videoPath error:nil];
+                [weakSelf.messageStore addMessage:elem];
+                [weakSelf.msgListener onMessageUpdateSendStatus:elem];
+                [weakSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
+                [weakSelf sendVideoMessageByTCP:elem successed:success failed:failed];
+                
+            } fail:^(NSInteger code, NSString * _Nonnull desc) {
+                elem.progress = 0;
+                [weakSelf sendMessageFailedHandler:elem code:code error:desc];
+                if (failed) failed(code,desc);
+            }];
+        }
+                                            fail:^(NSInteger code, NSString * _Nonnull desc) {
+            elem.progress = 0;
+            [weakSelf sendMessageFailedHandler:elem code:code error:desc];
+            if (failed) failed(code,desc);
+        }];
+    }
 }
 
 - (void)sendVideoMessageByTCP:(MSIMVideoElem *)elem
@@ -331,7 +377,7 @@
     chats.duration = elem.duration;
     WS(weakSelf)
     MSLog(@"[发送视频消息]ChatS:\n%@",chats);
-    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == 0) {
@@ -371,23 +417,22 @@
           successed:(void(^)(NSInteger msg_id))success
              failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
-    [BFUploadManager uploadVoiceToCOS:elem uploadProgress:^(CGFloat progress) {
+    WS(weakSelf)
+    [self.uploadMediator ms_uploadWithObject:elem.path fileType:BFIM_MSG_TYPE_VOICE progress:^(CGFloat progress) {
         
-        } success:^(NSString * _Nonnull url) {
-            
-            elem.url = url;
-            //上传成功，清除沙盒中的缓存
-            [[NSFileManager defaultManager]removeItemAtPath:elem.path error:nil];
-            
-            [self.messageStore addMessage:elem];
-            [self.msgListener onMessageUpdateSendStatus:elem];
-            [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
-            [self sendVoiceMessageByTCP:elem successed:success failed:failed];
-            
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            
-            [self sendMessageFailedHandler:elem code:code error:desc];
-            if (failed) failed(code,desc);
+    } succ:^(NSString * _Nonnull url) {
+        elem.url = url;
+        //上传成功，清除沙盒中的缓存
+        [[NSFileManager defaultManager]removeItemAtPath:elem.path error:nil];
+        
+        [weakSelf.messageStore addMessage:elem];
+        [weakSelf.msgListener onMessageUpdateSendStatus:elem];
+        [weakSelf elemNeedToUpdateConversations:@[elem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
+        [weakSelf sendVoiceMessageByTCP:elem successed:success failed:failed];
+        
+    } fail:^(NSInteger code, NSString * _Nonnull desc) {
+        [weakSelf sendMessageFailedHandler:elem code:code error:desc];
+        if (failed) failed(code,desc);
     }];
 }
 
@@ -403,7 +448,7 @@
     chats.toUid = elem.toUid.integerValue;
     WS(weakSelf)
     MSLog(@"[发送语音消息]ChatS:\n%@",chats);
-    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == 0) {
@@ -427,7 +472,7 @@
                 successed:(void(^)(NSInteger msg_id))success
                    failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
-    if (elem.data == nil) {
+    if (elem.jsonStr.length == 0) {
         failed(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
@@ -439,11 +484,11 @@
     ChatS *chats = [[ChatS alloc]init];
     chats.sign = elem.msg_sign;
     chats.type = elem.type;
-    chats.body = [[NSString alloc]initWithData:elem.data encoding:NSUTF8StringEncoding];
+    chats.body = elem.jsonStr;
     chats.toUid = elem.toUid.integerValue;
     WS(weakSelf)
     MSLog(@"[发送自定义消息]ChatS:\n%@",chats);
-    [self send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[chats data] protoType:XMChatProtoTypeSend needToEncry:NO sign:chats.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {
@@ -496,7 +541,7 @@
     revoke.toUid = reciever;
     revoke.msgId = msg_id;
     MSLog(@"[发送消息]Revoke:\n%@",revoke);
-    [self send:[revoke data] protoType:XMChatProtoTypeRecall needToEncry:NO sign:revoke.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[revoke data] protoType:XMChatProtoTypeRecall needToEncry:NO sign:revoke.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {

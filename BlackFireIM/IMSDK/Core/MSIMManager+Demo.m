@@ -20,7 +20,7 @@
     FetchSpark *request = [[FetchSpark alloc]init];
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     MSLog(@"[发送消息]获取首页Sparks：%@",request);
-    [self send:[request data] protoType:XMChatProtoTypeGetSpark needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[request data] protoType:XMChatProtoTypeGetSpark needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {
                 Sparks *datas = response;
@@ -47,7 +47,7 @@
     token.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     token.phone = [phone integerValue];
     MSLog(@"[发送消息]获取im-token：%@",token);
-    [self send:[token data] protoType:CMChatProtoTypeGetImToken needToEncry:NO sign:token.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[token data] protoType:CMChatProtoTypeGetImToken needToEncry:NO sign:token.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             Result *result = response;
             if (code == ERR_SUCC) {
@@ -72,10 +72,10 @@
     request.nickName = nickName;
     request.avatar = avatar;
     request.pic = avatar;
-    request.verified = YES;
-    request.gold = YES;
+    request.verified = NO;
+    request.gold = NO;
     MSLog(@"[发送消息]用户注册signUp：%@",request);
-    [self send:[request data] protoType:XMChatProtoTypeSignup needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[request data] protoType:XMChatProtoTypeSignup needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             Result *result = response;
             if (code == ERR_SUCC) {

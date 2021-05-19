@@ -37,11 +37,7 @@ enum ERROR_CODE {
     ERR_SDK_COMM_FILE_NOT_FOUND                 = 7004,    ///< 文件不存在，请检查文件路径是否正确
     ERR_SDK_NOT_LOGGED_IN                       = 6014,    ///< IM SDK 未登录，请先登录，成功回调之后重试，或者已被踢下线，可使用 TIMManager getLoginUser 检查当前是否在线。
     ERR_NO_PREVIOUS_LOGIN                       = 6026,    ///< 自动登录时，并没有登录过该用户，这时候请调用 login 接口重新登录。
-    
-    
-    ERR_SDK_ACCOUNT_LOGIN_IN_PROCESS            = 7501,    ///< 登录正在执行中，例如，第一次 login 或 autoLogin 操作在回调前，后续的 login 或 autoLogin 操作会返回该错误码。
-    ERR_SDK_ACCOUNT_LOGOUT_IN_PROCESS           = 7502,    ///< 登出正在执行中，例如，第一次 logout 操作在回调前，后续的 logout 操作会返回该错误码
-    
+
     ERR_SDK_DB_WRITE_FAIL                       = 8001, ///< 数据库写入消息失败
     ERR_SDK_DB_DEL_CONVERSATION_FAIL            = 8002,   ///<数据库删除会话记录失败
     

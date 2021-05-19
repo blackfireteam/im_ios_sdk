@@ -25,11 +25,11 @@
     return self;
 }
 
-- (void)increaseCount
+- (void)increaseCount:(NSInteger)count
 {
     [self setHidden:NO];
     NSString *countStr = self.countBtn.titleLabel.text;
-    [self.countBtn setTitle:[NSString stringWithFormat:@"%zd",countStr.integerValue+1] forState:UIControlStateNormal];
+    [self.countBtn setTitle:[NSString stringWithFormat:@"%zd",countStr.integerValue+count] forState:UIControlStateNormal];
 }
 
 - (void)cleanCount

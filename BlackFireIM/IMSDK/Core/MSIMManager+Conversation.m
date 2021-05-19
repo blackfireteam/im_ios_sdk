@@ -27,13 +27,20 @@
     request.updateTime = [MSIMTools sharedInstance].convUpdateTime;
     WS(weakSelf)
     MSLog(@"[发送消息]同步会话列表：%@",request);
-    [self send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[request data] protoType:XMChatProtoTypeGetChatList needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         STRONG_SELF(strongSelf)
         if (code == ERR_CHAT_LIST_EMPTY) {//如果用户一条会话都没有时，服务器会通过result直接返回错误码
             strongSelf.isChatListResult = YES;
             if (strongSelf.convListener && [strongSelf.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
                 [strongSelf.convListener onSyncServerFinish];
             }
+            //顺便同步下自己的Profile
+            MSProfileInfo *me = [[MSProfileProvider provider]providerProfileFromLocal:[[MSIMTools sharedInstance].user_id integerValue]];
+            if (!me) {
+                me = [[MSProfileInfo alloc]init];
+                me.user_id = [MSIMTools sharedInstance].user_id;
+            }
+            [[MSProfileProvider provider] synchronizeProfiles:@[me].mutableCopy];
         }else if (code == ERR_SUCC){
         }else {
             MSLog(@"建立链接与服务器同步会话列表失败.%@", error);
@@ -52,7 +59,7 @@
                        succ:(MSIMConversationListSucc)succ
                        fail:(MSIMFail)fail
 {
-    NSInteger count = [MSIMManager sharedInstance].config.chatListPageCount;
+    NSInteger count = [MSIMManager sharedInstance].socket.config.chatListPageCount;
     if (nextSeq < 0 || count <= 0) {
         fail(ERR_USER_PARAMS_ERROR,@"params error");
         return;
@@ -98,7 +105,7 @@
     delRequest.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     delRequest.toUid = conv.partner_id.integerValue;
     MSLog(@"[发送消息]删除会话：%@",delRequest);
-    [self send:[delRequest data] protoType:XMChatProtoTypeDeleteChat needToEncry:NO sign:delRequest.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[delRequest data] protoType:XMChatProtoTypeDeleteChat needToEncry:NO sign:delRequest.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {
                 succed();
@@ -109,23 +116,20 @@
     }];
 }
 
-///标记消息已读状态
-///msgID 标记为已读的消息的最后一条 id
+///标记消息已读
 - (void)markC2CMessageAsRead:(NSString *)user_id
-                   lastMsgID:(NSInteger)msgID
                         succ:(MSIMSucc)succed
                       failed:(MSIMFail)failed
 {
-    if (user_id.length == 0 || msgID <= 0) {
+    if (user_id.length == 0) {
         failed(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
     MsgRead *request = [[MsgRead alloc]init];
     request.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     request.toUid = user_id.integerValue;
-    request.msgId = msgID;
     MSLog(@"[发送消息]标记消息已读：%@",request);
-    [self send:[request data] protoType:XMChatProtoTypeMsgread needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self.socket send:[request data] protoType:XMChatProtoTypeMsgread needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
     }];
 }

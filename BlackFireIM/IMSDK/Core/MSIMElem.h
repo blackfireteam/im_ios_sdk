@@ -40,8 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 消息已读状态*/
 @property(nonatomic,assign) BFIMMessageReadStatus readStatus;
 
-//@property(nonatomic,assign,readonly) NSDictionary *contentDic;
-
 @property(nonatomic,assign,readonly) NSData *extData;
 
 /** 被撤回消息msg_id*/
@@ -155,8 +153,8 @@ NS_ASSUME_NONNULL_BEGIN
 /////////////////////////////////////////////////////////////////////////////////
 @interface MSIMCustomElem: MSIMElem
 
-/** 自定义消息二进制数据*/
-@property(nonatomic,strong) NSData *data;
+/** 自定义消息 自定义的json字符串*/
+@property(nonatomic,copy) NSString *jsonStr;
 
 @end
 

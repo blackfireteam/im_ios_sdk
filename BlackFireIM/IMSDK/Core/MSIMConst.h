@@ -119,6 +119,8 @@ typedef NS_ENUM(NSUInteger, BFIMNetStatus) {
 
 /** 用户在线状态*/
 typedef NS_ENUM(NSUInteger, BFIMUserStatus) {
+    IMUSER_STATUS_UNLOGIN = 0,   //用户未登录
+    IMUSER_STATUS_LOGIN,         //用户已登录
     IMUSER_STATUS_FORCEOFFLINE,  //用户被强制下线
     IMUSER_STATUS_SIGEXPIRED,    //用户身份（usersig）过期
 };

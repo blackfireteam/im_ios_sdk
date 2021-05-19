@@ -9,9 +9,10 @@
 #import <AVFoundation/AVFoundation.h>
 #import "UIImage+BFKit.h"
 #import "BFHeader.h"
-#import "BFUploadManager.h"
 #import "NSFileManager+filePath.h"
 #import <SVProgressHUD.h>
+#import "MSIMSDK.h"
+
 
 @interface BFVoiceMessageCellData()<AVAudioPlayerDelegate>
 
@@ -82,19 +83,18 @@
         self.isDownloading = YES;
         WS(weakSelf)
         NSString *savePath = [[NSFileManager pathForIMVoice] stringByAppendingPathComponent:[self.voiceElem.url lastPathComponent]];
-        [BFUploadManager downloadFileFromCOS:self.voiceElem.url
-                                  toSavePath:savePath
-                                    progress:^(CGFloat progress) {
-            
-        }
-                                     success:^{
-            weakSelf.isDownloading = NO;
-            weakSelf.voiceElem.path = savePath;
-            [weakSelf playInternal:savePath];
-        }
-                                      failed:^(NSInteger code, NSString * _Nonnull desc) {
-            weakSelf.isDownloading = NO;
-            [weakSelf stopVoiceMessage];
+        
+        [[MSIMManager sharedInstance].uploadMediator ms_downloadFromUrl:self.voiceElem.url toSavePath:savePath progress:^(CGFloat progress) {
+                    
+                } succ:^(NSString * _Nonnull url) {
+                    
+                    weakSelf.isDownloading = NO;
+                    weakSelf.voiceElem.path = savePath;
+                    [weakSelf playInternal:savePath];
+                    
+                } fail:^(NSInteger code, NSString * _Nonnull desc) {
+                    weakSelf.isDownloading = NO;
+                    [weakSelf stopVoiceMessage];
         }];
     }
 }

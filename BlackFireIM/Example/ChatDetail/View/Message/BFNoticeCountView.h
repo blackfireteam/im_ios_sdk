@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,weak) id<BFNoticeCountViewDelegate> delegate;
 
-- (void)increaseCount;
+- (void)increaseCount:(NSInteger)count;
 
 - (void)cleanCount;
 

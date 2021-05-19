@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
     [self setupUI];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self loadParksData];
     });
 }
@@ -202,8 +202,8 @@
 - (void)winkBtnDidClick:(BFSparkCardCell *)cell
 {
     if (cell.user.user_id) {
-        NSDictionary *extDic = @{@"type": @(32),@"text": @"wink"};
-        MSIMCustomElem *customElem = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertData]];
+        NSDictionary *extDic = @{@"type": @(1),@"desc": @"like"};
+        MSIMCustomElem *customElem = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertJsonString]];
         [[MSIMManager sharedInstance]sendC2CMessage:customElem toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
                     
              cell.winkBtn.selected = YES;

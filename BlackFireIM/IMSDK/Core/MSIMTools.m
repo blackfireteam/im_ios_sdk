@@ -11,6 +11,8 @@
 
 @property(nonatomic,assign) NSInteger diff;
 
+@property(nonatomic,assign) NSInteger conv_update_time;
+
 @end
 @implementation MSIMTools
 @synthesize user_id = _user_id;
@@ -35,7 +37,7 @@ static MSIMTools *_tools;
 - (NSInteger)adjustLocalTimeInterval
 {
     NSTimeInterval stamp = self.currentLocalTimeInterval + self.diff;
-    return stamp;
+    return stamp * 10;
 }
 
 
@@ -78,17 +80,27 @@ static MSIMTools *_tools;
 ///维护会话列表更新时间
 - (void)updateConversationTime:(NSInteger)update_time
 {
-    NSString *key = [NSString stringWithFormat:@"conv_update_%@",self.user_id];
-    [[NSUserDefaults standardUserDefaults] setInteger:update_time forKey:key];
-    [[NSUserDefaults standardUserDefaults]synchronize];
+    if (update_time > self.conv_update_time) {
+        self.conv_update_time = update_time;
+        NSString *key = [NSString stringWithFormat:@"conv_update_%@",self.user_id];
+        [[NSUserDefaults standardUserDefaults] setInteger:update_time forKey:key];
+//        [[NSUserDefaults standardUserDefaults]synchronize];
+    }
 }
 
 ///获取会话列表更新时间
 - (NSInteger)convUpdateTime
 {
-    NSString *key = [NSString stringWithFormat:@"conv_update_%@",self.user_id];
-    NSInteger update_time = [[NSUserDefaults standardUserDefaults] integerForKey:key];
-    return update_time;
+    if (self.conv_update_time == 0) {
+        NSString *key = [NSString stringWithFormat:@"conv_update_%@",self.user_id];
+        self.conv_update_time = [[NSUserDefaults standardUserDefaults] integerForKey:key];
+    }
+    return self.conv_update_time;
+}
+
+- (void)cleanConvUpdateTime
+{
+    self.conv_update_time = 0;
 }
 
 @end
