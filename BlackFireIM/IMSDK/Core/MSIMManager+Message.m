@@ -12,7 +12,6 @@
 #import "NSString+Ext.h"
 #import "NSFileManager+filePath.h"
 #import "MSIMManager+Parse.h"
-#import "BFUploadManager.h"
 
 
 @implementation MSIMManager (Message)
@@ -597,7 +596,8 @@
         fail(ERR_USER_PARAMS_ERROR,@"params error");
         return;
     }
-    [self.messageStore messageByPartnerID:user_id last_msg_sign:lastMsgID count:count complete:^(NSArray<MSIMElem *> * _Nonnull data, BOOL hasMore) {
+    NSInteger tempCount = MIN(100, count);
+    [self.messageStore messageByPartnerID:user_id last_msg_sign:lastMsgID count:tempCount complete:^(NSArray<MSIMElem *> * _Nonnull data, BOOL hasMore) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (succ) {
                 succ(data,hasMore ? NO : YES);

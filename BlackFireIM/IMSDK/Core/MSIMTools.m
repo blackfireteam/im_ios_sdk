@@ -37,7 +37,7 @@ static MSIMTools *_tools;
 - (NSInteger)adjustLocalTimeInterval
 {
     NSTimeInterval stamp = self.currentLocalTimeInterval + self.diff;
-    return stamp * 10;
+    return stamp;
 }
 
 

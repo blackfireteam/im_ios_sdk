@@ -97,13 +97,15 @@
                     [SVProgressHUD showInfoWithStatus:desc];
         }];
     } fail:^(NSError * _Nonnull error) {
-        if (error.code == ERR_USER_NOT_REGISTER) {//未注册，起注册流程
+        if (error.code == 9) {//未注册，起注册流程
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"手机号未注册，现在注册吗?" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [weakSelf needToSignIn];
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
             [weakSelf presentViewController:alert animated:YES completion:nil];
+        }else {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }
     }];
 }

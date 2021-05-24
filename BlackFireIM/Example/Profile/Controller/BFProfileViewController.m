@@ -105,7 +105,7 @@
 {
     MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
     info.gold = sw.isOn;
-    info.gold_exp = [MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000/10 + 7*24*60*60;
+    info.gold_exp = [MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
         [[MSProfileProvider provider]updateProfiles:@[info]];

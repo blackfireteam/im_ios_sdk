@@ -266,7 +266,7 @@
         if (response.sign > 0) {
             elem.msg_sign = response.sign;
         }else {
-            elem.msg_sign = response.msgTime*10;
+            elem.msg_sign = response.msgTime;
         }
         elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
         MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:elem.partner_id];

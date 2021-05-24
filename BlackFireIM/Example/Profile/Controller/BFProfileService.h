@@ -18,6 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
                success:(void(^)(NSDictionary *dic))succ
                   fail:(void(^)(NSError *error))fail;
 
+///模拟用户注册
++ (void)userSignUp:(NSString *)phone
+          nickName:(NSString *)nickName
+            avatar:(NSString *)avatar
+              succ:(void(^)(void))succ
+            failed:(void(^)(NSError *error))fail;
+
 ///修改个人资料
 + (void)requestToEditProfile:(MSProfileInfo *)info
                      success:(void(^)(NSDictionary *dic))succ

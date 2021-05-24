@@ -282,7 +282,6 @@ static MSIMManager *_manager;
             }else {
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }
-            MSLog(@"[收到]会话某些属性发生变更***%@",item);
         }
             break;
         case XMChatProtoTypeGetSparkResponse: //获取首页sparks返回   for demo
@@ -305,7 +304,15 @@ static MSIMManager *_manager;
 
 - (void)messageRsultHandler:(Result *)result
 {
-    if (result.code == ERR_LOGIN_KICKED_OFF_BY_OTHER) {
+    if (result.code == ERR_USER_SIG_EXPIRED || result.code == ERR_IM_TOKEN_NOT_FIND) {
+        
+        if (self.connListener && [self.connListener respondsToSelector:@selector(onUserSigExpired)]) {
+            [self.connListener onUserSigExpired];
+        }
+        //清空本地的token
+        [self cleanIMToken];
+        
+    }else if (result.code == ERR_LOGIN_KICKED_OFF_BY_OTHER) {
         if (self.connListener && [self.connListener respondsToSelector:@selector(onForceOffline)]) {
             [self.connListener onForceOffline];
         }

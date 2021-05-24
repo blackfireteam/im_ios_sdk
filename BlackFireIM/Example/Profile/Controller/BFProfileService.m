@@ -24,7 +24,7 @@
     AFHTTPSessionManager *manager = [self ms_manager];
     NSString *secret = @"asfasdasd123";
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
-    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000/10];
+    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
     NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/iminit",[IMSDKConfig defaultConfig].ip];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -36,12 +36,58 @@
         if (code.integerValue == 0) {
             if (succ) succ(dic[@"data"]);
         }else {
-            if (fail) fail(nil);
+            NSError *err = [NSError errorWithDomain:dic[@"msg"] code:code.integerValue userInfo:nil];
+            if (fail) fail(err);
+            MSLog(@"%@",err);
         }
         
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             
             if (fail) fail(error);
+            MSLog(@"%@",error);
+    }];
+}
+
+///模拟用户注册
++ (void)userSignUp:(NSString *)phone
+          nickName:(NSString *)nickName
+            avatar:(NSString *)avatar
+              succ:(void(^)(void))succ
+            failed:(void(^)(NSError *error))fail
+{
+    AFHTTPSessionManager *manager = [self ms_manager];
+    NSString *secret = @"asfasdasd123";
+    NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
+    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
+    NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
+    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/reg",[IMSDKConfig defaultConfig].ip];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setValue:phone forKey:@"uid"];
+    [params setValue:nickName forKey:@"nick_name"];
+    [params setValue:avatar forKey:@"avatar"];
+    [params setValue:@(NO) forKey:@"gold"];
+    [params setValue:@([MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000) forKey:@"gold_exp"];
+    [params setValue:@(YES) forKey:@"approved"];
+    [params setValue:@(NO) forKey:@"disabled"];
+    [params setValue:@(NO) forKey:@"blocked"];
+    [params setValue:@(NO) forKey:@"hold"];
+    [params setValue:@(NO) forKey:@"deleted"];
+    [params setValue:@(NO) forKey:@"verified"];
+    [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
+        NSNumber *code = dic[@"code"];
+        if (code.integerValue == 0) {
+            if (succ) succ();
+        }else {
+            NSError *err = [NSError errorWithDomain:dic[@"msg"] code:code.integerValue userInfo:nil];
+            if (fail) fail(err);
+            MSLog(@"%@",err);
+        }
+        
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            
+            if (fail) fail(error);
+            MSLog(@"%@",error);
     }];
 }
 
@@ -57,7 +103,7 @@
     AFHTTPSessionManager *manager = [self ms_manager];
     NSString *secret = @"asfasdasd123";
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
-    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000/10];
+    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
     NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/update",[IMSDKConfig defaultConfig].ip];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -76,6 +122,7 @@
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             
             if (fail) fail(error);
+            MSLog(@"%@",error);
     }];
 }
 

@@ -278,11 +278,8 @@ static MSTCPSocket *_manager;
                 [strongSelf.delegate onIMLoginSucc];
             }
         }else {
-            if (code == ERR_USER_SIG_EXPIRED) {
+            if (code == ERR_USER_SIG_EXPIRED || code == ERR_IM_TOKEN_NOT_FIND) {
                 strongSelf.userStatus = IMUSER_STATUS_SIGEXPIRED;
-                if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(onUserSigExpired)]) {
-                    [strongSelf.delegate onUserSigExpired];
-                }
             }else {
                 strongSelf.userStatus = IMUSER_STATUS_UNLOGIN;
             }
@@ -372,7 +369,7 @@ static MSTCPSocket *_manager;
     for (NSInteger i = 0; i < self.sendCache.count; i++) {
         MSMsgCacheItem *item = self.sendCache[i];
         NSInteger sendTime = item.taskID.integerValue;
-        if (([MSIMTools sharedInstance].adjustLocalTimeInterval - sendTime) > kMsgMaxOutTime*1000*1000*10) {//判断超时，回调失败
+        if (([MSIMTools sharedInstance].adjustLocalTimeInterval - sendTime) > kMsgMaxOutTime*1000*1000) {//判断超时，回调失败
             if (item.block) {
                 item.block(item.sign, nil, @"发送超时");
             }

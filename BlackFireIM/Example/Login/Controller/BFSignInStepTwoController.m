@@ -16,7 +16,7 @@
 #import "MSIMKit.h"
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
-
+#import "BFProfileService.h"
 
 @interface BFSignInStepTwoController()<TZImagePickerControllerDelegate>
 
@@ -94,20 +94,31 @@
 - (void)reqeustToSignUp
 {
     WS(weakSelf)
-    [[MSIMManager sharedInstance]userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^(NSString * _Nonnull userToken) {
-        [SVProgressHUD showSuccessWithStatus:@"注册成功"];
-        weakSelf.info.userToken = userToken;
+    [BFProfileService userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^() {
         
-        [[MSIMManager sharedInstance]login:weakSelf.info.userToken succ:^{
-                    
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
-                } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                    [SVProgressHUD showInfoWithStatus:desc];
+        if ([MSIMManager sharedInstance].connStatus != IMNET_STATUS_SUCC) {
+            [SVProgressHUD showInfoWithStatus:@"正在建立TCP连接"];
+            return;
+        }
+        MSLog(@"获取userToKen");
+        [BFProfileService requestIMToken:weakSelf.info.phone success:^(NSDictionary * _Nonnull dic) {
+            //2.登录
+            NSString *userToken = dic[@"token"];
+            weakSelf.info.userToken = userToken;
+            MSLog(@"获取userToKen = %@",userToken);
+            [[MSIMManager sharedInstance]login:userToken succ:^{
+                        
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
+                    } failed:^(NSInteger code, NSString * _Nonnull desc) {
+                        [SVProgressHUD showInfoWithStatus:desc];
+            }];
+        } fail:^(NSError * _Nonnull error) {
+            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
         }];
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            
-            [SVProgressHUD showErrorWithStatus:desc];
+        
+    } failed:^(NSError * _Nonnull error) {
+        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
     }];
 }
 

@@ -277,9 +277,9 @@
 
 - (BFSystemMessageCellData *)transSystemMsgFromDate:(NSInteger)date
 {
-    if(self.msgForDate == nil || labs(date - self.msgForDate.msg_sign)/1000/1000/10 > MAX_MESSAGE_SEP_DLAY){
+    if(self.msgForDate == nil || labs(date - self.msgForDate.msg_sign)/1000/1000 > MAX_MESSAGE_SEP_DLAY){
         BFSystemMessageCellData *system = [[BFSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
-        system.content = [[NSDate dateWithTimeIntervalSince1970:date/1000/1000/10] ms_messageString];
+        system.content = [[NSDate dateWithTimeIntervalSince1970:date/1000/1000] ms_messageString];
         return system;
     }
     return nil;
