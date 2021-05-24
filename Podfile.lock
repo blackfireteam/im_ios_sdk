@@ -24,7 +24,11 @@ PODS:
   - FMDB/standard (2.7.5)
   - lottie-ios (2.5.3)
   - MJRefresh (3.5.0)
-  - Protobuf (3.14.0)
+  - MSIMSDK (1.0.2):
+    - CocoaAsyncSocket
+    - FMDB
+    - Protobuf
+  - Protobuf (3.16.0)
   - QCloudCore/WithoutMTA (5.8.4)
   - QCloudCOSXML/Transfer (5.8.4):
     - QCloudCore/WithoutMTA (= 5.8.4)
@@ -37,27 +41,28 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - Bugly
-  - CocoaAsyncSocket
   - CocoaLumberjack
-  - FMDB
   - lottie-ios (= 2.5.3)
   - MJRefresh
-  - Protobuf
+  - MSIMSDK
   - QCloudCOSXML/Transfer
   - SDWebImage
   - SVProgressHUD
   - TZImagePickerController
 
 SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - CocoaAsyncSocket
+    - FMDB
+    - Protobuf
+  https://github.com/wffkan/MSIMSpecs.git:
+    - MSIMSDK
   trunk:
     - AFNetworking
     - Bugly
-    - CocoaAsyncSocket
     - CocoaLumberjack
-    - FMDB
     - lottie-ios
     - MJRefresh
-    - Protobuf
     - QCloudCore
     - QCloudCOSXML
     - SDWebImage
@@ -72,13 +77,14 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
-  Protobuf: 0cde852566359049847168e51bd1c690e0f70056
+  MSIMSDK: c8b9b955239a51a0307ab9aed181ad5f9d7ea11e
+  Protobuf: 8e78b4aabb47d17f379fb10b0d22ed5439e69b95
   QCloudCore: 3dd29860235cab8d84342a6312e8319742520b6c
   QCloudCOSXML: e6b0028b5e7b89fdf59fc0413a7ccef2465be5d2
   SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   TZImagePickerController: 7fd9702897ef8c0b7c951e5463f4bcf398296f9e
 
-PODFILE CHECKSUM: 8d79d347af1d9f4b38155702dd96b0f0f40026c1
+PODFILE CHECKSUM: 8e90e0d6c852e93a2e1e2594b2a2f28e633edf34
 
 COCOAPODS: 1.10.1

@@ -1,0 +1,1 @@
+../../../MSIMSDK/MSIMSDK/Classes/Core/MSIMManager+Demo.h

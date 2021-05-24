@@ -1,13 +1,12 @@
 
 platform :ios, '11.0'
 
+source 'https://github.com/wffkan/MSIMSpecs.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
 target 'BlackFireIM' do
  
-  use_frameworks! :linkage => :static
 pod 'AFNetworking'
-pod 'CocoaAsyncSocket'
-pod 'Protobuf'
-pod 'FMDB'
 pod 'TZImagePickerController'
 pod 'lottie-ios','2.5.3'
 pod 'MJRefresh'
@@ -15,6 +14,7 @@ pod 'SDWebImage'
 pod 'SVProgressHUD'
 pod 'QCloudCOSXML/Transfer'
 
+pod 'MSIMSDK'
 pod 'CocoaLumberjack'
 pod 'Bugly'
 

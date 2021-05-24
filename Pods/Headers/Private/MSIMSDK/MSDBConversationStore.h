@@ -1,0 +1,1 @@
+../../../MSIMSDK/MSIMSDK/Classes/Database/MSDBConversationStore.h

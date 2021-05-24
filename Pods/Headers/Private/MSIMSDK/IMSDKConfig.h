@@ -1,0 +1,1 @@
+../../../MSIMSDK/MSIMSDK/Classes/Core/IMSDKConfig.h

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B2155DC9E9B69430B6C78F3E6D06BACF"
-               BuildableName = "QCloudCOSXML.framework"
+               BuildableName = "libQCloudCOSXML.a"
                BlueprintName = "QCloudCOSXML"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "DBD31C8A3F2371ED732009637E95423D"
-               BuildableName = "QCloudCore.framework"
+               BuildableName = "libQCloudCore.a"
                BlueprintName = "QCloudCore"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
