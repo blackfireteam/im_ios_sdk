@@ -22,6 +22,8 @@
 @property(nonatomic,copy) MSIMSucc loginSuccBlock;
 @property(nonatomic,copy) MSIMFail loginFailBlock;
 
+@property(nonatomic,strong) dispatch_queue_t commonQueue;
+
 @end
 @implementation MSIMManager
 
@@ -83,11 +85,26 @@ static MSIMManager *_manager;
     return _profileCaches;
 }
 
+- (NSMutableArray *)messageCaches
+{
+    if (!_messageCaches) {
+        _messageCaches = [NSMutableArray array];
+    }
+    return _messageCaches;
+}
+
 - (BFIMNetStatus)connStatus
 {
     return self.socket.connStatus;
 }
 
+- (dispatch_queue_t)commonQueue
+{
+    if (!_commonQueue) {
+        _commonQueue = dispatch_queue_create("mQueue", NULL);
+    }
+    return _commonQueue;
+}
 
 - (void)initSDK:(IMSDKConfig *)config listener:(id<MSIMSDKListener>)listener
 {
@@ -157,6 +174,16 @@ static MSIMManager *_manager;
     });
 }
 
+- (void)globTimerCallback
+{
+    dispatch_async(self.commonQueue, ^{
+        @synchronized (self) {
+            [self receiveMessageHandler:self.messageCaches.copy];
+            [self.messageCaches removeAllObjects];
+        }
+    });
+}
+
 - (void)onRevieveData:(NSData *)package protoType:(XMChatProtoType)type
 {
     if(package == nil || package.length == 0) {
@@ -182,7 +209,9 @@ static MSIMManager *_manager;
             NSError *error;
             ChatR *recieve = [[ChatR alloc]initWithData:package error:&error];
             if (error == nil && recieve != nil) {
-                [self recieveMessage:recieve];
+                @synchronized (self) {
+                    [self.messageCaches addObject:recieve];
+                }
             }else {
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }

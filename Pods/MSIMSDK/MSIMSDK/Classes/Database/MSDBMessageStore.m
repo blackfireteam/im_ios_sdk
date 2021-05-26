@@ -100,7 +100,10 @@ static NSString *ext_data = @"ext_data";
     for (MSIMElem *elem in elems) {
         NSString *tableName = [NSString stringWithFormat:@"message_user_%@",elem.partner_id];
         BOOL isTableExist = [self createTableWithName:tableName];
-        if (isTableExist == NO) return;
+        if (isTableExist == NO){
+            MSLog(@"创建消息表失败");
+            return;
+        }
     }
     WS(weakSelf)
     [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {

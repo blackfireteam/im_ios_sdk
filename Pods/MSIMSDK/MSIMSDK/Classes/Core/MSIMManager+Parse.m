@@ -94,10 +94,9 @@
 - (void)elemNeedToUpdateConversations:(NSArray<MSIMElem *> *)elems increaseUnreadCount:(NSArray<NSNumber *> *)increases isConvLastMessage:(BOOL)isConvLastMessage
 {
     NSMutableArray *needConvs = [NSMutableArray array];
-    NSMutableArray *needProfiles = [NSMutableArray array];
     for (NSInteger i = 0; i < elems.count; i++) {
         MSIMElem *elem = elems[i];
-        BOOL increase = [increases[i] boolValue];
+        NSInteger increaseCount = [increases[i] integerValue];
         MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:elem.partner_id];
         if (conv == nil) {
             conv = [[MSIMConversation alloc]init];
@@ -106,13 +105,6 @@
             conv.show_msg = elem;
             conv.show_msg_sign = elem.msg_sign;
             conv.msg_end = elem.msg_id;
-            MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:elem.partner_id.integerValue];
-            if (profile == nil || profile.update_time == 0) {
-                MSProfileInfo *info = [[MSProfileInfo alloc]init];
-                info.user_id = elem.partner_id;
-                [needProfiles addObject:info];
-            }
-            [needConvs addObject:conv];
         }
         if(elem.msg_sign >= conv.show_msg_sign) {
             conv.show_msg_sign = elem.msg_sign;
@@ -120,8 +112,8 @@
             if (elem.msg_id > conv.msg_end) {
                 conv.msg_end = elem.msg_id;
             }
-            if (increase) {
-                conv.unread_count += 1;
+            if (increaseCount) {
+                conv.unread_count += increaseCount;
             }
             if (isConvLastMessage == NO) {
                 conv.deleted = 0;
@@ -129,7 +121,6 @@
             [needConvs addObject:conv];
         }
     }
-    [[MSProfileProvider provider]synchronizeProfiles:needProfiles];
     if (needConvs.count) {
         [[MSConversationProvider provider]updateConversations:needConvs];
         [self.convListener onUpdateConversations:needConvs];
@@ -142,6 +133,7 @@
     WS(weakSelf)
     NSMutableArray *tempConvs = [NSMutableArray array];
     NSMutableArray *tempIncreases = [NSMutableArray array];
+    NSMutableArray *needProfiles = [NSMutableArray array];
     NSInteger convsCount = convs.count;
     __block NSInteger total = 0;
     for (MSIMConversation *conv in convs) {
@@ -150,13 +142,21 @@
             MSIMElem *lastElem = [weakSelf.messageStore lastShowMessage:conv.partner_id];
             if (lastElem) {
                 [tempConvs addObject:lastElem];
-                [tempIncreases addObject:@(NO)];
+                [tempIncreases addObject:@(0)];
             }else {
                 MSLog(@"拉取最后一页聊天记录失败");
+            }
+            MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:conv.partner_id.integerValue];
+            if (profile == nil || profile.update_time == 0) {
+                MSProfileInfo *info = [[MSProfileInfo alloc]init];
+                info.user_id = conv.partner_id;
+                [needProfiles addObject:info];
             }
             total += 1;
             if (total >= convsCount) {
                 [weakSelf elemNeedToUpdateConversations:tempConvs increaseUnreadCount:tempIncreases isConvLastMessage: YES];
+                [[MSProfileProvider provider]synchronizeProfiles:needProfiles];
+                [needProfiles removeAllObjects];
                 [tempConvs removeAllObjects];
                 [tempIncreases removeAllObjects];
             }
@@ -169,28 +169,57 @@
 }
 
 ///收到服务器下发的消息处理
-- (void)recieveMessage:(ChatR *)response
+- (void)receiveMessageHandler:(NSArray<ChatR *> *)responses
 {
-    MSIMElem *elem = [self transferChatItem:@[response] isHistory:NO].lastObject;
-    if (elem.type == BFIM_MSG_TYPE_NULL) {
-        MSIMElem *showElem = [self.messageStore lastShowMessage:elem.partner_id];
-        showElem.msg_id = elem.msg_id;
-        [self elemNeedToUpdateConversations:@[showElem] increaseUnreadCount:@[@(NO)] isConvLastMessage:NO];
-    }else {
-        if ([self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
-            [self.msgListener onNewMessages:@[elem]];
+    if (responses.count == 0) return;
+    NSArray *elems = [self transferChatItem:responses isHistory:NO];
+    NSMutableArray *totalElems = [NSMutableArray array];
+    NSMutableArray *tempElems = [NSMutableArray array];
+    NSMutableArray *tempUnreads = [NSMutableArray array];
+    NSMutableArray *needProfiles = [NSMutableArray array];
+    for (NSInteger i = 0; i < elems.count; i++) {
+        MSIMElem *elem = elems[i];
+        BOOL isNull = elem.type == BFIM_MSG_TYPE_NULL;
+        if (isNull) {
+            MSIMElem *showElem = [self.messageStore lastShowMessage:elem.partner_id];
+            showElem.msg_id = elem.msg_id;
+            elem = showElem;
+        }else {
+            [totalElems addObject:elem];
         }
-        [self elemNeedToUpdateConversations:@[elem] increaseUnreadCount:(elem.isSelf ? @[@(NO)] : @[@(YES)]) isConvLastMessage:NO];
+        BOOL isExsit = NO;
+        for (NSInteger j = 0; j < tempElems.count; j++) {
+            MSIMElem *tempE = tempElems[j];
+            if ([tempE.partner_id isEqualToString:elem.partner_id]) {
+                isExsit = YES;
+                [tempElems removeObjectAtIndex:j];
+                [tempElems insertObject:elem atIndex:j];
+                NSInteger tempUnread = [tempUnreads[j] integerValue];
+                [tempUnreads removeObjectAtIndex:j];
+                [tempUnreads insertObject:((isNull || elem.isSelf) ? @(tempUnread) : @(tempUnread+1)) atIndex:j];
+                break;
+            }
+        }
+        if (isExsit == NO) {
+            [tempElems addObject:elem];
+            [tempUnreads addObject:((isNull || elem.isSelf) ? @(0) : @(1))];
+            MSProfileInfo *fromProfile = [[MSProfileProvider provider]providerProfileFromLocal:[elem.partner_id integerValue]];
+            if (fromProfile == nil) {
+                fromProfile = [[MSProfileInfo alloc]init];
+                fromProfile.user_id = elem.partner_id;
+            }
+            if (fromProfile.update_time < responses[i].sput) {
+                [needProfiles addObject:fromProfile];
+            }
+        }
     }
+    [self elemNeedToUpdateConversations:tempElems increaseUnreadCount:tempUnreads isConvLastMessage:NO];
+    if ([self.msgListener respondsToSelector:@selector(onNewMessages:)]) {
+        [self.msgListener onNewMessages:totalElems];
+    }
+
     //更新profile
-    MSProfileInfo *fromProfile = [[MSProfileProvider provider]providerProfileFromLocal:response.fromUid];
-    if (!fromProfile) {
-        fromProfile = [[MSProfileInfo alloc]init];
-        fromProfile.user_id = [NSString stringWithFormat:@"%lld",response.fromUid];
-    }
-    if (fromProfile.update_time < response.sput) {
-        [[MSProfileProvider provider]synchronizeProfiles:@[fromProfile].mutableCopy];
-    }
+    [[MSProfileProvider provider]synchronizeProfiles:needProfiles];
 }
 
 ///服务器返回的历史数据处理
@@ -203,7 +232,8 @@
 - (NSArray<MSIMElem *> *)transferChatItem:(NSArray<ChatR *> *)responses isHistory:(BOOL)isHistory
 {
     NSMutableArray *recieves = [NSMutableArray array];
-    for (ChatR *response in responses) {
+    for (NSInteger i = 0; i < responses.count; i++) {
+        ChatR *response = responses[i];
         MSIMElem *elem = nil;
         if (response.type == BFIM_MSG_TYPE_RECALL) {//消息撤回
             elem = [[MSIMElem alloc]init];
@@ -356,13 +386,14 @@
 //我主动发起的标记消息已读
 - (void)chatUnreadCountChanged:(ChatItemUpdate *)result
 {
-    NSString *fromUid = [NSString stringWithFormat:@"%lld",result.uid];
-    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:fromUid];
-    conv.unread_count = result.unread;
-    [[MSConversationProvider provider]updateConversations:@[conv]];
-    if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-        [self.convListener onUpdateConversations:@[conv]];
-    }
+//    NSString *fromUid = [NSString stringWithFormat:@"%lld",result.uid];
+//    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:fromUid];
+//    conv.unread_count = result.unread;
+//    [[MSConversationProvider provider]updateConversations:@[conv]];
+//    if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+//        [self.convListener onUpdateConversations:@[conv]];
+//    }
+    //标记的时候就直接清空未读数，不等结果返回
     [self updateChatListUpdateTime:result.updateTime];
 }
 

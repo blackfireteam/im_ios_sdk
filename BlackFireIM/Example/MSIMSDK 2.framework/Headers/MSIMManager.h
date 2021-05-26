@@ -35,9 +35,6 @@ typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 ///暂时缓存服务器返回的会话列表，当接收到服务器返回的所有会话时，再写入数据库
 @property(nonatomic,strong) NSMutableArray *convCaches;
 
-///暂时缓存收到的新消息，当单位时间内收到消息处理时提高性能
-@property(nonatomic,strong) NSMutableArray *messageCaches;
-
 ///当接收到服务器返回的所有会话时,批量同步profile信息，再写入数据库
 @property(nonatomic,strong) NSMutableArray *profileCaches;
 

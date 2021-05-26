@@ -144,7 +144,7 @@
 
 - (NSData *)extData
 {
-    NSDictionary *dic = @{@"videoUrl": XMNoNilString(self.videoUrl),@"width": @(self.width),@"height": @(self.height),@"videoPath": XMNoNilString(self.videoPath),@"duration": @(self.duration),@"coverPath":XMNoNilString(self.coverUrl),@"coverUrl":XMNoNilString(self.coverUrl),@"uuid": XMNoNilString(self.uuid)};
+    NSDictionary *dic = @{@"videoUrl": XMNoNilString(self.videoUrl),@"width": @(self.width),@"height": @(self.height),@"videoPath": XMNoNilString(self.videoPath),@"duration": @(self.duration),@"coverPath":XMNoNilString(self.coverPath),@"coverUrl":XMNoNilString(self.coverUrl),@"uuid": XMNoNilString(self.uuid)};
     return [dic el_convertData];
 }
 

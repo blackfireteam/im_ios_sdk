@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)onRevieveData:(NSData *)package protoType:(XMChatProtoType)type;
 
+- (void)globTimerCallback;
+
 @end
 
 typedef void (^TCPBlock)(NSInteger code, id _Nullable response, NSString * _Nullable error);
@@ -48,6 +50,8 @@ typedef void (^TCPBlock)(NSInteger code, id _Nullable response, NSString * _Null
 @property(nonatomic,assign,readonly) BFIMNetStatus connStatus;//tcp连接状态
 
 @property(nonatomic,assign,readonly) BFIMUserStatus userStatus;//用户登录状态
+
+@property(nonatomic,strong,readonly)dispatch_queue_t socketQueue;// 数据的串行队列
 
 - (void)sendMessageResponse:(NSInteger)sign resultCode:(NSInteger)code resultMsg:(NSString *)msg response:(id)response;
 

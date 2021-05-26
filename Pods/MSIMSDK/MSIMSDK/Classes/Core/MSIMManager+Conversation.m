@@ -132,6 +132,14 @@
     [self.socket send:[request data] protoType:XMChatProtoTypeMsgread needToEncry:NO sign:request.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
     }];
+    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:user_id];
+    if (conv && conv.unread_count) {
+        conv.unread_count = 0;
+        [[MSConversationProvider provider]updateConversations:@[conv]];
+        if (self.convListener && [self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+            [self.convListener onUpdateConversations:@[conv]];
+        }
+    }
 }
 
 @end

@@ -241,7 +241,7 @@
 {
     NSInteger count = [[MSConversationProvider provider]allUnreadCount];
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.tabBarItem.badgeValue = count ? (count > 99 ? @"99+" : [NSString stringWithFormat:@"%zd",count]) : nil;
+        self.tabBarItem.badgeValue = count ? [NSString stringWithFormat:@"%zd",count] : nil;
     });
 }
 

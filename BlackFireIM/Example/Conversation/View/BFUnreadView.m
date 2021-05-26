@@ -21,9 +21,9 @@
 - (void)setNum:(NSInteger)num
 {
     NSString *unReadStr = [[NSNumber numberWithInteger:num] stringValue];
-    if (num > 99){
-        unReadStr = @"99+";
-    }
+//    if (num > 99){
+//        unReadStr = @"99+";
+//    }
     _unReadLabel.text = unReadStr;
     self.hidden = (num <= 0? YES: NO);
     [self defaultLayout];

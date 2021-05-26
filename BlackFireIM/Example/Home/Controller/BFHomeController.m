@@ -13,7 +13,6 @@
 #import "BFSparkCardView.h"
 #import "BFSparkCardCell.h"
 #import "BFChatViewController.h"
-#import "MSIMSDK.h"
 #import "BFSparkLoadingView.h"
 #import "BFSparkEmptyView.h"
 

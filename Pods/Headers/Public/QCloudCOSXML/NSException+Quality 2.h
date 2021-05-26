@@ -1,1 +1,0 @@
-../../../QCloudCOSXML/QCloudCOSXML/Classes/Base/NSException+Quality.h

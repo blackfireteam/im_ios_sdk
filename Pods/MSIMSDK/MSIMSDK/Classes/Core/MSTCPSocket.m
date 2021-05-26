@@ -85,7 +85,7 @@ static MSTCPSocket *_manager;
 - (dispatch_queue_t)socketQueue
 {
     if(!_socketQueue) {
-        _socketQueue = dispatch_get_global_queue(0, 0);
+        _socketQueue = dispatch_queue_create("socketQueue", NULL);
     }
     return _socketQueue;
 }
@@ -304,12 +304,16 @@ static MSTCPSocket *_manager;
     if (self.sendCount % 10 == 0) {
         [self outTimeClean];
     }
+    if ([self.delegate respondsToSelector:@selector(globTimerCallback)]) {
+        [self.delegate globTimerCallback];
+    }
     if (self.sendCache.count == 0) return;
     
     if (self.connStatus != IMNET_STATUS_SUCC) return;
     
     MSMsgCacheItem *noNeedLoginItem = nil;
-    for (MSMsgCacheItem *item in self.sendCache) {
+    for (NSInteger i = 0; i < self.sendCache.count; i++) {
+        MSMsgCacheItem *item = self.sendCache[i];
         if (item.isSending == NO && (item.protoType == XMChatProtoTypeLogin || item.protoType == CMChatProtoTypeGetImToken)) {
             noNeedLoginItem = item;
             noNeedLoginItem.isSending = YES;

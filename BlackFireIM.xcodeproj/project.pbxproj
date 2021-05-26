@@ -140,6 +140,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F0865012265BF30B00EE917D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		368F05822409585B0BB7B5F4 /* Pods-BlackFireIM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlackFireIM.release.xcconfig"; path = "Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM.release.xcconfig"; sourceTree = "<group>"; };
 		AFE98E3FCC613BB998667C88 /* Pods-BlackFireIM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlackFireIM.debug.xcconfig"; path = "Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1050,6 +1063,7 @@
 				F011D57725E736BD0061F9D6 /* Resources */,
 				38DF2BCC64EDADA176819C77 /* [CP] Copy Pods Resources */,
 				F0D2990526295BE300F485CC /* ShellScript */,
+				F0865012265BF30B00EE917D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1515,6 +1529,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6N3JSL2D62;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BlackFireIM",
+					"$(PROJECT_DIR)/BlackFireIM/Example",
+					"$(PROJECT_DIR)/BlackFireIM/Example/Lib",
+				);
 				INFOPLIST_FILE = BlackFireIM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1535,6 +1555,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6N3JSL2D62;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BlackFireIM",
+					"$(PROJECT_DIR)/BlackFireIM/Example",
+					"$(PROJECT_DIR)/BlackFireIM/Example/Lib",
+				);
 				INFOPLIST_FILE = BlackFireIM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (

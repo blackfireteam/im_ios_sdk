@@ -1,1 +1,0 @@
-../../../MSIMSDK/MSIMSDK/Classes/Core/MSIMConversation.h
