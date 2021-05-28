@@ -1,1 +1,1 @@
-../../../MSIMSDK/MSIMSDK/Classes/MSIMSDK.h
+../../../MSIMSDK/MSIMSDK/Classes/Core/MSIMSDK.h

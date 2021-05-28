@@ -1,1 +1,1 @@
-../../../MSIMSDK/MSIMSDK/Classes/IMSDK_UIKit/MSIMHeader.h
+../../../MSIMSDK/MSIMSDK/Classes/IMKit/MSIMHeader.h
