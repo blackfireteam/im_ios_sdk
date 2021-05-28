@@ -41,6 +41,14 @@ typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSI
                         succ:(MSIMSucc)succed
                       failed:(MSIMFail)failed;
 
+
+///设置会话草稿
+///只在本地保存，不会存储 Server，不能多端同步，程序卸载重装会失效。
+- (void)setConversationDraft:(NSString *)user_id
+                   draftText:(NSString *)text
+                        succ:(nullable MSIMSucc)succed
+                      failed:(nullable MSIMFail)failed;
+
 @end
 
 NS_ASSUME_NONNULL_END

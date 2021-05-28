@@ -32,7 +32,7 @@ static UIImage *sOutgoingBubble;
 + (UIImage *)outgoingBubble
 {
     if (!sOutgoingBubble) {
-        sOutgoingBubble = [[UIImage imageNamed:TUIKitResource(@"SenderTextNodeBkg")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{30,20,22,20}") resizingMode:UIImageResizingModeStretch];
+        sOutgoingBubble = [[UIImage imageNamed:TUIKitResource(@"sender_text_normal")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{15,20,15,22}") resizingMode:UIImageResizingModeStretch];
     }
     return sOutgoingBubble;
 }
@@ -46,7 +46,7 @@ static UIImage *sOutgoingHighlightedBubble;
 + (UIImage *)outgoingHighlightedBubble
 {
     if (!sOutgoingHighlightedBubble) {
-        sOutgoingHighlightedBubble = [[UIImage imageNamed:TUIKitResource(@"SenderTextNodeBkgHL")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{30,20,22,20}") resizingMode:UIImageResizingModeStretch];
+        sOutgoingHighlightedBubble = [[UIImage imageNamed:TUIKitResource(@"sender_text_pressed")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{15,20,15,22}") resizingMode:UIImageResizingModeStretch];
     }
     return sOutgoingHighlightedBubble;
 }
@@ -60,7 +60,7 @@ static UIImage *sIncommingBubble;
 + (UIImage *)incommingBubble
 {
     if (!sIncommingBubble) {
-        sIncommingBubble = [[UIImage imageNamed:TUIKitResource(@"ReceiverTextNodeBkg")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{30,22,22,22}") resizingMode:UIImageResizingModeStretch];
+        sIncommingBubble = [[UIImage imageNamed:TUIKitResource(@"receiver_text_normal")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{15,23,15,16}") resizingMode:UIImageResizingModeStretch];
     }
     return sIncommingBubble;
 }
@@ -74,7 +74,7 @@ static UIImage *sIncommingHighlightedBubble;
 + (UIImage *)incommingHighlightedBubble
 {
     if (!sIncommingHighlightedBubble) {
-        sIncommingHighlightedBubble =[[UIImage imageNamed:TUIKitResource(@"ReceiverTextNodeBkgHL")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{30,22,22,22}") resizingMode:UIImageResizingModeStretch];
+        sIncommingHighlightedBubble =[[UIImage imageNamed:TUIKitResource(@"receiver_text_pressed")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{15,23,15,16}") resizingMode:UIImageResizingModeStretch];
     }
     return sIncommingHighlightedBubble;
 }

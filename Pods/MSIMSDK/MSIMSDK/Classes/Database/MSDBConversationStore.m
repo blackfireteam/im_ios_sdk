@@ -15,7 +15,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 
 - (BOOL)createTable
 {
-    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(conv_id TEXT,chat_type INTEGER,f_id TEXT,msg_end INTEGER,show_msg_sign INTEGER,msg_last_read INTEGER,unread_count INTEGER,status INTEGER,ext TEXT,PRIMARY KEY(conv_id))",CONV_TABLE_NAME];
+    NSString *createSQL = [NSString stringWithFormat:@"create table if not exists %@(conv_id TEXT,chat_type INTEGER,f_id TEXT,msg_end INTEGER,show_msg_sign INTEGER,msg_last_read INTEGER,unread_count INTEGER,status INTEGER,draft TEXT,is_top INTEGER,show_time INTEGER,ext TEXT,PRIMARY KEY(conv_id))",CONV_TABLE_NAME];
     BOOL isOK = [self createTable:CONV_TABLE_NAME withSQL:createSQL];
     if (isOK == NO) {
         NSLog(@"创建表失败****%@",CONV_TABLE_NAME);
@@ -28,7 +28,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 {
     [self createTable];
     [self.dbQueue inDeferredTransaction:^(FMDatabase * _Nonnull db, BOOL * _Nonnull rollback) {
-        NSString *addSQL = @"REPLACE into %@ (conv_id,chat_type,f_id,msg_end,show_msg_sign,msg_last_read,unread_count,status,ext) VALUES (?,?,?,?,?,?,?,?,?)";
+        NSString *addSQL = @"REPLACE into %@ (conv_id,chat_type,f_id,msg_end,show_msg_sign,msg_last_read,unread_count,status,draft,is_top,show_time,ext) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         NSString *sqlStr = [NSString stringWithFormat:addSQL,CONV_TABLE_NAME];
         for (MSIMConversation *conv in convs) {
             NSArray *addParams = @[conv.conversation_id,
@@ -39,6 +39,9 @@ static NSString *CONV_TABLE_NAME = @"conversation";
                                    @(conv.msg_last_read),
                                    @(conv.unread_count),
                                    @(conv.deleted),
+                                   XMNoNilString(conv.draftText),
+                                   @(conv.is_top),
+                                   @(conv.time),
                                    conv.extString];
             [db executeUpdate:sqlStr withArgumentsInArray:addParams];
         }
@@ -58,7 +61,7 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 - (NSArray<MSIMConversation *> *)allConvesations
 {
     __block NSMutableArray *convs = [[NSMutableArray alloc] init];
-    NSString *sqlString = [NSString stringWithFormat: @"SELECT * FROM %@ where status = 0 ORDER BY show_msg_sign DESC", CONV_TABLE_NAME];
+    NSString *sqlString = [NSString stringWithFormat: @"SELECT * FROM %@ where status = 0 ORDER BY show_time DESC", CONV_TABLE_NAME];
     WS(weakSelf)
     [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet * _Nonnull rsSet) {
         while ([rsSet next]) {
@@ -77,9 +80,9 @@ static NSString *CONV_TABLE_NAME = @"conversation";
 {
     NSString *sqlStr;
     if (last_seq == 0) {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ where status = 0 order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,count+1];
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where status = 0 order by show_time desc limit '%zd'",CONV_TABLE_NAME,count+1];
     }else {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ where status = 0 and show_msg_sign < '%zd' order by show_msg_sign desc limit '%zd'",CONV_TABLE_NAME,last_seq,count+1];
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where status = 0 and show_time < '%zd' order by show_time desc limit '%zd'",CONV_TABLE_NAME,last_seq,count+1];
     }
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     WS(weakSelf)
@@ -136,6 +139,9 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     conv.msg_last_read = [rsSet longLongIntForColumn:@"msg_last_read"];
     conv.unread_count = [rsSet intForColumn:@"unread_count"];
     conv.deleted = [rsSet intForColumn:@"status"];
+    conv.draftText = [rsSet stringForColumn:@"draft"];
+    conv.is_top = [rsSet intForColumn:@"is_top"];
+    conv.time = [rsSet longLongIntForColumn:@"show_time"];
     NSString *extString = [rsSet stringForColumn:@"ext"];
     NSData *data = [extString dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -151,6 +157,12 @@ static NSString *CONV_TABLE_NAME = @"conversation";
     return ok;
 }
 
-
+///更新草稿
+- (BOOL)updateDraft:(NSString *)text conv_id:(NSString *)conv_id
+{
+    NSString *sqlString = [NSString stringWithFormat:@"UPDATE %@ set draft = '%@' WHERE conv_id = '%@'", CONV_TABLE_NAME,XMNoNilString(text), conv_id];
+    BOOL ok = [self excuteSQL:sqlString];
+    return ok;
+}
 
 @end

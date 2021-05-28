@@ -45,7 +45,7 @@
 
 - (CGSize)contentSize
 {
-    UIEdgeInsets contentInset = UIEdgeInsetsMake(10, 16, 16, 16);
+    UIEdgeInsets contentInset = self.direction == MsgDirectionIncoming ? UIEdgeInsetsMake(10, 16, 10, 14) : UIEdgeInsetsMake(10, 14, 10, 16);
     CGRect rect = [self.attributedString boundingRectWithSize:CGSizeMake(TTextMessageCell_Text_Width_Max, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
     CGSize size = CGSizeMake(CGFLOAT_CEIL(rect.size.width), CGFLOAT_CEIL(rect.size.height));
     self.textSize = size;
@@ -140,7 +140,7 @@ static UIColor *sOutgoingTextColor;
 + (UIColor *)outgoingTextColor
 {
     if (!sOutgoingTextColor) {
-        sOutgoingTextColor = [UIColor d_colorWithColorLight:TText_Color dark:TText_OutMessage_Color_Dark];
+        sOutgoingTextColor = [UIColor d_colorWithColorLight:[UIColor whiteColor] dark:TText_OutMessage_Color_Dark];
     }
     return sOutgoingTextColor;
 }

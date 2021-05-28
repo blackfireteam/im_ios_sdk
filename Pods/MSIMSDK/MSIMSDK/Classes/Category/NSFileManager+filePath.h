@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///聊天音频保存地址
 + (NSString *)pathForIMVoice;
 
+///聊天视频保存地址
++ (NSString *)pathForIMVideo;
+
 @end
 
 NS_ASSUME_NONNULL_END

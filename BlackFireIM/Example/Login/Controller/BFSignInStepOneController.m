@@ -7,8 +7,6 @@
 
 #import "BFSignInStepOneController.h"
 #import "BFHeader.h"
-#import "UIView+Frame.h"
-#import "NSBundle+BFKit.h"
 #import "BFRegisterInfo.h"
 #import "BFSignInStepTwoController.h"
 

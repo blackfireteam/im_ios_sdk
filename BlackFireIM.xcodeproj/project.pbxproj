@@ -121,6 +121,7 @@
 		F0DC81912616CA280042D4BD /* YBIBVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC81852616CA280042D4BD /* YBIBVideoView.m */; };
 		F0DC81922616CA280042D4BD /* YBIBVideoActionBar.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC818B2616CA280042D4BD /* YBIBVideoActionBar.m */; };
 		F0DC81932616CA280042D4BD /* YBImageBrowserVideo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0DC818D2616CA280042D4BD /* YBImageBrowserVideo.bundle */; };
+		F0F5B70C265F437D004A0299 /* BFHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F5B70B265F437D004A0299 /* BFHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -394,6 +395,8 @@
 		F0DC818B2616CA280042D4BD /* YBIBVideoActionBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YBIBVideoActionBar.m; sourceTree = "<group>"; };
 		F0DC818C2616CA280042D4BD /* YBIBVideoTopBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBIBVideoTopBar.h; sourceTree = "<group>"; };
 		F0DC818D2616CA280042D4BD /* YBImageBrowserVideo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = YBImageBrowserVideo.bundle; sourceTree = "<group>"; };
+		F0F5B70A265F437D004A0299 /* BFHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFHelper.h; sourceTree = "<group>"; };
+		F0F5B70B265F437D004A0299 /* BFHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -653,9 +656,9 @@
 				F09316D6260B816D0099E39E /* Discovery */,
 				F058368526032A5E0008C4FD /* ChatDetail */,
 				F05836572602EE4E0008C4FD /* Conversation */,
-				F05836392602E6040008C4FD /* Super */,
 				F056714B25F07AE400782F9C /* Resource */,
 				F056713A25F076F900782F9C /* Base */,
+				F05836392602E6040008C4FD /* Super */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -686,6 +689,8 @@
 				F05836702602FB300008C4FD /* NSDate+MSKit.m */,
 				F0DC812F261462DF0042D4BD /* BFUploadManager.h */,
 				F0DC8130261462DF0042D4BD /* BFUploadManager.m */,
+				F0F5B70A265F437D004A0299 /* BFHelper.h */,
+				F0F5B70B265F437D004A0299 /* BFHelper.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1299,6 +1304,7 @@
 				F0DC81912616CA280042D4BD /* YBIBVideoView.m in Sources */,
 				F0020B4F2614263E0080C005 /* YBImageBrowser.m in Sources */,
 				F056716025F07F1600782F9C /* NSBundle+BFKit.m in Sources */,
+				F0F5B70C265F437D004A0299 /* BFHelper.m in Sources */,
 				F058361D260203680008C4FD /* BFTabBarController.m in Sources */,
 				F0850E87262FBF91007C5589 /* NSString+Encry.m in Sources */,
 				F0864F572654FA5D00EE917D /* YYAnimatedImageView.m in Sources */,

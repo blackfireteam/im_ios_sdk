@@ -86,7 +86,7 @@
         [self updateConvLastMessage:tempConvs];
         [[MSProfileProvider provider]synchronizeProfiles:tempProfiles];
         MSIMConversation *lastConv = data.lastObject;
-        NSInteger nextSign = lastConv.show_msg_sign;
+        NSInteger nextSign = lastConv.time;
         succ(data,nextSign,hasMore ? NO : YES);
     }];
 }
@@ -140,6 +140,34 @@
             [self.convListener onUpdateConversations:@[conv]];
         }
     }
+}
+
+///设置会话草稿
+///只在本地保存，不会存储 Server，不能多端同步，程序卸载重装会失效。
+- (void)setConversationDraft:(NSString *)user_id
+                   draftText:(NSString *)text
+                        succ:(nullable MSIMSucc)succed
+                      failed:(nullable MSIMFail)failed
+{
+    if (user_id.length == 0) {
+        if (failed) failed(ERR_USER_PARAMS_ERROR,@"params error");
+        return;
+    }
+    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:user_id];
+    if (conv == nil) {
+        conv = [[MSIMConversation alloc]init];
+        conv.chat_type = BFIM_CHAT_TYPE_C2C;
+        conv.partner_id = user_id;
+    }
+    conv.draftText = text;
+    if (text.length == 0 && conv.show_msg_sign > 0) {
+        conv.time = conv.show_msg_sign;
+    }else {
+        conv.time = [MSIMTools sharedInstance].adjustLocalTimeInterval;
+    }
+    [[MSConversationProvider provider]updateConversations:@[conv]];
+    [self.convListener onUpdateConversations:@[conv]];
+    if (succed) succed();
 }
 
 @end

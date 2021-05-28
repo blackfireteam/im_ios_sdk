@@ -90,10 +90,10 @@
 "TUIkitMessageTypeVideo" = "[视频]";
 "TUIkitMessageTypeFile" = "[文件]";
 "TUIKitMessageTypeAnimateEmoji" = "[动画表情]";
-"TUIKitMessageTypeDraftFormat" = "[草稿] %@";
+"TUIKitMessageTypeDraft" = "[草稿]";
 
-"TUIKitMoreCamera" = "拍照";
-"TUIKitMorePhoto" = "相册";
+"TUIKitMoreCamera" = "拍摄";
+"TUIKitMorePhoto" = "照片";
 "TUIKitMoreVideo" = "视频";
 "TUIKitMoreLocation" = "位置";
 "TUIKitMoreFile" = "文件";

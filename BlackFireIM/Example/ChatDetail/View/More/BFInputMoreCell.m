@@ -51,15 +51,15 @@
     _image.image = data.image;
     [_title setText:data.title];
     //update layout
-    CGSize menuSize = CGSizeMake(70, 70);
+    CGSize menuSize = CGSizeMake(65, 65);
     _image.frame = CGRectMake(0, 0, menuSize.width, menuSize.height);
-    _title.frame = CGRectMake(0, _image.frame.origin.y + _image.frame.size.height, _image.frame.size.width, 20);
+    _title.frame = CGRectMake(0, _image.frame.origin.y + _image.frame.size.height + 5, _image.frame.size.width, 20);
 }
 
 + (CGSize)getSize
 {
-    CGSize menuSize = CGSizeMake(70, 70);
-    return CGSizeMake(menuSize.width, menuSize.height + 20);
+    CGSize menuSize = CGSizeMake(65, 65);
+    return CGSizeMake(menuSize.width, menuSize.height + 25);
 }
 
 @end

@@ -8,20 +8,17 @@
 #import "BFProfileViewController.h"
 #import "BFHeader.h"
 #import "MSIMSDK.h"
-#import <SVProgressHUD.h>
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
 #import "BFLoginController.h"
 #import "BFNavigationController.h"
-#import "UIButton+positon.h"
-#import "UIView+Frame.h"
 #import <SDWebImage.h>
 #import "BFProfileHeaderView.h"
-#import <TZImagePickerController.h>
 #import "BFProfileService.h"
+#import <Photos/Photos.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 
-
-@interface BFProfileViewController ()<UITableViewDelegate,UITableViewDataSource,TZImagePickerControllerDelegate>
+@interface BFProfileViewController ()<UITableViewDelegate,UITableViewDataSource,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
 @property(nonatomic,strong) UITableView *myTableView;
 
@@ -109,10 +106,10 @@
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
-        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+        [BFHelper showToastSucc:@"修改成功"];
         
     } fail:^(NSError * _Nonnull error) {
-        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        [BFHelper showToastFail:error.localizedDescription];
         sw.on = !sw.isOn;
     }];
 }
@@ -124,9 +121,9 @@
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
-        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+        [BFHelper showToastSucc:@"修改成功"];
     } fail:^(NSError * _Nonnull error) {
-        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        [BFHelper showToastFail:error.localizedDescription];
         sw.on = !sw.isOn;
     }];
 }
@@ -139,9 +136,9 @@
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
         self.headerView.nickNameL.text = name;
-        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+        [BFHelper showToastSucc:@"修改成功"];
     } fail:^(NSError * _Nonnull error) {
-        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        [BFHelper showToastFail:error.localizedDescription];
     }];
 }
 
@@ -153,19 +150,22 @@
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
         [self.headerView.avatarIcon sd_setImageWithURL:[NSURL URLWithString:url]];
-        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+        [BFHelper showToastSucc:@"修改成功"];
         
     } fail:^(NSError * _Nonnull error) {
-        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        [BFHelper showToastFail:error.localizedDescription];
     }];
 }
 
 - (void)avatarTap
 {
-    TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
-    picker.allowPickingImage = YES;
-    picker.allowPickingVideo = NO;
-    [self presentViewController:picker animated:YES completion:nil];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        picker.delegate = self;
+        [self presentViewController:picker animated:YES completion:nil];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -207,7 +207,7 @@
             UITextField *tf = alert.textFields.firstObject;
             NSString *nickname = [tf.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if (nickname.length < 3) {
-                [SVProgressHUD showErrorWithStatus:@"Nickname must contain at least 3 characters."];
+                [BFHelper showToastFail:@"Nickname must contain at least 3 characters."];
                 return;
             }
             [weakSelf editNickName:nickname];
@@ -217,38 +217,53 @@
     }
 }
 
-- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto
+#pragma mark -
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    UIImage *image = photos.firstObject;
-    PHAsset *asset = assets.firstObject;
-    if (image.size.width > 1920 || image.size.height > 1920) {
-        CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height);
-        CGFloat aspectWidth = image.size.width * aspectRatio;
-        CGFloat aspectHeight = image.size.height * aspectRatio;
+    picker.delegate = nil;
+    WS(weakSelf)
+    [picker dismissViewControllerAnimated:YES completion:^{
+        NSString *mediaType = info[UIImagePickerControllerMediaType];
+        PHAsset *imageAsset = info[UIImagePickerControllerPHAsset];
+        
+        if([mediaType isEqualToString:(NSString *)kUTTypeImage]){
+            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+            UIImageOrientation imageOrientation = image.imageOrientation;
+            if(imageOrientation != UIImageOrientationUp) {
+                CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height);
+                CGFloat aspectWidth = image.size.width * aspectRatio;
+                CGFloat aspectHeight = image.size.height * aspectRatio;
 
-        UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
-        [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
-        image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-    }
-    MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
-    imageElem.type = BFIM_MSG_TYPE_IMAGE;
-    imageElem.image = image;
-    imageElem.width = image.size.width;
-    imageElem.height = image.size.height;
-    imageElem.uuid = asset.localIdentifier;
-    
-    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:BFIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
-        
-    } succ:^(NSString * _Nonnull url) {
-        
-        [self editAvatar:url];
-        
-    } fail:^(NSInteger code, NSString * _Nonnull desc) {
-        
-        [SVProgressHUD showErrorWithStatus:desc];
-        
+                UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
+                [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
+                image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+            }
+            MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
+            imageElem.type = BFIM_MSG_TYPE_IMAGE;
+            imageElem.image = image;
+            imageElem.width = image.size.width;
+            imageElem.height = image.size.height;
+            imageElem.uuid = imageAsset.localIdentifier;
+            
+            [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:BFIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
+                
+            } succ:^(NSString * _Nonnull url) {
+                
+                [weakSelf editAvatar:url];
+                
+            } fail:^(NSInteger code, NSString * _Nonnull desc) {
+                
+                [BFHelper showToastFail:desc];
+                
+            }];
+        }
     }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)logoutBtnClick
@@ -261,7 +276,7 @@
             appDelegate.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
             
             } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                [SVProgressHUD showInfoWithStatus:desc];
+                [BFHelper showToastFail:desc];
         }];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];

@@ -108,7 +108,7 @@
 "TUIkitMessageTypeVideo" = "[Video]";
 "TUIkitMessageTypeFile" = "[File]";
 "TUIKitMessageTypeAnimateEmoji" = "[Animated Sticker]";
-"TUIKitMessageTypeDraftFormat" = "[Draft] %@";
+"TUIKitMessageTypeDraft" = "[Draft]";
 
 "TUIKitMoreCamera" = "Take Photo";
 "TUIKitMorePhoto" = "Album";

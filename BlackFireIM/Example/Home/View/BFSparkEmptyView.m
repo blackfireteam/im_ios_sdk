@@ -6,9 +6,7 @@
 //
 
 #import "BFSparkEmptyView.h"
-#import "UIView+Frame.h"
 #import "BFHeader.h"
-#import "NSBundle+BFKit.h"
 
 
 @implementation BFSparkEmptyView

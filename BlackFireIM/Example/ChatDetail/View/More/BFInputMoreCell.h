@@ -16,6 +16,10 @@ typedef NS_ENUM(NSInteger ,BFIMMoreType){
     BFIM_MORE_VIDEO = 1,//视频
     
     BFIM_MORE_LOCATION = 2,//位置
+    
+    BFIM_MORE_VOICE_CALL = 3, //语音通话
+    
+    BFIM_MORE_VIDEO_CALL = 4, //视频通话
 };
 
 @interface BFInputMoreCellData: NSObject

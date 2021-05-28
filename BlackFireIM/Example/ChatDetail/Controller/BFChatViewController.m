@@ -13,7 +13,6 @@
 #import "MSIMSDK.h"
 #import "YBImageBrowser.h"
 #import "YBIBVideoData.h"
-#import <SVProgressHUD.h>
 #import "BFChatViewController+More.h"
 #import "BFMessageCell.h"
 
@@ -32,6 +31,11 @@
 {
     [super viewDidLoad];
     [self setupViews];
+}
+
+- (void)dealloc
+{
+    [self saveDraft];
 }
 
 - (void)setupViews
@@ -56,7 +60,11 @@
     }];
     MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:self.partner_id];
     if (conv.ext.i_block_u) {
-        [SVProgressHUD showInfoWithStatus:@"对方被我Block"];
+        [BFHelper showToastString:@"对方被我Block"];
+    }
+    if (conv.draftText.length > 0) {
+        self.inputController.inputBar.inputTextView.text = conv.draftText;
+        [self.inputController.inputBar.inputTextView becomeFirstResponder];
     }
 }
 
@@ -86,7 +94,7 @@
     [[MSIMManager sharedInstance] sendC2CMessage:textElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
         
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            [SVProgressHUD showInfoWithStatus:desc];
+            [BFHelper showToastFail:desc];
     }];
 }
 
@@ -105,7 +113,7 @@
     [[MSIMManager sharedInstance] sendC2CMessage:voiceElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
             
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            [SVProgressHUD showInfoWithStatus:desc];
+            [BFHelper showToastFail:desc];
     }];
 }
 
@@ -129,6 +137,10 @@
         [self selectPhotoForSend];
     }else if (cell.data.tye == BFIM_MORE_VIDEO) {//视频
         [self selectVideoForSend];
+    }else if (cell.data.tye == BFIM_MORE_VIDEO_CALL) {//语音通话
+        
+    }else if (cell.data.tye == BFIM_MORE_VIDEO_CALL) {//视频通话
+        
     }
 }
 
@@ -207,6 +219,13 @@
 - (void)didHideMenuInMessageController:(BFMessageController *)controller
 {
     self.inputController.inputBar.inputTextView.overrideNextResponder = nil;
+}
+
+- (void)saveDraft
+{
+    NSString *draft = self.inputController.inputBar.inputTextView.text;
+    draft = [draft stringByTrimmingCharactersInSet: NSCharacterSet.whitespaceAndNewlineCharacterSet];
+    [[MSIMManager sharedInstance] setConversationDraft:self.partner_id draftText:draft succ:nil failed:nil];
 }
 
 @end

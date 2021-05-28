@@ -7,7 +7,6 @@
 
 #import "BFMessageController.h"
 #import "BFHeader.h"
-#import "UIColor+BFDarkMode.h"
 #import "BFTextMessageCellData.h"
 #import "BFImageMessageCellData.h"
 #import "BFWinkMessageCellData.h"
@@ -19,11 +18,7 @@
 #import "BFVoiceMessageCell.h"
 #import "MSIMSDK.h"
 #import "BFSystemMessageCellData.h"
-#import "NSDate+MSKit.h"
-#import "NSBundle+BFKit.h"
-#import "UIView+Frame.h"
 #import "BFNoticeCountView.h"
-#import <SVProgressHUD.h>
 #import <MJRefresh.h>
 
 
@@ -156,7 +151,7 @@
     [[MSIMManager sharedInstance] resendC2CMessage:data.elem toReciever:data.elem.toUid successed:^(NSInteger msg_id) {
         data.elem.msg_id = msg_id;
     } failed:^(NSInteger code, NSString * _Nonnull desc) {
-        [SVProgressHUD showInfoWithStatus:desc];
+        [BFHelper showToastFail:desc];
     }];
 }
 

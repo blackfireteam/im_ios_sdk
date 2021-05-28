@@ -8,6 +8,19 @@
 #ifndef BFHeader_h
 #define BFHeader_h
 
+#import "BFHelper.h"
+#import "UIColor+BFDarkMode.h"
+#import "UIImage+BFDarkMode.h"
+#import "UIButton+positon.h"
+#import "UIImage+BFKit.h"
+#import "UIView+Frame.h"
+#import "NSString+Encry.h"
+#import "NSBundle+BFKit.h"
+#import "UIDevice+Ext.h"
+#import "UIView+BFExtension.h"
+#import "NSDate+MSKit.h"
+#import "BFUploadManager.h"
+
 
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 #define STRONG_SELF(strongSelf) if (!weakSelf) return; \

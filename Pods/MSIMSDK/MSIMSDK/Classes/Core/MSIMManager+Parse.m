@@ -104,10 +104,12 @@
             conv.partner_id = elem.partner_id;
             conv.show_msg = elem;
             conv.show_msg_sign = elem.msg_sign;
+            conv.time = elem.msg_sign;
             conv.msg_end = elem.msg_id;
         }
         if(elem.msg_sign >= conv.show_msg_sign) {
             conv.show_msg_sign = elem.msg_sign;
+            conv.time = elem.msg_sign;
             conv.show_msg = elem;
             if (elem.msg_id > conv.msg_end) {
                 conv.msg_end = elem.msg_id;

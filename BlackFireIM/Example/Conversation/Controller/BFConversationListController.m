@@ -10,15 +10,10 @@
 #import "BFNaviBarIndicatorView.h"
 #import "BFHeader.h"
 #import "BFConversationListCell.h"
-#import "NSBundle+BFKit.h"
 #import "BFChatViewController.h"
-#import "UIColor+BFDarkMode.h"
-#import "MSIMHeader.h"
-#import "UIImage+BFKit.h"
 #import "BFNavigationController.h"
 #import "BFLoginController.h"
 #import <MJRefresh.h>
-#import <SVProgressHUD.h>
 
 @interface BFConversationListController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -280,7 +275,7 @@
            
             [self removeConversation:data];
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            [SVProgressHUD showErrorWithStatus:desc];
+            [BFHelper showToastFail:desc];
         }];
     }
 }

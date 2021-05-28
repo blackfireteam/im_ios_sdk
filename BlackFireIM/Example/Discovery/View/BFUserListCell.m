@@ -6,9 +6,7 @@
 //
 
 #import "BFUserListCell.h"
-#import "UIColor+BFDarkMode.h"
 #import <SDWebImage.h>
-#import "UIView+Frame.h"
 #import "BFHeader.h"
 
 @implementation BFUserListCell

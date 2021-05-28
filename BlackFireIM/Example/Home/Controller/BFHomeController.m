@@ -7,9 +7,7 @@
 
 #import "BFHomeController.h"
 #import "BFHeader.h"
-#import "UIView+Frame.h"
 #import "MSIMSDK.h"
-#import <SVProgressHUD.h>
 #import "BFSparkCardView.h"
 #import "BFSparkCardCell.h"
 #import "BFChatViewController.h"
@@ -111,7 +109,7 @@
         [self.dataList addObjectsFromArray:sparks];
         [self bf_reloadData];
         } fail:^(NSInteger code, NSString * _Nonnull desc) {
-            [SVProgressHUD showInfoWithStatus:desc];
+            [BFHelper showToastFail:desc];
             [self.loadingView stopAnimating];
             self.emptyView.hidden = NO;
     }];
@@ -208,7 +206,7 @@
              cell.winkBtn.selected = YES;
             
             } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                [SVProgressHUD showErrorWithStatus:desc];
+                [BFHelper showToastFail:desc];
         }];
     }
 }

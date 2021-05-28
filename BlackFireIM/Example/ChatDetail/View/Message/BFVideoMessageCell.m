@@ -8,7 +8,6 @@
 #import "BFVideoMessageCell.h"
 #import "BFHeader.h"
 #import <SDWebImage.h>
-#import "UIView+Frame.h"
 
 
 @implementation BFVideoMessageCell

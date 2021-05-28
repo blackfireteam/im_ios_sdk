@@ -36,6 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
 ///未读数
 @property(nonatomic,assign) NSInteger unread_count;
 
+///草稿信息
+@property(nonatomic,copy) NSString *draftText;
+
+///是否置顶
+@property(nonatomic,assign) NSInteger is_top;
+
+///显示时间
+@property(nonatomic,assign) NSInteger time;
+
 ///会话已删除
 @property(nonatomic,assign) NSInteger deleted;
 

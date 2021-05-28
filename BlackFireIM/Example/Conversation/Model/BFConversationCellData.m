@@ -6,19 +6,27 @@
 //
 
 #import "BFConversationCellData.h"
-#import "UIColor+BFDarkMode.h"
-#import "UIImage+BFKit.h"
+#import "BFHeader.h"
+
 
 @implementation BFConversationCellData
 
 - (NSAttributedString *)subTitle
 {
     NSString *lastMsgStr = self.conv.show_msg.displayStr;
-    if (lastMsgStr.length == 0) {
+    if (lastMsgStr.length == 0 && self.conv.draftText.length == 0) {
         return nil;
     }
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc]initWithString:lastMsgStr];
-    [attr setAttributes:@{NSForegroundColorAttributeName: [UIColor d_systemGrayColor],NSFontAttributeName: [UIFont systemFontOfSize:14]} range:NSMakeRange(0, attr.length)];
+    NSMutableAttributedString *attr;
+    if (self.conv.draftText.length > 0) {
+        NSString *show_msg = [NSString stringWithFormat:@"%@ %@",TUILocalizableString(TUIKitMessageTypeDraft),self.conv.draftText];
+        attr = [[NSMutableAttributedString alloc]initWithString:show_msg];
+        [attr setAttributes:@{NSForegroundColorAttributeName: [UIColor d_systemGrayColor],NSFontAttributeName: [UIFont systemFontOfSize:14]} range:NSMakeRange(0, attr.length)];
+        [attr setAttributes:@{NSForegroundColorAttributeName: [UIColor redColor],NSFontAttributeName: [UIFont systemFontOfSize:14]} range:NSMakeRange(0, TUILocalizableString(TUIKitMessageTypeDraft).length)];
+    }else {
+        attr = [[NSMutableAttributedString alloc]initWithString:lastMsgStr];
+        [attr setAttributes:@{NSForegroundColorAttributeName: [UIColor d_systemGrayColor],NSFontAttributeName: [UIFont systemFontOfSize:14]} range:NSMakeRange(0, attr.length)];
+    }
     return attr;
 }
 
@@ -38,7 +46,7 @@
 
 - (NSDate *)time
 {
-    return [NSDate dateWithTimeIntervalSince1970:self.conv.show_msg_sign/1000/1000];
+    return [NSDate dateWithTimeIntervalSince1970:self.conv.time/1000/1000];
 }
 
 @end

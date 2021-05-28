@@ -6,12 +6,9 @@
 //
 
 #import "BFMessageCell.h"
-#import "UIColor+BFDarkMode.h"
 #import <SDWebImage.h>
 #import "BFHeader.h"
-#import "UIView+Frame.h"
 #import "MSProfileProvider.h"
-#import "NSBundle+BFKit.h"
 
 
 @interface BFMessageCell()

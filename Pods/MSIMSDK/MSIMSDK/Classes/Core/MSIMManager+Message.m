@@ -267,8 +267,10 @@
             MSFileInfo *cacheElem = [store searchRecord:elem.uuid];
             if ([cacheElem.url hasPrefix:@"http"]) {
                 elem.videoUrl = cacheElem.url;
+                [self sendVideoMessageByTCP:elem successed:success failed:failed];
+            }else {
+                [self uploadVideo:elem successed:success failed:failed];
             }
-            [self uploadVideo:elem successed:success failed:failed];
         }else {
             [self uploadVideo:elem successed:success failed:failed];
         }

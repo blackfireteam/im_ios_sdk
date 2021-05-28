@@ -7,8 +7,7 @@
 
 #import "BFWinkMessageCell.h"
 #import "BFWinkMessageCellData.h"
-#import "UIView+Frame.h"
-#import "UIColor+BFDarkMode.h"
+#import "BFHeader.h"
 
 
 @implementation BFWinkMessageCell

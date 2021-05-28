@@ -7,18 +7,14 @@
 
 #import "BFSignInStepTwoController.h"
 #import "BFHeader.h"
-#import "UIView+Frame.h"
-#import "NSBundle+BFKit.h"
-#import <TZImagePickerController.h>
 #import "BFRegisterInfo.h"
-#import <SVProgressHUD.h>
-#import "MSIMSDK.h"
 #import "MSIMKit.h"
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
 #import "BFProfileService.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
-@interface BFSignInStepTwoController()<TZImagePickerControllerDelegate>
+@interface BFSignInStepTwoController()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
 @property(nonatomic,strong) UIImageView *avatarIcon;
 
@@ -60,21 +56,22 @@
 
 - (void)avatarDidTap
 {
-    TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
-    picker.allowPickingImage = YES;
-    picker.allowPickingVideo = NO;
-    picker.autoDismiss = YES;
-    [self presentViewController:picker animated:YES completion:nil];
-    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        picker.delegate = self;
+        [self presentViewController:picker animated:YES completion:nil];
+    }
 }
 
 - (void)nextBtnDidClick
 {
     if (!self.info.avatarImage) {
-        [SVProgressHUD showInfoWithStatus:@"请上传头像"];
+        [BFHelper showToastString:@"请上传头像"];
         return;
     }
-    [SVProgressHUD show];
+    [BFHelper showToast];
     MSIMImageElem *elem = [[MSIMImageElem alloc]init];
     elem.image = self.info.avatarImage;
     [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:elem.image fileType:BFIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
@@ -86,7 +83,7 @@
         
     } fail:^(NSInteger code, NSString * _Nonnull desc) {
         
-        [SVProgressHUD showErrorWithStatus:desc];
+        [BFHelper showToastFail:desc];
         
     }];
 }
@@ -97,7 +94,7 @@
     [BFProfileService userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^() {
         
         if ([MSIMManager sharedInstance].connStatus != IMNET_STATUS_SUCC) {
-            [SVProgressHUD showInfoWithStatus:@"正在建立TCP连接"];
+            [BFHelper showToastString:@"正在建立TCP连接"];
             return;
         }
         MSLog(@"获取userToKen");
@@ -111,22 +108,47 @@
                 AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
                 appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
                     } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                        [SVProgressHUD showInfoWithStatus:desc];
+                        [BFHelper showToastFail:desc];
             }];
         } fail:^(NSError * _Nonnull error) {
-            [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+            [BFHelper showToastFail:error.localizedDescription];
         }];
         
     } failed:^(NSError * _Nonnull error) {
-        [SVProgressHUD showErrorWithStatus:error.localizedDescription];
+        [BFHelper showToastFail:error.localizedDescription];
     }];
 }
 
-- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto
+#pragma mark -
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    UIImage *image = photos.firstObject;
-    self.avatarIcon.image = image;
-    self.info.avatarImage = image;
+    picker.delegate = nil;
+    WS(weakSelf)
+    [picker dismissViewControllerAnimated:YES completion:^{
+        NSString *mediaType = info[UIImagePickerControllerMediaType];
+        
+        if([mediaType isEqualToString:(NSString *)kUTTypeImage]){
+            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+            UIImageOrientation imageOrientation = image.imageOrientation;
+            if(imageOrientation != UIImageOrientationUp) {
+                CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height);
+                CGFloat aspectWidth = image.size.width * aspectRatio;
+                CGFloat aspectHeight = image.size.height * aspectRatio;
+
+                UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
+                [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
+                image = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+            }
+            weakSelf.avatarIcon.image = image;
+            weakSelf.info.avatarImage = image;
+        }
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

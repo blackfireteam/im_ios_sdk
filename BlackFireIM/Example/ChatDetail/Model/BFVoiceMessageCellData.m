@@ -7,10 +7,8 @@
 
 #import "BFVoiceMessageCellData.h"
 #import <AVFoundation/AVFoundation.h>
-#import "UIImage+BFKit.h"
 #import "BFHeader.h"
 #import "NSFileManager+filePath.h"
-#import <SVProgressHUD.h>
 #import "MSIMSDK.h"
 
 
@@ -28,15 +26,15 @@
     self = [super initWithDirection:direction];
     if (self) {
         if (direction == MsgDirectionIncoming) {
-            _voiceImage = [UIImage bf_imageNamed:@"message_voice_receiver_normal"];
-            _voiceAnimationImages = @[[UIImage bf_imageNamed:@"message_voice_receiver_playing_1"],
-                                      [UIImage bf_imageNamed:@"message_voice_receiver_playing_2"],
-                                      [UIImage bf_imageNamed:@"message_voice_receiver_playing_3"]];
+            _voiceImage = [UIImage bf_imageNamed:@"receiver_voice"];
+            _voiceAnimationImages = @[[UIImage bf_imageNamed:@"receiver_voice_play_1"],
+                                      [UIImage bf_imageNamed:@"receiver_voice_play_2"],
+                                      [UIImage bf_imageNamed:@"receiver_voice_play_3"]];
         } else {
-            _voiceImage = [UIImage bf_imageNamed:@"message_voice_sender_normal"];
-            _voiceAnimationImages = @[[UIImage bf_imageNamed:@"message_voice_sender_playing_1"],
-                                      [UIImage bf_imageNamed:@"message_voice_sender_playing_2"],
-                                      [UIImage bf_imageNamed:@"message_voice_sender_playing_3"]];
+            _voiceImage = [UIImage bf_imageNamed:@"sender_voice"];
+            _voiceAnimationImages = @[[UIImage bf_imageNamed:@"sender_voice_play_1"],
+                                      [UIImage bf_imageNamed:@"sender_voice_play_2"],
+                                      [UIImage bf_imageNamed:@"sender_voice_play_3"]];
         }
     }
 
@@ -58,10 +56,10 @@
     CGFloat bubbleHeight = TVoiceMessageCell_Duration_Size.height;
     if (self.direction == MsgDirectionIncoming) {
         bubbleWidth = MAX(bubbleWidth, [BFBubbleMessageCellData incommingBubble].size.width);
-        bubbleHeight = [BFBubbleMessageCellData incommingBubble].size.height;
+        bubbleHeight = 40;
     } else {
         bubbleWidth = MAX(bubbleWidth, [BFBubbleMessageCellData outgoingBubble].size.width);
-        bubbleHeight = [BFBubbleMessageCellData outgoingBubble].size.height;
+        bubbleHeight = 40;
     }
     return CGSizeMake(bubbleWidth+TVoiceMessageCell_Duration_Size.width, bubbleHeight);
 }
@@ -111,7 +109,7 @@
     BOOL result = [self.audioPlayer play];
     if (!result) {
         self.isPlaying = NO;
-        [SVProgressHUD showErrorWithStatus:@"音频文件不存在或已损坏"];
+        [BFHelper showToastFail:@"音频文件不存在或已损坏"];
     }
 }
 
@@ -134,7 +132,7 @@
 {
     self.isPlaying = NO;
     MSLog(@"音频播放失败：%@",error);
-    [SVProgressHUD showErrorWithStatus:@"音频文件解码失败"];
+    [BFHelper showToastFail:@"音频文件解码失败"];
 }
 
 - (NSString *)reuseId

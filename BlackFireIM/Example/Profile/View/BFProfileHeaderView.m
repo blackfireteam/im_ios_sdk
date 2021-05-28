@@ -7,7 +7,6 @@
 
 #import "BFProfileHeaderView.h"
 #import "BFHeader.h"
-#import "UIView+Frame.h"
 
 
 @implementation BFProfileHeaderView

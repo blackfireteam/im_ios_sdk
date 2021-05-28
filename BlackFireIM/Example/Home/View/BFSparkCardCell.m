@@ -9,8 +9,6 @@
 #import "MSProfileInfo.h"
 #import <SDWebImage.h>
 #import "BFHeader.h"
-#import "UIView+Frame.h"
-#import "UIDevice+Ext.h"
 
 
 @interface BFSparkCardCell()

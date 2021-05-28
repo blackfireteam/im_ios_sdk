@@ -288,10 +288,18 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
         cameraData.image = [UIImage bf_imageNamed:@"more_picture"];
         
         BFInputMoreCellData *photoData = [[BFInputMoreCellData alloc]initWithType:BFIM_MORE_VIDEO];
-        photoData.title = TUILocalizableString(TUIKitMoreVideo);
-        photoData.image = [UIImage bf_imageNamed:@"more_video"];
+        photoData.title = TUILocalizableString(TUIKitMoreCamera);
+        photoData.image = [UIImage bf_imageNamed:@"more_camera"];
         
-        [_moreView setData:@[cameraData,photoData]];
+        BFInputMoreCellData *voiceData = [[BFInputMoreCellData alloc]initWithType:BFIM_MORE_VOICE_CALL];
+        voiceData.title = TUILocalizableString(TUIKitMoreVoiceCall);
+        voiceData.image = [UIImage bf_imageNamed:@"more_voice_call"];
+        
+        BFInputMoreCellData *videoData = [[BFInputMoreCellData alloc]initWithType:BFIM_MORE_VIDEO_CALL];
+        videoData.title = TUILocalizableString(TUIKitMoreVideoCall);
+        videoData.image = [UIImage bf_imageNamed:@"more_video_call"];
+        
+        [_moreView setData:@[cameraData,photoData,voiceData,videoData]];
     }
     return _moreView;
 }

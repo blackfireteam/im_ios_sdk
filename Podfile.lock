@@ -24,7 +24,7 @@ PODS:
   - FMDB/standard (2.7.5)
   - lottie-ios (2.5.3)
   - MJRefresh (3.5.0)
-  - MSIMSDK (1.0.3):
+  - MSIMSDK (1.0.4):
     - CocoaAsyncSocket
     - FMDB
     - Protobuf
@@ -36,7 +36,6 @@ PODS:
     - SDWebImage/Core (= 5.9.0)
   - SDWebImage/Core (5.9.0)
   - SVProgressHUD (2.2.5)
-  - TZImagePickerController (3.5.8)
 
 DEPENDENCIES:
   - AFNetworking
@@ -48,7 +47,6 @@ DEPENDENCIES:
   - QCloudCOSXML/Transfer
   - SDWebImage
   - SVProgressHUD
-  - TZImagePickerController
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -67,7 +65,6 @@ SPEC REPOS:
     - QCloudCOSXML
     - SDWebImage
     - SVProgressHUD
-    - TZImagePickerController
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
@@ -77,14 +74,13 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
-  MSIMSDK: bfd6b87a67b49829696846419974cc6b91c13b2d
+  MSIMSDK: 5fcfed74b7d2990537690617027a6c137d2684d1
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
   QCloudCore: 3dd29860235cab8d84342a6312e8319742520b6c
   QCloudCOSXML: e6b0028b5e7b89fdf59fc0413a7ccef2465be5d2
   SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  TZImagePickerController: 7fd9702897ef8c0b7c951e5463f4bcf398296f9e
 
-PODFILE CHECKSUM: 01fe39bf46c0058211ae646ff041df10bfd7d7f9
+PODFILE CHECKSUM: 9a583d0ac92067d41ecdc359d5955fc2951db584
 
 COCOAPODS: 1.10.1

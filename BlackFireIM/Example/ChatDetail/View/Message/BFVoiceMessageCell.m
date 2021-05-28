@@ -52,8 +52,10 @@
     
     if (data.direction == MsgDirectionIncoming) {
         _duration.textAlignment = NSTextAlignmentLeft;
+        _duration.textColor = [UIColor grayColor];
     } else {
         _duration.textAlignment = NSTextAlignmentRight;
+        _duration.textColor = [UIColor whiteColor];
     }
 }
 
@@ -71,12 +73,12 @@
 {
     [super layoutSubviews];
     if (self.voiceData.direction == MsgDirectionIncoming) {
-        self.voice.frame = CGRectMake(12, 12, self.voiceData.voiceImage.size.width, self.voiceData.voiceImage.size.height);
+        self.voice.frame = CGRectMake(16, 20-self.voiceData.voiceImage.size.height*0.5, self.voiceData.voiceImage.size.width, self.voiceData.voiceImage.size.height);
         self.duration.frame = CGRectMake(self.voice.maxX+10, 0, 40, 20);
         self.duration.centerY = self.voice.centerY;
     } else {
-        self.voice.frame = CGRectMake(0, 12, self.voiceData.voiceImage.size.width, self.voiceData.voiceImage.size.height);
-        self.voice.maxX = self.container.width-12;
+        self.voice.frame = CGRectMake(0, 20-self.voiceData.voiceImage.size.height*0.5, self.voiceData.voiceImage.size.width, self.voiceData.voiceImage.size.height);
+        self.voice.maxX = self.container.width-16;
         self.duration.frame = CGRectMake(0, 0, 40, 20);
         self.duration.centerY = self.voice.centerY;
         self.duration.maxX = self.voice.x-10;
