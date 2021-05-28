@@ -36,7 +36,7 @@
     NSArray *items = list.chatItemsArray;
     for (ChatItem *item in items) {
         MSIMConversation *conv = [[MSIMConversation alloc]init];
-        conv.chat_type = BFIM_CHAT_TYPE_C2C;
+        conv.chat_type = MSIM_CHAT_TYPE_C2C;
         conv.partner_id = [NSString stringWithFormat:@"%lld",item.uid];
         conv.msg_end = item.msgEnd;
         conv.msg_last_read = item.msgLastRead;
@@ -100,7 +100,7 @@
         MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:elem.partner_id];
         if (conv == nil) {
             conv = [[MSIMConversation alloc]init];
-            conv.chat_type = BFIM_CHAT_TYPE_C2C;
+            conv.chat_type = MSIM_CHAT_TYPE_C2C;
             conv.partner_id = elem.partner_id;
             conv.show_msg = elem;
             conv.show_msg_sign = elem.msg_sign;
@@ -181,7 +181,7 @@
     NSMutableArray *needProfiles = [NSMutableArray array];
     for (NSInteger i = 0; i < elems.count; i++) {
         MSIMElem *elem = elems[i];
-        BOOL isNull = elem.type == BFIM_MSG_TYPE_NULL;
+        BOOL isNull = elem.type == MSIM_MSG_TYPE_NULL;
         if (isNull) {
             MSIMElem *showElem = [self.messageStore lastShowMessage:elem.partner_id];
             showElem.msg_id = elem.msg_id;
@@ -237,9 +237,9 @@
     for (NSInteger i = 0; i < responses.count; i++) {
         ChatR *response = responses[i];
         MSIMElem *elem = nil;
-        if (response.type == BFIM_MSG_TYPE_RECALL) {//消息撤回
+        if (response.type == MSIM_MSG_TYPE_RECALL) {//消息撤回
             elem = [[MSIMElem alloc]init];
-            elem.type = BFIM_MSG_TYPE_NULL;
+            elem.type = MSIM_MSG_TYPE_NULL;
             
             //将之前的消息标记为撤回消息
             elem.fromUid = [NSString stringWithFormat:@"%lld",response.fromUid];
@@ -251,45 +251,45 @@
             if ([self.msgListener respondsToSelector:@selector(onRevokeMessage:)]) {
                 [self.msgListener onRevokeMessage:elem];
             }
-        }else if (response.type == BFIM_MSG_TYPE_TEXT) {
+        }else if (response.type == MSIM_MSG_TYPE_TEXT) {
             MSIMTextElem *textElem = [[MSIMTextElem alloc]init];
             textElem.text = response.body;
-            textElem.type = BFIM_MSG_TYPE_TEXT;
+            textElem.type = MSIM_MSG_TYPE_TEXT;
             elem = textElem;
             
-        }else if (response.type == BFIM_MSG_TYPE_IMAGE) {
+        }else if (response.type == MSIM_MSG_TYPE_IMAGE) {
             MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
             imageElem.width = response.width;
             imageElem.height = response.height;
             imageElem.url = response.body;
-            imageElem.type = BFIM_MSG_TYPE_IMAGE;
+            imageElem.type = MSIM_MSG_TYPE_IMAGE;
             elem = imageElem;
-        }else if (response.type == BFIM_MSG_TYPE_VIDEO) {
+        }else if (response.type == MSIM_MSG_TYPE_VIDEO) {
             MSIMVideoElem *videoElem = [[MSIMVideoElem alloc]init];
             videoElem.width = response.width;
             videoElem.height = response.height;
             videoElem.videoUrl = response.body;
             videoElem.coverUrl = response.thumb;
             videoElem.duration = response.duration;
-            videoElem.type = BFIM_MSG_TYPE_VIDEO;
+            videoElem.type = MSIM_MSG_TYPE_VIDEO;
             elem = videoElem;
-        }else if (response.type == BFIM_MSG_TYPE_VOICE) {
+        }else if (response.type == MSIM_MSG_TYPE_VOICE) {
             MSIMVoiceElem *voiceElem = [[MSIMVoiceElem alloc]init];
             voiceElem.url = response.body;
             voiceElem.duration = response.duration;
-            voiceElem.type = BFIM_MSG_TYPE_VOICE;
+            voiceElem.type = MSIM_MSG_TYPE_VOICE;
             elem = voiceElem;
-        }else if (response.type == BFIM_MSG_TYPE_REVOKE) {
+        }else if (response.type == MSIM_MSG_TYPE_REVOKE) {
             elem = [[MSIMElem alloc]init];
-            elem.type = BFIM_MSG_TYPE_REVOKE;
-        }else if (response.type == BFIM_MSG_TYPE_CUSTOM) {
+            elem.type = MSIM_MSG_TYPE_REVOKE;
+        }else if (response.type == MSIM_MSG_TYPE_CUSTOM) {
             MSIMCustomElem *customElem = [[MSIMCustomElem alloc]init];
             customElem.jsonStr = response.body;
-            customElem.type = BFIM_MSG_TYPE_CUSTOM;
+            customElem.type = MSIM_MSG_TYPE_CUSTOM;
             elem = customElem;
         }else {//未知消息
             MSIMElem *unknowElem = [[MSIMElem alloc]init];
-            unknowElem.type = BFIM_MSG_TYPE_UNKNOWN;
+            unknowElem.type = MSIM_MSG_TYPE_UNKNOWN;
             elem = unknowElem;
         }
         elem.fromUid = [NSString stringWithFormat:@"%lld",response.fromUid];
@@ -300,12 +300,12 @@
         }else {
             elem.msg_sign = response.msgTime;
         }
-        elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+        elem.sendStatus = MSIM_MSG_STATUS_SEND_SUCC;
         MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:elem.partner_id];
         if (elem.isSelf && elem.msg_id > conv.msg_last_read) {
-            elem.readStatus = BFIM_MSG_STATUS_UNREAD;
+            elem.readStatus = MSIM_MSG_STATUS_UNREAD;
         }else {
-            elem.readStatus = BFIM_MSG_STATUS_READ;
+            elem.readStatus = MSIM_MSG_STATUS_READ;
         }
         [recieves addObject:elem];
         //更新会话更新时间

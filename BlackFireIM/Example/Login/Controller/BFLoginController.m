@@ -6,7 +6,7 @@
 //
 
 #import "BFLoginController.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 #import "MSIMSDK.h"
 #import "BFTabBarController.h"
 #import "AppDelegate.h"
@@ -78,7 +78,7 @@
     //1.获取IM—token
     WS(weakSelf)
     if ([MSIMManager sharedInstance].connStatus != IMNET_STATUS_SUCC) {
-        [BFHelper showToastFail:@"正在建立TCP连接"];
+        [MSHelper showToastFail:@"正在建立TCP连接"];
         return;
     }
     [BFProfileService requestIMToken:phone success:^(NSDictionary * _Nonnull dic) {
@@ -90,7 +90,7 @@
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
                 } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                    [BFHelper showToastFail:desc];
+                    [MSHelper showToastFail:desc];
         }];
     } fail:^(NSError * _Nonnull error) {
         if (error.code == 9) {//未注册，起注册流程
@@ -101,7 +101,7 @@
             [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
             [weakSelf presentViewController:alert animated:YES completion:nil];
         }else {
-            [BFHelper showToastFail:error.localizedDescription];
+            [MSHelper showToastFail:error.localizedDescription];
         }
     }];
 }

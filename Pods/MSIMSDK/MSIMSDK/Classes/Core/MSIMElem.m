@@ -48,7 +48,7 @@
 
 - (NSString *)displayStr
 {
-    if (self.type == BFIM_MSG_TYPE_REVOKE) {
+    if (self.type == MSIM_MSG_TYPE_REVOKE) {
         if (self.isSelf) {
             return @"您撤回了一条消息";
         }else {

@@ -6,7 +6,7 @@
 //
 
 #import "BFProfileViewController.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 #import "MSIMSDK.h"
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
@@ -106,10 +106,10 @@
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
-        [BFHelper showToastSucc:@"修改成功"];
+        [MSHelper showToastSucc:@"修改成功"];
         
     } fail:^(NSError * _Nonnull error) {
-        [BFHelper showToastFail:error.localizedDescription];
+        [MSHelper showToastFail:error.localizedDescription];
         sw.on = !sw.isOn;
     }];
 }
@@ -121,9 +121,9 @@
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
-        [BFHelper showToastSucc:@"修改成功"];
+        [MSHelper showToastSucc:@"修改成功"];
     } fail:^(NSError * _Nonnull error) {
-        [BFHelper showToastFail:error.localizedDescription];
+        [MSHelper showToastFail:error.localizedDescription];
         sw.on = !sw.isOn;
     }];
 }
@@ -136,9 +136,9 @@
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
         self.headerView.nickNameL.text = name;
-        [BFHelper showToastSucc:@"修改成功"];
+        [MSHelper showToastSucc:@"修改成功"];
     } fail:^(NSError * _Nonnull error) {
-        [BFHelper showToastFail:error.localizedDescription];
+        [MSHelper showToastFail:error.localizedDescription];
     }];
 }
 
@@ -150,10 +150,10 @@
         
         [[MSProfileProvider provider]updateProfiles:@[info]];
         [self.headerView.avatarIcon sd_setImageWithURL:[NSURL URLWithString:url]];
-        [BFHelper showToastSucc:@"修改成功"];
+        [MSHelper showToastSucc:@"修改成功"];
         
     } fail:^(NSError * _Nonnull error) {
-        [BFHelper showToastFail:error.localizedDescription];
+        [MSHelper showToastFail:error.localizedDescription];
     }];
 }
 
@@ -207,7 +207,7 @@
             UITextField *tf = alert.textFields.firstObject;
             NSString *nickname = [tf.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if (nickname.length < 3) {
-                [BFHelper showToastFail:@"Nickname must contain at least 3 characters."];
+                [MSHelper showToastFail:@"Nickname must contain at least 3 characters."];
                 return;
             }
             [weakSelf editNickName:nickname];
@@ -240,13 +240,13 @@
                 UIGraphicsEndImageContext();
             }
             MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
-            imageElem.type = BFIM_MSG_TYPE_IMAGE;
+            imageElem.type = MSIM_MSG_TYPE_IMAGE;
             imageElem.image = image;
             imageElem.width = image.size.width;
             imageElem.height = image.size.height;
             imageElem.uuid = imageAsset.localIdentifier;
             
-            [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:BFIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
+            [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:MSIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
                 
             } succ:^(NSString * _Nonnull url) {
                 
@@ -254,7 +254,7 @@
                 
             } fail:^(NSInteger code, NSString * _Nonnull desc) {
                 
-                [BFHelper showToastFail:desc];
+                [MSHelper showToastFail:desc];
                 
             }];
         }
@@ -276,7 +276,7 @@
             appDelegate.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
             
             } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                [BFHelper showToastFail:desc];
+                [MSHelper showToastFail:desc];
         }];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];

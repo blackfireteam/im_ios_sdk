@@ -55,61 +55,61 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
 };
 
 /** 消息发送状态*/
-typedef NS_ENUM(NSInteger ,BFIMMessageStatus){
+typedef NS_ENUM(NSInteger ,MSIMMessageStatus){
     
-    BFIM_MSG_STATUS_SENDING = 0, //消息发送中
+    MSIM_MSG_STATUS_SENDING = 0, //消息发送中
     
-    BFIM_MSG_STATUS_SEND_SUCC = 1,//消息发送成功
+    MSIM_MSG_STATUS_SEND_SUCC = 1,//消息发送成功
     
-    BFIM_MSG_STATUS_SEND_FAIL = 2,//消息发送失败
+    MSIM_MSG_STATUS_SEND_FAIL = 2,//消息发送失败
     
-    BFIM_MSG_STATUS_HAS_DELETED = 3,//消息被删除
+    MSIM_MSG_STATUS_HAS_DELETED = 3,//消息被删除
 };
 
 /** 聊天类型*/
-typedef NS_ENUM(NSInteger ,BFIMAChatType){
+typedef NS_ENUM(NSInteger ,MSIMAChatType){
     
-    BFIM_CHAT_TYPE_C2C = 0, //单聊
+    MSIM_CHAT_TYPE_C2C = 0, //单聊
     
-    BFIM_CHAT_TYPE_GROUP = 1,//群聊
+    MSIM_CHAT_TYPE_GROUP = 1,//群聊
 };
 
 /** 消息状态*/
-typedef NS_ENUM(NSInteger ,BFIMMessageReadStatus){
+typedef NS_ENUM(NSInteger ,MSIMMessageReadStatus){
     
-    BFIM_MSG_STATUS_UNREAD = 0, //消息未读
+    MSIM_MSG_STATUS_UNREAD = 0, //消息未读
     
-    BFIM_MSG_STATUS_READ = 1,//消息已读
+    MSIM_MSG_STATUS_READ = 1,//消息已读
 };
 
 /** 消息类型*/
-typedef NS_ENUM(NSInteger ,BFIMMessageType){
+typedef NS_ENUM(NSInteger ,MSIMMessageType){
     
-    BFIM_MSG_TYPE_UNKNOWN = -1, //未知消息
+    MSIM_MSG_TYPE_UNKNOWN = -1, //未知消息
     
-    BFIM_MSG_TYPE_TEXT = 0, //文本消息
+    MSIM_MSG_TYPE_TEXT = 0, //文本消息
     
-    BFIM_MSG_TYPE_IMAGE = 1,//图片消息
+    MSIM_MSG_TYPE_IMAGE = 1,//图片消息
     
-    BFIM_MSG_TYPE_VOICE = 2,//音频消息
+    MSIM_MSG_TYPE_VOICE = 2,//音频消息
     
-    BFIM_MSG_TYPE_VIDEO = 3,//视频消息
+    MSIM_MSG_TYPE_VIDEO = 3,//视频消息
     
-    BFIM_MSG_TYPE_LOCATION = 4,//位置消息
+    MSIM_MSG_TYPE_LOCATION = 4,//位置消息
     
-    BFIM_MSG_TYPE_USER_CARD = 6,//用户名片消息
+    MSIM_MSG_TYPE_USER_CARD = 6,//用户名片消息
     
-    BFIM_MSG_TYPE_REVOKE = 31,//撤回消息
+    MSIM_MSG_TYPE_REVOKE = 31,//撤回消息
     
-    BFIM_MSG_TYPE_RECALL = 64,//消息撤回
+    MSIM_MSG_TYPE_RECALL = 64,//消息撤回
     
-    BFIM_MSG_TYPE_CUSTOM  = 100,//自定义消息
+    MSIM_MSG_TYPE_CUSTOM  = 100,//自定义消息
     
-    BFIM_MSG_TYPE_NULL = 999,//空消息，用于占位
+    MSIM_MSG_TYPE_NULL = 999,//空消息，用于占位
 };
 
 /** 网络连接状态*/
-typedef NS_ENUM(NSUInteger, BFIMNetStatus) {
+typedef NS_ENUM(NSUInteger, MSIMNetStatus) {
     IMNET_STATUS_SUCC = 1,    //连接成功
     IMNET_STATUS_CONNECTING,  //正在连接
     IMNET_STATUS_CONNFAILED,  //连接失败
@@ -118,7 +118,7 @@ typedef NS_ENUM(NSUInteger, BFIMNetStatus) {
 };
 
 /** 用户在线状态*/
-typedef NS_ENUM(NSUInteger, BFIMUserStatus) {
+typedef NS_ENUM(NSUInteger, MSIMUserStatus) {
     IMUSER_STATUS_UNLOGIN = 0,   //用户未登录
     IMUSER_STATUS_LOGIN,         //用户已登录
     IMUSER_STATUS_FORCEOFFLINE,  //用户被强制下线

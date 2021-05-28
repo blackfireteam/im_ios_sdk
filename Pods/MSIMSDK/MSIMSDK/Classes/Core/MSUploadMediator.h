@@ -20,7 +20,7 @@ typedef void(^normalFail)(NSInteger code, NSString *desc);
 @optional
 
 - (void)ms_uploadWithObject:(id)object
-                   fileType:(BFIMMessageType)type
+                   fileType:(MSIMMessageType)type
                    progress:(normalProgress)progress
                        succ:(normalSucc)succ
                        fail:(normalFail)fail;

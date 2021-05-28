@@ -47,9 +47,9 @@ typedef void (^TCPBlock)(NSInteger code, id _Nullable response, NSString * _Null
 
 @property(nonatomic,weak) id<MSTCPSocketDelegate> delegate;
 
-@property(nonatomic,assign,readonly) BFIMNetStatus connStatus;//tcp连接状态
+@property(nonatomic,assign,readonly) MSIMNetStatus connStatus;//tcp连接状态
 
-@property(nonatomic,assign,readonly) BFIMUserStatus userStatus;//用户登录状态
+@property(nonatomic,assign,readonly) MSIMUserStatus userStatus;//用户登录状态
 
 @property(nonatomic,strong,readonly)dispatch_queue_t socketQueue;// 数据的串行队列
 

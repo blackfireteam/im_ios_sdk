@@ -76,7 +76,7 @@ static MSDBManager *manager;
         while ([resultSet next]) {
             NSString *tableName = [resultSet stringForColumnIndex:1];
             if ([tableName hasPrefix:@"message_user_"]) {
-                NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd' where send_status = '%zd'",tableName,BFIM_MSG_STATUS_SEND_FAIL,BFIM_MSG_STATUS_SENDING];
+                NSString *sqlStr = [NSString stringWithFormat:@"update %@ set send_status = '%zd' where send_status = '%zd'",tableName,MSIM_MSG_STATUS_SEND_FAIL,MSIM_MSG_STATUS_SENDING];
                 [db executeUpdate:sqlStr];
             }
         }

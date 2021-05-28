@@ -7,7 +7,7 @@
 
 #import "MSChatMoreView.h"
 #import "UIColor+BFDarkMode.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 
 @interface MSChatMoreView()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 

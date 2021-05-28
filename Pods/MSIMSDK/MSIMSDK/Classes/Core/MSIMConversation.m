@@ -15,7 +15,7 @@
     if (self.partner_id.length == 0) {
         return @"";
     }
-    if (self.chat_type == BFIM_CHAT_TYPE_C2C) {
+    if (self.chat_type == MSIM_CHAT_TYPE_C2C) {
         return [NSString stringWithFormat:@"c2c_%@",self.partner_id];
     }else {
         return [NSString stringWithFormat:@"group_%@",self.partner_id];

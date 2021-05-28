@@ -8,7 +8,7 @@
 #import "BFSparkCardCell.h"
 #import "MSProfileInfo.h"
 #import <SDWebImage.h>
-#import "BFHeader.h"
+#import "MSHeader.h"
 
 
 @interface BFSparkCardCell()

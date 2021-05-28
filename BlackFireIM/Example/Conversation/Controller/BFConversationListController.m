@@ -8,8 +8,8 @@
 #import "BFConversationListController.h"
 #import "MSIMSDK.h"
 #import "BFNaviBarIndicatorView.h"
-#import "BFHeader.h"
-#import "BFChatViewController.h"
+#import "MSHeader.h"
+#import "MSChatViewController.h"
 #import "MSUIConversationListController.h"
 
 
@@ -66,11 +66,11 @@
 
 - (void)onNetworkChanged:(NSNotification *)notification
 {
-    BFIMNetStatus status = [notification.object intValue];
+    MSIMNetStatus status = [notification.object intValue];
     [self updateTitleViewWith:status];
 }
 
-- (void)updateTitleViewWith:(BFIMNetStatus)status
+- (void)updateTitleViewWith:(MSIMNetStatus)status
 {
     switch (status) {
         case IMNET_STATUS_SUCC:
@@ -120,7 +120,7 @@
 #pragma mark - MSUIConversationListControllerDelegate
 - (void)conversationListController:(MSUIConversationListController *)conversationController didSelectConversation:(MSUIConversationCell *)conversationCell
 {
-    BFChatViewController *vc = [[BFChatViewController alloc]init];
+    MSChatViewController *vc = [[MSChatViewController alloc]init];
     MSUIConversationCellData *data = conversationCell.convData;
     vc.partner_id = data.conv.partner_id;
     [self.navigationController pushViewController:vc animated:YES];

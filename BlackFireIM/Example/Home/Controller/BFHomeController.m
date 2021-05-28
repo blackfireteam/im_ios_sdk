@@ -6,11 +6,11 @@
 //
 
 #import "BFHomeController.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 #import "MSIMSDK.h"
 #import "BFSparkCardView.h"
 #import "BFSparkCardCell.h"
-#import "BFChatViewController.h"
+#import "MSChatViewController.h"
 #import "BFSparkLoadingView.h"
 #import "BFSparkEmptyView.h"
 
@@ -109,7 +109,7 @@
         [self.dataList addObjectsFromArray:sparks];
         [self bf_reloadData];
         } fail:^(NSInteger code, NSString * _Nonnull desc) {
-            [BFHelper showToastFail:desc];
+            [MSHelper showToastFail:desc];
             [self.loadingView stopAnimating];
             self.emptyView.hidden = NO;
     }];
@@ -206,7 +206,7 @@
              cell.winkBtn.selected = YES;
             
             } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                [BFHelper showToastFail:desc];
+                [MSHelper showToastFail:desc];
         }];
     }
 }
@@ -214,7 +214,7 @@
 - (void)chatBtnDidClick:(BFSparkCardCell *)cell
 {
     if (cell.user.user_id) {
-        BFChatViewController *vc = [[BFChatViewController alloc]init];
+        MSChatViewController *vc = [[MSChatViewController alloc]init];
         vc.partner_id = cell.user.user_id;
         [self.navigationController pushViewController:vc animated:YES];
     }

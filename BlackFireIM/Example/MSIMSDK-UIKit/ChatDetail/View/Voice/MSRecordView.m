@@ -6,7 +6,7 @@
 //
 
 #import "MSRecordView.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 
 @implementation MSRecordView
 

@@ -6,7 +6,7 @@
 //
 
 #import "BFProfileHeaderView.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 
 
 @implementation BFProfileHeaderView

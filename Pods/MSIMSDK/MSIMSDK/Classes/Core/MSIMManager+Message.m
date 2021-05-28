@@ -21,7 +21,7 @@
 {
     MSIMTextElem *elem = [[MSIMTextElem alloc]init];
     elem.text = text;
-    elem.type = BFIM_MSG_TYPE_TEXT;
+    elem.type = MSIM_MSG_TYPE_TEXT;
     [self initDefault:elem];
     return elem;
 }
@@ -31,7 +31,7 @@
  */
 - (MSIMImageElem *)createImageMessage:(MSIMImageElem *)elem
 {
-    elem.type = BFIM_MSG_TYPE_IMAGE;
+    elem.type = MSIM_MSG_TYPE_IMAGE;
     [self initDefault:elem];
     return elem;
 }
@@ -40,7 +40,7 @@
  */
 - (MSIMVoiceElem *)createVoiceMessage:(MSIMVoiceElem *)elem
 {
-    elem.type = BFIM_MSG_TYPE_VOICE;
+    elem.type = MSIM_MSG_TYPE_VOICE;
     [self initDefault:elem];
     return elem;
 }
@@ -50,7 +50,7 @@
  */
 - (MSIMVideoElem *)createVideoMessage:(MSIMVideoElem *)elem
 {
-    elem.type = BFIM_MSG_TYPE_VIDEO;
+    elem.type = MSIM_MSG_TYPE_VIDEO;
     [self initDefault:elem];
     return elem;
 }
@@ -60,7 +60,7 @@
 {
     MSIMCustomElem *elem = [[MSIMCustomElem alloc]init];
     elem.jsonStr = jsonStr;
-    elem.type = BFIM_MSG_TYPE_CUSTOM;
+    elem.type = MSIM_MSG_TYPE_CUSTOM;
     [self initDefault:elem];
     return elem;
 }
@@ -68,8 +68,8 @@
 - (void)initDefault:(MSIMElem *)elem
 {
     elem.fromUid = [MSIMTools sharedInstance].user_id;
-    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
-    elem.readStatus = BFIM_MSG_STATUS_UNREAD;
+    elem.sendStatus = MSIM_MSG_STATUS_SENDING;
+    elem.readStatus = MSIM_MSG_STATUS_UNREAD;
     elem.msg_sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
 }
 
@@ -92,15 +92,15 @@
         return;
     }
     elem.toUid = reciever;
-    if (elem.type == BFIM_MSG_TYPE_TEXT) {
+    if (elem.type == MSIM_MSG_TYPE_TEXT) {
         [self sendTextMessage:(MSIMTextElem *)elem isResend:NO successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
+    }else if (elem.type == MSIM_MSG_TYPE_IMAGE) {
         [self sendImageMessage:(MSIMImageElem *)elem isResend:NO successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
+    }else if (elem.type == MSIM_MSG_TYPE_VIDEO) {
         [self sendVideoMessage:(MSIMVideoElem *)elem isResend:NO successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_VOICE) {
+    }else if (elem.type == MSIM_MSG_TYPE_VOICE) {
         [self sendVoiceMessage:(MSIMVoiceElem *)elem isResend:NO successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
+    }else if (elem.type == MSIM_MSG_TYPE_CUSTOM) {
         [self sendCustomMessage:(MSIMCustomElem *)elem isResend:NO successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"params error");
@@ -189,7 +189,7 @@
 {
     WS(weakSelf)
     [self.uploadMediator ms_uploadWithObject:elem.image ? elem.image : elem.path
-                                    fileType:BFIM_MSG_TYPE_IMAGE
+                                    fileType:MSIM_MSG_TYPE_IMAGE
                                     progress:^(CGFloat progress) {
         elem.progress = progress;
         [weakSelf.msgListener onMessageUpdateSendStatus:elem];
@@ -287,7 +287,7 @@
     if ([elem.videoUrl hasPrefix:@"http"]) {
         //只需要上传图片
         [self.uploadMediator ms_uploadWithObject:elem.coverImage ? elem.coverImage : elem.coverPath
-                                        fileType:BFIM_MSG_TYPE_IMAGE
+                                        fileType:MSIM_MSG_TYPE_IMAGE
                                         progress:^(CGFloat progress) {
             elem.progress = progress;
             [weakSelf.msgListener onMessageUpdateSendStatus:elem];
@@ -319,7 +319,7 @@
     }else {
         //先上传图片
         [self.uploadMediator ms_uploadWithObject:elem.coverImage ? elem.coverImage : elem.coverPath
-                                        fileType:BFIM_MSG_TYPE_IMAGE
+                                        fileType:MSIM_MSG_TYPE_IMAGE
                                         progress:^(CGFloat coverProgress) {
             elem.progress = coverProgress*0.2;
             [weakSelf.msgListener onMessageUpdateSendStatus:elem];
@@ -328,7 +328,7 @@
             elem.progress = 0.2;
             elem.coverUrl = coverUrl;
             //再上传视频
-            [self.uploadMediator ms_uploadWithObject:elem.videoPath fileType:BFIM_MSG_TYPE_VIDEO progress:^(CGFloat videoProgress) {
+            [self.uploadMediator ms_uploadWithObject:elem.videoPath fileType:MSIM_MSG_TYPE_VIDEO progress:^(CGFloat videoProgress) {
                 elem.progress = 0.2 + videoProgress*0.8;
                 [weakSelf.msgListener onMessageUpdateSendStatus:elem];
             } succ:^(NSString * _Nonnull videoUrl) {
@@ -419,7 +419,7 @@
              failed:(void(^)(NSInteger code,NSString *errorString))failed
 {
     WS(weakSelf)
-    [self.uploadMediator ms_uploadWithObject:elem.path fileType:BFIM_MSG_TYPE_VOICE progress:^(CGFloat progress) {
+    [self.uploadMediator ms_uploadWithObject:elem.path fileType:MSIM_MSG_TYPE_VOICE progress:^(CGFloat progress) {
         
     } succ:^(NSString * _Nonnull url) {
         elem.url = url;
@@ -506,7 +506,7 @@
 
 - (void)sendMessageSuccessHandler:(MSIMElem *)elem response:(ChatSR *)response
 {
-    elem.sendStatus = BFIM_MSG_STATUS_SEND_SUCC;
+    elem.sendStatus = MSIM_MSG_STATUS_SEND_SUCC;
     elem.msg_id = response.msgId;
     [self.messageStore addMessage:elem];
     [self.msgListener onMessageUpdateSendStatus:elem];
@@ -515,7 +515,7 @@
 
 - (void)sendMessageFailedHandler:(MSIMElem *)elem code:(NSInteger)code error:(NSString *)error
 {
-    elem.sendStatus = BFIM_MSG_STATUS_SEND_FAIL;
+    elem.sendStatus = MSIM_MSG_STATUS_SEND_FAIL;
     elem.code = code;
     elem.reason = error;
     [self.messageStore addMessage:elem];
@@ -565,18 +565,18 @@
                successed:(void(^)(NSInteger msg_id))success
                   failed:(MSIMFail)failed
 {
-    elem.sendStatus = BFIM_MSG_STATUS_SENDING;
+    elem.sendStatus = MSIM_MSG_STATUS_SENDING;
     [self.messageStore addMessage:elem];
     [self.msgListener onMessageUpdateSendStatus:elem];
-    if (elem.type == BFIM_MSG_TYPE_TEXT) {
+    if (elem.type == MSIM_MSG_TYPE_TEXT) {
         [self sendTextMessage:(MSIMTextElem *)elem isResend:YES successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_IMAGE) {
+    }else if (elem.type == MSIM_MSG_TYPE_IMAGE) {
         [self sendImageMessage:(MSIMImageElem *)elem isResend:YES successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_VIDEO) {
+    }else if (elem.type == MSIM_MSG_TYPE_VIDEO) {
         [self sendVideoMessage:(MSIMVideoElem *)elem isResend:YES successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_VOICE) {
+    }else if (elem.type == MSIM_MSG_TYPE_VOICE) {
         [self sendVoiceMessage:(MSIMVoiceElem *)elem isResend:YES successed:success failed:failed];
-    }else if (elem.type == BFIM_MSG_TYPE_CUSTOM) {
+    }else if (elem.type == MSIM_MSG_TYPE_CUSTOM) {
         [self sendCustomMessage:(MSIMCustomElem *)elem isResend:YES successed:success failed:failed];
     }else {
         failed(ERR_USER_PARAMS_ERROR,@"params error");

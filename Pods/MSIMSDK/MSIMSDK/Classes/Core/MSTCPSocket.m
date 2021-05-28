@@ -33,7 +33,7 @@
 
 @property(nonatomic,assign) NSInteger retryCount;//自动重连次数
 
-@property(nonatomic,assign) BFIMNetStatus connStatus;//tcp连接状态
+@property(nonatomic,assign) MSIMNetStatus connStatus;//tcp连接状态
 
 /** 发送消息队列池*/
 @property(nonatomic,strong) NSMutableArray<MSMsgCacheItem *> *sendCache;
@@ -44,7 +44,7 @@
 
 @property(nonatomic,strong) NSMutableDictionary *taskIDs;
 
-@property(nonatomic,assign) BFIMUserStatus userStatus;//用户登录状态
+@property(nonatomic,assign) MSIMUserStatus userStatus;//用户登录状态
 
 @property(nonatomic,assign) NSInteger sendCount;
 

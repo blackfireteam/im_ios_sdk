@@ -6,7 +6,7 @@
 //
 
 #import "MSUIConversationListController.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 #import <MJRefresh.h>
 
 @interface MSUIConversationListController ()<UITableViewDelegate,UITableViewDataSource>
@@ -204,7 +204,7 @@
            
             [self removeConversation:data];
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            [BFHelper showToastFail:desc];
+            [MSHelper showToastFail:desc];
         }];
     }
 }

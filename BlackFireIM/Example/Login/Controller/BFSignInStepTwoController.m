@@ -6,7 +6,7 @@
 //
 
 #import "BFSignInStepTwoController.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 #import "BFRegisterInfo.h"
 #import "MSIMKit.h"
 #import "AppDelegate.h"
@@ -68,13 +68,13 @@
 - (void)nextBtnDidClick
 {
     if (!self.info.avatarImage) {
-        [BFHelper showToastString:@"请上传头像"];
+        [MSHelper showToastString:@"请上传头像"];
         return;
     }
-    [BFHelper showToast];
+    [MSHelper showToast];
     MSIMImageElem *elem = [[MSIMImageElem alloc]init];
     elem.image = self.info.avatarImage;
-    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:elem.image fileType:BFIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
+    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:elem.image fileType:MSIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
         
     } succ:^(NSString * _Nonnull url) {
         
@@ -83,7 +83,7 @@
         
     } fail:^(NSInteger code, NSString * _Nonnull desc) {
         
-        [BFHelper showToastFail:desc];
+        [MSHelper showToastFail:desc];
         
     }];
 }
@@ -94,7 +94,7 @@
     [BFProfileService userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^() {
         
         if ([MSIMManager sharedInstance].connStatus != IMNET_STATUS_SUCC) {
-            [BFHelper showToastString:@"正在建立TCP连接"];
+            [MSHelper showToastString:@"正在建立TCP连接"];
             return;
         }
         MSLog(@"获取userToKen");
@@ -108,14 +108,14 @@
                 AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
                 appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
                     } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                        [BFHelper showToastFail:desc];
+                        [MSHelper showToastFail:desc];
             }];
         } fail:^(NSError * _Nonnull error) {
-            [BFHelper showToastFail:error.localizedDescription];
+            [MSHelper showToastFail:error.localizedDescription];
         }];
         
     } failed:^(NSError * _Nonnull error) {
-        [BFHelper showToastFail:error.localizedDescription];
+        [MSHelper showToastFail:error.localizedDescription];
     }];
 }
 

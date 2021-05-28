@@ -7,7 +7,7 @@
 
 #import "BFUserListCell.h"
 #import <SDWebImage.h>
-#import "BFHeader.h"
+#import "MSHeader.h"
 
 @implementation BFUserListCell
 

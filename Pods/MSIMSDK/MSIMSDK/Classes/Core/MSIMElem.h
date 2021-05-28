@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSIMElem : NSObject<NSCopying>
 
 /** 消息类型*/
-@property(nonatomic,assign) BFIMMessageType type;
+@property(nonatomic,assign) MSIMMessageType type;
 
 /** 消息发送方ID*/
 @property(nonatomic,copy) NSString *fromUid;
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) NSInteger msg_sign;
 
 /** 消息状态*/
-@property(nonatomic,assign) BFIMMessageStatus sendStatus;
+@property(nonatomic,assign) MSIMMessageStatus sendStatus;
 
 /** 消息发送失败错误码*/
 @property(nonatomic,assign) NSInteger code;
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy) NSString *reason;
 
 /** 消息已读状态*/
-@property(nonatomic,assign) BFIMMessageReadStatus readStatus;
+@property(nonatomic,assign) MSIMMessageReadStatus readStatus;
 
 @property(nonatomic,assign,readonly) NSData *extData;
 

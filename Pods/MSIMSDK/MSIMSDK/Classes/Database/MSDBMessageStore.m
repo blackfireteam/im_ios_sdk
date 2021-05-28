@@ -171,7 +171,7 @@ static NSString *ext_data = @"ext_data";
 - (BOOL)updateMessageRevoke:(NSInteger)msg_id partnerID:(NSString *)partnerID
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set msg_type = '%zd' where msg_id = '%zd'",tableName,BFIM_MSG_TYPE_REVOKE,msg_id];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set msg_type = '%zd' where msg_id = '%zd'",tableName,MSIM_MSG_TYPE_REVOKE,msg_id];
     BOOL isOK = [self excuteSQL:sqlStr];
     return isOK;
 }
@@ -180,7 +180,7 @@ static NSString *ext_data = @"ext_data";
 - (BOOL)markMessageAsRead:(NSInteger)last_msg_id partnerID:(NSString *)partnerID
 {
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
-    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set read_status = '%zd' where msg_id <= '%zd'",tableName,BFIM_MSG_STATUS_READ,last_msg_id];
+    NSString *sqlStr = [NSString stringWithFormat:@"update %@ set read_status = '%zd' where msg_id <= '%zd'",tableName,MSIM_MSG_STATUS_READ,last_msg_id];
     BOOL isOK = [self excuteSQL:sqlStr];
     return isOK;
 }
@@ -232,7 +232,7 @@ static NSString *ext_data = @"ext_data";
     }
     __block MSIMElem *elem = nil;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partner_id];
-    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' order by msg_sign desc limit 1",tableName,BFIM_MSG_TYPE_NULL];
+    NSString *sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' order by msg_sign desc limit 1",tableName,MSIM_MSG_TYPE_NULL];
     WS(weakSelf)
     [self excuteQuerySQL:sqlStr resultBlock:^(FMResultSet * _Nonnull rsSet) {
         STRONG_SELF(strongSelf)
@@ -503,7 +503,7 @@ static NSString *ext_data = @"ext_data";
             //将不显示的消息剔除
             NSMutableArray *tempArr = [NSMutableArray array];
             for (MSIMElem *elem in msgs) {
-                if (elem.type != BFIM_MSG_TYPE_NULL) {
+                if (elem.type != MSIM_MSG_TYPE_NULL) {
                     [tempArr addObject:elem];
                 }
             }
@@ -524,9 +524,9 @@ static NSString *ext_data = @"ext_data";
     NSString *sqlStr;
     NSString *tableName = [NSString stringWithFormat:@"message_user_%@",partnerID];
     if (last_msg_sign == 0) {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,BFIM_MSG_TYPE_NULL,block_id,count+1];
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,MSIM_MSG_TYPE_NULL,block_id,count+1];
     }else {
-        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,last_msg_sign,BFIM_MSG_TYPE_NULL,block_id,count+1];
+        sqlStr = [NSString stringWithFormat:@"select * from %@ where msg_sign < '%zd' and msg_type != '%zd' and block_id = '%zd' order by msg_sign desc limit '%zd'",tableName,last_msg_sign,MSIM_MSG_TYPE_NULL,block_id,count+1];
     }
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     WS(weakSelf)
@@ -547,14 +547,14 @@ static NSString *ext_data = @"ext_data";
 - (MSIMElem *)bf_componentElem:(FMResultSet *)rsSet
 {
     MSIMElem *elem = [[MSIMElem alloc]init];
-    BFIMMessageType type = [rsSet intForColumn:msg_type];
+    MSIMMessageType type = [rsSet intForColumn:msg_type];
     NSData *extData = [rsSet dataForColumn:@"ext_data"];
     NSDictionary *dic = [NSDictionary el_convertFromData:extData];
-    if (type == BFIM_MSG_TYPE_TEXT) {
+    if (type == MSIM_MSG_TYPE_TEXT) {
         MSIMTextElem *textElem = [[MSIMTextElem alloc]init];
         textElem.text = dic[@"text"];
         elem = textElem;
-    }else if (type == BFIM_MSG_TYPE_IMAGE) {
+    }else if (type == MSIM_MSG_TYPE_IMAGE) {
         MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
         imageElem.width = [dic[@"width"]integerValue];
         imageElem.height = [dic[@"height"]integerValue];
@@ -563,7 +563,7 @@ static NSString *ext_data = @"ext_data";
         imageElem.url = dic[@"url"];
         imageElem.uuid = dic[@"uuid"];
         elem = imageElem;
-    }else if (type == BFIM_MSG_TYPE_VIDEO) {
+    }else if (type == MSIM_MSG_TYPE_VIDEO) {
         MSIMVideoElem *videoElem = [[MSIMVideoElem alloc]init];
         videoElem.width = [dic[@"width"]integerValue];
         videoElem.height = [dic[@"height"]integerValue];
@@ -574,14 +574,14 @@ static NSString *ext_data = @"ext_data";
         videoElem.duration = [dic[@"duration"] integerValue];
         videoElem.uuid = dic[@"uuid"];
         elem = videoElem;
-    }else if (type == BFIM_MSG_TYPE_VOICE) {
+    }else if (type == MSIM_MSG_TYPE_VOICE) {
         MSIMVoiceElem *voiceElem = [[MSIMVoiceElem alloc]init];
         voiceElem.url = dic[@"voiceUrl"];
         voiceElem.path = [self fixLocalImagePath:dic[@"voicePath"]];
         voiceElem.duration = [dic[@"duration"] integerValue];
         voiceElem.dataSize = [dic[@"size"] integerValue];
         elem = voiceElem;
-    }else if (type == BFIM_MSG_TYPE_CUSTOM) {
+    }else if (type == MSIM_MSG_TYPE_CUSTOM) {
         MSIMCustomElem *customElem = [[MSIMCustomElem alloc]init];
         customElem.jsonStr = [[NSString alloc]initWithData:extData encoding:NSUTF8StringEncoding];
         elem = customElem;

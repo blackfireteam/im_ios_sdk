@@ -156,7 +156,7 @@
     MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:user_id];
     if (conv == nil) {
         conv = [[MSIMConversation alloc]init];
-        conv.chat_type = BFIM_CHAT_TYPE_C2C;
+        conv.chat_type = MSIM_CHAT_TYPE_C2C;
         conv.partner_id = user_id;
     }
     conv.draftText = text;

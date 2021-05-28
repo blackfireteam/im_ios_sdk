@@ -5,12 +5,12 @@
 //  Created by benny wang on 2021/3/5.
 //
 
-#import "BFMessageCell.h"
+#import "MSMessageCell.h"
 #import "BFBubbleMessageCellData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BFBubbleMessageCell : BFMessageCell
+@interface BFBubbleMessageCell : MSMessageCell
 
 /**
  *  气泡图像视图，即消息的气泡图标，在 UI 上作为气泡的背景板包裹消息信息内容。

@@ -6,7 +6,7 @@
 //
 
 #import "BFNaviBarIndicatorView.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 #import "UIColor+BFDarkMode.h"
 
 @implementation BFNaviBarIndicatorView

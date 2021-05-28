@@ -6,7 +6,7 @@
 //
 
 #import "BFSparkEmptyView.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 
 
 @implementation BFSparkEmptyView

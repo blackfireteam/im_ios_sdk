@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,copy,readonly) NSString *conversation_id;
 
 ///聊天类型，单聊或群聊
-@property(nonatomic,assign) BFIMAChatType chat_type;
+@property(nonatomic,assign) MSIMAChatType chat_type;
 
 ///如果是单聊：对方的uid,群聊： 指group_id
 @property(nonatomic,copy) NSString *partner_id;

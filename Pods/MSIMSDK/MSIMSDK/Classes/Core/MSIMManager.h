@@ -26,7 +26,7 @@ typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 
 @property(nonatomic,strong,readonly) MSTCPSocket *socket;
 
-@property(nonatomic,assign,readonly) BFIMNetStatus connStatus;//tcp连接状态
+@property(nonatomic,assign,readonly) MSIMNetStatus connStatus;//tcp连接状态
 
 @property(nonatomic,strong) MSDBMessageStore *messageStore;
 

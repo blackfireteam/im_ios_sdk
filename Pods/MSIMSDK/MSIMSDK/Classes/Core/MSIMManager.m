@@ -93,7 +93,7 @@ static MSIMManager *_manager;
     return _messageCaches;
 }
 
-- (BFIMNetStatus)connStatus
+- (MSIMNetStatus)connStatus
 {
     return self.socket.connStatus;
 }

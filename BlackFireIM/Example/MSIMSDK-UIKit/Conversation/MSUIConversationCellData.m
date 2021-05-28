@@ -6,7 +6,7 @@
 //
 
 #import "MSUIConversationCellData.h"
-#import "BFHeader.h"
+#import "MSHeader.h"
 
 @implementation MSUIConversationCellData
 
@@ -36,7 +36,7 @@
 
 - (UIImage *)avatarImage
 {
-    if (self.conv.chat_type == BFIM_CHAT_TYPE_C2C) {
+    if (self.conv.chat_type == MSIM_CHAT_TYPE_C2C) {
         return [UIImage bf_imageNamed:@"default_c2c_head"];
     }else {
         return [UIImage bf_imageNamed:@"default_group_head"];

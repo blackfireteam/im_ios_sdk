@@ -65,7 +65,7 @@
 
 - (void)onUserLogStatusChanged:(NSNotification *)notification
 {
-    BFIMUserStatus status = [notification.object intValue];
+    MSIMUserStatus status = [notification.object intValue];
     switch (status) {
         case IMUSER_STATUS_FORCEOFFLINE://用户被强制下线
         {
