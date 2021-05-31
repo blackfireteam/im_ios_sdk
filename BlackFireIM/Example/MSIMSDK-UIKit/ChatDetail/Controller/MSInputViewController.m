@@ -44,6 +44,11 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)dealloc
+{
+    MSLog(@"%@ dealloc",self.class);
+}
+
 - (void)setupUI
 {
     self.view.backgroundColor = [UIColor d_colorWithColorLight:TInput_Background_Color dark:TInput_Background_Color_Dark];

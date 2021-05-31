@@ -90,6 +90,7 @@
 		F09316DC260B81B80099E39E /* BFDiscoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316DB260B81B80099E39E /* BFDiscoveryController.m */; };
 		F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316E1260B82EE0099E39E /* BFUserListCell.m */; };
 		F0C4AB792660E45400CC3160 /* MSMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C4AB782660E45400CC3160 /* MSMessageController.m */; };
+		F0C4AB7D2664860B00CC3160 /* BFChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C4AB7C2664860B00CC3160 /* BFChatViewController.m */; };
 		F0CF6429261ECE8400106697 /* UIButton+positon.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6428261ECE8400106697 /* UIButton+positon.m */; };
 		F0CF642F261ED60A00106697 /* BFHomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF642E261ED60A00106697 /* BFHomeController.m */; };
 		F0CF645E2623EE3500106697 /* BFSignInStepOneController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF645D2623EE3500106697 /* BFSignInStepOneController.m */; };
@@ -336,6 +337,9 @@
 		F09316E0260B82EE0099E39E /* BFUserListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUserListCell.h; sourceTree = "<group>"; };
 		F09316E1260B82EE0099E39E /* BFUserListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUserListCell.m; sourceTree = "<group>"; };
 		F0C4AB782660E45400CC3160 /* MSMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMessageController.m; sourceTree = "<group>"; };
+		F0C4AB7B2664860B00CC3160 /* BFChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFChatViewController.h; sourceTree = "<group>"; };
+		F0C4AB7C2664860B00CC3160 /* BFChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFChatViewController.m; sourceTree = "<group>"; };
+		F0C4AB7E2664CAAE00CC3160 /* MSIMSDK-UIKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MSIMSDK-UIKit.h"; sourceTree = "<group>"; };
 		F0CF6427261ECE8400106697 /* UIButton+positon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+positon.h"; sourceTree = "<group>"; };
 		F0CF6428261ECE8400106697 /* UIButton+positon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+positon.m"; sourceTree = "<group>"; };
 		F0CF642D261ED60A00106697 /* BFHomeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFHomeController.h; sourceTree = "<group>"; };
@@ -724,6 +728,8 @@
 		F058368626032A790008C4FD /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				F0C4AB7B2664860B00CC3160 /* BFChatViewController.h */,
+				F0C4AB7C2664860B00CC3160 /* BFChatViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -848,7 +854,6 @@
 			isa = PBXGroup;
 			children = (
 				F09316D7260B817B0099E39E /* Controller */,
-				F09316D9260B81870099E39E /* Model */,
 				F09316D8260B81820099E39E /* View */,
 			);
 			path = Discovery;
@@ -870,13 +875,6 @@
 				F09316E1260B82EE0099E39E /* BFUserListCell.m */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		F09316D9260B81870099E39E /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		F0C4AB7A2660E52B00CC3160 /* Base */ = {
@@ -915,7 +913,6 @@
 			isa = PBXGroup;
 			children = (
 				F0CF642B261ED5E900106697 /* Controller */,
-				F0CF645226204DD900106697 /* Model */,
 				F0CF642C261ED5F000106697 /* View */,
 			);
 			path = Home;
@@ -943,13 +940,6 @@
 				F0850E7E262E6F80007C5589 /* BFSparkEmptyView.m */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		F0CF645226204DD900106697 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		F0CF645F2623F67C00106697 /* Model */ = {
@@ -984,6 +974,7 @@
 		F0E4AA6326609D12002FD8F2 /* MSIMSDK-UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				F0C4AB7E2664CAAE00CC3160 /* MSIMSDK-UIKit.h */,
 				F0C4AB7A2660E52B00CC3160 /* Base */,
 				F0E4AA742660CB81002FD8F2 /* Resource */,
 				F0E4AA712660CB4C002FD8F2 /* ChatDetail */,
@@ -1299,6 +1290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0C4AB7D2664860B00CC3160 /* BFChatViewController.m in Sources */,
 				F056714725F07A0C00782F9C /* UIImage+BFDarkMode.m in Sources */,
 				F09316DC260B81B80099E39E /* BFDiscoveryController.m in Sources */,
 				F0E4AA6C2660BF34002FD8F2 /* MSUIConversationCell.m in Sources */,

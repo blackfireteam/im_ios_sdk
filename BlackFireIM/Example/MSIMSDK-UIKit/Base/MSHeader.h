@@ -8,7 +8,6 @@
 #ifndef MSHeader_h
 #define MSHeader_h
 
-#import "MSHeader.h"
 #import "UIColor+BFDarkMode.h"
 #import "UIImage+BFDarkMode.h"
 #import "UIButton+positon.h"

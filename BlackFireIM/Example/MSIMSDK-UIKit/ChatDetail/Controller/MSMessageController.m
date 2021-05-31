@@ -54,7 +54,7 @@
 
 - (void)dealloc
 {
-    NSLog(@"%@ dealloc",self.class);
+    MSLog(@"%@ dealloc",self.class);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -306,7 +306,19 @@
         }
     }
     
-    NSMutableArray *uiMsgs = [self transUIMsgFromIMMsg:tempArr];
+    NSMutableArray *uiMsgs = [NSMutableArray array];
+    for (MSIMElem *e in tempArr) {
+        if ([self.delegate respondsToSelector:@selector(messageController:onNewMessage:)]) {
+            MSMessageCellData *data = [self.delegate messageController:self onNewMessage:e];
+            if (data != nil) {
+                [uiMsgs addObject:data];
+            }else {
+                [uiMsgs addObjectsFromArray:[self transUIMsgFromIMMsg:@[e]]];
+            }
+        }else {
+            [uiMsgs addObjectsFromArray:[self transUIMsgFromIMMsg:@[e]]];
+        }
+    }
     if (uiMsgs.count) {
         //当前列表是否停留在底部
         BOOL isAtBottom = (self.tableView.contentOffset.y + self.tableView.height + 20 >= self.tableView.contentSize.height);
@@ -422,7 +434,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MSMessageCellData *data = _uiMsgs[indexPath.row];
-    MSMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:data.reuseId forIndexPath:indexPath];
+    MSMessageCell *cell;
+    if ([self.delegate respondsToSelector:@selector(messageController:onShowMessageData:)]) {
+        cell = [self.delegate messageController:self onShowMessageData:data];
+        if (cell) {
+            [self.tableView registerClass:[cell class] forCellReuseIdentifier:data.reuseId];
+            cell.delegate = self;
+            [cell fillWithData:data];
+            return cell;
+        }
+    }
+    cell = [tableView dequeueReusableCellWithIdentifier:data.reuseId forIndexPath:indexPath];
     cell.delegate = self;
     [cell fillWithData:data];
     return cell;

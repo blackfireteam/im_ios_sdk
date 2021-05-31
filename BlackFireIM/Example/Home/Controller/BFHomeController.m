@@ -10,7 +10,7 @@
 #import "MSIMSDK.h"
 #import "BFSparkCardView.h"
 #import "BFSparkCardCell.h"
-#import "MSChatViewController.h"
+#import "BFChatViewController.h"
 #import "BFSparkLoadingView.h"
 #import "BFSparkEmptyView.h"
 
@@ -214,7 +214,7 @@
 - (void)chatBtnDidClick:(BFSparkCardCell *)cell
 {
     if (cell.user.user_id) {
-        MSChatViewController *vc = [[MSChatViewController alloc]init];
+        BFChatViewController *vc = [[BFChatViewController alloc]init];
         vc.partner_id = cell.user.user_id;
         [self.navigationController pushViewController:vc animated:YES];
     }

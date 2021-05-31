@@ -7,14 +7,10 @@
 
 #import "MSChatViewController.h"
 #import "MSHeader.h"
-#import "MSMessageController.h"
-#import "MSInputViewController.h"
 #import "MSIMSDK.h"
-#import "YBImageBrowser.h"
-#import "YBIBVideoData.h"
 #import "MSChatViewController+More.h"
 #import "MSMessageCell.h"
-
+#import <AVFoundation/AVFoundation.h>
 
 @interface MSChatViewController ()<MSInputViewControllerDelegate,MSMessageControllerDelegate>
 
@@ -35,11 +31,11 @@
 - (void)dealloc
 {
     [self saveDraft];
+    MSLog(@"%@ dealloc",self.class);
 }
 
 - (void)setupViews
 {
-    self.view.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
     self.messageController = [[MSMessageController alloc]init];
     self.messageController.delegate = self;
     self.messageController.partner_id = self.partner_id;
@@ -54,13 +50,7 @@
     [self addChildViewController:self.inputController];
     [self.view addSubview:self.inputController.view];
     
-    [[MSProfileProvider provider] providerProfile:self.partner_id.integerValue complete:^(MSProfileInfo * _Nonnull profile) {
-            self.navigationItem.title = profile.nick_name;
-    }];
     MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:self.partner_id];
-    if (conv.ext.i_block_u) {
-        [MSHelper showToastString:@"对方被我Block"];
-    }
     if (conv.draftText.length > 0) {
         self.inputController.inputBar.inputTextView.text = conv.draftText;
         [self.inputController.inputBar.inputTextView becomeFirstResponder];
@@ -90,11 +80,7 @@
 - (void)inputController:(MSInputViewController *)inputController didSendTextMessage:(NSString *)msg
 {
     MSIMTextElem *textElem = [[MSIMManager sharedInstance] createTextMessage:msg];
-    [[MSIMManager sharedInstance] sendC2CMessage:textElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
-        
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            [MSHelper showToastFail:desc];
-    }];
+    [self sendMessage:textElem];
 }
 
 - (void)inputController:(MSInputViewController *)inputController didSendVoiceMessage:(NSString *)filePath
@@ -109,11 +95,7 @@
     voiceElem.duration = duration;
     voiceElem.dataSize = length;
     voiceElem = [[MSIMManager sharedInstance] createVoiceMessage:voiceElem];
-    [[MSIMManager sharedInstance] sendC2CMessage:voiceElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
-            
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            [MSHelper showToastFail:desc];
-    }];
+    [self sendMessage:voiceElem];
 }
 
 - (void)inputControllerDidInputAt:(MSInputViewController *)inputController
@@ -132,18 +114,40 @@
 /// 点击拍照，照片等更多功能
 - (void)inputController:(MSInputViewController *)inputController didSelectMoreCell:(MSInputMoreCell *)cell
 {
+    if ([self.delegate respondsToSelector:@selector(chatController:onSelectMoreCell:)]) {
+        [self.delegate chatController:self onSelectMoreCell:cell];
+    }
     if (cell.data.tye == MSIM_MORE_PHOTO) {//照片
         [self selectPhotoForSend];
     }else if (cell.data.tye == MSIM_MORE_VIDEO) {//视频
         [self selectVideoForSend];
-    }else if (cell.data.tye == MSIM_MORE_VIDEO_CALL) {//语音通话
-        
-    }else if (cell.data.tye == MSIM_MORE_VIDEO_CALL) {//视频通话
-        
     }
 }
 
 #pragma mark - <MSMessageControllerDelegate>
+
+/**
+ *  收到新消息的函数委托
+ */
+- (MSMessageCellData *)messageController:(MSMessageController *)controller onNewMessage:(MSIMElem *)data
+{
+    if ([self.delegate respondsToSelector:@selector(chatController:onNewMessage:)]) {
+        return [self.delegate chatController:self onNewMessage:data];
+    }
+    return nil;
+}
+
+/**
+ *  显示消息数据委托
+ *  您可以通过该回调实现：根据传入的 data 初始化消息气泡并进行显示
+ */
+- (MSMessageCell *)messageController:(MSMessageController *)controller onShowMessageData:(MSMessageCellData *)data
+{
+    if ([self.delegate respondsToSelector:@selector(messageController:onShowMessageData:)]) {
+        return [self.delegate chatController:self onShowMessageData:data];
+    }
+    return nil;
+}
 
 /**
  *  控制器点击回调
@@ -160,6 +164,9 @@
  */
 - (void)messageController:(MSMessageController *)controller onSelectMessageAvatar:(MSMessageCell *)cell
 {
+    if ([self.delegate respondsToSelector:@selector(chatController:onSelectMessageAvatar:)]) {
+        [self.delegate chatController:self onSelectMessageAvatar:cell];
+    }
     [self.inputController reset];
 }
 
@@ -169,37 +176,8 @@
 - (void)messageController:(MSMessageController *)controller onSelectMessageContent:(MSMessageCell *)cell
 {
     [self.inputController reset];
-    if (cell.messageData.elem.type == MSIM_MSG_TYPE_IMAGE) {//点击图片消息，查看图片
-        NSMutableArray *tempArr = [NSMutableArray array];
-        NSInteger defaultIndex = 0;
-        for (NSInteger i = 0; i < self.messageController.uiMsgs.count; i++) {
-            MSMessageCellData *data = self.messageController.uiMsgs[i];
-            if (data.elem.type == MSIM_MSG_TYPE_IMAGE) {
-                MSMessageCell *dataCell = (MSMessageCell *)[self.messageController.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-                MSIMImageElem *imageElem = (MSIMImageElem *)data.elem;
-                YBIBImageData *imageData = [YBIBImageData new];
-                imageData.imageURL = [NSURL URLWithString:imageElem.url];
-                imageData.projectiveView = dataCell.container.subviews.firstObject;
-                [tempArr addObject:imageData];
-                if (cell.messageData == data) {
-                    defaultIndex = tempArr.count-1;
-                }
-            }
-        }
-        YBImageBrowser *browser = [YBImageBrowser new];
-        browser.dataSourceArray = tempArr;
-        browser.currentPage = defaultIndex;
-        [browser show];
-    }else if (cell.messageData.elem.type == MSIM_MSG_TYPE_VIDEO) {//点击视频
-        
-        MSIMVideoElem *videoElem = (MSIMVideoElem *)cell.messageData.elem;
-        YBIBVideoData *videoData = [YBIBVideoData new];
-        videoData.videoURL = [NSURL URLWithString:videoElem.videoUrl];
-        videoData.projectiveView = cell.container.subviews.firstObject;
-        YBImageBrowser *browser = [YBImageBrowser new];
-        browser.dataSourceArray = @[videoData];
-        browser.currentPage = 0;
-        [browser show];
+    if ([self.delegate respondsToSelector:@selector(chatController:onSelectMessageContent:)]) {
+        [self.delegate chatController:self onSelectMessageContent:cell];
     }
 }
 
@@ -225,6 +203,18 @@
     NSString *draft = self.inputController.inputBar.inputTextView.text;
     draft = [draft stringByTrimmingCharactersInSet: NSCharacterSet.whitespaceAndNewlineCharacterSet];
     [[MSIMManager sharedInstance] setConversationDraft:self.partner_id draftText:draft succ:nil failed:nil];
+}
+
+- (void)sendMessage:(MSIMElem *)message
+{
+    [[MSIMManager sharedInstance] sendC2CMessage:message toReciever:self.partner_id successed:^(NSInteger msg_id) {
+            
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            [MSHelper showToastFail:desc];
+    }];
+    if ([self.delegate respondsToSelector:@selector(chatController:didSendMessage:)]) {
+        [self.delegate chatController:self didSendMessage:message];
+    }
 }
 
 @end

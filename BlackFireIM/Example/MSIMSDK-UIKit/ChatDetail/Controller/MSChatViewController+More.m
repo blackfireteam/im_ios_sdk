@@ -176,23 +176,13 @@
 - (void)sendImage:(MSIMImageElem *)elem
 {
     MSIMImageElem *imageElem = [[MSIMManager sharedInstance]createImageMessage:elem];
-    [[MSIMManager sharedInstance]sendC2CMessage:imageElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
-            
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            NSLog(@"code = %zd,desc = %@",code,desc);
-            [MSHelper showToastFail:desc];
-    }];
+    [self sendMessage:imageElem];
 }
 
 - (void)sendVideo:(MSIMVideoElem *)elem
 {
     MSIMVideoElem *videoElem = [[MSIMManager sharedInstance]createVideoMessage:elem];
-    [[MSIMManager sharedInstance]sendC2CMessage:videoElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
-            
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
-            NSLog(@"code = %zd,desc = %@",code,desc);
-            [MSHelper showToastFail:desc];
-    }];
+    [self sendMessage:videoElem];
 }
 
 @end

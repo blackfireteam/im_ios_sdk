@@ -9,7 +9,7 @@
 #import "UIColor+BFDarkMode.h"
 #import "MSHeader.h"
 #import "BFUserListCell.h"
-#import "MSChatViewController.h"
+#import "BFChatViewController.h"
 #import "MSIMSDK.h"
 
 
@@ -102,7 +102,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    MSChatViewController *vc = [[MSChatViewController alloc]init];
+    BFChatViewController *vc = [[BFChatViewController alloc]init];
     vc.partner_id = [NSString stringWithFormat:@"%@",self.dataArray[indexPath.row]];
     [self.navigationController pushViewController:vc animated:YES];
 }

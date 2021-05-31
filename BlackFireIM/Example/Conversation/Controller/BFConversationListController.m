@@ -8,10 +8,8 @@
 #import "BFConversationListController.h"
 #import "MSIMSDK.h"
 #import "BFNaviBarIndicatorView.h"
-#import "MSHeader.h"
-#import "MSChatViewController.h"
-#import "MSUIConversationListController.h"
-
+#import "MSIMSDK-UIKit.h"
+#import "BFChatViewController.h"
 
 @interface BFConversationListController ()<MSUIConversationListControllerDelegate>
 
@@ -120,7 +118,7 @@
 #pragma mark - MSUIConversationListControllerDelegate
 - (void)conversationListController:(MSUIConversationListController *)conversationController didSelectConversation:(MSUIConversationCell *)conversationCell
 {
-    MSChatViewController *vc = [[MSChatViewController alloc]init];
+    BFChatViewController *vc = [[BFChatViewController alloc]init];
     MSUIConversationCellData *data = conversationCell.convData;
     vc.partner_id = data.conv.partner_id;
     [self.navigationController pushViewController:vc animated:YES];

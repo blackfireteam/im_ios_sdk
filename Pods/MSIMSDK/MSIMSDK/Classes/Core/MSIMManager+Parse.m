@@ -114,14 +114,14 @@
             if (elem.msg_id > conv.msg_end) {
                 conv.msg_end = elem.msg_id;
             }
-            if (increaseCount) {
-                conv.unread_count += increaseCount;
-            }
-            if (isConvLastMessage == NO) {
-                conv.deleted = 0;
-            }
-            [needConvs addObject:conv];
         }
+        if (increaseCount) {
+            conv.unread_count += increaseCount;
+        }
+        if (isConvLastMessage == NO) {
+            conv.deleted = 0;
+        }
+        [needConvs addObject:conv];
     }
     if (needConvs.count) {
         [[MSConversationProvider provider]updateConversations:needConvs];
