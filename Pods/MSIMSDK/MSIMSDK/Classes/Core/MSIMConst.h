@@ -8,7 +8,6 @@
 #ifndef MSIMConst_h
 #define MSIMConst_h
 
-
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 #define STRONG_SELF(strongSelf) if (!weakSelf) return; \
 __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -114,7 +113,6 @@ typedef NS_ENUM(NSUInteger, MSIMNetStatus) {
     IMNET_STATUS_CONNECTING,  //正在连接
     IMNET_STATUS_CONNFAILED,  //连接失败
     IMNET_STATUS_DISCONNECT,  //断开连接
-    IMNET_STATUS_RECONNFAILD  //重连失败
 };
 
 /** 用户在线状态*/

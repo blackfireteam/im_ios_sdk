@@ -9,9 +9,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger ,MSIMServerType){
+    
+    MSIMServerTypeTest = 0, //测试环境
+    
+    MSIMServerTypeProduct = 1,//正式环境
+};
+
 @interface MSIMTools : NSObject
 
 + (MSIMTools *)sharedInstance;
+
+@property(nonatomic,assign) MSIMServerType serverType;
+
+@property(nonatomic,copy,readonly) NSString *HOST_IM_URL;
+
+@property(nonatomic,assign,readonly) NSInteger IM_PORT;
 
 @property(nonatomic,copy) NSString * _Nullable user_id;
 

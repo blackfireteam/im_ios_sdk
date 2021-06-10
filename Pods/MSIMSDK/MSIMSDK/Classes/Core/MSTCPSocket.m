@@ -15,6 +15,7 @@
 #import "MSIMErrorCode.h"
 
 
+
 #define kMsgMaxOutTime 60
 @interface MSTCPSocket()<GCDAsyncSocketDelegate>
 
@@ -31,7 +32,8 @@
 @property(nonatomic,strong) GCDAsyncSocket *socket;
 @property(nonatomic,strong)dispatch_queue_t socketQueue;// 数据的串行队列
 
-@property(nonatomic,assign) NSInteger retryCount;//自动重连次数
+@property(nonatomic,assign) NSInteger retryCount;//重连次数
+@property(nonatomic,strong) NSArray *retryDurations;//自动重连间隔
 
 @property(nonatomic,assign) MSIMNetStatus connStatus;//tcp连接状态
 
@@ -47,6 +49,7 @@
 @property(nonatomic,assign) MSIMUserStatus userStatus;//用户登录状态
 
 @property(nonatomic,assign) NSInteger sendCount;
+
 
 @end
 @implementation MSTCPSocket
@@ -68,12 +71,13 @@ static MSTCPSocket *_manager;
         [_buffer setLength: 0];
         _sendCache = [NSMutableArray array];
         _cacheLock = [[NSLock alloc]init];
+        _retryDurations = @[@(0),@(0.25),@(0.5),@(1),@(2),@(4),@(8),@(16),@(32),@(64)];
         _socket = [[GCDAsyncSocket alloc]initWithDelegate:self delegateQueue:self.socketQueue];
-        _sendTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(sendTimerHandler:) userInfo:nil repeats:true];
+        _sendTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(sendTimerHandler:) userInfo:nil repeats:true];
         [[NSRunLoop mainRunLoop]addTimer:_sendTimer forMode:NSRunLoopCommonModes];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-        self.reachability = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+        self.reachability = [Reachability reachabilityWithHostName:@"www.apple.com"];
         [self.reachability startNotifier];
         
         //app启动或者app从后台进入前台都会调用这个方法
@@ -86,8 +90,14 @@ static MSTCPSocket *_manager;
 {
     if(!_socketQueue) {
         _socketQueue = dispatch_queue_create("socketQueue", NULL);
+        MSLog(@"*****%@",_socketQueue);
     }
     return _socketQueue;
+}
+
+- (void)connectTCP:(NSString *)host port:(NSInteger)port
+{
+    [self.socket connectToHost:host onPort:port error:nil];
 }
 
 - (void)connectTCPToServer
@@ -97,7 +107,7 @@ static MSTCPSocket *_manager;
     self.userStatus = IMUSER_STATUS_UNLOGIN;
     self.connStatus = IMNET_STATUS_CONNECTING;
     NSError *error = nil;
-    [self.socket connectToHost:self.config.ip onPort:self.config.port withTimeout:15 error:&error];
+    [self.socket connectToHost:MSIMTools.sharedInstance.HOST_IM_URL onPort:MSIMTools.sharedInstance.IM_PORT withTimeout:10 error:&error];
     if(error) {
         MSLog(@"socket连接错误：%@", error);
         if (self.delegate && [self.delegate respondsToSelector:@selector(connectFailed:err:)]) {
@@ -169,7 +179,7 @@ static MSTCPSocket *_manager;
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
-    MSLog(@"****连接断开****");
+    MSLog(@"****连接断开****%@",err);
     self.userStatus = IMUSER_STATUS_UNLOGIN;
     self.connStatus = IMNET_STATUS_CONNFAILED;
     [self closeTimer];
@@ -177,17 +187,16 @@ static MSTCPSocket *_manager;
     self.retryTimer = nil;
     if (self.netStatus != NotReachable) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(self.retryCount <= self.config.retryCount) {//断线重连
-                MSLog(@"断线重连");
-                self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:self.retryCount*self.retryCount target:self selector:@selector(connectTCPToServer) userInfo:nil repeats:true];
-                [[NSRunLoop mainRunLoop]addTimer:self.retryTimer forMode:NSRunLoopCommonModes];
-                self.retryCount++;
-            }else {//断线重连失败
-                MSLog(@"断线重连失败");
-                if (self.delegate && [self.delegate respondsToSelector:@selector(onReConnFailed:err:)]) {
-                    [self.delegate onReConnFailed:err.code err:err.localizedDescription];
-                }
+            MSLog(@"断线重连");
+            NSInteger duration = 0;
+            if (self.retryCount > self.retryDurations.count-1) {
+                duration = 64;
+            }else {
+                duration = [self.retryDurations[self.retryCount] integerValue];
             }
+            self.retryTimer = [NSTimer scheduledTimerWithTimeInterval:duration target:self selector:@selector(connectTCPToServer) userInfo:nil repeats:true];
+            [[NSRunLoop mainRunLoop]addTimer:self.retryTimer forMode:NSRunLoopCommonModes];
+            self.retryCount++;
         });
     }
 }
@@ -201,21 +210,26 @@ static MSTCPSocket *_manager;
         HTONL(length);//ios系统采用的是小端序，将网络的大端序转换成本机序
         if(length == 0) {
             //没有申明长度的包作为异常包丢弃
-            [_buffer setLength:0];
+            NSData *tmp = [_buffer subdataWithRange:NSMakeRange(4, _buffer.length-4)];
+            [_buffer setLength:0];//清零
+            [_buffer appendData:tmp];
+            MSLog(@"buffer length = 0");
         }else {
             _bodyLength = (length >> 12) - 4;
-            BOOL isZip = (length & 4095) & 1;//对应是否压缩
-            BOOL isSecrect = ((length & 4095) >> 1) & 1; //是否加密
+            BOOL isZip = length & 1;//对应是否压缩
+            BOOL isSecrect = (length >> 1) & 1; //是否加密
             NSInteger type = (length & 4095) >> 2;//对应protobuf的模型
             
-            if((_bodyLength+4) <= _buffer.length) {//如果数据包没有超过缓冲区的大小
+            if(_buffer.length >= (_bodyLength+4)) {//如果数据包没有超过缓冲区的大小
                 @try {
                     NSData *data = [_buffer subdataWithRange:NSMakeRange(4, _bodyLength)];
                     if(data != nil && isSecrect) {//先解密
+                        MSLog(@"buffer 解密");
                         NSString *encryStr = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                         data = [[NSString decryptAES:encryStr key:nil]dataUsingEncoding:NSUTF8StringEncoding];
                     }
                     if(data != nil && isZip) {//先解压
+                        MSLog(@"buffer 解压");
                         data = [NSData dataByDecompressingData:data];
                     }
                     [self handlePackage:data protoType:type];//收到的数据分发
@@ -226,8 +240,8 @@ static MSTCPSocket *_manager;
                 }@catch (NSException *exception) {
                     MSLog(@"exception name is %@,reason is %@",exception.name,exception.reason);
                 }
-                
             }else {
+                MSLog(@"******buffer break");
                 break;
             }
         }
@@ -237,7 +251,6 @@ static MSTCPSocket *_manager;
 
 - (void)send:(NSData *)sendData protoType:(XMChatProtoType)protoType needToEncry:(BOOL)encry sign:(int64_t)sign callback:(TCPBlock)block
 {
-    if (sign == 0) return;
     //等发送消息先加入消息队列
     [self.cacheLock lock];
     //重新生成一个taskID,映射到msg_seq
@@ -301,7 +314,7 @@ static MSTCPSocket *_manager;
 - (void)sendTimerHandler:(NSTimer *)timer
 {
     self.sendCount++;
-    if (self.sendCount % 10 == 0) {
+    if (self.sendCount % 20 == 0) {
         [self outTimeClean];
     }
     if ([self.delegate respondsToSelector:@selector(globTimerCallback)]) {
@@ -414,7 +427,7 @@ static MSTCPSocket *_manager;
     Ping *ping = [[Ping alloc]init];
     ping.type = 0;
     MSLog(@"[发送消息-心跳包]:\n%@",ping);
-    [self send:[ping data] protoType:XMChatProtoTypeHeadBeat needToEncry:NO sign:0 callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
+    [self send:[ping data] protoType:XMChatProtoTypeHeadBeat needToEncry:NO sign:[MSIMTools sharedInstance].adjustLocalTimeInterval callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
         
     }];
 }

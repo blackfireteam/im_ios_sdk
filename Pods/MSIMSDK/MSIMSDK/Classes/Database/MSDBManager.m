@@ -11,7 +11,7 @@
 #import "NSFileManager+filePath.h"
 #import "MSConversationProvider.h"
 #import "MSDBMessageStore.h"
-
+#import "MSProfileProvider.h"
 
 @interface MSDBManager()
 
@@ -32,7 +32,7 @@ static MSDBManager *manager;
 - (instancetype)init
 {
     if (self = [super init]) {
-        _tableCache = [[NSCache alloc]init];
+        _tableCache = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -52,10 +52,8 @@ static MSDBManager *manager;
 - (FMDatabaseQueue *)commonQueue
 {
     if(!_commonQueue) {
-        if([MSIMTools sharedInstance].user_id) {
-            NSString *commonQueuePath = [NSFileManager pathDBCommon];
-            _commonQueue = [FMDatabaseQueue databaseQueueWithPath:commonQueuePath];
-        }
+        NSString *commonQueuePath = [NSFileManager pathDBCommon];
+        _commonQueue = [FMDatabaseQueue databaseQueueWithPath:commonQueuePath];
     }
     return _commonQueue;
 }
@@ -64,6 +62,7 @@ static MSDBManager *manager;
 {
     [self scanAllTables];
     [[MSConversationProvider provider]clean];
+    [[MSProfileProvider provider]clean];
     [_messageQueue close];
     _messageQueue = nil;
 }

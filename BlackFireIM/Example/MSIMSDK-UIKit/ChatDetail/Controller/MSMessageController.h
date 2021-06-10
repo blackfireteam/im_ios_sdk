@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString *partner_id;
 
-@property (nonatomic, strong,readonly) NSMutableArray *uiMsgs;
+@property (nonatomic, strong,readonly) NSMutableArray<MSMessageCellData *> *uiMsgs;
 
 - (void)scrollToBottom:(BOOL)animate;
 

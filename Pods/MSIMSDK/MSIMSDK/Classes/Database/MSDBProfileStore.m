@@ -17,7 +17,7 @@ static NSString *PROFILE_TABLE_NAME = @"profile";
 
 - (FMDatabaseQueue *)dbQueue
 {
-    return [MSDBManager sharedInstance].commonQueue;
+    return [MSDBManager sharedInstance].messageQueue;
 }
 
 ///向数据库中添加批量记录

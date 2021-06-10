@@ -10,9 +10,11 @@
 #import "BFLoginController.h"
 #import "BFNavigationController.h"
 #import "MSIMKit.h"
+#import "MSIMSDK-UIKit.h"
 #import "BFUploadManager.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import <Bugly/Bugly.h>
+
 
 @interface AppDelegate ()<QCloudSignatureProvider>
 

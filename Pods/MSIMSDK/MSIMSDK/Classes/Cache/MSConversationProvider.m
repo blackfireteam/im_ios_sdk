@@ -11,7 +11,7 @@
 
 @interface MSConversationProvider()
 
-@property(nonatomic,strong) NSCache *mainCache;
+@property(nonatomic,strong) NSMutableDictionary *mainCache;
 @property(nonatomic,strong) MSDBConversationStore *store;
 
 @end
@@ -28,11 +28,10 @@ static MSConversationProvider *instance;
     return instance;
 }
 
-- (NSCache *)mainCache
+- (NSMutableDictionary *)mainCache
 {
     if (!_mainCache) {
-        _mainCache = [[NSCache alloc] init];
-        _mainCache.name = @"conv_cache";
+        _mainCache = [NSMutableDictionary dictionary];
     }
     return _mainCache;
 }
@@ -63,8 +62,11 @@ static MSConversationProvider *instance;
 
 - (void)updateConversations:(NSArray<MSIMConversation *> *)convs
 {
-    for (MSIMConversation *conv in convs) {
-        [self.mainCache setObject:conv forKey:conv.conversation_id];
+    if (convs.count == 0) return;
+    @synchronized (self) {
+        for (MSIMConversation *conv in convs) {
+            [self.mainCache setObject:conv forKey:conv.conversation_id];
+        }
     }
     [self.store addConversations:convs];
 }
@@ -73,9 +75,11 @@ static MSConversationProvider *instance;
 - (void)deleteConversation:(NSString *)partner_id
 {
     if (!partner_id) return;
-    NSString *conv_id = [NSString stringWithFormat:@"c2c_%@",partner_id];
-    [self.mainCache removeObjectForKey:conv_id];
-    [self.store updateConvesationStatus:1 conv_id:conv_id];
+    @synchronized (self) {
+        NSString *conv_id = [NSString stringWithFormat:@"c2c_%@",partner_id];
+        [self.mainCache removeObjectForKey:conv_id];
+        [self.store updateConvesationStatus:1 conv_id:conv_id];
+    }
 }
 
 - (NSInteger)allUnreadCount

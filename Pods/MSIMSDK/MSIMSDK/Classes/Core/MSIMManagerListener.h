@@ -35,11 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onForceOffline;
 
 /**
- *  断线重连失败
- */
-- (void)onReConnFailed:(NSInteger)code err:(NSString*)err;
-
-/**
  *  用户登录的userSig过期（用户需要重新获取userSig后登录）
  */
 - (void)onUserSigExpired;

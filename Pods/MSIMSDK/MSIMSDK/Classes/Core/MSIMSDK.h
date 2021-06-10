@@ -24,6 +24,6 @@
 #import "MSIMMessageReceipt.h"
 #import "MSIMManager+Demo.h"
 #import "MSIMErrorCode.h"
-
+#import "MSDBManager.h"
 
 #endif /* MSIMSDK_h */

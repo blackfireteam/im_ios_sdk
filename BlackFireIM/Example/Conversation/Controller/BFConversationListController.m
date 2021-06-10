@@ -15,6 +15,8 @@
 
 @property(nonatomic,strong) BFNaviBarIndicatorView *titleView;
 
+@property(nonatomic,strong) MSUIConversationListController *conVC;
+
 @end
 
 @implementation BFConversationListController
@@ -22,20 +24,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    MSUIConversationListController *convVC = [[MSUIConversationListController alloc]init];
-    convVC.delegate = self;
-    [self addChildViewController:convVC];
-    [self.view addSubview:convVC.view];
-    
-//    convVC.tableView.delaysContentTouches = NO;
-    
+    [self addChildViewController:self.conVC];
+    [self.view addSubview:self.conVC.view];
     [self setupNavigation];
 }
 
 - (instancetype)init
 {
     if (self = [super init]) {
+        self.conVC = [[MSUIConversationListController alloc]init];
+        self.conVC.delegate = self;
         [self addNotifications];
     }
     return self;
@@ -87,9 +85,6 @@
             [_titleView stopAnimating];
             [_titleView setTitle:@"MESSAGE(未连接)"];
             break;
-        case IMNET_STATUS_RECONNFAILD:
-            [_titleView stopAnimating];
-            [_titleView setTitle:@"MESSAGE(重连失败)"];
         default:
             break;
     }

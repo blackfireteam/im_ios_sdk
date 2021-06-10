@@ -664,17 +664,9 @@
 				F09316D6260B816D0099E39E /* Discovery */,
 				F058368526032A5E0008C4FD /* ChatDetail */,
 				F05836572602EE4E0008C4FD /* Conversation */,
-				F056713A25F076F900782F9C /* Base */,
 				F05836392602E6040008C4FD /* Super */,
 			);
 			path = Example;
-			sourceTree = "<group>";
-		};
-		F056713A25F076F900782F9C /* Base */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Base;
 			sourceTree = "<group>";
 		};
 		F05836392602E6040008C4FD /* Super */ = {
@@ -739,16 +731,8 @@
 			children = (
 				F0777BBA2612FAF9006CA660 /* Controller */,
 				F0CF645F2623F67C00106697 /* Model */,
-				F0777BB92612FAF2006CA660 /* View */,
 			);
 			path = Login;
-			sourceTree = "<group>";
-		};
-		F0777BB92612FAF2006CA660 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		F0777BBA2612FAF9006CA660 /* Controller */ = {

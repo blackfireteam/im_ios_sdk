@@ -16,15 +16,12 @@ PODS:
     - AFNetworking/NSURLSession
   - Bugly (2.5.90)
   - CocoaAsyncSocket (7.6.5)
-  - CocoaLumberjack (3.7.2):
-    - CocoaLumberjack/Core (= 3.7.2)
-  - CocoaLumberjack/Core (3.7.2)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - lottie-ios (2.5.3)
   - MJRefresh (3.5.0)
-  - MSIMSDK (1.0.8):
+  - MSIMSDK (1.0.13):
     - CocoaAsyncSocket
     - FMDB
     - Protobuf
@@ -40,7 +37,6 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - Bugly
-  - CocoaLumberjack
   - lottie-ios (= 2.5.3)
   - MJRefresh
   - MSIMSDK
@@ -58,7 +54,6 @@ SPEC REPOS:
   trunk:
     - AFNetworking
     - Bugly
-    - CocoaLumberjack
     - lottie-ios
     - MJRefresh
     - QCloudCore
@@ -70,17 +65,16 @@ SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   Bugly: 88bc32c0acc6fef7b74d610f0319ee7560d6b9fe
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
-  MSIMSDK: e113ea3556a9ff171149b4c4426254a84a209418
+  MSIMSDK: 811a389a715a138dced4ffe31f2aa840343fc182
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
   QCloudCore: 3dd29860235cab8d84342a6312e8319742520b6c
   QCloudCOSXML: e6b0028b5e7b89fdf59fc0413a7ccef2465be5d2
   SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: 9a583d0ac92067d41ecdc359d5955fc2951db584
+PODFILE CHECKSUM: 8c4da5d4760b825a2ea5d8ec6dea04ba67466720
 
 COCOAPODS: 1.10.1

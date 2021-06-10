@@ -197,4 +197,9 @@ static MSProfileProvider *instance;
     }
 }
 
+- (void)clean
+{
+    [self.mainCache removeAllObjects];
+}
+
 @end

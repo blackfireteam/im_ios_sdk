@@ -10,8 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// 获取历史消息成功回调
-typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSInteger nexSeq,BOOL isFinished);
 
 @interface MSIMManager (Conversation)
 
@@ -27,8 +25,8 @@ typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSI
 /// @param succ 拉取成功
 /// @param fail 拉取失败
 - (void)getConversationList:(NSInteger)nextSeq
-                       succ:(MSIMConversationListSucc)succ
-                       fail:(MSIMFail)fail;
+                       succ:(nullable MSIMConversationListSucc)succ
+                       fail:(nullable MSIMFail)fail;
 
 ///删除某一条会话
 ///删除会话只会删除会话记录，不会删除会话对应的聊天内容

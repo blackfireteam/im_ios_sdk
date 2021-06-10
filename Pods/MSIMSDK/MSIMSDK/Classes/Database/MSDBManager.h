@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 
-@property(nonatomic,strong) NSCache *tableCache;
+@property(nonatomic,strong) NSMutableDictionary *tableCache;
 
 /**
  *  与IM相关的DB队列

@@ -24,6 +24,8 @@
 
 @property(nonatomic,strong) dispatch_queue_t commonQueue;
 
+@property(nonatomic,assign) NSInteger lastRecieveMsgTime;
+
 @end
 @implementation MSIMManager
 
@@ -141,13 +143,6 @@ static MSIMManager *_manager;
     }
 }
 
-- (void)onReConnFailed:(NSInteger)code err:(NSString*)err
-{
-    if ([self.connListener respondsToSelector:@selector(onReConnFailed:err:)]) {
-        [self.connListener onReConnFailed:code err:err];
-    }
-}
-
 - (void)onUserSigExpired
 {
     if ([self.connListener respondsToSelector:@selector(onUserSigExpired)]) {
@@ -209,8 +204,14 @@ static MSIMManager *_manager;
             NSError *error;
             ChatR *recieve = [[ChatR alloc]initWithData:package error:&error];
             if (error == nil && recieve != nil) {
+                NSInteger currentTime = [MSIMTools sharedInstance].adjustLocalTimeInterval;
                 @synchronized (self) {
-                    [self.messageCaches addObject:recieve];
+                    if (self.messageCaches.count == 0 && (currentTime - self.lastRecieveMsgTime > 0.05*1000*1000)) {
+                        [self receiveMessageHandler:@[recieve]];
+                    }else {
+                        [self.messageCaches addObject:recieve];
+                    }
+                    self.lastRecieveMsgTime = currentTime;
                 }
             }else {
                 MSLog(@"消息protobuf解析失败-- %@",error);

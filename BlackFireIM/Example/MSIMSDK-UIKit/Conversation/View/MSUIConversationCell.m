@@ -52,7 +52,7 @@
         [self.contentView addSubview:_verifyIcon];
         
         [self setSeparatorInset:UIEdgeInsetsMake(0, 97, 0, 0)];
-        [self setSelectionStyle:UITableViewCellSelectionStyleDefault];
+        [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         self.headImageView.layer.cornerRadius = 34;
         self.headImageView.layer.masksToBounds = YES;

@@ -40,6 +40,8 @@ typedef void (^profileBlock)(MSProfileInfo * __nullable profile);
 ///返回本地数据库中所有的用户信息
 - (NSArray<MSProfileInfo *> *)allProfiles;
 
+- (void)clean;
+
 @end
 
 NS_ASSUME_NONNULL_END

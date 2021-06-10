@@ -13,8 +13,8 @@
 #import "MSConversationProvider.h"
 #import "MSIMManager+Parse.h"
 
-@implementation MSIMManager (Conversation)
 
+@implementation MSIMManager (Conversation)
 
 - (void)synchronizeConversationList
 {
@@ -56,12 +56,17 @@
 /// @param succ 拉取成功
 /// @param fail 拉取失败
 - (void)getConversationList:(NSInteger)nextSeq
-                       succ:(MSIMConversationListSucc)succ
-                       fail:(MSIMFail)fail
+                       succ:(nullable MSIMConversationListSucc)succ
+                       fail:(nullable MSIMFail)fail
 {
     NSInteger count = [MSIMManager sharedInstance].socket.config.chatListPageCount;
     if (nextSeq < 0 || count <= 0) {
-        fail(ERR_USER_PARAMS_ERROR,@"params error");
+        if (fail) fail(ERR_USER_PARAMS_ERROR,@"params error");
+        return;
+    }
+    NSString *isNotFirstConvFinishKey = [NSString stringWithFormat:@"isNotFirstConvFinish_%@",MSIMTools.sharedInstance.user_id];
+    BOOL isNotFirstConvFinish = [[NSUserDefaults standardUserDefaults]boolForKey:isNotFirstConvFinishKey];
+    if (isNotFirstConvFinish == NO && self.isChatListResult == NO) {
         return;
     }
     WS(weakSelf)

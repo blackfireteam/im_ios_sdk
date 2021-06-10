@@ -13,7 +13,8 @@
 
 + (NSString *)pathDBMessage
 {
-    NSString *path = [NSString stringWithFormat:@"%@/User/%@/Chat/DB/", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject,[MSIMTools sharedInstance].user_id];
+    NSString *server = [MSIMTools sharedInstance].serverType == MSIMServerTypeProduct ? @"Product" : @"Test";
+    NSString *path = [NSString stringWithFormat:@"%@/User/%@/%@/Chat/DB/", NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject,server,[MSIMTools sharedInstance].user_id];
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
         NSError *error;
         [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];

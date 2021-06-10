@@ -1,6 +1,7 @@
 
 platform :ios, '11.0'
 
+
 source 'https://github.com/wffkan/MSIMSpecs.git'
 source 'https://github.com/CocoaPods/Specs.git'
 
@@ -14,7 +15,7 @@ pod 'SVProgressHUD'
 pod 'QCloudCOSXML/Transfer'
 
 pod 'MSIMSDK'
-pod 'CocoaLumberjack'
 pod 'Bugly'
+
 
 end

@@ -23,8 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)onForceOffline;
 
-- (void)onReConnFailed:(NSInteger)code err:(NSString*)err;
-
 - (void)onUserSigExpired;
 
 - (void)onIMLoginSucc;

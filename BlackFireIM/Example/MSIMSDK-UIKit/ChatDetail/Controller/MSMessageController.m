@@ -25,7 +25,7 @@
 #define MAX_MESSAGE_SEP_DLAY (5 * 60)
 @interface MSMessageController ()<MSMessageCellDelegate,MSNoticeCountViewDelegate>
 
-@property (nonatomic, strong) NSMutableArray *uiMsgs;
+@property (nonatomic, strong) NSMutableArray<MSMessageCellData *> *uiMsgs;
 @property (nonatomic, strong) NSMutableArray *heightCache;
 
 @property (nonatomic, assign) BOOL isScrollBottom;
@@ -168,15 +168,15 @@
         [[MSIMManager sharedInstance] getC2CHistoryMessageList:self.partner_id count:msgCount lastMsg:self.last_msg_sign succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
             
             STRONG_SELF(strongSelf)
+            NSArray<MSIMElem *> *tempElems = [strongSelf deduplicateMessage:msgs];
             [strongSelf.tableView.mj_header endRefreshing];
-            if (msgs.count != 0) {
-                strongSelf.last_msg_sign = msgs.lastObject.msg_sign;
-            }
+            strongSelf.last_msg_sign = msgs.lastObject.msg_sign;
+            
             if (isFinished) {
                 strongSelf.noMoreMsg = YES;
                 strongSelf.tableView.mj_header.hidden = YES;
             }
-            NSMutableArray *uiMsgs = [strongSelf transUIMsgFromIMMsg:msgs];
+            NSMutableArray *uiMsgs = [strongSelf transUIMsgFromIMMsg:tempElems];
             if (uiMsgs.count != 0) {
                 NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, uiMsgs.count)];
                 [strongSelf.uiMsgs insertObjects:uiMsgs atIndexes:indexSet];
@@ -280,14 +280,12 @@
     return nil;
 }
 
-///收到新消息
-- (void)onNewMessage:(NSNotification *)note
+//消息去重
+- (NSArray<MSIMElem *> *)deduplicateMessage:(NSArray *)elems
 {
-    NSArray *elems = note.object;
-    //消息去重
-    NSMutableArray *tempArr = [NSMutableArray array];
+    NSMutableArray<MSIMElem *> *tempArr = [NSMutableArray array];
     for (MSIMElem *elem in elems) {
-        if (![elem.partner_id isEqualToString:self.partner_id]) return;
+        if (![elem.partner_id isEqualToString:self.partner_id]) return nil;
         BOOL isExsit = NO;
         for (MSMessageCellData *data in self.uiMsgs) {
             if (elem.msg_id > 0 && elem.msg_id == data.elem.msg_id) {
@@ -305,9 +303,18 @@
             [tempArr addObject:elem];
         }
     }
-    
+    return tempArr;
+}
+
+///收到新消息
+- (void)onNewMessage:(NSNotification *)note
+{
+    NSArray *elems = note.object;
+    elems = [[elems reverseObjectEnumerator] allObjects];
+    //消息去重
+    NSArray *tempElems = [self deduplicateMessage:elems];
     NSMutableArray *uiMsgs = [NSMutableArray array];
-    for (MSIMElem *e in tempArr) {
+    for (MSIMElem *e in tempElems) {
         if ([self.delegate respondsToSelector:@selector(messageController:onNewMessage:)]) {
             MSMessageCellData *data = [self.delegate messageController:self onNewMessage:e];
             if (data != nil) {
@@ -319,6 +326,7 @@
             [uiMsgs addObjectsFromArray:[self transUIMsgFromIMMsg:@[e]]];
         }
     }
+    
     if (uiMsgs.count) {
         //当前列表是否停留在底部
         BOOL isAtBottom = (self.tableView.contentOffset.y + self.tableView.height + 20 >= self.tableView.contentSize.height);
@@ -330,7 +338,7 @@
             [self scrollToBottom:YES];
             [self readedReport: uiMsgs];//标记已读
         }else {
-            [self.countTipView increaseCount: tempArr.count];
+            [self.countTipView increaseCount: tempElems.count];
         }
     }
 }
@@ -561,7 +569,7 @@
             if(![self.uiMsgs[index] isKindOfClass:[MSVoiceMessageCellData class]]){
                 continue;
             }
-            MSVoiceMessageCellData *uiMsg = _uiMsgs[index];
+            MSVoiceMessageCellData *uiMsg = (MSVoiceMessageCellData *)_uiMsgs[index];
             if(uiMsg == voiceCell.voiceData){
                 if (uiMsg.isPlaying) {
                     [uiMsg stopVoiceMessage];

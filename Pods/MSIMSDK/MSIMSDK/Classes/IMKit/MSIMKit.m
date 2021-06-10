@@ -72,16 +72,6 @@
 }
 
 /**
- *  断线重连失败
- */
-- (void)onReConnFailed:(NSInteger)code err:(NSString*)err
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSUIKitNotification_ConnListener object:[NSNumber numberWithInt:IMNET_STATUS_RECONNFAILD]];
-    });
-}
-
-/**
  *  用户登录的userSig过期（用户需要重新获取userSig后登录）
  */
 - (void)onUserSigExpired

@@ -17,6 +17,7 @@
 @implementation MSIMTools
 @synthesize user_id = _user_id;
 @synthesize user_sign = _user_sign;
+@synthesize serverType = _serverType;
 
 static MSIMTools *_tools;
 + (MSIMTools *)sharedInstance
@@ -26,6 +27,38 @@ static MSIMTools *_tools;
         _tools = [[MSIMTools alloc]init];
     });
     return _tools;
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        
+    }
+    return self;
+}
+
+- (MSIMServerType)serverType
+{
+    BOOL isProduct = [[NSUserDefaults standardUserDefaults]boolForKey:@"isProduct"];
+    _serverType = isProduct ? MSIMServerTypeProduct : MSIMServerTypeTest;
+    return _serverType;
+}
+
+- (void)setServerType:(MSIMServerType)serverType
+{
+    _serverType = serverType;
+    BOOL isProduct = (serverType == MSIMServerTypeProduct);
+    [[NSUserDefaults standardUserDefaults]setBool:isProduct forKey:@"isProduct"];
+}
+
+- (NSString *)HOST_IM_URL
+{
+    return self.serverType == MSIMServerTypeTest ? @"192.168.50.188" : @"im.ekfree.com";
+}
+
+- (NSInteger)IM_PORT
+{
+    return self.serverType == MSIMServerTypeTest ? 18888 : 18888;
 }
 
 - (NSInteger)currentLocalTimeInterval

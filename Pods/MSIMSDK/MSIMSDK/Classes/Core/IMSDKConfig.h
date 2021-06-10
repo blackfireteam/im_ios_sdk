@@ -12,9 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol MSUploadMediator;
 @interface IMSDKConfig : NSObject
 
-@property(nonatomic,copy) NSString *ip;
-@property(nonatomic,assign) UInt16 port;
-
 /** 心跳间隔 默认 ：30s, min: 5s max: 4分钟*/
 @property(nonatomic,assign) NSInteger heartDuration;
 /** 链接断开，自动重连次数,默认：6次，min: 1次*/

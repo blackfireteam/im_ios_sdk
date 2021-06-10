@@ -14,6 +14,7 @@
 #import "MSIMTools.h"
 #import "MSConversationProvider.h"
 #import "MSIMMessageReceipt.h"
+#import "MSIMManager+Conversation.h"
 
 
 @implementation MSIMManager (Parse)
@@ -40,6 +41,7 @@
         conv.partner_id = [NSString stringWithFormat:@"%lld",item.uid];
         conv.msg_end = item.msgEnd;
         conv.msg_last_read = item.msgLastRead;
+        conv.time=  item.showMsgTime;
         conv.unread_count = item.unread;
         conv.deleted = item.deleted;
         MSCustomExt *ext = [[MSCustomExt alloc]init];
@@ -74,15 +76,28 @@
         [[MSProfileProvider provider] synchronizeProfiles:self.profileCaches];
         //更新会话缓存
         [[MSConversationProvider provider]updateConversations:self.convCaches];
-        //同步最后一页聊天数据,如果需要同步的会话太多时，只同步最多50条
-        NSArray *firstPageConvs = (self.convCaches.count > self.socket.config.chatListPageCount ? [self.convCaches subarrayWithRange:NSMakeRange(0, self.socket.config.chatListPageCount)] : self.convCaches);
-        [self updateConvLastMessage:firstPageConvs];
+        //判断是否是首次同步会话完成
+        NSString *isNotFirstConvFinishKey = [NSString stringWithFormat:@"isNotFirstConvFinish_%@",MSIMTools.sharedInstance.user_id];
+        BOOL isNotFirstConvFinish = [[NSUserDefaults standardUserDefaults]boolForKey:isNotFirstConvFinishKey];
+        if (isNotFirstConvFinish) {
+            [self updateConvLastMessage:self.convCaches];
+            //通知会话有更新
+            if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+                [self.convListener onUpdateConversations:self.convCaches];
+            }
+        }else {
+//            同步最后一页聊天数据,如果是首次同步会话，有可能会很多，只同步最多50条
+            NSArray *firstPageConvs = (self.convCaches.count > self.socket.config.chatListPageCount ? [self.convCaches subarrayWithRange:NSMakeRange(0, self.socket.config.chatListPageCount)] : self.convCaches);
+            [self updateConvLastMessage:firstPageConvs];
+            //通知会话有更新
+            if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
+                [self.convListener onUpdateConversations:firstPageConvs];
+            }
+            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:isNotFirstConvFinishKey];
+        }
         self.isChatListResult = YES;
         [self updateChatListUpdateTime:MAX(self.chatUpdateTime, update_time)];
-        //通知会话有更新
-        if ([self.convListener respondsToSelector:@selector(onUpdateConversations:)]) {
-            [self.convListener onUpdateConversations:firstPageConvs];
-        }
+        
         if ([self.convListener respondsToSelector:@selector(onSyncServerFinish)]) {
             [self.convListener onSyncServerFinish];
         }

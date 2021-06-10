@@ -56,7 +56,6 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     _inputBar = [[MSInputBarView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TTextView_Height)];
     _inputBar.delegate = self;
     [self.view addSubview:_inputBar];
-    
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification

@@ -22,6 +22,9 @@ typedef void (^MSIMSucc)(void);
 /// 失败通用回调
 typedef void (^MSIMFail)(NSInteger code, NSString * desc);
 
+/// 获取历史消息成功回调
+typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSInteger nexSeq,BOOL isFinished);
+
 @interface MSIMManager : NSObject
 
 @property(nonatomic,strong,readonly) MSTCPSocket *socket;

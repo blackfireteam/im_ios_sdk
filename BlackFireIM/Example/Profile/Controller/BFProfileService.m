@@ -9,9 +9,27 @@
 #import "NSString+Encry.h"
 #import "MSIMSDK.h"
 #import <AFNetworking.h>
+#import "MSIMSDK-UIKit.h"
 
+@interface BFProfileService()<NSURLSessionDelegate>
+
+
+@end
 @implementation BFProfileService
 
+
++ (void)testRequest:(void(^)(NSDictionary *dic))succ
+               fail:(void(^)(NSError *error))fail
+{
+    AFHTTPSessionManager *manager = [self ms_manager];
+    [manager POST:@"https://www.baidu.com" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功%@",responseObject);
+        succ(nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@",error);
+        fail(nil);
+    }];
+}
 
 + (void)requestIMToken:(NSString *)uid
                success:(void(^)(NSDictionary *dic))succ
@@ -26,7 +44,7 @@
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
     NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/iminit",[IMSDKConfig defaultConfig].ip];
+    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/iminit",MSIMTools.sharedInstance.HOST_IM_URL];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:uid forKey:@"uid"];
     [params setValue:@(0) forKey:@"ctype"];
@@ -40,12 +58,21 @@
             if (fail) fail(err);
             MSLog(@"%@",err);
         }
-        
+
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            
+
             if (fail) fail(error);
             MSLog(@"%@",error);
     }];
+}
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    if (![challenge.protectionSpace.authenticationMethod isEqualToString:@"NSURLAuthenticationMethodServerTrust"]) {
+        return;
+    }
+    NSURLCredential *credential = [[NSURLCredential alloc] initWithTrust:challenge.protectionSpace.serverTrust];
+    completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+
 }
 
 ///模拟用户注册
@@ -60,7 +87,7 @@
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
     NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/reg",[IMSDKConfig defaultConfig].ip];
+    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/reg",MSIMTools.sharedInstance.HOST_IM_URL];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:phone forKey:@"uid"];
     [params setValue:nickName forKey:@"nick_name"];
@@ -105,7 +132,7 @@
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
     NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/update",[IMSDKConfig defaultConfig].ip];
+    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/update",MSIMTools.sharedInstance.HOST_IM_URL];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:info.user_id forKey:@"uid"];
     [params setValue:info.nick_name forKey:@"nick_name"];
@@ -134,6 +161,7 @@
     manager.securityPolicy.validatesDomainName = NO;
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 5;
     return manager;
 }
 
