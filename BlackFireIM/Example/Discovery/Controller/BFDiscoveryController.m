@@ -54,18 +54,26 @@
 
 - (void)userOnline:(NSNotification *)note
 {
-    NSNumber *uid = note.object;
-    if (![self.dataArray containsObject:uid]) {
-        [self.dataArray addObject:uid];
-        [self.myCollectionView reloadData];
+    NSArray *uids = note.object;
+    for (NSNumber *uid in uids) {
+        if (![self.dataArray containsObject:uid]) {
+            [self.dataArray addObject:uid];
+        }
     }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.myCollectionView reloadData];
+    });
 }
 
 - (void)userOffline:(NSNotification *)note
 {
-    NSNumber *uid = note.object;
-    [self.dataArray removeObject:uid];
-    [self.myCollectionView reloadData];
+    NSArray *uids = note.object;
+    for (NSNumber *uid in uids) {
+        [self.dataArray removeObject:uid];
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.myCollectionView reloadData];
+    });
 }
 
 - (void)setupUI

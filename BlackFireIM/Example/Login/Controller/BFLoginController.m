@@ -74,18 +74,6 @@
     self.serverL.text = self.serverSwitch.isOn ? @"正式环境" : @"测试环境";
 }
 
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//    if ([MSIMManager sharedInstance].connStatus == IMNET_STATUS_CONNECTING) {
-//        [[MSIMManager sharedInstance].socket disConnectTCP];
-//        [MSIMManager.sharedInstance.socket connectTCP:@"192.168.50.188" port:18888];
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [[MSIMManager sharedInstance].socket disConnectTCP];
-//        });
-//    }
-//}
-
 - (BFRegisterInfo *)registerInfo
 {
     if (!_registerInfo) {

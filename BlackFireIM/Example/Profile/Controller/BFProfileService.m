@@ -11,25 +11,12 @@
 #import <AFNetworking.h>
 #import "MSIMSDK-UIKit.h"
 
-@interface BFProfileService()<NSURLSessionDelegate>
+@interface BFProfileService()
 
 
 @end
 @implementation BFProfileService
 
-
-+ (void)testRequest:(void(^)(NSDictionary *dic))succ
-               fail:(void(^)(NSError *error))fail
-{
-    AFHTTPSessionManager *manager = [self ms_manager];
-    [manager POST:@"https://www.baidu.com" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"成功%@",responseObject);
-        succ(nil);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"%@",error);
-        fail(nil);
-    }];
-}
 
 + (void)requestIMToken:(NSString *)uid
                success:(void(^)(NSDictionary *dic))succ
@@ -66,15 +53,6 @@
     }];
 }
 
-- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
-    if (![challenge.protectionSpace.authenticationMethod isEqualToString:@"NSURLAuthenticationMethodServerTrust"]) {
-        return;
-    }
-    NSURLCredential *credential = [[NSURLCredential alloc] initWithTrust:challenge.protectionSpace.serverTrust];
-    completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
-
-}
-
 ///模拟用户注册
 + (void)userSignUp:(NSString *)phone
           nickName:(NSString *)nickName
@@ -92,14 +70,14 @@
     [params setValue:phone forKey:@"uid"];
     [params setValue:nickName forKey:@"nick_name"];
     [params setValue:avatar forKey:@"avatar"];
-    [params setValue:@(NO) forKey:@"gold"];
-    [params setValue:@([MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000) forKey:@"gold_exp"];
+    [params setValue:@(YES) forKey:@"gold"];
+    [params setValue:@([MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60) forKey:@"gold_exp"];
     [params setValue:@(YES) forKey:@"approved"];
     [params setValue:@(NO) forKey:@"disabled"];
     [params setValue:@(NO) forKey:@"blocked"];
     [params setValue:@(NO) forKey:@"hold"];
     [params setValue:@(NO) forKey:@"deleted"];
-    [params setValue:@(NO) forKey:@"verified"];
+    [params setValue:@(YES) forKey:@"verified"];
     [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         NSNumber *code = dic[@"code"];

@@ -95,11 +95,6 @@ static MSTCPSocket *_manager;
     return _socketQueue;
 }
 
-- (void)connectTCP:(NSString *)host port:(NSInteger)port
-{
-    [self.socket connectToHost:host onPort:port error:nil];
-}
-
 - (void)connectTCPToServer
 {
     if (self.connStatus == IMNET_STATUS_SUCC || self.connStatus == IMNET_STATUS_CONNECTING) return;
@@ -180,6 +175,7 @@ static MSTCPSocket *_manager;
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err
 {
     MSLog(@"****连接断开****%@",err);
+    [self.socket disconnect];
     self.userStatus = IMUSER_STATUS_UNLOGIN;
     self.connStatus = IMNET_STATUS_CONNFAILED;
     [self closeTimer];

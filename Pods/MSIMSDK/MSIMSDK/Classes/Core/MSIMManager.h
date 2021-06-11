@@ -38,8 +38,11 @@ typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSI
 ///暂时缓存服务器返回的会话列表，当接收到服务器返回的所有会话时，再写入数据库
 @property(nonatomic,strong) NSMutableArray *convCaches;
 
-///暂时缓存收到的新消息，当单位时间内收到消息处理时提高性能
+///消息池，当短时间内收到大量消息时，批量消息处理以提高性能
 @property(nonatomic,strong) NSMutableArray *messageCaches;
+
+///用户下线消息池，当短时间内收到大量用户下线消息时，批量处理
+@property(nonatomic,strong) NSMutableArray *offlineCache;
 
 ///当接收到服务器返回的所有会话时,批量同步profile信息，再写入数据库
 @property(nonatomic,strong) NSMutableArray *profileCaches;

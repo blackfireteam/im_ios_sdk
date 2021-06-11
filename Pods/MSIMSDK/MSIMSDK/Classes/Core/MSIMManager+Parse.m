@@ -332,28 +332,52 @@
     return recieves;
 }
 
-///服务器返回的用户上线通知处理
-- (void)userOnLineHandler:(ProfileOnline *)online
+///服务器返回的用户上线下线通知处理
+- (void)userOnLineChangeHandler:(NSArray *)onlines
 {
-    MSProfileInfo *info = [[MSProfileInfo alloc]init];
-    info.user_id = [NSString stringWithFormat:@"%lld",online.uid];
-    info.nick_name = online.nickName;
-    info.avatar = online.avatar;
-    info.gold = online.gold;
-    info.update_time = online.updateTime;
-    info.verified = online.verified;
-    [[MSProfileProvider provider] updateProfiles:@[info]];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_online" object:@(online.uid)];
-    });
+    if (onlines.count ==0) return;
+    NSMutableArray *onlineArr = [NSMutableArray array];
+    NSMutableArray *offlineArr = [NSMutableArray array];
+    for (id one in onlines) {
+        if ([one isKindOfClass:[ProfileOnline class]]) {
+            [onlineArr addObject:one];
+        }else if ([one isKindOfClass:[UsrOffline class]]) {
+            UsrOffline *offline = one;
+            [offlineArr addObject:@(offline.uid)];
+        }
+    }
+    if (onlineArr.count) {
+        [self userOnLineHandler: onlineArr];
+    }
+    if (offlineArr.count) {
+        [self userOfflineHandler:offlineArr];
+    }
+}
+
+///服务器返回的用户上线通知处理
+- (void)userOnLineHandler:(NSArray<ProfileOnline *> *)onlines
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    NSMutableArray *uids = [NSMutableArray array];
+    for (ProfileOnline *online in onlines) {
+        MSProfileInfo *info = [[MSProfileInfo alloc]init];
+        info.user_id = [NSString stringWithFormat:@"%lld",online.uid];
+        info.nick_name = online.nickName;
+        info.avatar = online.avatar;
+        info.gold = online.gold;
+        info.update_time = online.updateTime;
+        info.verified = online.verified;
+        [arr addObject:info];
+        [uids addObject:@(online.uid)];
+    }
+    [[MSProfileProvider provider] updateProfiles:arr];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_online" object:uids];
 }
 
 ///服务器返回的用户下线通知处理
-- (void)userOfflineHandler:(UsrOffline *)offline
+- (void)userOfflineHandler:(NSArray<NSNumber *> *)offlines
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_offline" object:@(offline.uid)];
-    });
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MSUIKitNotification_Profile_offline" object:offlines];
 }
 
 ///会话某些属性发生变更

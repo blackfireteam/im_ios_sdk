@@ -95,6 +95,14 @@ static MSIMManager *_manager;
     return _messageCaches;
 }
 
+- (NSMutableArray *)offlineCache
+{
+    if (!_offlineCache) {
+        _offlineCache = [NSMutableArray array];
+    }
+    return _offlineCache;
+}
+
 - (MSIMNetStatus)connStatus
 {
     return self.socket.connStatus;
@@ -175,6 +183,8 @@ static MSIMManager *_manager;
         @synchronized (self) {
             [self receiveMessageHandler:self.messageCaches.copy];
             [self.messageCaches removeAllObjects];
+            [self userOnLineChangeHandler:self.offlineCache.copy];
+            [self.offlineCache removeAllObjects];
         }
     });
 }
@@ -283,7 +293,9 @@ static MSIMManager *_manager;
             NSError *error;
             ProfileOnline *online = [[ProfileOnline alloc]initWithData:package error:&error];
             if (error == nil && online != nil) {
-                [self userOnLineHandler:online];
+                @synchronized (self) {
+                    [self.offlineCache addObject:online];
+                }
             }else {
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }
@@ -296,7 +308,9 @@ static MSIMManager *_manager;
             NSError *error;
             UsrOffline *offline = [[UsrOffline alloc]initWithData:package error:&error];
             if (error == nil && offline != nil) {
-                [self userOfflineHandler:offline];
+                @synchronized (self) {
+                    [self.offlineCache addObject:offline];
+                }
             }else {
                 MSLog(@"消息protobuf解析失败-- %@",error);
             }
@@ -382,22 +396,19 @@ static MSIMManager *_manager;
 - (void)logout:(MSIMSucc)succ
         failed:(MSIMFail)fail
 {
-    WS(weakSelf)
     ImLogout *logout = [[ImLogout alloc]init];
     logout.sign = [MSIMTools sharedInstance].adjustLocalTimeInterval;
     MSLog(@"[发送消息-logout]:\n%@",logout);
     [self.socket send:[logout data] protoType:XMChatProtoTypeLogout needToEncry:NO sign:logout.sign callback:^(NSInteger code, id  _Nullable response, NSString * _Nullable error) {
-        STRONG_SELF(strongSelf)
         dispatch_async(dispatch_get_main_queue(), ^{
             if (code == ERR_SUCC) {
-                [strongSelf cleanIMToken];
-                succ();
             }else {
                 MSLog(@"退出登录失败*******code = %ld,response = %@,errorMsg = %@",code,response,error);
-                fail(code, error);
             }
         });
     }];
+    [self cleanIMToken];
+    succ();
 }
 
 ///更新同步会话时间

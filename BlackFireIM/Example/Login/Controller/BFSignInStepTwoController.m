@@ -93,14 +93,8 @@
     WS(weakSelf)
     [BFProfileService userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^() {
         
-        if ([MSIMManager sharedInstance].connStatus != IMNET_STATUS_SUCC) {
-            [MSHelper showToastString:@"正在建立TCP连接"];
-            return;
-        }
-        MSLog(@"获取userToKen");
-        [BFProfileService requestIMToken:weakSelf.info.phone success:^(NSDictionary * _Nonnull dic) {
+        [[MSIMManager sharedInstance]getIMToken:weakSelf.info.phone succ:^(NSString * _Nonnull userToken) {
             //2.登录
-            NSString *userToken = dic[@"token"];
             weakSelf.info.userToken = userToken;
             MSLog(@"获取userToKen = %@",userToken);
             [[MSIMManager sharedInstance]login:userToken succ:^{
@@ -110,10 +104,9 @@
                     } failed:^(NSInteger code, NSString * _Nonnull desc) {
                         [MSHelper showToastFail:desc];
             }];
-        } fail:^(NSError * _Nonnull error) {
-            [MSHelper showToastFail:error.localizedDescription];
+        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            [MSHelper showToastFail:desc];
         }];
-        
     } failed:^(NSError * _Nonnull error) {
         [MSHelper showToastFail:error.localizedDescription];
     }];
