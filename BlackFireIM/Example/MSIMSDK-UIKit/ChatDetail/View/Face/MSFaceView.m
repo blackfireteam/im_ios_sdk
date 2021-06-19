@@ -41,8 +41,8 @@
 
     _faceFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     _faceFlowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    _faceFlowLayout.minimumLineSpacing = 12;
-    _faceFlowLayout.minimumInteritemSpacing = 12;
+    _faceFlowLayout.minimumLineSpacing = 8;
+    _faceFlowLayout.minimumInteritemSpacing = 8;
     _faceFlowLayout.sectionInset = UIEdgeInsetsMake(0, 20, 0, 20);
 
     _faceCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:_faceFlowLayout];
@@ -187,8 +187,8 @@
 {
     int groupIndex = [_groupIndexInSection[indexPath.section] intValue];
     BFFaceGroup *group = _faceGroups[groupIndex];
-    CGFloat width = (self.frame.size.width - 20 * 2 - 12 * (group.itemCountPerRow - 1)) / group.itemCountPerRow;
-    CGFloat height = (collectionView.frame.size.height -  12 * (group.rowCount - 1)) / group.rowCount;
+    CGFloat width = (self.frame.size.width - 20 * 2 - 8 * (group.itemCountPerRow - 1)) / group.itemCountPerRow;
+    CGFloat height = (collectionView.frame.size.height -  8 * (group.rowCount - 1)) / group.rowCount;
     return CGSizeMake(width, height);
 }
 

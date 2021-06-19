@@ -15,6 +15,7 @@
 			dependencies = (
 			);
 			name = Bugly;
+			productName = Bugly;
 		};
 /* End PBXAggregateTarget section */
 
@@ -1218,7 +1219,7 @@
 		347810F3DC7C0330B6A90355AC5B8F13 /* QCloudUploadPartCopyRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudUploadPartCopyRequest.h; path = QCloudCOSXML/Classes/Transfer/request/QCloudUploadPartCopyRequest.h; sourceTree = "<group>"; };
 		34B5735AA88D5F48E81AD2275A0753E1 /* NSDate+QCLOUD.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDate+QCLOUD.m"; path = "QCloudCore/Classes/Base/QCloudCategory/NSDate+QCLOUD.m"; sourceTree = "<group>"; };
 		34CC50F710CC04B5A1F83D249EE657E0 /* QCloudMultipartInfo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudMultipartInfo.m; path = QCloudCOSXML/Classes/Transfer/model/QCloudMultipartInfo.m; sourceTree = "<group>"; };
-		3582F93656048864A074DB0D372270C6 /* QCloudAuthentationV4Creator.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = QCloudAuthentationV4Creator.mm; path = QCloudCore/Classes/Base/QCloudClientBase/Authentation/QCloudAuthentationV4Creator.mm; sourceTree = "<group>"; };
+		3582F93656048864A074DB0D372270C6 /* QCloudAuthentationV4Creator.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = QCloudAuthentationV4Creator.mm; path = QCloudCore/Classes/Base/QCloudClientBase/Authentation/QCloudAuthentationV4Creator.mm; sourceTree = "<group>"; };
 		35C86C2BB28F2969B815C00805880217 /* QCloudTagSet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudTagSet.m; path = QCloudCOSXML/Classes/Transfer/model/QCloudTagSet.m; sourceTree = "<group>"; };
 		3624248FF60706B309217831AA333243 /* QCloudCOSStorageClassEnum.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudCOSStorageClassEnum.m; path = QCloudCOSXML/Classes/Transfer/enum/QCloudCOSStorageClassEnum.m; sourceTree = "<group>"; };
 		36808C2C27BF476753EC3F57E5FD28AA /* GPBDictionary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBDictionary.m; path = objectivec/GPBDictionary.m; sourceTree = "<group>"; };
@@ -1239,7 +1240,7 @@
 		394899C2D3F06F026FC827DE7E7F31C3 /* LOTStrokeRenderer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LOTStrokeRenderer.m; path = "lottie-ios/Classes/RenderSystem/RenderNodes/LOTStrokeRenderer.m"; sourceTree = "<group>"; };
 		39BCFA7B3322E4C21AD35427C4E0CBA6 /* QCloudAuthentationV4Creator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudAuthentationV4Creator.h; path = QCloudCore/Classes/Base/QCloudClientBase/Authentation/QCloudAuthentationV4Creator.h; sourceTree = "<group>"; };
 		3A05DC36A3BC1C80BF7368CFDA464A67 /* QCloudGetRecognitionObjectResult.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudGetRecognitionObjectResult.h; path = QCloudCOSXML/Classes/Transfer/model/QCloudGetRecognitionObjectResult.h; sourceTree = "<group>"; };
-		3A29D7C214574D219F6C435101FF52C8 /* libQCloudCOSXML.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libQCloudCOSXML.a; path = libQCloudCOSXML.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A29D7C214574D219F6C435101FF52C8 /* libQCloudCOSXML.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libQCloudCOSXML.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A597852965E8401D5669F0378CD6D46 /* MSUploadMediator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MSUploadMediator.h; path = MSIMSDK/Classes/Core/MSUploadMediator.h; sourceTree = "<group>"; };
 		3A895D037B9E3F15A10429DB1B1FC2E5 /* QCloudProgrameDefines.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudProgrameDefines.m; path = QCloudCore/Classes/Base/QCLOUDProgramDefines/QCloudProgrameDefines.m; sourceTree = "<group>"; };
 		3A9CB2344E0A2FED90DADBBAD5825492 /* QCloudCredentailFenceQueue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudCredentailFenceQueue.m; path = QCloudCore/Classes/Base/QCloudClientBase/Authentation/QCloudCredentailFenceQueue.m; sourceTree = "<group>"; };
@@ -1288,10 +1289,10 @@
 		45559C2216FF51D02395498C1916FF31 /* GPBCodedInputStream.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBCodedInputStream.h; path = objectivec/GPBCodedInputStream.h; sourceTree = "<group>"; };
 		455CC357A3774C82756B394BBF2492A1 /* UIDevice+QCloudFCUUID.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIDevice+QCloudFCUUID.h"; path = "QCloudCore/Classes/Base/FCUUID/UIDevice+QCloudFCUUID.h"; sourceTree = "<group>"; };
 		4619AA9B4B0F835F96CB0512A2DDB0F7 /* QCloudCOSXMLEndPoint.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudCOSXMLEndPoint.h; path = QCloudCOSXML/Classes/Base/QCloudCOSXMLEndPoint.h; sourceTree = "<group>"; };
-		46692FB12DB27794094D838DF87D563C /* libQCloudCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libQCloudCore.a; path = libQCloudCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		46692FB12DB27794094D838DF87D563C /* libQCloudCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libQCloudCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4693E7D648A0C409D1BFA4D3E2232D16 /* SDImageCachesManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCachesManager.m; path = SDWebImage/Core/SDImageCachesManager.m; sourceTree = "<group>"; };
 		46B56B5997B7EE830259941758DFEBEF /* MSIMManagerListener.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MSIMManagerListener.h; path = MSIMSDK/Classes/Core/MSIMManagerListener.h; sourceTree = "<group>"; };
-		46BB7E106DF7E5BEB7EB2099D8C028BA /* libMSIMSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libMSIMSDK.a; path = libMSIMSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		46BB7E106DF7E5BEB7EB2099D8C028BA /* libMSIMSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMSIMSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		46E624A3B40830C2E66FD81549C76953 /* QCloudCOSXML-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "QCloudCOSXML-dummy.m"; sourceTree = "<group>"; };
 		475ABCADE2F95104057DCFB207674550 /* QCloudHTTPTaskDelayManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudHTTPTaskDelayManager.h; path = QCloudCore/Classes/Base/QCLOUDRestNet/Retry/QCloudHTTPTaskDelayManager.h; sourceTree = "<group>"; };
 		47C15518D9FEC810A057E8038A16C997 /* MSIMSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MSIMSDK.release.xcconfig; sourceTree = "<group>"; };
@@ -1331,7 +1332,7 @@
 		513C60B613CCF906328A8DF88EBCDB9E /* QCloudUploadPartResult.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudUploadPartResult.m; path = QCloudCOSXML/Classes/Transfer/model/QCloudUploadPartResult.m; sourceTree = "<group>"; };
 		51610312F6BC075950502E94A1A90071 /* LOTCacheProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LOTCacheProvider.m; path = "lottie-ios/Classes/Private/LOTCacheProvider.m"; sourceTree = "<group>"; };
 		517402D49B68D0AD561E1207ACA596C7 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+WebCacheOperation.h"; path = "SDWebImage/Core/UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
-		51BA97E8B5085EFFB47BC9C0B785CEA7 /* liblottie-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "liblottie-ios.a"; path = "liblottie-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		51BA97E8B5085EFFB47BC9C0B785CEA7 /* liblottie-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "liblottie-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51DD203D732BEAF95943D733B00BD741 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFHTTPSessionManager.m; path = AFNetworking/AFHTTPSessionManager.m; sourceTree = "<group>"; };
 		51F9EA0F9CD153A2D70953F681361082 /* LOTRenderGroup.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LOTRenderGroup.m; path = "lottie-ios/Classes/RenderSystem/RenderNodes/LOTRenderGroup.m"; sourceTree = "<group>"; };
 		5212DB1AC26F51B7BF4FC6CFD204A503 /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+AFNetworking.h"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -1422,7 +1423,7 @@
 		6C45517BE9362C37BE49B7EAE082F954 /* LOTModels.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LOTModels.h; path = "lottie-ios/Classes/Models/LOTModels.h"; sourceTree = "<group>"; };
 		6CBAB892AC23F794FB7D376ABA983E93 /* SDWebImageTransition.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageTransition.m; path = SDWebImage/Core/SDWebImageTransition.m; sourceTree = "<group>"; };
 		6CBB644291BAADECC105D43861ADE77D /* SVProgressHUD-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SVProgressHUD-dummy.m"; sourceTree = "<group>"; };
-		6CBEFE4F9E22AFDC6347A739BB35FF8C /* libCocoaAsyncSocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libCocoaAsyncSocket.a; path = libCocoaAsyncSocket.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CBEFE4F9E22AFDC6347A739BB35FF8C /* libCocoaAsyncSocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCocoaAsyncSocket.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D2C1FB684EBA4B1224758263DB536C8 /* QCloudUICKeyChainStore.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudUICKeyChainStore.m; path = QCloudCore/Classes/Base/QCloudClientBase/Authentation/QCloudUICKeyChainStore.m; sourceTree = "<group>"; };
 		6D5FBE7C7C1CA3DB1E6D8D35EE582E25 /* QCloudCOSXMLService+Configuration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "QCloudCOSXMLService+Configuration.h"; path = "QCloudCOSXML/Classes/Base/QCloudCOSXMLService+Configuration.h"; sourceTree = "<group>"; };
 		6D7C8E56F8F1391EB435321DD767A679 /* SDImageCachesManagerOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCachesManagerOperation.m; path = SDWebImage/Private/SDImageCachesManagerOperation.m; sourceTree = "<group>"; };
@@ -1574,7 +1575,7 @@
 		969D6C807D54247233AA75D511123248 /* QCloudThreadSafeMutableDictionary.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudThreadSafeMutableDictionary.h; path = "QCloudCore/Classes/Base/Bolts-Promise/QCloudThreadSafeMutableDictionary.h"; sourceTree = "<group>"; };
 		97077F75EC6AB33019F34A461F80E19D /* UIImageView+WebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+WebCache.h"; path = "SDWebImage/Core/UIImageView+WebCache.h"; sourceTree = "<group>"; };
 		9792F13E1CDDCFDDAF85A0EE097B5881 /* SVProgressHUD.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SVProgressHUD.release.xcconfig; sourceTree = "<group>"; };
-		97D4FCE038D4CC78DB88819F0254D4F1 /* NSData+zlib.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "NSData+zlib.mm"; path = "MSIMSDK/Classes/Category/NSData+zlib.mm"; sourceTree = "<group>"; };
+		97D4FCE038D4CC78DB88819F0254D4F1 /* NSData+zlib.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSData+zlib.mm"; path = "MSIMSDK/Classes/Category/NSData+zlib.mm"; sourceTree = "<group>"; };
 		9893BCE4BE47F84D163CEB00193F438F /* QCloudGetObjectTaggingRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudGetObjectTaggingRequest.m; path = QCloudCOSXML/Classes/Transfer/request/QCloudGetObjectTaggingRequest.m; sourceTree = "<group>"; };
 		992C163B526ABD6080DADA42026B375D /* UIImage+MultiFormat.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+MultiFormat.m"; path = "SDWebImage/Core/UIImage+MultiFormat.m"; sourceTree = "<group>"; };
 		99956FDE9E6839AF6FB0BBADD0F9209B /* FMResultSet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = src/fmdb/FMResultSet.m; sourceTree = "<group>"; };
@@ -1594,7 +1595,7 @@
 		9C4F502A22B0FCAAC1E01D647CDDB102 /* QCloudPutObjectWatermarkRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudPutObjectWatermarkRequest.h; path = QCloudCOSXML/Classes/Transfer/request/QCloudPutObjectWatermarkRequest.h; sourceTree = "<group>"; };
 		9C821C7DDDAD2DE3B1AD91836509654A /* QCloudURLSessionTaskData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudURLSessionTaskData.m; path = QCloudCore/Classes/Base/QCLOUDRestNet/SessionSupport/QCloudURLSessionTaskData.m; sourceTree = "<group>"; };
 		9CDA2D88C81032F5C8561000C9639F28 /* QCloudAbstractRequest+Quality.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "QCloudAbstractRequest+Quality.m"; path = "QCloudCOSXML/Classes/Base/QCloudAbstractRequest+Quality.m"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9DB09B749EA87D443BEB4E9A8E56E3FF /* AFNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworking.release.xcconfig; sourceTree = "<group>"; };
 		9E17E171C3C1E062E239093E868311FC /* LOTRenderGroup.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LOTRenderGroup.h; path = "lottie-ios/Classes/RenderSystem/RenderNodes/LOTRenderGroup.h"; sourceTree = "<group>"; };
 		9E797F7EDE581FF404B258F5208C2733 /* QCloudCOSXMLService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudCOSXMLService.m; path = QCloudCOSXML/Classes/Base/QCloudCOSXMLService.m; sourceTree = "<group>"; };
@@ -1614,18 +1615,18 @@
 		A1F69D5BB7BFA616F430BCAAA73DF975 /* LOTMask.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LOTMask.h; path = "lottie-ios/Classes/Models/LOTMask.h"; sourceTree = "<group>"; };
 		A2143A6B32E2D00D7B536C5154453995 /* SDWebImageDownloaderOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloaderOperation.m; path = SDWebImage/Core/SDWebImageDownloaderOperation.m; sourceTree = "<group>"; };
 		A2227332F924422883B81A6D1CC0CFA5 /* UIImage+GIF.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+GIF.m"; path = "SDWebImage/Core/UIImage+GIF.m"; sourceTree = "<group>"; };
-		A2B7B6942FD6354420C231477E0FBCEA /* aos_crc64.c */ = {isa = PBXFileReference; includeInIndex = 1; name = aos_crc64.c; path = QCloudCore/Classes/Base/QCloudCategory/aos_crc64.c; sourceTree = "<group>"; };
+		A2B7B6942FD6354420C231477E0FBCEA /* aos_crc64.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = aos_crc64.c; path = QCloudCore/Classes/Base/QCloudCategory/aos_crc64.c; sourceTree = "<group>"; };
 		A2CC844A4C57B558715CE8F831A481DA /* LOTValueInterpolator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LOTValueInterpolator.h; path = "lottie-ios/Classes/RenderSystem/InterpolatorNodes/LOTValueInterpolator.h"; sourceTree = "<group>"; };
 		A36AD0EDC1D86FAF00C3AF47CFA6BB5D /* LOTShapePath.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LOTShapePath.h; path = "lottie-ios/Classes/Models/LOTShapePath.h"; sourceTree = "<group>"; };
 		A39FADD3F5BD6464147EEF1B5CD2AEA2 /* QCloudEndPoint.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudEndPoint.m; path = QCloudCore/Classes/Base/QCloudClientBase/Service/QCloudEndPoint.m; sourceTree = "<group>"; };
-		A3A80BA70CFB7F75C5391BEBBBA8C9DA /* libFMDB.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libFMDB.a; path = libFMDB.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3A80BA70CFB7F75C5391BEBBBA8C9DA /* libFMDB.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFMDB.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3AC063335C6AD85747E77803B4F2D55 /* QCloudCOSTransferMangerService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudCOSTransferMangerService.h; path = QCloudCOSXML/Classes/Transfer/QCloudCOSTransferMangerService.h; sourceTree = "<group>"; };
 		A3D6116332BC4794BEFBD2A4B18E6ECC /* UIKit+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIKit+AFNetworking.h"; path = "UIKit+AFNetworking/UIKit+AFNetworking.h"; sourceTree = "<group>"; };
 		A460BE44AC03EFC363CD4B9CE1A36A56 /* LOTColorInterpolator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LOTColorInterpolator.m; path = "lottie-ios/Classes/RenderSystem/InterpolatorNodes/LOTColorInterpolator.m"; sourceTree = "<group>"; };
 		A4ABB85CB728558C9B9DA1E48A9B07C4 /* FMResultSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = src/fmdb/FMResultSet.h; sourceTree = "<group>"; };
 		A4B83434F7ED033CD61AF0091F9811CA /* QCloudURLTools.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudURLTools.h; path = QCloudCore/Classes/Base/QCLOUDRestNet/URLTools/QCloudURLTools.h; sourceTree = "<group>"; };
 		A4B9B37FF5BBA59E7FC9583EB867AB2B /* GPBRootObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GPBRootObject.m; path = objectivec/GPBRootObject.m; sourceTree = "<group>"; };
-		A4FA15D44DF6BAC7550EDEED10862AA3 /* libAFNetworking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libAFNetworking.a; path = libAFNetworking.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4FA15D44DF6BAC7550EDEED10862AA3 /* libAFNetworking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAFNetworking.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A0910693A4B9FD19C5D2EA01F4E8EC /* MSIMManager+Demo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "MSIMManager+Demo.h"; path = "MSIMSDK/Classes/Core/MSIMManager+Demo.h"; sourceTree = "<group>"; };
 		A5B6EA26B8C1AC49AEA5C0848D613BF2 /* GPBMessage_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBMessage_PackagePrivate.h; path = objectivec/GPBMessage_PackagePrivate.h; sourceTree = "<group>"; };
 		A5D0E6536DA23714B4FDE8EC72C9DC8B /* SDImageAssetManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageAssetManager.h; path = SDWebImage/Private/SDImageAssetManager.h; sourceTree = "<group>"; };
@@ -1668,7 +1669,7 @@
 		AF46F8466EC10B73C6ECB7E25AA3F150 /* QCloudOperationQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudOperationQueue.h; path = QCloudCore/Classes/Base/QCLOUDRestNet/Operations/QCloudOperationQueue.h; sourceTree = "<group>"; };
 		AF49E542B1E14612A260D54EF483AC2E /* SDImageCacheDefine.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCacheDefine.m; path = SDWebImage/Core/SDImageCacheDefine.m; sourceTree = "<group>"; };
 		AF54FBA3A7F077226588254A8D79D434 /* NSHTTPCookie+QCloudNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSHTTPCookie+QCloudNetworking.h"; path = "QCloudCore/Classes/Base/QCLOUDRestNet/CoreRequest/NSHTTPCookie+QCloudNetworking.h"; sourceTree = "<group>"; };
-		B0B214D775196BA7CA8E17E53048A493 /* libSDWebImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSDWebImage.a; path = libSDWebImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0B214D775196BA7CA8E17E53048A493 /* libSDWebImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSDWebImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0B763705C9DA8E5E34683DA157E5E15 /* QCloudSignature.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudSignature.h; path = QCloudCore/Classes/Base/QCloudClientBase/Authentation/QCloudSignature.h; sourceTree = "<group>"; };
 		B0E72986E83F3D2BB9C50179E05A9D2A /* GPBUnknownField_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBUnknownField_PackagePrivate.h; path = objectivec/GPBUnknownField_PackagePrivate.h; sourceTree = "<group>"; };
 		B1204F1B0B47BD330B0067E6E0894C8D /* UIImageView+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+WebCache.m"; path = "SDWebImage/Core/UIImageView+WebCache.m"; sourceTree = "<group>"; };
@@ -1732,7 +1733,7 @@
 		BFFAEE06B27BFDAB07F4C404D25F7908 /* SDAnimatedImageView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDAnimatedImageView.h; path = SDWebImage/Core/SDAnimatedImageView.h; sourceTree = "<group>"; };
 		C09C82EE0B60923F05035B5EB583A1C0 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = src/fmdb/FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		C0DC37852383558CB560D77D52D400AD /* SDWebImageDefine.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDefine.h; path = SDWebImage/Core/SDWebImageDefine.h; sourceTree = "<group>"; };
-		C2105C94812B6214B154F54DCEDB72AC /* libProtobuf.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libProtobuf.a; path = libProtobuf.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2105C94812B6214B154F54DCEDB72AC /* libProtobuf.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libProtobuf.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2A0F98722AF225B642AD5FFCA70771C /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+AFNetworking.h"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		C2F46B024E24B67A2E4024265CEAF9DF /* LOTLayerGroup.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LOTLayerGroup.m; path = "lottie-ios/Classes/Models/LOTLayerGroup.m"; sourceTree = "<group>"; };
 		C307726CA2586FFE94674959C19EE1C8 /* QCloudGenerateSnapshotResult.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudGenerateSnapshotResult.h; path = QCloudCOSXML/Classes/Transfer/model/QCloudGenerateSnapshotResult.h; sourceTree = "<group>"; };
@@ -1802,7 +1803,7 @@
 		DB78FBF912AA6DC2EB36FEB4CEEA428A /* FMDatabase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = src/fmdb/FMDatabase.h; sourceTree = "<group>"; };
 		DBDE591B872A1890235A1214767220EE /* MSDBManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MSDBManager.m; path = MSIMSDK/Classes/Database/MSDBManager.m; sourceTree = "<group>"; };
 		DBE197436FDDEDFE4D6F22263649706B /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+AFNetworking.h"; path = "UIKit+AFNetworking/UIButton+AFNetworking.h"; sourceTree = "<group>"; };
-		DBE92507B53B7E9AEFB7C3FFF8B89AAD /* libPods-BlackFireIM.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-BlackFireIM.a"; path = "libPods-BlackFireIM.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBE92507B53B7E9AEFB7C3FFF8B89AAD /* libPods-BlackFireIM.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlackFireIM.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC418203DF5D8D3DB4F7082FFC402996 /* GPBRuntimeTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBRuntimeTypes.h; path = objectivec/GPBRuntimeTypes.h; sourceTree = "<group>"; };
 		DC444DD54B07E92F91B7F3E3B967B67E /* GPBCodedInputStream_PackagePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPBCodedInputStream_PackagePrivate.h; path = objectivec/GPBCodedInputStream_PackagePrivate.h; sourceTree = "<group>"; };
 		DC8E77415A6E09CADEFDB9C880DA161A /* QCloudHTTPMultiDataStream.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudHTTPMultiDataStream.h; path = QCloudCore/Classes/Base/QCLOUDRestNet/DataForm/QCloudHTTPMultiDataStream.h; sourceTree = "<group>"; };
@@ -1833,12 +1834,12 @@
 		E2904321EC01C49C00B738C683EEC6BB /* LOTLayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LOTLayer.m; path = "lottie-ios/Classes/Models/LOTLayer.m"; sourceTree = "<group>"; };
 		E2D458920E0BCD595E99AF2D8C72E5B7 /* QCloudXMLDictionary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudXMLDictionary.m; path = QCloudCore/Classes/Base/QCLOUDRestNet/CoreRequest/Serializer/XML/XMLDictionary/Reader/QCloudXMLDictionary.m; sourceTree = "<group>"; };
 		E2F8A53C61100A23341DA93C70CBE519 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLRequestSerialization.m; path = AFNetworking/AFURLRequestSerialization.m; sourceTree = "<group>"; };
-		E37B33C873E2833FD9756B6775B19EEF /* NSString+QCloudSHA.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "NSString+QCloudSHA.mm"; path = "QCloudCore/Classes/Base/QCLOUDRestNet/QCloudSecret/NSString+QCloudSHA.mm"; sourceTree = "<group>"; };
+		E37B33C873E2833FD9756B6775B19EEF /* NSString+QCloudSHA.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSString+QCloudSHA.mm"; path = "QCloudCore/Classes/Base/QCLOUDRestNet/QCloudSecret/NSString+QCloudSHA.mm"; sourceTree = "<group>"; };
 		E38312C53AA1E9817C2C231BDC40BFF4 /* QCloudCOSXMLServiceUtilities.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudCOSXMLServiceUtilities.h; path = QCloudCOSXML/Classes/Base/QCloudCOSXMLServiceUtilities.h; sourceTree = "<group>"; };
 		E3E509AA9FFA3AF20CB54F2C25EE2FFD /* QCloudError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudError.h; path = QCloudCore/Classes/Base/QCloudClientBase/Service/QCloudError.h; sourceTree = "<group>"; };
 		E4505F5BFDDB49B46B94217D09853917 /* QCloudGetFilePreviewResult.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudGetFilePreviewResult.m; path = QCloudCOSXML/Classes/Transfer/model/QCloudGetFilePreviewResult.m; sourceTree = "<group>"; };
 		E47C7AFC7812021C8A70ACB20AFCB71B /* QCloudAbstractRequest_FakeRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudAbstractRequest_FakeRequest.h; path = QCloudCore/Classes/Base/QCloudClientBase/Request/QCloudAbstractRequest_FakeRequest.h; sourceTree = "<group>"; };
-		E49D6D248DD1CEE584E6776B9164A1B2 /* libMJRefresh.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libMJRefresh.a; path = libMJRefresh.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E49D6D248DD1CEE584E6776B9164A1B2 /* libMJRefresh.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMJRefresh.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E7663B5E788DDEA8334C484A508361 /* QCloudHTTPSessionManager_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudHTTPSessionManager_Private.h; path = QCloudCore/Classes/Base/QCLOUDRestNet/Operations/QCloudHTTPSessionManager_Private.h; sourceTree = "<group>"; };
 		E51076E1BA83EB3BBFC61196A1F88376 /* QCloudSignatureFields.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudSignatureFields.h; path = QCloudCore/Classes/Base/QCloudClientBase/Authentation/QCloudSignatureFields.h; sourceTree = "<group>"; };
 		E57C9266AF9B0A50CB6518A4189D78FF /* QCloudNetEnv.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudNetEnv.m; path = QCloudCore/Classes/Base/QCLOUDRestNet/reachability/QCloudNetEnv.m; sourceTree = "<group>"; };
@@ -1852,7 +1853,7 @@
 		E8A76665AE10441F37019A28101781B5 /* QCloudReachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudReachability.h; path = QCloudCore/Classes/Base/QCLOUDRestNet/reachability/QCloudReachability.h; sourceTree = "<group>"; };
 		E8D7EAD6C5E2AD0AE8E1FF6EEC48F85F /* QCloudCOSXMLService+Transfer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "QCloudCOSXMLService+Transfer.h"; path = "QCloudCOSXML/Classes/Transfer/QCloudCOSXMLService+Transfer.h"; sourceTree = "<group>"; };
 		E93EB3356D5F394CB9A10C8F8C139834 /* LOTShapeRectangle.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LOTShapeRectangle.m; path = "lottie-ios/Classes/Models/LOTShapeRectangle.m"; sourceTree = "<group>"; };
-		E97D43C46A45EE515A4DA3AF94398441 /* libSVProgressHUD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSVProgressHUD.a; path = libSVProgressHUD.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E97D43C46A45EE515A4DA3AF94398441 /* libSVProgressHUD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSVProgressHUD.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9C3340C9C790B1A713E945315B639E9 /* MSDBProfileStore.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MSDBProfileStore.m; path = MSIMSDK/Classes/Database/MSDBProfileStore.m; sourceTree = "<group>"; };
 		EA0BD3D12F2A71CF433EB3050D429CA3 /* QCloudSandboxPath.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudSandboxPath.m; path = QCloudCore/Classes/Base/PathUtilities/QCloudSandboxPath.m; sourceTree = "<group>"; };
 		EA18E1211FED0BF029BA14DEAF3902B5 /* MSIMHeader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MSIMHeader.h; path = MSIMSDK/Classes/IMKit/MSIMHeader.h; sourceTree = "<group>"; };
@@ -1904,7 +1905,7 @@
 		F841F686D71D5245D3FCCCAA04A73C1A /* MJRefreshStateHeader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJRefreshStateHeader.h; path = MJRefresh/Custom/Header/MJRefreshStateHeader.h; sourceTree = "<group>"; };
 		F867F962B0A14E2107DA51045F874DF1 /* SDAnimatedImageView+WebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "SDAnimatedImageView+WebCache.h"; path = "SDWebImage/Core/SDAnimatedImageView+WebCache.h"; sourceTree = "<group>"; };
 		F890708FEDB9D029095804494B0EFA64 /* MJRefresh.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MJRefresh.debug.xcconfig; sourceTree = "<group>"; };
-		F8945DAF91B88FB4D678D3E7EE8E95BD /* QCloudEncryt.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = QCloudEncryt.mm; path = QCloudCore/Classes/Base/Logger/Encryt/QCloudEncryt.mm; sourceTree = "<group>"; };
+		F8945DAF91B88FB4D678D3E7EE8E95BD /* QCloudEncryt.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = QCloudEncryt.mm; path = QCloudCore/Classes/Base/Logger/Encryt/QCloudEncryt.mm; sourceTree = "<group>"; };
 		F922009D7AE3EEFD09399D5D1DC99A28 /* QCloudGetObjectTaggingRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QCloudGetObjectTaggingRequest.h; path = QCloudCOSXML/Classes/Transfer/request/QCloudGetObjectTaggingRequest.h; sourceTree = "<group>"; };
 		F938527B6ADA5E3BA5F2B4DB83A4F461 /* QCloudRequestData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QCloudRequestData.m; path = QCloudCore/Classes/Base/QCLOUDRestNet/CoreRequest/QCloudRequestData.m; sourceTree = "<group>"; };
 		F958CFE2264C3DF09B02A790744CDA41 /* SDAnimatedImageRep.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDAnimatedImageRep.m; path = SDWebImage/Core/SDAnimatedImageRep.m; sourceTree = "<group>"; };
@@ -2086,7 +2087,6 @@
 				F16374057EB19C006B612CBD80836DD1 /* Resources */,
 				06E69435ACC7A799EDD6DBF51BB56289 /* Support Files */,
 			);
-			name = MJRefresh;
 			path = MJRefresh;
 			sourceTree = "<group>";
 		};
@@ -2099,7 +2099,6 @@
 				7981C6F9C466AF4F28AF0C8BC99A1AD5 /* GCDAsyncUdpSocket.m */,
 				5817C43F685BB0326D3C268E285365F4 /* Support Files */,
 			);
-			name = CocoaAsyncSocket;
 			path = CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
@@ -2121,7 +2120,6 @@
 				66458758D762411C82F3B58F849AECB0 /* standard */,
 				ADDF21EF1302CC3D4B6D5505F371A132 /* Support Files */,
 			);
-			name = FMDB;
 			path = FMDB;
 			sourceTree = "<group>";
 		};
@@ -2131,7 +2129,6 @@
 				31A9B0D612DDE821716B6D51499B8067 /* Support Files */,
 				5EA768147A4C86FBB48A7A0E5E1C673B /* WithoutMTA */,
 			);
-			name = QCloudCore;
 			path = QCloudCore;
 			sourceTree = "<group>";
 		};
@@ -2202,7 +2199,6 @@
 				DF0232A7A2654973C8413F8DFA1E5C86 /* Reachability.m */,
 				CD36F109E7BC531D3B79C481F01F24DB /* Support Files */,
 			);
-			name = MSIMSDK;
 			path = MSIMSDK;
 			sourceTree = "<group>";
 		};
@@ -2378,7 +2374,6 @@
 				A96055DD1537DFD897D3AC48546E06CD /* UIColor+Expanded.m */,
 				910622ED03E037028E6EC7E460F84D12 /* Support Files */,
 			);
-			name = "lottie-ios";
 			path = "lottie-ios";
 			sourceTree = "<group>";
 		};
@@ -2458,7 +2453,6 @@
 				DF1C322E2CCAA76B163F48D066007217 /* Resources */,
 				318CAEA3EA040ED2E391277AD2B32EFD /* Support Files */,
 			);
-			name = SVProgressHUD;
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
@@ -2687,7 +2681,6 @@
 				64E57CBDD45B8BB95017124E5A50B6D2 /* Frameworks */,
 				02AE12234CD518D10BD4FFAA093ECF14 /* Support Files */,
 			);
-			name = Bugly;
 			path = Bugly;
 			sourceTree = "<group>";
 		};
@@ -2955,7 +2948,6 @@
 				48DD266E48A7DF0362D5727A3ED266A2 /* Wrappers.pbobjc.h */,
 				3D38CF662DD9273A7D06FC1A96C3F14B /* Support Files */,
 			);
-			name = Protobuf;
 			path = Protobuf;
 			sourceTree = "<group>";
 		};
@@ -2965,7 +2957,6 @@
 				7912235A5EF53F62EF1231A8156E8B90 /* Core */,
 				7BE678BCE4D20A23BF641C4CE28F0442 /* Support Files */,
 			);
-			name = SDWebImage;
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
@@ -3027,7 +3018,6 @@
 				51616EDEAB5279A79697F0C3F0278B11 /* Support Files */,
 				8D5704DEB14E1E1A4AA71033DF5C132B /* UIKit */,
 			);
-			name = AFNetworking;
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
@@ -3288,7 +3278,6 @@
 				B2B42EC116F91989D571AE0D9A2889F1 /* Support Files */,
 				BCDBEE05E24AD47135E38326B2154289 /* Transfer */,
 			);
-			name = QCloudCOSXML;
 			path = QCloudCOSXML;
 			sourceTree = "<group>";
 		};

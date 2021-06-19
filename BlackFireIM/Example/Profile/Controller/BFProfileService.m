@@ -116,8 +116,8 @@
     [params setValue:info.nick_name forKey:@"nick_name"];
     [params setValue:info.avatar forKey:@"avatar"];
     [params setValue:@(info.gold) forKey:@"gold"];
-    if (info.gold_exp) {
-        [params setValue:@(info.gold_exp) forKey:@"gold_exp"];
+    if (info.gold) {
+        [params setValue:@([MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60) forKey:@"gold_exp"];
     }
     [params setValue:@(info.verified) forKey:@"verified"];
     [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

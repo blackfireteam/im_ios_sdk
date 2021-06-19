@@ -162,7 +162,7 @@
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        picker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        picker.mediaTypes = [NSArray arrayWithObjects: @"public.image", nil];
         picker.delegate = self;
         [self presentViewController:picker animated:YES completion:nil];
     }

@@ -62,14 +62,14 @@
     self.serverSwitch.frame = CGRectMake(self.loginBtn.x, self.loginBtn.maxY+30, 60, 30);
     [self.serverSwitch addTarget:self action:@selector(serverSwitchChanged:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.serverSwitch];
-    
+
     self.serverL = [[UILabel alloc]init];
     self.serverL.font = [UIFont systemFontOfSize:16];
     self.serverL.textColor = [UIColor blackColor];
     self.serverL.text = @"正式环境";
     self.serverL.frame = CGRectMake(self.serverSwitch.maxX+10, self.serverSwitch.y, 100, self.serverSwitch.height);
     [self.view addSubview:self.serverL];
-    
+
     self.serverSwitch.on = (MSIMTools.sharedInstance.serverType == MSIMServerTypeProduct);
     self.serverL.text = self.serverSwitch.isOn ? @"正式环境" : @"测试环境";
 }
@@ -93,11 +93,6 @@
     self.registerInfo.phone = phone;
     //1.获取IM—token
     WS(weakSelf)
-    if ([MSIMManager sharedInstance].connStatus != IMNET_STATUS_SUCC) {
-        [MSHelper showToastFail:@"正在建立TCP连接"];
-        [[MSIMManager sharedInstance].socket disConnectTCP];
-        return;
-    }
     [MSHelper showToast];
     [[MSIMManager sharedInstance]getIMToken:phone succ:^(NSString * _Nonnull userToken) {
         [MSHelper dismissToast];

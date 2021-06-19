@@ -247,6 +247,7 @@
 		F011D5A525E736C10061F9D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F036361F25FEEC9500E69D14 /* TUIKitResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitResource.bundle; sourceTree = "<group>"; };
 		F036362025FEEC9600E69D14 /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
+		F042C8522679E00D0067547E /* BlackFireIM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlackFireIM.entitlements; sourceTree = "<group>"; };
 		F056712825EF919600782F9C /* MSInputBarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSInputBarView.h; sourceTree = "<group>"; };
 		F056712925EF919600782F9C /* MSInputBarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSInputBarView.m; sourceTree = "<group>"; };
 		F056713225F06E1000782F9C /* MSResponderTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSResponderTextView.m; sourceTree = "<group>"; };
@@ -623,6 +624,7 @@
 		F011D57B25E736BD0061F9D6 /* BlackFireIM */ = {
 			isa = PBXGroup;
 			children = (
+				F042C8522679E00D0067547E /* BlackFireIM.entitlements */,
 				F056712525EF916800782F9C /* Example */,
 				F011D57C25E736BD0061F9D6 /* AppDelegate.h */,
 				F011D57D25E736BD0061F9D6 /* AppDelegate.m */,
@@ -1555,6 +1557,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BlackFireIM/BlackFireIM.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6N3JSL2D62;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1581,6 +1584,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BlackFireIM/BlackFireIM.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6N3JSL2D62;
 				FRAMEWORK_SEARCH_PATHS = (
