@@ -8,7 +8,7 @@
 #import "BFSignInStepTwoController.h"
 #import "MSHeader.h"
 #import "BFRegisterInfo.h"
-#import "MSIMKit.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
 #import "BFProfileService.h"

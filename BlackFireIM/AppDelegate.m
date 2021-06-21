@@ -9,7 +9,7 @@
 #import "BFTabBarController.h"
 #import "BFLoginController.h"
 #import "BFNavigationController.h"
-#import "MSIMKit.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import "MSIMSDK-UIKit.h"
 #import "BFUploadManager.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>

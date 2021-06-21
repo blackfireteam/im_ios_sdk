@@ -7,7 +7,7 @@
 
 #import "MSChatViewController.h"
 #import "MSHeader.h"
-#import "MSIMSDK.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import "MSChatViewController+More.h"
 #import "MSMessageCell.h"
 #import <AVFoundation/AVFoundation.h>

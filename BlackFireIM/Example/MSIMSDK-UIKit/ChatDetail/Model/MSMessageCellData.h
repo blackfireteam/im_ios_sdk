@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "MSIMElem.h"
+#import <MSIMSDK/MSIMSDK.h>
 
 /**
  *  消息方向枚举

@@ -8,7 +8,7 @@
 #import "MSSystemMessageCellData.h"
 #import "UIColor+BFDarkMode.h"
 #import "MSHeader.h"
-#import "NSString+Ext.h"
+#import <MSIMSDK/MSIMSDK.h>
 
 @implementation MSSystemMessageCellData
 

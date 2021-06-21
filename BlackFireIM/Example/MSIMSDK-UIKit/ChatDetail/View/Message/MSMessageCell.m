@@ -8,7 +8,7 @@
 #import "MSMessageCell.h"
 #import <SDWebImage.h>
 #import "MSHeader.h"
-#import "MSProfileProvider.h"
+#import <MSIMSDK/MSIMSDK.h>
 
 
 @interface MSMessageCell()

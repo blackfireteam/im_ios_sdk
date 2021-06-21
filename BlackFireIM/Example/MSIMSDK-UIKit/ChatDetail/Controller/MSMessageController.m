@@ -16,7 +16,7 @@
 #import "MSVideoMessageCell.h"
 #import "MSWinkMessageCell.h"
 #import "MSVoiceMessageCell.h"
-#import "MSIMSDK.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import "MSSystemMessageCellData.h"
 #import "MSNoticeCountView.h"
 #import <MJRefresh.h>

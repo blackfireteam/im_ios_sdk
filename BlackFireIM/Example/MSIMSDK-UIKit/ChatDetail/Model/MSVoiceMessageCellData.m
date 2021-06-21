@@ -8,8 +8,7 @@
 #import "MSVoiceMessageCellData.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MSHeader.h"
-#import "NSFileManager+filePath.h"
-#import "MSIMSDK.h"
+#import <MSIMSDK/MSIMSDK.h>
 
 
 @interface MSVoiceMessageCellData()<AVAudioPlayerDelegate>

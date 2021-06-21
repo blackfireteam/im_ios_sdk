@@ -9,8 +9,7 @@
 #import "MSHeader.h"
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "MSIMSDK.h"
-#import "NSFileManager+filePath.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import <Photos/Photos.h>
 
 @interface MSChatViewController()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>

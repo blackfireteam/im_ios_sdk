@@ -6,8 +6,8 @@
 //
 
 #import "BFSparkLoadingView.h"
-#import "MSHeader.h"
-#import "MSIMSDK.h"
+#import "MSIMSDK-UIKit.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import <SDWebImage.h>
 
 

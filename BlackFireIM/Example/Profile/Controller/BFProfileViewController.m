@@ -6,8 +6,8 @@
 //
 
 #import "BFProfileViewController.h"
-#import "MSHeader.h"
-#import "MSIMSDK.h"
+#import "MSIMSDK-UIKit.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
 #import "BFLoginController.h"
@@ -271,11 +271,11 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"退出登录" message:@"确定要退出吗？" preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction: [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[MSIMManager sharedInstance]logout:^{
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            appDelegate.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
             
             } failed:^(NSInteger code, NSString * _Nonnull desc) {
         }];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        appDelegate.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];

@@ -6,11 +6,10 @@
 //
 
 #import "BFLoginController.h"
-#import "MSHeader.h"
-#import "MSIMSDK.h"
+#import "MSIMSDK-UIKit.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import "BFTabBarController.h"
 #import "AppDelegate.h"
-#import "MSIMKit.h"
 #import "BFSignInStepOneController.h"
 #import "BFRegisterInfo.h"
 

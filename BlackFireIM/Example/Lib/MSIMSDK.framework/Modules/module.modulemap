@@ -1,0 +1,6 @@
+framework module MSIMSDK {
+  umbrella header "MSIMSDK.h"
+
+  export *
+  module * { export * }
+}

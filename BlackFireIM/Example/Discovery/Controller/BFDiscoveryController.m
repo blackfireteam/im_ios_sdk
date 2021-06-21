@@ -7,10 +7,10 @@
 
 #import "BFDiscoveryController.h"
 #import "UIColor+BFDarkMode.h"
-#import "MSHeader.h"
 #import "BFUserListCell.h"
 #import "BFChatViewController.h"
-#import "MSIMSDK.h"
+#import "MSIMSDK-UIKit.h"
+#import <MSIMSDK/MSIMSDK.h>
 
 
 @interface BFDiscoveryController ()<UICollectionViewDelegate,UICollectionViewDataSource>

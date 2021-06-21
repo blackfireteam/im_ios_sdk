@@ -6,9 +6,9 @@
 //
 
 #import "BFSparkCardCell.h"
-#import "MSProfileInfo.h"
+#import "MSIMSDK-UIKit.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import <SDWebImage.h>
-#import "MSHeader.h"
 
 
 @interface BFSparkCardCell()

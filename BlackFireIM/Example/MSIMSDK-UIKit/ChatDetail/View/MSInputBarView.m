@@ -14,9 +14,8 @@
 #import "UIView+BFExtension.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MSRecordView.h"
-#import "NSFileManager+filePath.h"
-#import "NSString+Ext.h"
-
+#import <MSIMSDK/MSIMSDK.h>
+#import <MSIMSDK/NSFileManager+filePath.h>
 
 @interface MSInputBarView()<UITextViewDelegate,AVAudioRecorderDelegate>
 

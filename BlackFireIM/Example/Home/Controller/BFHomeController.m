@@ -6,8 +6,8 @@
 //
 
 #import "BFHomeController.h"
-#import "MSHeader.h"
-#import "MSIMSDK.h"
+#import "MSIMSDK-UIKit.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import "BFSparkCardView.h"
 #import "BFSparkCardCell.h"
 #import "BFChatViewController.h"

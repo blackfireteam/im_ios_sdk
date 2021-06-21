@@ -7,7 +7,7 @@
 
 #import "BFProfileService.h"
 #import "NSString+Encry.h"
-#import "MSIMSDK.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import <AFNetworking.h>
 #import "MSIMSDK-UIKit.h"
 

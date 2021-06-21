@@ -6,7 +6,7 @@
 //
 
 #import "BFConversationListController.h"
-#import "MSIMSDK.h"
+#import <MSIMSDK/MSIMSDK.h>
 #import "BFNaviBarIndicatorView.h"
 #import "MSIMSDK-UIKit.h"
 #import "BFChatViewController.h"
