@@ -89,7 +89,6 @@
 		F09316BD2609DB8C0099E39E /* MSMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316BC2609DB8C0099E39E /* MSMenuView.m */; };
 		F09316DC260B81B80099E39E /* BFDiscoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316DB260B81B80099E39E /* BFDiscoveryController.m */; };
 		F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316E1260B82EE0099E39E /* BFUserListCell.m */; };
-		F0934F762680588E00D63DEE /* MSIMSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0934F752680588E00D63DEE /* MSIMSDK.framework */; };
 		F0C4AB792660E45400CC3160 /* MSMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C4AB782660E45400CC3160 /* MSMessageController.m */; };
 		F0C4AB7D2664860B00CC3160 /* BFChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C4AB7C2664860B00CC3160 /* BFChatViewController.m */; };
 		F0CF6429261ECE8400106697 /* UIButton+positon.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6428261ECE8400106697 /* UIButton+positon.m */; };
@@ -338,7 +337,6 @@
 		F09316DB260B81B80099E39E /* BFDiscoveryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDiscoveryController.m; sourceTree = "<group>"; };
 		F09316E0260B82EE0099E39E /* BFUserListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUserListCell.h; sourceTree = "<group>"; };
 		F09316E1260B82EE0099E39E /* BFUserListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUserListCell.m; sourceTree = "<group>"; };
-		F0934F752680588E00D63DEE /* MSIMSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MSIMSDK.framework; sourceTree = "<group>"; };
 		F0C4AB782660E45400CC3160 /* MSMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMessageController.m; sourceTree = "<group>"; };
 		F0C4AB7B2664860B00CC3160 /* BFChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFChatViewController.h; sourceTree = "<group>"; };
 		F0C4AB7C2664860B00CC3160 /* BFChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFChatViewController.m; sourceTree = "<group>"; };
@@ -415,7 +413,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BA543369665173254D87FE7 /* libPods-BlackFireIM.a in Frameworks */,
-				F0934F762680588E00D63DEE /* MSIMSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,7 +454,6 @@
 			isa = PBXGroup;
 			children = (
 				F0E4AA6326609D12002FD8F2 /* MSIMSDK-UIKit */,
-				F0934F752680588E00D63DEE /* MSIMSDK.framework */,
 				F0864F482654FA5D00EE917D /* YYImage */,
 				F0020B032614263E0080C005 /* YBImageBrowser */,
 			);
