@@ -21,7 +21,6 @@
 #import "MSVoiceMessageCell.h"
 #import "MSVideoMessageCell.h"
 #import "MSSystemMessageCell.h"
-#import "MSWinkMessageCell.h"
 #import "MSNoticeCountView.h"
 #import "MSChatMoreView.h"
 

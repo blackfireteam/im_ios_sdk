@@ -5,12 +5,12 @@
 //  Created by benny wang on 2021/4/13.
 //
 
-#import "MSWinkMessageCell.h"
-#import "MSWinkMessageCellData.h"
+#import "BFWinkMessageCell.h"
+#import "BFWinkMessageCellData.h"
 #import "MSHeader.h"
 
 
-@implementation MSWinkMessageCell
+@implementation BFWinkMessageCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -33,7 +33,7 @@
     return self;
 }
 
-- (void)fillWithData:(MSWinkMessageCellData *)data
+- (void)fillWithData:(BFWinkMessageCellData *)data
 {
     //set data
     [super fillWithData:data];

@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  显示消息数据委托
  *  您可以通过该回调实现：根据传入的 data 初始化消息气泡并进行显示
  */
-- (MSMessageCell *)messageController:(MSMessageController *)controller onShowMessageData:(MSMessageCellData *)data;
+- (Class)messageController:(MSMessageController *)controller onShowMessageData:(MSMessageCellData *)data;
 
 /**
  *  控制器点击回调

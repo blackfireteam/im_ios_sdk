@@ -9,12 +9,10 @@
 #import "MSHeader.h"
 #import "MSTextMessageCellData.h"
 #import "MSImageMessageCellData.h"
-#import "MSWinkMessageCellData.h"
 #import "MSTextMessageCell.h"
 #import "MSImageMessageCell.h"
 #import "MSSystemMessageCell.h"
 #import "MSVideoMessageCell.h"
-#import "MSWinkMessageCell.h"
 #import "MSVoiceMessageCell.h"
 #import <MSIMSDK/MSIMSDK.h>
 #import "MSSystemMessageCellData.h"
@@ -109,7 +107,6 @@
     [self.tableView registerClass:[MSSystemMessageCell class] forCellReuseIdentifier:TSystemMessageCell_ReuseId];
     [self.tableView registerClass:[MSVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
     [self.tableView registerClass:[MSVoiceMessageCell class] forCellReuseIdentifier:TVoiceMessageCell_ReuseId];
-    [self.tableView registerClass:[MSWinkMessageCell class] forCellReuseIdentifier:TWinkMessageCell_ReuseId];
  
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf loadMessages];
@@ -219,6 +216,18 @@
         MSSystemMessageCellData *dateMsg = [self transSystemMsgFromDate: elem.msg_sign];
         
         MSMessageCellData *data;
+        if ([self.delegate respondsToSelector:@selector(messageController:onNewMessage:)]) {
+            MSMessageCellData *cellData = [self.delegate messageController:self onNewMessage:elem];
+            if (cellData != nil) {
+                if (dateMsg) {
+                    self.msgForDate = elem;
+                    [uiMsgs addObject:dateMsg];
+                }
+                [uiMsgs addObject:cellData];
+                continue;
+            }
+        }
+        
         if (elem.type == MSIM_MSG_TYPE_REVOKE) {// 撤回的消息
             MSSystemMessageCellData *revoke = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             if (elem.isSelf) {
@@ -250,11 +259,6 @@
             voiceMsg.showName = YES;
             voiceMsg.elem = elem;
             data = voiceMsg;
-        }else if (elem.type == MSIM_MSG_TYPE_CUSTOM) {
-            MSWinkMessageCellData *winkMsg = [[MSWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
-            winkMsg.showName = YES;
-            winkMsg.elem = elem;
-            data = winkMsg;
         }else {
             MSSystemMessageCellData *unknowData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);
@@ -313,20 +317,8 @@
     elems = [[elems reverseObjectEnumerator] allObjects];
     //消息去重
     NSArray *tempElems = [self deduplicateMessage:elems];
-    NSMutableArray *uiMsgs = [NSMutableArray array];
-    for (MSIMElem *e in tempElems) {
-        if ([self.delegate respondsToSelector:@selector(messageController:onNewMessage:)]) {
-            MSMessageCellData *data = [self.delegate messageController:self onNewMessage:e];
-            if (data != nil) {
-                [uiMsgs addObject:data];
-            }else {
-                [uiMsgs addObjectsFromArray:[self transUIMsgFromIMMsg:@[e]]];
-            }
-        }else {
-            [uiMsgs addObjectsFromArray:[self transUIMsgFromIMMsg:@[e]]];
-        }
-    }
-    
+    NSMutableArray *uiMsgs = [self transUIMsgFromIMMsg:tempElems];
+
     if (uiMsgs.count) {
         //当前列表是否停留在底部
         BOOL isAtBottom = (self.tableView.contentOffset.y + self.tableView.height + 20 >= self.tableView.contentSize.height);
@@ -444,9 +436,10 @@
     MSMessageCellData *data = _uiMsgs[indexPath.row];
     MSMessageCell *cell;
     if ([self.delegate respondsToSelector:@selector(messageController:onShowMessageData:)]) {
-        cell = [self.delegate messageController:self onShowMessageData:data];
-        if (cell) {
-            [self.tableView registerClass:[cell class] forCellReuseIdentifier:data.reuseId];
+        Class class = [self.delegate messageController:self onShowMessageData:data];
+        if (class != nil) {
+            [self.tableView registerClass:class forCellReuseIdentifier:data.reuseId];
+            cell = [tableView dequeueReusableCellWithIdentifier:data.reuseId forIndexPath:indexPath];
             cell.delegate = self;
             [cell fillWithData:data];
             return cell;

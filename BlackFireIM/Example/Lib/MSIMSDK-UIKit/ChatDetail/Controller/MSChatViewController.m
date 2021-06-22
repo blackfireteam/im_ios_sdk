@@ -141,9 +141,9 @@
  *  显示消息数据委托
  *  您可以通过该回调实现：根据传入的 data 初始化消息气泡并进行显示
  */
-- (MSMessageCell *)messageController:(MSMessageController *)controller onShowMessageData:(MSMessageCellData *)data
+- (Class)messageController:(MSMessageController *)controller onShowMessageData:(MSMessageCellData *)data
 {
-    if ([self.delegate respondsToSelector:@selector(messageController:onShowMessageData:)]) {
+    if ([self.delegate respondsToSelector:@selector(chatController:onShowMessageData:)]) {
         return [self.delegate chatController:self onShowMessageData:data];
     }
     return nil;

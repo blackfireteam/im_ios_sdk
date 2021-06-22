@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MSWinkMessageCellData : MSMessageCellData
+@interface BFWinkMessageCellData : MSMessageCellData
 
 @property(nonatomic,strong,readonly) MSIMCustomElem *customElem;
 

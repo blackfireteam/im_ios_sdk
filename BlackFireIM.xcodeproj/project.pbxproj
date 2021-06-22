@@ -89,8 +89,8 @@
 		F09316BD2609DB8C0099E39E /* MSMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316BC2609DB8C0099E39E /* MSMenuView.m */; };
 		F09316DC260B81B80099E39E /* BFDiscoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316DB260B81B80099E39E /* BFDiscoveryController.m */; };
 		F09316E2260B82EE0099E39E /* BFUserListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F09316E1260B82EE0099E39E /* BFUserListCell.m */; };
+		F093503B26817D4D00D63DEE /* BFChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F093503826817D4C00D63DEE /* BFChatViewController.m */; };
 		F0C4AB792660E45400CC3160 /* MSMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C4AB782660E45400CC3160 /* MSMessageController.m */; };
-		F0C4AB7D2664860B00CC3160 /* BFChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0C4AB7C2664860B00CC3160 /* BFChatViewController.m */; };
 		F0CF6429261ECE8400106697 /* UIButton+positon.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF6428261ECE8400106697 /* UIButton+positon.m */; };
 		F0CF642F261ED60A00106697 /* BFHomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF642E261ED60A00106697 /* BFHomeController.m */; };
 		F0CF645E2623EE3500106697 /* BFSignInStepOneController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF645D2623EE3500106697 /* BFSignInStepOneController.m */; };
@@ -99,7 +99,7 @@
 		F0D298F02625489500F485CC /* spark_loading.json in Resources */ = {isa = PBXBuildFile; fileRef = F0D298EF2625489500F485CC /* spark_loading.json */; };
 		F0D298F3262578EE00F485CC /* BFSparkCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D298F2262578EE00F485CC /* BFSparkCardView.m */; };
 		F0D298F626257E2E00F485CC /* BFSparkCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D298F526257E2E00F485CC /* BFSparkCardCell.m */; };
-		F0D298FC2625993F00F485CC /* MSWinkMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D298FB2625993F00F485CC /* MSWinkMessageCell.m */; };
+		F0D298FC2625993F00F485CC /* BFWinkMessageCell..m in Sources */ = {isa = PBXBuildFile; fileRef = F0D298FB2625993F00F485CC /* BFWinkMessageCell..m */; };
 		F0D298FE26259C2400F485CC /* wink.json in Resources */ = {isa = PBXBuildFile; fileRef = F0D298FD26259C2400F485CC /* wink.json */; };
 		F0D299012627D9B800F485CC /* UIDevice+Ext.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D299002627D9B800F485CC /* UIDevice+Ext.m */; };
 		F0DC8131261462DF0042D4BD /* BFUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DC8130261462DF0042D4BD /* BFUploadManager.m */; };
@@ -120,7 +120,7 @@
 		F0E4AA862660D992002FD8F2 /* MSBubbleMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E4AA7F2660D992002FD8F2 /* MSBubbleMessageCellData.m */; };
 		F0E4AA872660D992002FD8F2 /* MSImageMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E4AA812660D992002FD8F2 /* MSImageMessageCellData.m */; };
 		F0E4AA882660D992002FD8F2 /* MSTextMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E4AA822660D992002FD8F2 /* MSTextMessageCellData.m */; };
-		F0E4AA892660D992002FD8F2 /* MSWinkMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E4AA842660D992002FD8F2 /* MSWinkMessageCellData.m */; };
+		F0E4AA892660D992002FD8F2 /* BFWinkMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E4AA842660D992002FD8F2 /* BFWinkMessageCellData.m */; };
 		F0E4AA8D2660DB77002FD8F2 /* MSChatViewController+More.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E4AA8A2660DB77002FD8F2 /* MSChatViewController+More.m */; };
 		F0E4AA8E2660DB77002FD8F2 /* MSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E4AA8B2660DB77002FD8F2 /* MSChatViewController.m */; };
 		F0F5B70C265F437D004A0299 /* MSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F5B70B265F437D004A0299 /* MSHelper.m */; };
@@ -337,9 +337,9 @@
 		F09316DB260B81B80099E39E /* BFDiscoveryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFDiscoveryController.m; sourceTree = "<group>"; };
 		F09316E0260B82EE0099E39E /* BFUserListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFUserListCell.h; sourceTree = "<group>"; };
 		F09316E1260B82EE0099E39E /* BFUserListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFUserListCell.m; sourceTree = "<group>"; };
+		F093503626817D4A00D63DEE /* BFChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFChatViewController.h; sourceTree = "<group>"; };
+		F093503826817D4C00D63DEE /* BFChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFChatViewController.m; sourceTree = "<group>"; };
 		F0C4AB782660E45400CC3160 /* MSMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMessageController.m; sourceTree = "<group>"; };
-		F0C4AB7B2664860B00CC3160 /* BFChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFChatViewController.h; sourceTree = "<group>"; };
-		F0C4AB7C2664860B00CC3160 /* BFChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFChatViewController.m; sourceTree = "<group>"; };
 		F0C4AB7E2664CAAE00CC3160 /* MSIMSDK-UIKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MSIMSDK-UIKit.h"; sourceTree = "<group>"; };
 		F0CF6427261ECE8400106697 /* UIButton+positon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+positon.h"; sourceTree = "<group>"; };
 		F0CF6428261ECE8400106697 /* UIButton+positon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+positon.m"; sourceTree = "<group>"; };
@@ -356,9 +356,9 @@
 		F0D298F2262578EE00F485CC /* BFSparkCardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSparkCardView.m; sourceTree = "<group>"; };
 		F0D298F426257E2E00F485CC /* BFSparkCardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFSparkCardCell.h; sourceTree = "<group>"; };
 		F0D298F526257E2E00F485CC /* BFSparkCardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFSparkCardCell.m; sourceTree = "<group>"; };
-		F0D298F72625983800F485CC /* MSWinkMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSWinkMessageCellData.h; sourceTree = "<group>"; };
-		F0D298FA2625993F00F485CC /* MSWinkMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSWinkMessageCell.h; sourceTree = "<group>"; };
-		F0D298FB2625993F00F485CC /* MSWinkMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MSWinkMessageCell.m; sourceTree = "<group>"; };
+		F0D298F72625983800F485CC /* BFWinkMessageCellData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFWinkMessageCellData.h; sourceTree = "<group>"; };
+		F0D298FA2625993F00F485CC /* BFWinkMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BFWinkMessageCell.h; sourceTree = "<group>"; };
+		F0D298FB2625993F00F485CC /* BFWinkMessageCell..m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BFWinkMessageCell..m; sourceTree = "<group>"; };
 		F0D298FD26259C2400F485CC /* wink.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wink.json; sourceTree = "<group>"; };
 		F0D298FF2627D9B800F485CC /* UIDevice+Ext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Ext.h"; sourceTree = "<group>"; };
 		F0D299002627D9B800F485CC /* UIDevice+Ext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Ext.m"; sourceTree = "<group>"; };
@@ -398,7 +398,7 @@
 		F0E4AA812660D992002FD8F2 /* MSImageMessageCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSImageMessageCellData.m; sourceTree = "<group>"; };
 		F0E4AA822660D992002FD8F2 /* MSTextMessageCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSTextMessageCellData.m; sourceTree = "<group>"; };
 		F0E4AA832660D992002FD8F2 /* MSVideoMessageCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSVideoMessageCellData.h; sourceTree = "<group>"; };
-		F0E4AA842660D992002FD8F2 /* MSWinkMessageCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWinkMessageCellData.m; sourceTree = "<group>"; };
+		F0E4AA842660D992002FD8F2 /* BFWinkMessageCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFWinkMessageCellData.m; sourceTree = "<group>"; };
 		F0E4AA852660D992002FD8F2 /* MSImageMessageCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSImageMessageCellData.h; sourceTree = "<group>"; };
 		F0E4AA8A2660DB77002FD8F2 /* MSChatViewController+More.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSChatViewController+More.m"; sourceTree = "<group>"; };
 		F0E4AA8B2660DB77002FD8F2 /* MSChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSChatViewController.m; sourceTree = "<group>"; };
@@ -722,8 +722,12 @@
 		F058368626032A790008C4FD /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F0C4AB7B2664860B00CC3160 /* BFChatViewController.h */,
-				F0C4AB7C2664860B00CC3160 /* BFChatViewController.m */,
+				F093503626817D4A00D63DEE /* BFChatViewController.h */,
+				F093503826817D4C00D63DEE /* BFChatViewController.m */,
+				F0D298F72625983800F485CC /* BFWinkMessageCellData.h */,
+				F0E4AA842660D992002FD8F2 /* BFWinkMessageCellData.m */,
+				F0D298FA2625993F00F485CC /* BFWinkMessageCell.h */,
+				F0D298FB2625993F00F485CC /* BFWinkMessageCell..m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -830,8 +834,6 @@
 				F0878A852608428500268122 /* MSSystemMessageCell.m */,
 				F0777BB22612C2C6006CA660 /* MSNoticeCountView.h */,
 				F0777BB32612C2C6006CA660 /* MSNoticeCountView.m */,
-				F0D298FA2625993F00F485CC /* MSWinkMessageCell.h */,
-				F0D298FB2625993F00F485CC /* MSWinkMessageCell.m */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -1050,8 +1052,6 @@
 				F0E4AA7F2660D992002FD8F2 /* MSBubbleMessageCellData.m */,
 				F05671CD25F1DFD200782F9C /* MSTextMessageCellData.h */,
 				F0E4AA822660D992002FD8F2 /* MSTextMessageCellData.m */,
-				F0D298F72625983800F485CC /* MSWinkMessageCellData.h */,
-				F0E4AA842660D992002FD8F2 /* MSWinkMessageCellData.m */,
 				F0E4AA852660D992002FD8F2 /* MSImageMessageCellData.h */,
 				F0E4AA812660D992002FD8F2 /* MSImageMessageCellData.m */,
 				F0E4AA832660D992002FD8F2 /* MSVideoMessageCellData.h */,
@@ -1276,7 +1276,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0C4AB7D2664860B00CC3160 /* BFChatViewController.m in Sources */,
 				F056714725F07A0C00782F9C /* UIImage+BFDarkMode.m in Sources */,
 				F09316DC260B81B80099E39E /* BFDiscoveryController.m in Sources */,
 				F0E4AA6C2660BF34002FD8F2 /* MSUIConversationCell.m in Sources */,
@@ -1303,7 +1302,7 @@
 				F0020B502614263E0080C005 /* YBIBImageLayout.m in Sources */,
 				F0020B642614263E0080C005 /* YBIBDataMediator.m in Sources */,
 				F0020B5E2614263E0080C005 /* YBIBPhotoAlbumManager.m in Sources */,
-				F0D298FC2625993F00F485CC /* MSWinkMessageCell.m in Sources */,
+				F0D298FC2625993F00F485CC /* BFWinkMessageCell..m in Sources */,
 				F0E4AA8D2660DB77002FD8F2 /* MSChatViewController+More.m in Sources */,
 				F05671A025F1BC6200782F9C /* MSMessageCellData.m in Sources */,
 				F05671C325F1DD5B00782F9C /* MSBubbleMessageCell.m in Sources */,
@@ -1324,6 +1323,7 @@
 				F09316BD2609DB8C0099E39E /* MSMenuView.m in Sources */,
 				F0020B612614263E0080C005 /* YBIBSheetView.m in Sources */,
 				F0E4AA6926609D70002FD8F2 /* MSUIConversationCellData.m in Sources */,
+				F093503B26817D4D00D63DEE /* BFChatViewController.m in Sources */,
 				F0DC81912616CA280042D4BD /* YBIBVideoView.m in Sources */,
 				F0020B4F2614263E0080C005 /* YBImageBrowser.m in Sources */,
 				F056716025F07F1600782F9C /* NSBundle+BFKit.m in Sources */,
@@ -1346,7 +1346,7 @@
 				F0864F562654FA5D00EE917D /* YYFrameImage.m in Sources */,
 				F0777BB42612C2C6006CA660 /* MSNoticeCountView.m in Sources */,
 				F0020B5A2614263E0080C005 /* YBIBIconManager.m in Sources */,
-				F0E4AA892660D992002FD8F2 /* MSWinkMessageCellData.m in Sources */,
+				F0E4AA892660D992002FD8F2 /* BFWinkMessageCellData.m in Sources */,
 				F0020B632614263E0080C005 /* YBIBContainerView.m in Sources */,
 				F0020B5F2614263E0080C005 /* YBIBTopView.m in Sources */,
 				F0E4AA6626609D25002FD8F2 /* MSUIConversationListController.m in Sources */,

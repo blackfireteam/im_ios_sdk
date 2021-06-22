@@ -9,6 +9,9 @@
 #import "MSIMSDK-UIKit.h"
 #import "YBImageBrowser.h"
 #import "YBIBVideoData.h"
+#import "BFWinkMessageCell.h"
+#import "BFWinkMessageCellData.h"
+
 
 @interface BFChatViewController ()<MSChatViewControllerDelegate>
 
@@ -48,20 +51,33 @@
 - (MSMessageCellData *)chatController:(MSChatViewController *)controller onNewMessage:(MSIMElem *)elem
 {
     //收到的每一条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
+    if ([elem isKindOfClass:[MSIMCustomElem class]]) {
+        MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+        NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+        if ([dic[@"type"]integerValue] == 1) {
+            BFWinkMessageCellData *winkData = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+            winkData.showName = YES;
+            winkData.elem = customElem;
+            return winkData;
+        }
+    }
     return nil;
 }
 
-- (MSMessageCell *)chatController:(MSChatViewController *)controller onShowMessageData:(MSMessageCellData *)cellData
+- (Class)chatController:(MSChatViewController *)controller onShowMessageData:(MSMessageCellData *)cellData
 {
     //你可以自定义消息气泡的UI,对基本消息类型你可以直接返回nil，采用默认样式
+    if ([cellData isKindOfClass:[BFWinkMessageCellData class]]) {
+        return [BFWinkMessageCell class];
+    }
     return nil;
 }
 
 ///点击某一“更多”单元的回调委托
 - (void)chatController:(MSChatViewController *)controller onSelectMoreCell:(MSInputMoreCell *)cell
 {
-    if (cell.data.tye == MSIM_MORE_VIDEO_CALL) {//语音通话
-        
+    if (cell.data.tye == MSIM_MORE_VOICE_CALL) {//语音通话
+
     }else if (cell.data.tye == MSIM_MORE_VIDEO_CALL) {//视频通话
         
     }

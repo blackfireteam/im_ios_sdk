@@ -5,11 +5,10 @@
 //  Created by benny wang on 2021/4/13.
 //
 
-#import "MSWinkMessageCellData.h"
-#import "MSHeader.h"
+#import "BFWinkMessageCellData.h"
 
 
-@implementation MSWinkMessageCellData
+@implementation BFWinkMessageCellData
 
 - (instancetype)init
 {
@@ -46,7 +45,7 @@
 
 - (NSString *)reuseId
 {
-    return TWinkMessageCell_ReuseId;
+    return @"TWinkMessageCell";
 }
 
 @end
