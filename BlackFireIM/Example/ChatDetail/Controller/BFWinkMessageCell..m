@@ -7,7 +7,7 @@
 
 #import "BFWinkMessageCell.h"
 #import "BFWinkMessageCellData.h"
-#import "MSHeader.h"
+#import "MSIMSDK-UIKit.h"
 
 
 @implementation BFWinkMessageCell

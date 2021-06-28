@@ -6,10 +6,9 @@
 //
 
 #import "BFDiscoveryController.h"
-#import "UIColor+BFDarkMode.h"
+#import "MSIMSDK-UIKit.h"
 #import "BFUserListCell.h"
 #import "BFChatViewController.h"
-#import "MSIMSDK-UIKit.h"
 #import <MSIMSDK/MSIMSDK.h>
 
 

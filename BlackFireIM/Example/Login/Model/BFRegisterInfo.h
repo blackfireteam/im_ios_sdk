@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString *userToken;
 
+@property(nonatomic,copy) NSString *imUrl;
+
 @property(nonatomic,copy) NSString *phone;
 
 @property(nonatomic,copy) NSString *nickName;

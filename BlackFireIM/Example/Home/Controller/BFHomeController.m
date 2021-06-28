@@ -200,7 +200,9 @@
 {
     if (cell.user.user_id) {
         NSDictionary *extDic = @{@"type": @(1),@"desc": @"like"};
-        MSIMCustomElem *customElem = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertJsonString]];
+        MSIMPushInfo *push = [[MSIMPushInfo alloc]init];
+        push.body = @"[Like]";
+        MSIMCustomElem *customElem = [[MSIMManager sharedInstance] createCustomMessage:[extDic el_convertJsonString] option:IMCUSTOM_UNREADCOUNT_RECALL pushExt:push];
         [[MSIMManager sharedInstance]sendC2CMessage:customElem toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
                     
              cell.winkBtn.selected = YES;

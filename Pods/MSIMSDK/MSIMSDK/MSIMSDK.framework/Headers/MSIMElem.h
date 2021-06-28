@@ -52,10 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)partner_id;
 
-/** 在会话列表中显示的文字*/
-@property(nonatomic,copy,readonly) NSString *displayStr;
-
-
 @end
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -151,10 +147,39 @@ NS_ASSUME_NONNULL_BEGIN
 //                      自定义消息 Elem
 //
 /////////////////////////////////////////////////////////////////////////////////
+@class MSIMPushInfo;
 @interface MSIMCustomElem: MSIMElem
 
 /** 自定义消息 自定义的json字符串*/
 @property(nonatomic,copy) NSString *jsonStr;
+
+/** 指明是哪种自定义消息，是否会影响未读数，是否可撤回等等*/
+@property(nonatomic,assign) MSIMCustomOption option;
+
+/** 推送相关的配置*/
+@property(nonatomic,strong) MSIMPushInfo *pushExt;
+
+@property(nonatomic,assign,readonly) BOOL canCount;
+
+@property(nonatomic,assign,readonly) BOOL canRecall;
+
+@end
+
+
+/** 配置推送显示的内容，只会对自定义消息*/
+@interface MSIMPushInfo: NSObject
+
+/** 离线推送展示的标题*/
+@property(nonatomic,copy) NSString *title;
+
+/** 离线推送展示的内容*/
+@property(nonatomic,copy) NSString *body;
+
+/** 接收时会不会播放声音，默认有声音*/
+@property(nonatomic,assign) BOOL isMute;
+
+/** sound为空时，接收时播放系统声音。如果需要自定义音效，需要先把语音文件链接进 Xcode 工程，然后把语音文件名（带后缀）设置给 sound。*/
+@property(nonatomic,copy) NSString *sound;
 
 @end
 

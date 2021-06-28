@@ -41,8 +41,8 @@ typedef void (^BFIMMessageListSucc)(NSArray<MSIMElem *> * msgs,BOOL isFinished);
  */
 - (MSIMVideoElem *)createVideoMessage:(MSIMVideoElem *)elem;
 
-/** 创建自定义消息 */
-- (MSIMCustomElem *)createCustomMessage:(NSString *)jsonStr;
+/** 创建自定义消息,如果不走推送，pushExt字段可以传nil */
+- (MSIMCustomElem *)createCustomMessage:(NSString *)jsonStr option:(MSIMCustomOption)option pushExt:(nullable MSIMPushInfo *)pushExt;
 
 /// 发送单聊消息
 /// @param elem 消息体

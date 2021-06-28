@@ -6,8 +6,8 @@
 //
 
 #import "BFNaviBarIndicatorView.h"
-#import "MSHeader.h"
-#import "UIColor+BFDarkMode.h"
+#import "MSIMSDK-UIKit.h"
+
 
 @implementation BFNaviBarIndicatorView
 

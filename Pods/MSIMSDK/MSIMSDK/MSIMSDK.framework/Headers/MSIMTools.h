@@ -20,12 +20,6 @@ typedef NS_ENUM(NSInteger ,MSIMServerType){
 
 + (MSIMTools *)sharedInstance;
 
-@property(nonatomic,assign) MSIMServerType serverType;
-
-@property(nonatomic,copy,readonly) NSString *HOST_IM_URL;
-
-@property(nonatomic,assign,readonly) NSInteger IM_PORT;
-
 @property(nonatomic,copy) NSString * _Nullable user_id;
 
 @property(nonatomic,copy) NSString * _Nullable user_sign;

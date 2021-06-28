@@ -6,9 +6,9 @@
 //
 
 #import "BFSparkCardCell.h"
-#import "MSIMSDK-UIKit.h"
 #import <MSIMSDK/MSIMSDK.h>
 #import <SDWebImage.h>
+#import "MSIMSDK-UIKit.h"
 
 
 @interface BFSparkCardCell()

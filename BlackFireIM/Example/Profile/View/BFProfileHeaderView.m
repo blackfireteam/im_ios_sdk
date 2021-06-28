@@ -6,7 +6,7 @@
 //
 
 #import "BFProfileHeaderView.h"
-#import "MSHeader.h"
+#import "MSIMSDK-UIKit.h"
 
 
 @implementation BFProfileHeaderView

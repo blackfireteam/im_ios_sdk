@@ -83,6 +83,9 @@ typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSI
 - (void)logout:(MSIMSucc)succ
         failed:(MSIMFail)fail;
 
+///更新推送的token. device_token为空时，表示推送权限关闭，不接受推送
+- (void)refreshPushDeviceToken:(nullable NSString *)device_token;
+
 @end
 
 NS_ASSUME_NONNULL_END

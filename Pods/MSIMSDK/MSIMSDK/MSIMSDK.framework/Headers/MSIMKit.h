@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  共享实例
- *  TUIKit为单例
  */
 + (instancetype)sharedInstance;
 

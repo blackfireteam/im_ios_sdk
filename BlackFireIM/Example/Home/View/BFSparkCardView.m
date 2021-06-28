@@ -6,7 +6,7 @@
 //
 
 #import "BFSparkCardView.h"
-#import "MSHeader.h"
+#import "MSIMSDK-UIKit.h"
 
 
 #define GX_DEGREES_TO_RADIANS(angle)  (angle / 180.0 * M_PI)

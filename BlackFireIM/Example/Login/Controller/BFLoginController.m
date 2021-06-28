@@ -12,6 +12,8 @@
 #import "AppDelegate.h"
 #import "BFSignInStepOneController.h"
 #import "BFRegisterInfo.h"
+#import "BFProfileService.h"
+
 
 @interface BFLoginController ()
 
@@ -69,7 +71,7 @@
     self.serverL.frame = CGRectMake(self.serverSwitch.maxX+10, self.serverSwitch.y, 100, self.serverSwitch.height);
     [self.view addSubview:self.serverL];
 
-    self.serverSwitch.on = (MSIMTools.sharedInstance.serverType == MSIMServerTypeProduct);
+    self.serverSwitch.on = ![[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
     self.serverL.text = self.serverSwitch.isOn ? @"正式环境" : @"测试环境";
 }
 
@@ -93,20 +95,27 @@
     //1.获取IM—token
     WS(weakSelf)
     [MSHelper showToast];
-    [[MSIMManager sharedInstance]getIMToken:phone succ:^(NSString * _Nonnull userToken) {
-        [MSHelper dismissToast];
+    [BFProfileService requestIMToken:phone success:^(NSDictionary * _Nonnull dic) {
+        NSString *userToken = dic[@"token"];
+//        NSString *imUrl = dic[@"url"];
+        //im地址暂时写死
+        BOOL serverType = [[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
+        NSString *im_url = serverType ? @"https://192.168.50.190:18888" : @"https://im.ekfree.com:18888";
         //2.登录
+        [[NSUserDefaults standardUserDefaults]setValue:im_url forKey:@"im_url"];
         weakSelf.registerInfo.userToken = userToken;
-        [[MSIMManager sharedInstance]login:userToken succ:^{
-
+        weakSelf.registerInfo.imUrl = im_url;
+        [[MSIMManager sharedInstance] login:userToken succ:^{
+                  
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
-                } failed:^(NSInteger code, NSString * _Nonnull desc) {
+            
+                } failed:^(NSInteger code, NSString *desc) {
                     [MSHelper showToastFail:desc];
         }];
-    } failed:^(NSInteger code, NSString * _Nonnull desc) {
+    } fail:^(NSError * _Nonnull error) {
         [MSHelper dismissToast];
-        if (code == 9) {//未注册，起注册流程
+        if (error.code == 9) {//未注册，起注册流程
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"手机号未注册，现在注册吗?" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [weakSelf needToSignIn];
@@ -114,7 +123,7 @@
             [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
             [weakSelf presentViewController:alert animated:YES completion:nil];
         }else {
-            [MSHelper showToastFail:desc];
+            [MSHelper showToastFail:error.localizedDescription];
         }
     }];
 }
@@ -130,9 +139,8 @@
 {
     NSLog(@"switch: %d",sw.isOn);
     self.serverL.text = sw.isOn ? @"正式环境" : @"测试环境";
-    MSIMTools.sharedInstance.serverType = sw.isOn ? MSIMServerTypeProduct : MSIMServerTypeTest;
+    [[NSUserDefaults standardUserDefaults]setBool:!sw.isOn forKey:@"ms_Test"];
     [[MSDBManager sharedInstance] accountChanged];
-    [[MSIMManager sharedInstance].socket disConnectTCP];
 }
 
 @end

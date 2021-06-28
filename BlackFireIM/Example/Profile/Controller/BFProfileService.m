@@ -31,7 +31,8 @@
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
     NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/iminit",MSIMTools.sharedInstance.HOST_IM_URL];
+    
+    NSString *postUrl = [NSString stringWithFormat:@"%@/user/iminit",[self postUrl]];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:uid forKey:@"uid"];
     [params setValue:@(0) forKey:@"ctype"];
@@ -65,7 +66,7 @@
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
     NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/reg",MSIMTools.sharedInstance.HOST_IM_URL];
+    NSString *postUrl = [NSString stringWithFormat:@"%@/user/reg",[self postUrl]];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:phone forKey:@"uid"];
     [params setValue:nickName forKey:@"nick_name"];
@@ -110,7 +111,7 @@
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
     NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSString *postUrl = [NSString stringWithFormat:@"https://%@:18788/user/update",MSIMTools.sharedInstance.HOST_IM_URL];
+    NSString *postUrl = [NSString stringWithFormat:@"%@/user/update",[self postUrl]];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:info.user_id forKey:@"uid"];
     [params setValue:info.nick_name forKey:@"nick_name"];
@@ -120,6 +121,7 @@
         [params setValue:@([MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60) forKey:@"gold_exp"];
     }
     [params setValue:@(info.verified) forKey:@"verified"];
+    [params setValue:@(info.gender) forKey:@"gender"];
     [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         if (succ) succ(dic);
@@ -141,6 +143,13 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 5;
     return manager;
+}
+
++ (NSString *)postUrl
+{
+    BOOL serverType = [[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
+    NSString *host = serverType ? @"https://192.168.50.190:18788" : @"https://im.ekfree.com:18788";
+    return host;
 }
 
 @end

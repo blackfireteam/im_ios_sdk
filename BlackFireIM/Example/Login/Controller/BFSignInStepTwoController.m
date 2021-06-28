@@ -6,9 +6,8 @@
 //
 
 #import "BFSignInStepTwoController.h"
-#import "MSHeader.h"
+#import "MSIMSDK-UIKit.h"
 #import "BFRegisterInfo.h"
-#import <MSIMSDK/MSIMSDK.h>
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
 #import "BFProfileService.h"
@@ -93,18 +92,10 @@
     WS(weakSelf)
     [BFProfileService userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^() {
         
-        [[MSIMManager sharedInstance]getIMToken:weakSelf.info.phone succ:^(NSString * _Nonnull userToken) {
-            //2.登录
-            weakSelf.info.userToken = userToken;
-            MSLog(@"获取userToKen = %@",userToken);
-            [[MSIMManager sharedInstance]login:userToken succ:^{
-                        
-                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
-                    } failed:^(NSInteger code, NSString * _Nonnull desc) {
-                        [MSHelper showToastFail:desc];
-            }];
-        } failed:^(NSInteger code, NSString * _Nonnull desc) {
+        [[MSIMManager sharedInstance] login:weakSelf.info.userToken succ:^{
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
+        } failed:^(NSInteger code, NSString *desc) {
             [MSHelper showToastFail:desc];
         }];
     } failed:^(NSError * _Nonnull error) {

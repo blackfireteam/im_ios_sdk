@@ -6,7 +6,7 @@
 //
 
 #import "BFSparkEmptyView.h"
-#import "MSHeader.h"
+#import "MSIMSDK-UIKit.h"
 
 
 @implementation BFSparkEmptyView

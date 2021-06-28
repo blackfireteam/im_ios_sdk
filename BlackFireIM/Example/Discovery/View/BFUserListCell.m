@@ -7,7 +7,7 @@
 
 #import "BFUserListCell.h"
 #import <SDWebImage.h>
-#import "MSHeader.h"
+#import "MSIMSDK-UIKit.h"
 
 @implementation BFUserListCell
 

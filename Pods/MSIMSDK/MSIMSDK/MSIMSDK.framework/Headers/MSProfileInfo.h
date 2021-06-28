@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) NSInteger gold_exp;
 
+@property(nonatomic,assign) NSInteger gender;
+
 @property(nonatomic,copy) NSString *pic;
 
 

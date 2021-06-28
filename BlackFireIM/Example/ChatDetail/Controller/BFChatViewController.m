@@ -11,6 +11,7 @@
 #import "YBIBVideoData.h"
 #import "BFWinkMessageCell.h"
 #import "BFWinkMessageCellData.h"
+#import "BFVoiceChatController.h"
 
 
 @interface BFChatViewController ()<MSChatViewControllerDelegate>
@@ -48,17 +49,26 @@
     //主动发送的每一条消息都会进入这个回调，你可以在此做一些统计埋点等工作。。。
 }
 
-- (MSMessageCellData *)chatController:(MSChatViewController *)controller onNewMessage:(MSIMElem *)elem
+//将要展示在列表中的每和条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
+- (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMElem *)elem
 {
-    //收到的每一条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
     if ([elem isKindOfClass:[MSIMCustomElem class]]) {
         MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
         NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-        if ([dic[@"type"]integerValue] == 1) {
-            BFWinkMessageCellData *winkData = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
-            winkData.showName = YES;
-            winkData.elem = customElem;
-            return winkData;
+        if (customElem.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL) {
+            if ([dic[@"type"]integerValue] == 1) {
+                BFWinkMessageCellData *winkData = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+                winkData.showName = YES;
+                winkData.elem = customElem;
+                return winkData;
+            }
+        }else if(customElem.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
+            if ([dic[@"type"]integerValue] == 101) {
+                MSSystemMessageCellData *unknowData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
+                unknowData.content = dic[@"desc"];
+                unknowData.elem = customElem;
+                return unknowData;
+            }
         }
     }
     return nil;
@@ -78,6 +88,11 @@
 {
     if (cell.data.tye == MSIM_MORE_VOICE_CALL) {//语音通话
 
+        BFVoiceChatController *vc = [[BFVoiceChatController alloc]init];
+        vc.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:vc animated:YES completion:nil];
+        [vc showWithPartner_id:self.partner_id bySelf:YES];
+        
     }else if (cell.data.tye == MSIM_MORE_VIDEO_CALL) {//视频通话
         
     }

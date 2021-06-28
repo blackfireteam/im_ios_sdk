@@ -51,6 +51,8 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
     XMChatProtoTypeGetProfileResult = 18,//请求单个用户信息返回
     XMChatProtoTypeGetProfilesResult = 19,//请求批量用户信息返回
     
+    XMChatProtoTypeRefreshPushToken = 21,//客户端更新push token
+    
     XMChatProtoTypeProfileOnline = 50,//通知客户端用户上线事件
     XMChatProtoTypeProfileOffline = 52,//通知客户端用户下线事件
     XMChatProtoTypeSignup = 53,//注册新用户  for demo
@@ -108,7 +110,13 @@ typedef NS_ENUM(NSInteger ,MSIMMessageType){
     
     MSIM_MSG_TYPE_RECALL = 64,//消息撤回
     
-    MSIM_MSG_TYPE_CUSTOM  = 100,//自定义消息
+    MSIM_MSG_TYPE_CUSTOM_SIGNAL = 240,//自定义消息（不生成消息，仅作为信号传递）
+    
+    MSIM_MSG_TYPE_CUSTOM_IGNORE_UNREADCOUNT_RECALL  = 241,//自定义消息（不算计数 不可撤回 （可带push字段））
+    
+    MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL = 243,//自定义消息（算计数 不可撤回 （可带push字段）））
+    
+    MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL = 247,//自定义消息（算计数 可撤回 （可带push字段））
     
     MSIM_MSG_TYPE_NULL = 999,//空消息，用于占位
 };
@@ -127,6 +135,14 @@ typedef NS_ENUM(NSUInteger, MSIMUserStatus) {
     IMUSER_STATUS_LOGIN,         //用户已登录
     IMUSER_STATUS_FORCEOFFLINE,  //用户被强制下线
     IMUSER_STATUS_SIGEXPIRED,    //用户身份（usersig）过期
+};
+
+/** 自定义消息配置*/
+typedef NS_ENUM(NSUInteger, MSIMCustomOption) {
+    IMCUSTOM_SIGNAL = 240,                 //指令类型，不会产生消息,在线时才会收到。如：xxx正在输入。。。
+    IMCUSTOM_IGNORE_UNREADCOUNT_RECALL = 241,  //不计入未读数，不可撤回。
+    IMCUSTOM_UNREADCOUNT_NO_RECALL = 243,      //计入未读数，不可撤回。
+    IMCUSTOM_UNREADCOUNT_RECALL = 247,         //计入未读数，也可撤回。
 };
 
 

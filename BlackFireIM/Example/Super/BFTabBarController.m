@@ -11,10 +11,12 @@
 #import "BFProfileViewController.h"
 #import "BFNavigationController.h"
 #import "BFHomeController.h"
-#import "NSBundle+BFKit.h"
+#import "MSIMSDK-UIKit.h"
 #import <MSIMSDK/MSIMSDK.h>
 #import "AppDelegate.h"
 #import "BFLoginController.h"
+#import "BFVoiceChatController.h"
+
 
 @interface BFTabBarController ()
 
@@ -60,6 +62,10 @@
     BFNavigationController *profileNav = [[BFNavigationController alloc]initWithRootViewController:profileVC];
     [self addChildViewController:profileNav];
     
+    WS(weakSelf)
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+       [weakSelf onNewMessage:note];
+    }];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
 }
 
@@ -99,5 +105,28 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
 }
+
+///收到新消息
+- (void)onNewMessage:(NSNotification *)note
+{
+    NSArray *elems = note.object;
+    for (MSIMElem *elem in elems) {
+        if ([elem isKindOfClass:[MSIMCustomElem class]]) {
+            MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+            NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+            if(customElem.type == IMCUSTOM_SIGNAL) {
+                if ([dic[@"type"]integerValue] == 100) {//收到语音聊天邀请
+                    [UIDevice playShortSound:@"00" soundExtension:@"caf"];
+                    BFVoiceChatController *vc = [[BFVoiceChatController alloc]init];
+                    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+                    [self presentViewController:vc animated:YES completion:nil];
+                    [vc showWithPartner_id:customElem.fromUid bySelf:NO];
+                    return;
+                }
+            }
+        }
+    }
+}
+
 
 @end

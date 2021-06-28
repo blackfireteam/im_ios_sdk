@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSProfileInfo;
 @interface BFProfileService : NSObject
 
++ (NSString *)postUrl;
+
 ///请求用户的IM令牌和网关
 + (void)requestIMToken:(NSString *)uid
                success:(void(^)(NSDictionary *dic))succ

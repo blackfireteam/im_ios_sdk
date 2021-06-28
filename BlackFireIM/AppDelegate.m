@@ -9,15 +9,15 @@
 #import "BFTabBarController.h"
 #import "BFLoginController.h"
 #import "BFNavigationController.h"
-#import <MSIMSDK/MSIMSDK.h>
 #import "MSIMSDK-UIKit.h"
-#import "BFUploadManager.h"
+#import <MSIMSDK/MSIMSDK.h>
+#import "MSUploadManager.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import <Bugly/Bugly.h>
-#import <UserNotifications/UserNotifications.h>
+#import "MSPushMediator.h"
 
 
-@interface AppDelegate ()<QCloudSignatureProvider,UNUserNotificationCenterDelegate>
+@interface AppDelegate ()<QCloudSignatureProvider,MSPushMediatorDelegate>
 
 @end
 
@@ -31,10 +31,10 @@
     [self.window makeKeyAndVisible];
     
     IMSDKConfig *imConfig = [IMSDKConfig defaultConfig];
-    imConfig.uploadMediator = [BFUploadManager sharedInstance];
+    imConfig.uploadMediator = [MSUploadManager sharedInstance];
     [[MSIMKit sharedInstance] initWithConfig:imConfig];
     
-    if ([MSIMTools sharedInstance].user_sign) {
+    if ([MSIMTools sharedInstance].user_id) {
         self.window.rootViewController = [[BFTabBarController alloc] init];
     }else {
         self.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
@@ -48,29 +48,13 @@
     configuration.endpoint = endpoint;
     configuration.signatureProvider = self;
     [QCloudCOSXMLService registerDefaultCOSXMLWithConfiguration:configuration];
-      [QCloudCOSTransferMangerService registerDefaultCOSTransferMangerWithConfiguration:
-          configuration];
+    [QCloudCOSTransferMangerService registerDefaultCOSTransferMangerWithConfiguration:configuration];
     
     BuglyConfig *config = [[BuglyConfig alloc]init];
     [Bugly startWithAppId:@"f8db8c69b8" config:config];
     
-    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    center.delegate = self;
-    [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (granted) {
-                [[UIApplication sharedApplication] registerForRemoteNotifications];
-            }else {
-                MSLog(@"用户没有开通通知权限!");
-            }
-        });
-    }];
-    
-    NSDictionary *remoteNotification = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if(remoteNotification){
-        MSLog(@"【点击推送起动的app】,params: %@",remoteNotification);
-    }
+    [[MSPushMediator sharedInstance] applicationDidFinishLaunchingWithOptions:launchOptions];
+    [MSPushMediator sharedInstance].delegate = self;
     return YES;
 }
 
@@ -90,48 +74,31 @@
       continueBlock(signature, nil);
 }
 
-
 ///** 请求APNs建立连接并获得deviceToken*/
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    if (![deviceToken isKindOfClass:[NSData class]]) return;
-    NSMutableString *deviceTokenString = [NSMutableString string];
-    const char *bytes = deviceToken.bytes;
-    NSInteger count = deviceToken.length;
-    for (int i = 0; i < count; i++) {
-        [deviceTokenString appendFormat:@"%02x", bytes[i]&0x000000FF];
-    }
-    MSLog(@"注册APNS成功%@",deviceTokenString);
-    //redo
-    // 将devicetoken上传到服务器
+    [[MSPushMediator sharedInstance] didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
 ///获取device-token失败
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-  MSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
+    [[MSPushMediator sharedInstance] didFailToRegisterForRemoteNotificationsWithError:error];
 }
 
-///当 payload 包含参数 content-available=1 时，该推送就是静默推送，静默推送不会显示任何推送消息，当 App 在后台挂起时，静默推送的回调方法会被执行，开发者有 30s 的时间内在该回调方法中处理一些业务逻辑，并在处理完成后调用 fetchCompletionHandler
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+#pragma mark-- MSPushMediatorDelegate<NSObject>
+
+/** 点击推送消息进入的app,可以做些跳转操作*/
+- (void)didReceiveNotificationResponse:(NSDictionary *)userInfo
 {
-  completionHandler(UIBackgroundFetchResultNewData);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (userInfo[@"im"]) {
+            if ([MSIMTools sharedInstance].user_id) {
+                BFTabBarController *tabBar = (BFTabBarController *)self.window.rootViewController;
+                tabBar.selectedIndex = 2;
+            }
+        }
+    });
 }
-
-///App在前台运行时收到推送消息的回调
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
-{
-    completionHandler(UNNotificationPresentationOptionAlert);
-}
-
-///用户点击推送消息的回调
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
-{
-    UNNotification *noti = ((UNNotificationResponse *)response).notification;
-    NSDictionary *userInfo = noti.request.content.userInfo;
-    MSLog(@"【用户点击推送】，params： %@",userInfo);
-    completionHandler();
-}
-
 
 @end

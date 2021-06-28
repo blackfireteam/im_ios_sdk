@@ -6,7 +6,7 @@
 //
 
 #import "BFSignInStepOneController.h"
-#import "MSHeader.h"
+#import "MSIMSDK-UIKit.h"
 #import "BFRegisterInfo.h"
 #import "BFSignInStepTwoController.h"
 

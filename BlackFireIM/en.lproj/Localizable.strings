@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   BlackFireIM
 
@@ -108,6 +108,7 @@
 "TUIkitMessageTypeVideo" = "[Video]";
 "TUIkitMessageTypeFile" = "[File]";
 "TUIKitMessageTypeAnimateEmoji" = "[Animated Sticker]";
+"TUIKitMessageTipsUnsupportCustomMessage" = "[Customized message]";
 "TUIKitMessageTypeDraft" = "[Draft]";
 
 "TUIKitMoreCamera" = "Take Photo";
