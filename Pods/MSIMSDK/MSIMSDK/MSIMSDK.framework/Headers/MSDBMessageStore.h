@@ -53,6 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///取出小于或等于msg_id的对方发出的消息的msg_id
 - (NSInteger)latestMsgIDLessThan:(NSInteger)msg_id partner_id:(NSString *)partner_id;
 
+///本地删除消息
+- (BOOL)deleteFromLocalWithMsg_sign:(NSInteger)msg_sign partner_id:(NSString *)partner_id;
 
 @end
 
