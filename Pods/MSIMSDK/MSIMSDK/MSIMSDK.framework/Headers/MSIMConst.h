@@ -15,13 +15,12 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 
 #define XMNoNilString(str)  (str.length > 0 ? str : @"")
 
-#ifdef DEBUG
+#define customLogEnable   [[[NSUserDefaults standardUserDefaults] valueForKey:@"kLogEnable"] boolValue]
 
-#define MSLog(format, ...) NSLog(format, ## __VA_ARGS__)
+#define MSLog(format, ...) if(customLogEnable) {\
+NSLog(format, ## __VA_ARGS__);\
+} else {}
 
-#else
-#define MSLog(format, ...)
-#endif
 
 /// 成功通用回调
 typedef void (^MSIMSucc)(void);
