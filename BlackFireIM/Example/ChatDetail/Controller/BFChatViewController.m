@@ -36,10 +36,6 @@
     [[MSProfileProvider provider] providerProfile:self.partner_id.integerValue complete:^(MSProfileInfo * _Nonnull profile) {
             self.navigationItem.title = profile.nick_name;
     }];
-    MSIMConversation *conv = [[MSConversationProvider provider]providerConversation:self.partner_id];
-    if (conv.ext.i_block_u) {
-        [MSHelper showToastString:@"对方被我Block"];
-    }
 }
 
 #pragma mark - MSChatViewControllerDelegate

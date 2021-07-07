@@ -92,7 +92,7 @@
     WS(weakSelf)
     [BFProfileService userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^() {
         
-        [[MSIMManager sharedInstance] login:weakSelf.info.userToken succ:^{
+        [[MSIMManager sharedInstance] login:weakSelf.info.userToken imUrl:weakSelf.info.imUrl succ:^{
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
         } failed:^(NSInteger code, NSString *desc) {

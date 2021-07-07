@@ -138,7 +138,7 @@ typedef NS_ENUM(NSUInteger, MSIMUserStatus) {
 
 /** 自定义消息配置*/
 typedef NS_ENUM(NSUInteger, MSIMCustomOption) {
-    IMCUSTOM_SIGNAL = 240,                 //指令类型，不会产生消息,在线时才会收到。如：xxx正在输入。。。
+    IMCUSTOM_SIGNAL = 240,                     //指令类型，不会产生消息,在线时才会收到。如：xxx正在输入。。。
     IMCUSTOM_IGNORE_UNREADCOUNT_RECALL = 241,  //不计入未读数，不可撤回。
     IMCUSTOM_UNREADCOUNT_NO_RECALL = 243,      //计入未读数，不可撤回。
     IMCUSTOM_UNREADCOUNT_RECALL = 247,         //计入未读数，也可撤回。

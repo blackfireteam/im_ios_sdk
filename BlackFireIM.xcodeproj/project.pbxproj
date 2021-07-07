@@ -14,6 +14,7 @@
 		F011D58F25E736C10061F9D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D58E25E736C10061F9D6 /* main.m */; };
 		F011D59925E736C10061F9D6 /* BlackFireIMTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D59825E736C10061F9D6 /* BlackFireIMTests.m */; };
 		F011D5A425E736C10061F9D6 /* BlackFireIMUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */; };
+		F0250B442695C69400B24894 /* MSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0250B432695C69400B24894 /* MSUploadManager.m */; };
 		F056717625F08F6A00782F9C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F056717825F08F6A00782F9C /* Localizable.strings */; };
 		F0F5067A268B15FC00C3EBB8 /* BFProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F50568268B15FB00C3EBB8 /* BFProfileViewController.m */; };
 		F0F5067B268B15FC00C3EBB8 /* BFProfileService.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F5056A268B15FB00C3EBB8 /* BFProfileService.m */; };
@@ -64,7 +65,6 @@
 		F0F506A8268B15FC00C3EBB8 /* NSBundle+BFKit.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F505CE268B15FC00C3EBB8 /* NSBundle+BFKit.m */; };
 		F0F506A9268B15FC00C3EBB8 /* MSPushMediator.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F505D2268B15FC00C3EBB8 /* MSPushMediator.m */; };
 		F0F506AA268B15FC00C3EBB8 /* UIButton+positon.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F505D3268B15FC00C3EBB8 /* UIButton+positon.m */; };
-		F0F506AB268B15FC00C3EBB8 /* MSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F505D4268B15FC00C3EBB8 /* MSUploadManager.m */; };
 		F0F506AC268B15FC00C3EBB8 /* MSUIConversationListController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F505D7268B15FC00C3EBB8 /* MSUIConversationListController.m */; };
 		F0F506AD268B15FC00C3EBB8 /* MSUIConversationCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F505D8268B15FC00C3EBB8 /* MSUIConversationCellData.m */; };
 		F0F506AE268B15FC00C3EBB8 /* MSUnreadView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F505DA268B15FC00C3EBB8 /* MSUnreadView.m */; };
@@ -177,6 +177,8 @@
 		F011D59F25E736C10061F9D6 /* BlackFireIMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackFireIMUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlackFireIMUITests.m; sourceTree = "<group>"; };
 		F011D5A525E736C10061F9D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0250B422695C69400B24894 /* MSUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSUploadManager.h; sourceTree = "<group>"; };
+		F0250B432695C69400B24894 /* MSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSUploadManager.m; sourceTree = "<group>"; };
 		F042C8522679E00D0067547E /* BlackFireIM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlackFireIM.entitlements; sourceTree = "<group>"; };
 		F056716D25F08DAF00782F9C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		F056717725F08F6A00782F9C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -261,7 +263,6 @@
 		F0F505C2268B15FC00C3EBB8 /* UIImage+BFDarkMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BFDarkMode.m"; sourceTree = "<group>"; };
 		F0F505C3268B15FC00C3EBB8 /* UIDevice+Ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Ext.h"; sourceTree = "<group>"; };
 		F0F505C4268B15FC00C3EBB8 /* NSString+Encry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Encry.h"; sourceTree = "<group>"; };
-		F0F505C5268B15FC00C3EBB8 /* MSUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSUploadManager.h; sourceTree = "<group>"; };
 		F0F505C6268B15FC00C3EBB8 /* UIButton+positon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+positon.h"; sourceTree = "<group>"; };
 		F0F505C7268B15FC00C3EBB8 /* MSHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSHelper.h; sourceTree = "<group>"; };
 		F0F505C8268B15FC00C3EBB8 /* NSDate+MSKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+MSKit.m"; sourceTree = "<group>"; };
@@ -276,7 +277,6 @@
 		F0F505D1268B15FC00C3EBB8 /* UIView+Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
 		F0F505D2268B15FC00C3EBB8 /* MSPushMediator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSPushMediator.m; sourceTree = "<group>"; };
 		F0F505D3268B15FC00C3EBB8 /* UIButton+positon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+positon.m"; sourceTree = "<group>"; };
-		F0F505D4268B15FC00C3EBB8 /* MSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSUploadManager.m; sourceTree = "<group>"; };
 		F0F505D6268B15FC00C3EBB8 /* MSUIConversationCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSUIConversationCellData.h; sourceTree = "<group>"; };
 		F0F505D7268B15FC00C3EBB8 /* MSUIConversationListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSUIConversationListController.m; sourceTree = "<group>"; };
 		F0F505D8268B15FC00C3EBB8 /* MSUIConversationCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSUIConversationCellData.m; sourceTree = "<group>"; };
@@ -728,7 +728,6 @@
 				F0F505C2268B15FC00C3EBB8 /* UIImage+BFDarkMode.m */,
 				F0F505C3268B15FC00C3EBB8 /* UIDevice+Ext.h */,
 				F0F505C4268B15FC00C3EBB8 /* NSString+Encry.h */,
-				F0F505C5268B15FC00C3EBB8 /* MSUploadManager.h */,
 				F0F505C6268B15FC00C3EBB8 /* UIButton+positon.h */,
 				F0F505C7268B15FC00C3EBB8 /* MSHelper.h */,
 				F0F505C8268B15FC00C3EBB8 /* NSDate+MSKit.m */,
@@ -743,7 +742,6 @@
 				F0F505D1268B15FC00C3EBB8 /* UIView+Frame.h */,
 				F0F505D2268B15FC00C3EBB8 /* MSPushMediator.m */,
 				F0F505D3268B15FC00C3EBB8 /* UIButton+positon.m */,
-				F0F505D4268B15FC00C3EBB8 /* MSUploadManager.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -754,8 +752,8 @@
 				F0F505D6268B15FC00C3EBB8 /* MSUIConversationCellData.h */,
 				F0F505D7268B15FC00C3EBB8 /* MSUIConversationListController.m */,
 				F0F505D8268B15FC00C3EBB8 /* MSUIConversationCellData.m */,
-				F0F505D9268B15FC00C3EBB8 /* View */,
 				F0F505DE268B15FC00C3EBB8 /* MSUIConversationListController.h */,
+				F0F505D9268B15FC00C3EBB8 /* View */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -951,13 +949,13 @@
 			isa = PBXGroup;
 			children = (
 				F0F50645268B15FC00C3EBB8 /* BFWinkMessageCell.h */,
-				F0F50646268B15FC00C3EBB8 /* BFVoiceChatController.m */,
 				F0F50647268B15FC00C3EBB8 /* BFWinkMessageCell..m */,
-				F0F50648268B15FC00C3EBB8 /* BFChatViewController.m */,
 				F0F50649268B15FC00C3EBB8 /* BFWinkMessageCellData.h */,
-				F0F5064A268B15FC00C3EBB8 /* BFVoiceChatController.h */,
 				F0F5064B268B15FC00C3EBB8 /* BFWinkMessageCellData.m */,
+				F0F5064A268B15FC00C3EBB8 /* BFVoiceChatController.h */,
+				F0F50646268B15FC00C3EBB8 /* BFVoiceChatController.m */,
 				F0F5064C268B15FC00C3EBB8 /* BFChatViewController.h */,
+				F0F50648268B15FC00C3EBB8 /* BFChatViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -974,12 +972,12 @@
 		F0F5064E268B15FC00C3EBB8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F0F5064F268B15FC00C3EBB8 /* BFSignInStepTwoController.h */,
 				F0F50650268B15FC00C3EBB8 /* BFLoginController.h */,
-				F0F50651268B15FC00C3EBB8 /* BFSignInStepOneController.h */,
 				F0F50652268B15FC00C3EBB8 /* BFLoginController.m */,
-				F0F50653268B15FC00C3EBB8 /* BFSignInStepTwoController.m */,
+				F0F50651268B15FC00C3EBB8 /* BFSignInStepOneController.h */,
 				F0F50654268B15FC00C3EBB8 /* BFSignInStepOneController.m */,
+				F0F5064F268B15FC00C3EBB8 /* BFSignInStepTwoController.h */,
+				F0F50653268B15FC00C3EBB8 /* BFSignInStepTwoController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1029,6 +1027,8 @@
 				F0F50663268B15FC00C3EBB8 /* BFNavigationController.h */,
 				F0F50664268B15FC00C3EBB8 /* BFBaseViewController.h */,
 				F0F50665268B15FC00C3EBB8 /* BFTabBarController.m */,
+				F0250B422695C69400B24894 /* MSUploadManager.h */,
+				F0250B432695C69400B24894 /* MSUploadManager.m */,
 			);
 			path = Super;
 			sourceTree = "<group>";
@@ -1078,8 +1078,8 @@
 		F0F50674268B15FC00C3EBB8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F0F50675268B15FC00C3EBB8 /* BFConversationListController.m */,
 				F0F50676268B15FC00C3EBB8 /* BFConversationListController.h */,
+				F0F50675268B15FC00C3EBB8 /* BFConversationListController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1332,6 +1332,7 @@
 				F0F506A2268B15FC00C3EBB8 /* UIImage+BFKit.m in Sources */,
 				F0F506E0268B15FD00C3EBB8 /* BFUserListCell.m in Sources */,
 				F0F506D9268B15FD00C3EBB8 /* BFChatViewController.m in Sources */,
+				F0250B442695C69400B24894 /* MSUploadManager.m in Sources */,
 				F0F506A1268B15FC00C3EBB8 /* UIView+Frame.m in Sources */,
 				F0F506C4268B15FC00C3EBB8 /* YBIBToastView.m in Sources */,
 				F0F5068A268B15FC00C3EBB8 /* MSFaceUtil.m in Sources */,
@@ -1352,7 +1353,6 @@
 				F0F50698268B15FC00C3EBB8 /* MSInputBarView.m in Sources */,
 				F0F506C5268B15FC00C3EBB8 /* YBIBLoadingView.m in Sources */,
 				F0F50691268B15FC00C3EBB8 /* MSTextMessageCell.m in Sources */,
-				F0F506AB268B15FC00C3EBB8 /* MSUploadManager.m in Sources */,
 				F0F50688268B15FC00C3EBB8 /* MSMenuView.m in Sources */,
 				F0F506C7268B15FD00C3EBB8 /* YBIBIconManager.m in Sources */,
 				F0F506E2268B15FD00C3EBB8 /* BFNavigationController.m in Sources */,

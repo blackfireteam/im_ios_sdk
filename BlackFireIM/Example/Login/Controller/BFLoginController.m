@@ -97,15 +97,11 @@
     [MSHelper showToast];
     [BFProfileService requestIMToken:phone success:^(NSDictionary * _Nonnull dic) {
         NSString *userToken = dic[@"token"];
-//        NSString *imUrl = dic[@"url"];
-        //im地址暂时写死
-        BOOL serverType = [[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
-        NSString *im_url = serverType ? @"https://192.168.50.190:18888" : @"https://im.ekfree.com:18888";
+        NSString *im_url = dic[@"url"];
         //2.登录
-        [[NSUserDefaults standardUserDefaults]setValue:im_url forKey:@"im_url"];
         weakSelf.registerInfo.userToken = userToken;
         weakSelf.registerInfo.imUrl = im_url;
-        [[MSIMManager sharedInstance] login:userToken succ:^{
+        [[MSIMManager sharedInstance] login:userToken imUrl:im_url succ:^{
                   
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             appDelegate.window.rootViewController = [[BFTabBarController alloc]init];

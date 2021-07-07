@@ -76,6 +76,7 @@ typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSI
 
 ///登录需要用户签名 token
 - (void)login:(NSString *)userSign
+        imUrl:(NSString *)imUrl
          succ:(MSIMSucc)succ
        failed:(MSIMFail)fail;
 
