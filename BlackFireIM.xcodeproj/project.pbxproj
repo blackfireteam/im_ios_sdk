@@ -1045,8 +1045,8 @@
 		F0F50667268B15FC00C3EBB8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F0F50668268B15FC00C3EBB8 /* BFHomeController.m */,
 				F0F50669268B15FC00C3EBB8 /* BFHomeController.h */,
+				F0F50668268B15FC00C3EBB8 /* BFHomeController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
