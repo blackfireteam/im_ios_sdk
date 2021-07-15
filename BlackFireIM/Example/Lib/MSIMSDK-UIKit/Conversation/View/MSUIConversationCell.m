@@ -31,10 +31,6 @@
         _titleLabel.textColor = [UIColor d_colorWithColorLight:TText_Color dark:TText_Color_Dark];
         [self.contentView addSubview:_titleLabel];
         
-        _goldIcon = [[UIImageView alloc]init];
-        _goldIcon.image = [UIImage imageNamed:@"gold_verify"];
-        [self.contentView addSubview:_goldIcon];
-        
         _unReadView = [[MSUnreadView alloc]init];
         [self.contentView addSubview:_unReadView];
         
@@ -43,13 +39,8 @@
         _subTitleLabel.textColor = [UIColor d_systemGrayColor];
         [self.contentView addSubview:_subTitleLabel];
         
-        _matchIcon = [[UIImageView alloc]init];
-        _matchIcon.image = [UIImage imageNamed:@"ic_match_message"];
-        [self.contentView addSubview:_matchIcon];
-        
-        _verifyIcon = [[UIImageView alloc]init];
-        _verifyIcon.image = [UIImage imageNamed:@"photo_verify"];
-        [self.contentView addSubview:_verifyIcon];
+        _genderIcon = [[UIImageView alloc]init];
+        [self.contentView addSubview:_genderIcon];
         
         [self setSeparatorInset:UIEdgeInsetsMake(0, 97, 0, 0)];
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -67,9 +58,7 @@
     self.timeLabel.text = [convData.time ms_messageString];
     self.subTitleLabel.attributedText = convData.subTitle;
     [self.unReadView setNum:convData.conv.unread_count];
-    self.goldIcon.hidden = !convData.conv.userInfo.gold;
-    self.matchIcon.hidden = !convData.conv.ext.matched;;
-    self.verifyIcon.hidden = !convData.conv.userInfo.verified;
+    self.genderIcon.image = convData.conv.userInfo.gender == 1 ? [UIImage bf_imageNamed:@"male"] : [UIImage bf_imageNamed:@"female"];
     
     [self.headImageView sd_setImageWithURL:[NSURL URLWithString:XMNoNilString(convData.conv.userInfo.avatar)] placeholderImage:convData.avatarImage];
 }
@@ -86,14 +75,7 @@
     self.unReadView.maxX = self.width-15;
     self.unReadView.y = self.subTitleLabel.y;
     
-    self.matchIcon.size = CGSizeMake(18, 18);
-    self.matchIcon.center = CGPointMake(self.headImageView.maxX-8, self.headImageView.maxY-8);
-    if (self.verifyIcon.isHidden) {
-        self.goldIcon.frame = CGRectMake(self.titleLabel.maxX+8, self.titleLabel.centerY-10, 20, 20);
-    }else {
-        self.verifyIcon.frame = CGRectMake(self.titleLabel.maxX+8, self.titleLabel.centerY-10, 20, 20);
-        self.goldIcon.frame = CGRectMake(self.verifyIcon.maxX+5, self.titleLabel.centerY-10, 20, 20);
-    }
+    self.genderIcon.frame = CGRectMake(self.titleLabel.maxX+5, self.titleLabel.centerY-6, 12, 12);
 }
 
 @end

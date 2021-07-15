@@ -28,17 +28,17 @@ static MSUploadManager *_manager;
 }
 
 - (void)ms_uploadWithObject:(id)object
-                   fileType:(MSIMMessageType)type
+                   fileType:(MSUploadFileType)type
                    progress:(normalProgress)progress
                        succ:(normalSucc)succ
                        fail:(normalFail)fail
 {
-    if (object == nil || (type != MSIM_MSG_TYPE_IMAGE && type != MSIM_MSG_TYPE_VIDEO && type != MSIM_MSG_TYPE_VOICE)) {
+    if (object == nil) {
         fail(-99,@"");
         return;
     }
     QCloudCOSXMLUploadObjectRequest *put = [QCloudCOSXMLUploadObjectRequest new];
-    if (type == MSIM_MSG_TYPE_IMAGE) {
+    if (type == MSUploadFileTypeImage || type == MSUploadFileTypeAvatar) {
         if ([object isKindOfClass:[UIImage class]]) {
             UIImage *image = object;
             NSData *imageData = UIImageJPEGRepresentation(image, 0.75);
@@ -47,12 +47,16 @@ static MSUploadManager *_manager;
             NSString *path = object;
             put.body = [NSURL fileURLWithPath:path];
         }
-        put.object = [NSString stringWithFormat:@"im_image/%@.jpg",[NSString uuidString]];
-    }else if (type == MSIM_MSG_TYPE_VIDEO) {
+        if (type == MSUploadFileTypeAvatar) {
+            put.object = [NSString stringWithFormat:@"common/%@.jpg",[NSString uuidString]];
+        }else {
+            put.object = [NSString stringWithFormat:@"im_image/%@.jpg",[NSString uuidString]];
+        }
+    }else if (type == MSUploadFileTypeVideo) {
         NSString *path = object;
         put.body = [NSURL fileURLWithPath:path];
         put.object = [NSString stringWithFormat:@"im_video/%@.mp4",[NSString uuidString]];
-    }else if (type == MSIM_MSG_TYPE_VOICE) {
+    }else if (type == MSUploadFileTypeVoice) {
         NSString *path = object;
         put.body = [NSURL fileURLWithPath:path];
         put.object = [NSString stringWithFormat:@"im_voice/%@",[path lastPathComponent]];

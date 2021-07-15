@@ -172,7 +172,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -246,7 +246,7 @@
             imageElem.height = image.size.height;
             imageElem.uuid = imageAsset.localIdentifier;
             
-            [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:MSIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
+            [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:MSUploadFileTypeAvatar progress:^(CGFloat progress) {
                 
             } succ:^(NSString * _Nonnull url) {
                 

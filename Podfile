@@ -3,9 +3,6 @@ platform :ios, '11.0'
 
 inhibit_all_warnings!
 
-source 'https://github.com/wffkan/MSIMSpecs.git'
-source 'https://github.com/CocoaPods/Specs.git'
-
 
 target 'BlackFireIM' do
  

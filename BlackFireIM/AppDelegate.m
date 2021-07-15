@@ -31,8 +31,8 @@
     [self.window makeKeyAndVisible];
     
     IMSDKConfig *imConfig = [IMSDKConfig defaultConfig];
-    imConfig.uploadMediator = [MSUploadManager sharedInstance];
     imConfig.logEnable = YES;
+    imConfig.uploadMediator = [MSUploadManager sharedInstance];
     [[MSIMKit sharedInstance] initWithConfig:imConfig];
     
     if ([MSIMTools sharedInstance].user_id) {

@@ -71,14 +71,7 @@
     [params setValue:phone forKey:@"uid"];
     [params setValue:nickName forKey:@"nick_name"];
     [params setValue:avatar forKey:@"avatar"];
-    [params setValue:@(YES) forKey:@"gold"];
-    [params setValue:@([MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60) forKey:@"gold_exp"];
-    [params setValue:@(YES) forKey:@"approved"];
-    [params setValue:@(NO) forKey:@"disabled"];
-    [params setValue:@(NO) forKey:@"blocked"];
-    [params setValue:@(NO) forKey:@"hold"];
-    [params setValue:@(NO) forKey:@"deleted"];
-    [params setValue:@(YES) forKey:@"verified"];
+    [params setValue:@(1) forKey:@"gender"];
     [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         NSNumber *code = dic[@"code"];
@@ -116,11 +109,6 @@
     [params setValue:info.user_id forKey:@"uid"];
     [params setValue:info.nick_name forKey:@"nick_name"];
     [params setValue:info.avatar forKey:@"avatar"];
-    [params setValue:@(info.gold) forKey:@"gold"];
-    if (info.gold) {
-        [params setValue:@([MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60) forKey:@"gold_exp"];
-    }
-    [params setValue:@(info.verified) forKey:@"verified"];
     [params setValue:@(info.gender) forKey:@"gender"];
     [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
@@ -148,7 +136,7 @@
 + (NSString *)postUrl
 {
     BOOL serverType = [[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
-    NSString *host = serverType ? @"https://192.168.50.251:18789" : @"https://im.ekfree.com:18789";
+    NSString *host = serverType ? @"https://192.168.50.190:18789" : @"https://im.ekfree.com:18789";
     return host;
 }
 

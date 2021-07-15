@@ -73,7 +73,7 @@
     [MSHelper showToast];
     MSIMImageElem *elem = [[MSIMImageElem alloc]init];
     elem.image = self.info.avatarImage;
-    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:elem.image fileType:MSIM_MSG_TYPE_IMAGE progress:^(CGFloat progress) {
+    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:elem.image fileType:MSUploadFileTypeAvatar progress:^(CGFloat progress) {
         
     } succ:^(NSString * _Nonnull url) {
         
@@ -92,12 +92,23 @@
     WS(weakSelf)
     [BFProfileService userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^() {
         
-        [[MSIMManager sharedInstance] login:weakSelf.info.userToken imUrl:weakSelf.info.imUrl succ:^{
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
-        } failed:^(NSInteger code, NSString *desc) {
-            [MSHelper showToastFail:desc];
+        [BFProfileService requestIMToken:weakSelf.info.phone success:^(NSDictionary * _Nonnull dic) {
+            
+            NSString *userToken = dic[@"token"];
+            NSString *im_url = dic[@"url"];
+            weakSelf.info.userToken = userToken;
+            weakSelf.info.imUrl = im_url;
+            [[MSIMManager sharedInstance] login:weakSelf.info.userToken imUrl:weakSelf.info.imUrl succ:^{
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
+            } failed:^(NSInteger code, NSString *desc) {
+                [MSHelper showToastFail:desc];
+            }];
+            
+        } fail:^(NSError * _Nonnull error) {
+            [MSHelper showToastFail:error.localizedDescription];
         }];
+        
     } failed:^(NSError * _Nonnull error) {
         [MSHelper showToastFail:error.localizedDescription];
     }];
