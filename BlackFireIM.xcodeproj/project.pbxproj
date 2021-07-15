@@ -543,10 +543,10 @@
 		F0F50567268B15FB00C3EBB8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				F0F5056B268B15FB00C3EBB8 /* BFProfileViewController.h */,
 				F0F50568268B15FB00C3EBB8 /* BFProfileViewController.m */,
 				F0F50569268B15FB00C3EBB8 /* BFProfileService.h */,
 				F0F5056A268B15FB00C3EBB8 /* BFProfileService.m */,
-				F0F5056B268B15FB00C3EBB8 /* BFProfileViewController.h */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -666,6 +666,7 @@
 				F0F5059A268B15FB00C3EBB8 /* MSVoiceMessageCell.h */,
 				F0F5059B268B15FB00C3EBB8 /* MSVideoMessageCell.m */,
 				F0F5059C268B15FB00C3EBB8 /* MSMessageCell.h */,
+				F0F505A4268B15FB00C3EBB8 /* MSMessageCell.m */,
 				F0F5059D268B15FB00C3EBB8 /* MSSystemMessageCell.m */,
 				F0F5059E268B15FB00C3EBB8 /* MSImageMessageCell.m */,
 				F0F5059F268B15FB00C3EBB8 /* MSBubbleMessageCell.h */,
@@ -673,7 +674,6 @@
 				F0F505A1268B15FB00C3EBB8 /* MSVoiceMessageCell.m */,
 				F0F505A2268B15FB00C3EBB8 /* MSNoticeCountView.h */,
 				F0F505A3268B15FB00C3EBB8 /* MSTextMessageCell.m */,
-				F0F505A4268B15FB00C3EBB8 /* MSMessageCell.m */,
 				F0F505A5268B15FB00C3EBB8 /* MSImageMessageCell.h */,
 				F0F505A6268B15FB00C3EBB8 /* MSSystemMessageCell.h */,
 				F0F505A7268B15FB00C3EBB8 /* MSBubbleMessageCell.m */,

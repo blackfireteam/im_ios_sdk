@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/IMSDKConfig.h</key>
 		<data>
-		1V2sgMavU17AS99LasqcRInb3uE=
+		TrdttSkjF3IhpmORyHIQD4kY8bs=
 		</data>
 		<key>Headers/MSConversationProvider.h</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Headers/MSDBFileRecordStore.h</key>
 		<data>
-		TiQ4v6ZoTo5MUQri1hvTvBMD8GA=
+		HDH+MYbYl9VE3MEZBBWL1Xqv4m8=
 		</data>
 		<key>Headers/MSDBManager.h</key>
 		<data>
@@ -98,7 +98,7 @@
 		</data>
 		<key>Headers/MSProfileInfo.h</key>
 		<data>
-		qrgNw/025rkfvIA2EIIncAjZuW8=
+		XYErpuVK87mCzEQoCpE3prpWq88=
 		</data>
 		<key>Headers/MSProfileProvider.h</key>
 		<data>
@@ -143,11 +143,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1V2sgMavU17AS99LasqcRInb3uE=
+			TrdttSkjF3IhpmORyHIQD4kY8bs=
 			</data>
 			<key>hash2</key>
 			<data>
-			fmvnOS0AxTofqJ8FKBtoglmIOHZWFGn7jDzho06KXjc=
+			VRVKNYqOIvtRG/aP+0yHeapJjC5YT8MsMl9J/6hLfLg=
 			</data>
 		</dict>
 		<key>Headers/MSConversationProvider.h</key>
@@ -187,11 +187,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			TiQ4v6ZoTo5MUQri1hvTvBMD8GA=
+			HDH+MYbYl9VE3MEZBBWL1Xqv4m8=
 			</data>
 			<key>hash2</key>
 			<data>
-			nStgfqKOBnYx3uYZWu9jXD0IoeBHnBFzWbKE1vigCMI=
+			h8KrabsJIJN2iAN8zhya18y6BffG/7DDpkThmWYx9Oc=
 			</data>
 		</dict>
 		<key>Headers/MSDBManager.h</key>
@@ -396,11 +396,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			qrgNw/025rkfvIA2EIIncAjZuW8=
+			XYErpuVK87mCzEQoCpE3prpWq88=
 			</data>
 			<key>hash2</key>
 			<data>
-			0c5dr0Yg6/OM6IMi6kONgeKCcQ4VywGztMobqBsb/0c=
+			oy0/y+h1fy52AQBPQktQkD0LZCN4/oDvlTQfYbgAtv8=
 			</data>
 		</dict>
 		<key>Headers/MSProfileProvider.h</key>

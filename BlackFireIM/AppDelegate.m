@@ -32,6 +32,7 @@
     
     IMSDKConfig *imConfig = [IMSDKConfig defaultConfig];
     imConfig.uploadMediator = [MSUploadManager sharedInstance];
+    imConfig.logEnable = YES;
     [[MSIMKit sharedInstance] initWithConfig:imConfig];
     
     if ([MSIMTools sharedInstance].user_id) {

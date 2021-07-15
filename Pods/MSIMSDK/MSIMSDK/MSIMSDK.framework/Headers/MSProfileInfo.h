@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString *pic;
 
+@property(nonatomic,copy) NSString *custom;
 
 + (MSProfileInfo *)createWithProto:(Profile *)profile;
 
