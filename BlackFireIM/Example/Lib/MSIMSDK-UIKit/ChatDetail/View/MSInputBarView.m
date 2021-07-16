@@ -295,6 +295,11 @@
     if(newHeight < TTextView_TextView_Height_Min){
         newHeight = TTextView_TextView_Height_Min;
     }
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(inputBarContentDidChanged:)]) {
+        [self.delegate inputBarContentDidChanged:self];
+    }
+    
     if(oldHeight == newHeight){
         return;
     }

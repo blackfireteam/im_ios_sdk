@@ -19,6 +19,9 @@
 @end
 
 @implementation MSChatViewController
+{
+    BOOL _textingFlag;
+}
 
 - (void)viewDidLoad
 {
@@ -79,6 +82,7 @@
 {
     MSIMTextElem *textElem = [[MSIMManager sharedInstance] createTextMessage:msg];
     [self sendMessage:textElem];
+    _textingFlag = NO;
 }
 
 - (void)inputController:(MSInputViewController *)inputController didSendVoiceMessage:(NSString *)filePath
@@ -99,6 +103,30 @@
 - (void)inputControllerDidInputAt:(MSInputViewController *)inputController
 {
     
+}
+
+/**
+ *  输入框中内容发生变化时的回调
+ */
+- (void)inputController:(MSInputViewController *)inputController contentDidChanged:(NSString *)text
+{
+    //处理正在输入消息逻辑
+    //当满足以下两条规则，会发送一条正在输入的信令消息
+    //1.上一条消息是对方发的消息
+    //2.当前时间距离上一条消息间隔在10秒内
+    MSMessageCellData *lastData = self.messageController.uiMsgs.lastObject;
+    if (lastData == nil || lastData.elem.fromUid.length == 0) return;
+    NSInteger diff = [MSIMTools sharedInstance].adjustLocalTimeInterval - lastData.elem.msg_sign;
+    if (_textingFlag == NO && lastData.elem.isSelf == NO && diff <= 10*1000*1000) {
+        NSDictionary *extDic = @{@"type": @(200),@"notice": @"我正在输入..."};
+        MSIMCustomElem *customElem = [[MSIMManager sharedInstance] createCustomMessage:[extDic el_convertJsonString] option:IMCUSTOM_SIGNAL pushExt:nil];
+        [[MSIMManager sharedInstance]sendC2CMessage:customElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
+
+            } failed:^(NSInteger code, NSString * _Nonnull desc) {
+
+        }];
+        _textingFlag = YES;
+    }
 }
 
 /**
@@ -123,6 +151,24 @@
 }
 
 #pragma mark - <MSMessageControllerDelegate>
+
+/**
+ 收到信令消息
+ */
+- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMElem *>*)elems
+{
+    for (MSIMElem *elem in elems) {
+        if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
+        MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+        NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+        if ([dic[@"type"]integerValue] == 200) {//收到对方正在输入
+            if ([self.delegate respondsToSelector:@selector(chatController:onRecieveTextingMessage:)]) {
+                return [self.delegate chatController:self onRecieveTextingMessage:elem];
+            }
+            return;
+        }
+    }
+}
 
 /**
  *  收到新消息的函数委托

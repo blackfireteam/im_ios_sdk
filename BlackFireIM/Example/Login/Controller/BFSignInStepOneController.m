@@ -28,20 +28,20 @@
     UILabel *titleL = [[UILabel alloc]initWithFrame:CGRectMake(35, StatusBar_Height+NavBar_Height + 35, Screen_Width-70, 30)];
     titleL.text = @"MY NICKNAME IS";
     titleL.font = [UIFont boldSystemFontOfSize:21];
-    titleL.textColor = RGB(15, 15, 15);
+    titleL.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
     [self.view addSubview:titleL];
     
     self.nickNameTF = [[UITextField alloc]initWithFrame:CGRectMake(35, titleL.maxY+30, Screen_Width-70, 50)];
     self.nickNameTF.placeholder = TUILocalizableString(You-nickname);
     self.nickNameTF.font = [UIFont systemFontOfSize:16];
-    self.nickNameTF.textColor = [UIColor blackColor];
+    self.nickNameTF.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
     self.nickNameTF.clearButtonMode = UITextFieldViewModeAlways;
     [self.nickNameTF becomeFirstResponder];
     self.nickNameTF.text = self.info.nickName;
     [self.view addSubview:self.nickNameTF];
     
     UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(35, self.nickNameTF.maxY, Screen_Width-70, 0.5)];
-    lineView.backgroundColor = TCell_separatorColor;
+    lineView.backgroundColor = [UIColor d_colorWithColorLight:TCell_separatorColor dark:TCell_separatorColor_Dark];
     [self.view addSubview:lineView];
     
     self.errL = [[UILabel alloc]initWithFrame:CGRectMake(self.nickNameTF.x, lineView.maxY+8, self.nickNameTF.width, 20)];

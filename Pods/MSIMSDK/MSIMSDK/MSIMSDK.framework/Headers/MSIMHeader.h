@@ -26,6 +26,10 @@
 
 //有新消息通知
 #define MSUIKitNotification_MessageListener @"MSUIKitNotification_MessageListener"
+
+//有指令消息通知
+#define MSUIKitNotification_SignalMessageListener @"MSUIKitNotification_SignalMessageListener"
+
 //消息状态有变更通知
 #define MSUIKitNotification_MessageSendStatusUpdate @"MSUIKitNotification_MessageSendStatusUpdate"
 //收到对方撤回消息的通知

@@ -41,6 +41,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)inputController:(MSInputViewController *)inputController didSendVoiceMessage:(NSString *)filePath;
 
 /**
+ *  输入框中内容发生变化时的回调
+ */
+- (void)inputController:(MSInputViewController *)inputController contentDidChanged:(NSString *)text;
+
+/**
  *  有 @ 字符输入
  */
 - (void)inputControllerDidInputAt:(MSInputViewController *)inputController;

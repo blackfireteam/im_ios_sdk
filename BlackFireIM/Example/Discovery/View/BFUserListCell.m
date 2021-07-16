@@ -18,7 +18,7 @@
         self.layer.cornerRadius = 6;
         self.layer.masksToBounds = YES;
         self.layer.borderWidth = 1;
-        self.layer.borderColor = TCell_separatorColor.CGColor;
+        self.layer.borderColor = [UIColor d_colorWithColorLight:TCell_separatorColor dark:TCell_separatorColor_Dark].CGColor;
         
         //head
         _avatarView = [[UIImageView alloc] init];

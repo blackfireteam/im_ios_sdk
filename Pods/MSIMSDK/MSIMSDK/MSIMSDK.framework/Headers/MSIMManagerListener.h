@@ -73,8 +73,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @required
 
-/// 收到新消息
+/// 收到新消息（除了信令消息）
 - (void)onNewMessages:(NSArray<MSIMElem *> *)msgs;
+
+/// 收到信令消息
+- (void)onRecieveSignalMessages:(NSArray<MSIMElem *> *)msgs;
 
 /**
  *  消息发送状态变化通知

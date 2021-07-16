@@ -24,7 +24,7 @@
         [self addSubview:self.avatarIcon];
         
         self.nickNameL = [[UILabel alloc]init];
-        self.nickNameL.textColor = [UIColor blackColor];
+        self.nickNameL.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
         self.nickNameL.font = [UIFont boldSystemFontOfSize:20];
         self.nickNameL.textAlignment = NSTextAlignmentCenter;
         self.nickNameL.frame = CGRectMake(Screen_Width*0.5-100, self.avatarIcon.maxY+25, 200, 27);

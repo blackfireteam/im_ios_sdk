@@ -28,6 +28,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (Class)messageController:(MSMessageController *)controller onShowMessageData:(MSMessageCellData *)data;
 
 /**
+ 收到信令消息
+ */
+- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMElem *>*)elems;
+
+/**
  *  控制器点击回调
  *  您可以通过该回调实现：重置 InputControoler，收起键盘。
  */

@@ -140,7 +140,7 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 
 // bottom line
 #define TCell_separatorColor RGBA(230, 230, 230, 1.0)
-
+#define TCell_separatorColor_Dark RGBA(47, 47, 47, 1.0)
 // cell commom color
 #define TCell_Nomal [UIColor whiteColor]
 #define TCell_Nomal_Dark RGB(35, 35, 35)

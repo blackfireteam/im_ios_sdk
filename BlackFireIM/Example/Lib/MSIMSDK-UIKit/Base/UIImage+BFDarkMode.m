@@ -6,9 +6,56 @@
 //
 
 #import "UIImage+BFDarkMode.h"
+#import <objc/message.h>
+
 
 @implementation UIImage (BFDarkMode)
 
++ (void)load
+{
+    [self d_fixResizableImage];
+}
+
++ (void)d_fixResizableImage
+{
+    if (@available(iOS 13.0, *)) {
+        Class klass = UIImage.class;
+        SEL selector = @selector(resizableImageWithCapInsets:resizingMode:);
+        Method method = class_getInstanceMethod(klass, selector);
+        if (method == NULL) {
+            return;
+        }
+        
+        IMP originalImp = class_getMethodImplementation(klass, selector);
+        if (!originalImp) {
+            return;
+        }
+        
+        IMP dynamicColorCompatibleImp = imp_implementationWithBlock(^UIImage *(UIImage *_self, UIEdgeInsets insets, UIImageResizingMode resizingMode) {
+                UITraitCollection *lightTrait = [self lightTrait];
+                UITraitCollection *darkTrait = [self darkTrait];
+
+                UIImage *resizable = ((UIImage * (*)(UIImage *, SEL, UIEdgeInsets, UIImageResizingMode))
+                                          originalImp)(_self, selector, insets, resizingMode);
+                UIImage *resizableInLight = [_self.imageAsset imageWithTraitCollection:lightTrait];
+                UIImage *resizableInDark = [_self.imageAsset imageWithTraitCollection:darkTrait];
+            
+                if (resizableInLight) {
+                    [resizable.imageAsset registerImage:((UIImage * (*)(UIImage *, SEL, UIEdgeInsets, UIImageResizingMode))
+                                                             originalImp)(resizableInLight, selector, insets, resizingMode)
+                                    withTraitCollection:lightTrait];
+                }
+                if (resizableInDark) {
+                    [resizable.imageAsset registerImage:((UIImage * (*)(UIImage *, SEL, UIEdgeInsets, UIImageResizingMode))
+                                                             originalImp)(resizableInDark, selector, insets, resizingMode)
+                                    withTraitCollection:darkTrait];
+                }
+                return resizable;
+            });
+
+        class_replaceMethod(klass, selector, dynamicColorCompatibleImp, method_getTypeEncoding(method));
+    }
+}
 
 + (UITraitCollection *)lightTrait API_AVAILABLE(ios(13.0)) {
     static UITraitCollection *trait = nil;
@@ -42,7 +89,7 @@
         return nil;
     }
     if (@available(iOS 13.0, *)) {
-        UIImage *darkImage= [UIImage imageNamed:dark];
+        UIImage *darkImage = [UIImage imageNamed:dark];
         UITraitCollection *const scaleTraitCollection = [UITraitCollection currentTraitCollection];
         UITraitCollection *const darkUnscaledTraitCollection = [UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark];
         UITraitCollection *const darkScaledTraitCollection = [UITraitCollection traitCollectionWithTraitsFromCollections:@[scaleTraitCollection, darkUnscaledTraitCollection]];

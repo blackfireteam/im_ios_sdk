@@ -42,7 +42,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = 103;
-    self.tableView.separatorColor = TCell_separatorColor;
+    self.tableView.separatorColor = [UIColor d_colorWithColorLight:TCell_separatorColor dark:TCell_separatorColor_Dark];
     WS(weakSelf)
     self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         [weakSelf loadConversation];

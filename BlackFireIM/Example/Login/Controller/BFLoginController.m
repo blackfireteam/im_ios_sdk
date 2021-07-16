@@ -38,14 +38,14 @@
     self.phoneTF = [[UITextField alloc]initWithFrame:CGRectMake(35, StatusBar_Height+NavBar_Height + 80, Screen_Width-70, 50)];
     self.phoneTF.placeholder = TUILocalizableString(You-phone-number);
     self.phoneTF.font = [UIFont systemFontOfSize:16];
-    self.phoneTF.textColor = [UIColor blackColor];
+    self.phoneTF.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
     self.phoneTF.keyboardType = UIKeyboardTypeNumberPad;
     self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
     [self.phoneTF becomeFirstResponder];
     [self.view addSubview:self.phoneTF];
     
     UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(35, self.phoneTF.maxY, Screen_Width-30, 0.5)];
-    lineView.backgroundColor = TCell_separatorColor;
+    lineView.backgroundColor = [UIColor d_colorWithColorLight:TCell_separatorColor dark:TCell_separatorColor_Dark];
     [self.view addSubview:lineView];
     
     self.loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -66,7 +66,7 @@
 
     self.serverL = [[UILabel alloc]init];
     self.serverL.font = [UIFont systemFontOfSize:16];
-    self.serverL.textColor = [UIColor blackColor];
+    self.serverL.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
     self.serverL.text = @"正式环境";
     self.serverL.frame = CGRectMake(self.serverSwitch.maxX+10, self.serverSwitch.y, 100, self.serverSwitch.height);
     [self.view addSubview:self.serverL];

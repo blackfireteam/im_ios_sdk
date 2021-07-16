@@ -261,6 +261,13 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     }
 }
 
+- (void)inputBarContentDidChanged:(MSInputBarView *_Nonnull)textView
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(inputController:contentDidChanged:)]) {
+        [_delegate inputController:self contentDidChanged:textView.inputTextView.text];
+    }
+}
+
 - (void)reset
 {
     if(_status == Input_Status_Input){

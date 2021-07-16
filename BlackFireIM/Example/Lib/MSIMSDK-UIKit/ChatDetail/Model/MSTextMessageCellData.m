@@ -169,7 +169,7 @@ static UIColor *sIncommingTextColor;
 + (UIColor *)incommingTextColor
 {
     if (!sIncommingTextColor) {
-        sIncommingTextColor = [UIColor d_colorWithColorLight:TText_Color dark:TText_Color_Dark];
+        sIncommingTextColor = [UIColor d_colorWithColorLight:TText_Color dark:TText_Color];
     }
     return sIncommingTextColor;
 }

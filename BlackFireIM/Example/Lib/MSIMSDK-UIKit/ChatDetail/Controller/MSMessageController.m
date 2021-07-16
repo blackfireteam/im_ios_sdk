@@ -68,6 +68,9 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
        [weakSelf onNewMessage:note];
     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_SignalMessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+       [weakSelf onSignalMessage:note];
+    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageSendStatusUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf messageStatusUpdate:note];
     }];
@@ -323,6 +326,14 @@
         }else {
             [self.countTipView increaseCount: tempElems.count];
         }
+    }
+}
+
+- (void)onSignalMessage:(NSNotification *)note
+{
+    NSArray *elems = note.object;
+    if ([self.delegate respondsToSelector:@selector(messageController:onRecieveSignalMessage:)]) {
+        [self.delegate messageController:self onRecieveSignalMessage:elems];
     }
 }
 

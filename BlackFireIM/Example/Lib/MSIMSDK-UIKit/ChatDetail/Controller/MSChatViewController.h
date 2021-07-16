@@ -42,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///点击消息内容回调
 - (void)chatController:(MSChatViewController *)controller onSelectMessageContent:(MSMessageCell *)cell;
 
+///收到对方正在输入消息通知
+- (void)chatController:(MSChatViewController *)controller onRecieveTextingMessage:(MSIMElem *)elem;
 
 @end
 

@@ -28,7 +28,7 @@
     UILabel *titleL = [[UILabel alloc]initWithFrame:CGRectMake(35, StatusBar_Height+NavBar_Height + 35, Screen_Width-70, 30)];
     titleL.text = @"MY PROFILE IS";
     titleL.font = [UIFont boldSystemFontOfSize:21];
-    titleL.textColor = RGB(15, 15, 15);
+    titleL.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
     [self.view addSubview:titleL];
     
     self.avatarIcon = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_Width*0.5-112, titleL.maxY+40, 224, 218)];

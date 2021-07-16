@@ -60,7 +60,7 @@ static UIImage *sIncommingBubble;
 + (UIImage *)incommingBubble
 {
     if (!sIncommingBubble) {
-        sIncommingBubble = [[UIImage imageNamed:TUIKitResource(@"receiver_text_normal")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{15,23,15,16}") resizingMode:UIImageResizingModeStretch];
+        sIncommingBubble = [[UIImage d_imageWithImageLight:TUIKitResource(@"receiver_text_normal") dark:TUIKitResource(@"receiver_text_pressed")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{15,23,15,16}") resizingMode:UIImageResizingModeStretch];
     }
     return sIncommingBubble;
 }
@@ -74,7 +74,7 @@ static UIImage *sIncommingHighlightedBubble;
 + (UIImage *)incommingHighlightedBubble
 {
     if (!sIncommingHighlightedBubble) {
-        sIncommingHighlightedBubble =[[UIImage imageNamed:TUIKitResource(@"receiver_text_pressed")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{15,23,15,16}") resizingMode:UIImageResizingModeStretch];
+        sIncommingHighlightedBubble = [[UIImage imageNamed:TUIKitResource(@"receiver_text_pressed")] resizableImageWithCapInsets:UIEdgeInsetsFromString(@"{15,23,15,16}") resizingMode:UIImageResizingModeStretch];
     }
     return sIncommingHighlightedBubble;
 }

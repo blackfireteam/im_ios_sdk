@@ -180,7 +180,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
-    cell.textLabel.textColor = TText_Color;
+    cell.textLabel.textColor = [UIColor d_colorWithColorLight:TText_Color dark:TText_Color_Dark];
     if (indexPath.row == 0) {
         cell.textLabel.text = @"CHANGE NICKE NAME";
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

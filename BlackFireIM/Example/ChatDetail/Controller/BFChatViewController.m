@@ -100,6 +100,17 @@
     NSLog(@"点击头像...");
 }
 
+///收到对方正在输入消息通知
+- (void)chatController:(MSChatViewController *)controller onRecieveTextingMessage:(MSIMElem *)elem
+{
+    self.navigationItem.title = TUILocalizableString(TUIkitMessageTipsTextingMessage);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[MSProfileProvider provider] providerProfile:self.partner_id.integerValue complete:^(MSProfileInfo * _Nonnull profile) {
+                self.navigationItem.title = profile.nick_name;
+        }];
+    });
+}
+
 ///点击消息内容回调
 - (void)chatController:(MSChatViewController *)controller onSelectMessageContent:(MSMessageCell *)cell
 {

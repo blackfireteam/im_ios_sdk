@@ -100,6 +100,13 @@
  */
 - (void)inputBarDidTouchKeyboard:(MSInputBarView *_Nonnull)textView;
 
+/**
+ *  输入框中的内容发生变化时的回调委托
+ *
+ *  @param textView 委托者，当前与用户交互的 InputBar。
+ */
+- (void)inputBarContentDidChanged:(MSInputBarView *_Nonnull)textView;
+
 @end
 
 /**
