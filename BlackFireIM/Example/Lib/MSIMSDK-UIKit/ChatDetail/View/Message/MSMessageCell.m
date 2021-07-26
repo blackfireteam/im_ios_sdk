@@ -74,7 +74,7 @@
 {
     self.messageData = data;
     self.avatarView.image = data.defaultAvatar;
-    NSInteger fromUid = data.elem.fromUid.integerValue;
+    NSString *fromUid = data.elem.fromUid;
     if (fromUid) {
         MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:fromUid];
         [self.avatarView sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:data.defaultAvatar];

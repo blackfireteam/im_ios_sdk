@@ -11,7 +11,6 @@
 #import "YBIBVideoData.h"
 #import "BFWinkMessageCell.h"
 #import "BFWinkMessageCellData.h"
-#import "BFVoiceChatController.h"
 
 
 @interface BFChatViewController ()<MSChatViewControllerDelegate>
@@ -33,7 +32,7 @@
     [self addChildViewController:self.chatController];
     [self.view addSubview:self.chatController.view];
     
-    [[MSProfileProvider provider] providerProfile:self.partner_id.integerValue complete:^(MSProfileInfo * _Nonnull profile) {
+    [[MSProfileProvider provider] providerProfile:self.partner_id complete:^(MSProfileInfo * _Nonnull profile) {
             self.navigationItem.title = profile.nick_name;
     }];
 }
@@ -59,11 +58,12 @@
                 return winkData;
             }
         }else if(customElem.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
-            if ([dic[@"type"]integerValue] == 101) {
-                MSSystemMessageCellData *unknowData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
-                unknowData.content = dic[@"desc"];
-                unknowData.elem = customElem;
-                return unknowData;
+            MSIMCustomSubType subType = [dic[@"type"]integerValue];
+            if (subType == MSIMCustomSubTypeVoiceCall || subType == MSIMCustomSubTypeVideoCall) {
+                MSSystemMessageCellData *voiceCallData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
+                voiceCallData.content = [MSCallManager parseToMessageShow:dic callType:(subType == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video)];
+                voiceCallData.elem = customElem;
+                return voiceCallData;
             }
         }
     }
@@ -84,13 +84,11 @@
 {
     if (cell.data.tye == MSIM_MORE_VOICE_CALL) {//语音通话
 
-        BFVoiceChatController *vc = [[BFVoiceChatController alloc]init];
-        vc.modalPresentationStyle = UIModalPresentationFullScreen;
-        [self presentViewController:vc animated:YES completion:nil];
-        [vc showWithPartner_id:self.partner_id bySelf:YES];
+        [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Voice action:CallAction_Call];
         
     }else if (cell.data.tye == MSIM_MORE_VIDEO_CALL) {//视频通话
         
+        [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Video action:CallAction_Call];
     }
 }
 
@@ -105,7 +103,7 @@
 {
     self.navigationItem.title = TUILocalizableString(TUIkitMessageTipsTextingMessage);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[MSProfileProvider provider] providerProfile:self.partner_id.integerValue complete:^(MSProfileInfo * _Nonnull profile) {
+        [[MSProfileProvider provider] providerProfile:self.partner_id complete:^(MSProfileInfo * _Nonnull profile) {
                 self.navigationItem.title = profile.nick_name;
         }];
     });

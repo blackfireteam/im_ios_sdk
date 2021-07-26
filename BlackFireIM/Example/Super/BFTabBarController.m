@@ -15,7 +15,6 @@
 #import <MSIMSDK/MSIMSDK.h>
 #import "AppDelegate.h"
 #import "BFLoginController.h"
-#import "BFVoiceChatController.h"
 
 
 @interface BFTabBarController ()
@@ -66,6 +65,9 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_SignalMessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
        [weakSelf onSignalMessage:note];
     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+       [weakSelf onNewMessage:note];
+    }];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
 }
 
@@ -110,20 +112,39 @@
 - (void)onSignalMessage:(NSNotification *)note
 {
     NSArray *elems = note.object;
-    for (MSIMElem *elem in elems) {
-        if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
-        MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
-        NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-        if ([dic[@"type"]integerValue] == 100) {//收到语音聊天邀请
-            [UIDevice playShortSound:@"00" soundExtension:@"caf"];
-            BFVoiceChatController *vc = [[BFVoiceChatController alloc]init];
-            vc.modalPresentationStyle = UIModalPresentationFullScreen;
-            [self presentViewController:vc animated:YES completion:nil];
-            [vc showWithPartner_id:customElem.fromUid bySelf:NO];
-            return;
-        }
+    MSIMElem *elem = elems.lastObject;
+    if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
+    MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+    NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+    if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {//语音聊天
+        NSInteger event = [dic[@"event"] integerValue];
+        [[MSCallManager shareInstance] call:customElem.fromUid toUser:customElem.toUid callType:MSCallType_Voice action:event];
+    }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {//视频聊天
+        NSInteger event = [dic[@"event"] integerValue];
+        [[MSCallManager shareInstance] call:customElem.fromUid toUser:customElem.toUid callType:MSCallType_Video action:event];
     }
 }
 
+- (void)onNewMessage:(NSNotification *)note
+{
+    NSArray *elems = note.object;
+    for (MSIMElem *elem in elems) {
+        if ([elem isKindOfClass:[MSIMCustomElem class]]) {
+            MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+            NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+            if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {//语音聊天
+                NSInteger event = [dic[@"event"] integerValue];
+                if (![customElem.fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
+                    [[MSCallManager shareInstance] call:customElem.fromUid toUser:customElem.toUid callType:MSCallType_Voice action:event];
+                }
+            }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {//视频聊天
+                NSInteger event = [dic[@"event"] integerValue];
+                if (![customElem.fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
+                    [[MSCallManager shareInstance] call:customElem.fromUid toUser:customElem.toUid callType:MSCallType_Video action:event];
+                }
+            }
+        }
+    }
+}
 
 @end

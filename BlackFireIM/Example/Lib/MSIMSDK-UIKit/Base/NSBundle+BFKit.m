@@ -9,26 +9,25 @@
 
 @implementation NSBundle (BFKit)
 
-// tuikit 代码相关的国际化
-+ (instancetype)bf_tuikitBundle
+static NSBundle *resourceBundle = nil;
++ (instancetype)bf_resourceBundle
 {
-    static NSBundle *tuikitBundle = nil;
-//    if (tuikitBundle == nil) {
-//        tuikitBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[TUIKitConfig class]] pathForResource:@"TUIKitLocalizable" ofType:@"bundle"]];
-//    }
-    return tuikitBundle;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        resourceBundle = [NSBundle bundleWithURL: [[NSBundle mainBundle] URLForResource:@"TUIKitResource" withExtension: @"bundle"]];
+    });
+    return resourceBundle;
 }
 
 + (NSString *)bf_localizedStringForKey:(NSString *)key value:(nullable NSString *)value
 {
-//    static NSBundle *bundle = nil;
-//    if (bundle == nil) {
-//        NSString *language = [self tk_localizableLanguageKey];
-//
-//        // 从bundle中查找资源
-//        bundle = [NSBundle bundleWithPath:[[NSBundle tk_tuikitBundle] pathForResource:language ofType:@"lproj"]];
-//    }
-//    value = [bundle localizedStringForKey:key value:value table:nil];
+    static NSBundle *bundle = nil;
+    if (bundle == nil) {
+        NSString *language = [self bf_localizableLanguageKey];
+        language = [@"Localizable" stringByAppendingPathComponent:language];
+        bundle = [NSBundle bundleWithPath:[self.bf_resourceBundle pathForResource:language ofType:@"lproj"]];
+    }
+    value = [bundle localizedStringForKey:key value:value table:nil];
     return [[NSBundle mainBundle] localizedStringForKey:key value:value table:nil];
 }
 
@@ -37,14 +36,14 @@
     return [self bf_localizedStringForKey:key value:nil];
 }
 
-// tuikit 表情相关的国际化
+// 表情相关的国际化
 + (instancetype)bf_emojiBundle
 {
     static NSBundle *emojiBundle = nil;
-//    if (emojiBundle == nil) {
-//        NSString *path = [[NSBundle bundleForClass:[TUIKitConfig class]] pathForResource:@"TUIKitFace" ofType:@"bundle"];
-//        emojiBundle = [NSBundle bundleWithPath:path];
-//    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        emojiBundle = [NSBundle bundleWithURL: [[NSBundle mainBundle] URLForResource:@"TUIKitFace" withExtension: @"bundle"]];
+    });
     return emojiBundle;
 }
 

@@ -16,4 +16,6 @@ pod 'Bugly'
 
 pod 'MSIMSDK'
 
+#pod 'AgoraRtcEngine_iOS'  #声网音视频聊天
+
 end

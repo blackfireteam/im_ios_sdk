@@ -57,9 +57,11 @@ static MSPushMediator *_manager;
     }];
     NSDictionary *userInfo = [launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if(userInfo){
-        if ([self.delegate respondsToSelector:@selector(didReceiveNotificationResponse:)]) {
-            [self.delegate didReceiveNotificationResponse:userInfo];
-        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(didReceiveNotificationResponse:)]) {
+                [self.delegate didReceiveNotificationResponse:userInfo];
+            }
+        });
     }
 }
 
@@ -101,9 +103,11 @@ static MSPushMediator *_manager;
 {
     UNNotification *noti = ((UNNotificationResponse *)response).notification;
     NSDictionary *userInfo = noti.request.content.userInfo;
-    if ([self.delegate respondsToSelector:@selector(didReceiveNotificationResponse:)]) {
-        [self.delegate didReceiveNotificationResponse:userInfo];
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(didReceiveNotificationResponse:)]) {
+            [self.delegate didReceiveNotificationResponse:userInfo];
+        }
+    });
     completionHandler();
 }
 

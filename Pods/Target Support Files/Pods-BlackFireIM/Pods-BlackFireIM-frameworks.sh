@@ -175,10 +175,28 @@ code_sign_if_enabled() {
 }
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${PODS_ROOT}/TXIMSDK_iOS/ImSDK.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAIDenoiseExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraCore.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraDav1dExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraFDExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraJNDExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraRtcKit.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraSoundTouch.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraVideoSegmentationExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/Agorafdkaac.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/Agoraffmpeg.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${PODS_ROOT}/TXIMSDK_iOS/ImSDK.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraAIDenoiseExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraCore.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraDav1dExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraFDExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraJNDExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraRtcKit.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraSoundTouch.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/AgoraVideoSegmentationExtension.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/Agorafdkaac.framework"
+  install_framework "${PODS_ROOT}/AgoraRtcEngine_iOS/Agoraffmpeg.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

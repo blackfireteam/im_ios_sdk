@@ -81,8 +81,13 @@
 - (NSString *)getCustomElemContent:(MSIMElem *)elem
 {
     MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
-    if (customElem.pushExt.body.length) {
-        return customElem.pushExt.body;
+    NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+    if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {
+        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Voice];
+    }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {
+        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Video];
+    }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeLike) {
+        return @"[Like]";
     }else {
         return TUILocalizableString(TUIKitMessageTipsUnsupportCustomMessage);
     }

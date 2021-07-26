@@ -90,7 +90,7 @@
 
 - (void)reloadData
 {
-    [[MSProfileProvider provider] providerProfile:[[MSIMTools sharedInstance].user_id integerValue] complete:^(MSProfileInfo * _Nonnull profile) {
+    [[MSProfileProvider provider] providerProfile:[MSIMTools sharedInstance].user_id complete:^(MSProfileInfo * _Nonnull profile) {
         [self.headerView.avatarIcon sd_setImageWithURL:[NSURL URLWithString:profile.avatar]];
         self.headerView.nickNameL.text = profile.nick_name;
         self.goldSwitch.on = profile.gold;
@@ -100,7 +100,7 @@
 
 - (void)goldSwitchChange:(UISwitch *)sw
 {
-    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id];
     info.gold = sw.isOn;
     info.gold_exp = [MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000 + 7*24*60*60;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
@@ -116,7 +116,7 @@
 
 - (void)verifySwitchChange:(UISwitch *)sw
 {
-    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id];
     info.verified = sw.isOn;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
@@ -130,7 +130,7 @@
 
 - (void)editNickName:(NSString *)name
 {
-    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id];
     info.nick_name = name;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         
@@ -144,7 +144,7 @@
 
 - (void)editAvatar:(NSString *)url
 {
-    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id];
     info.avatar = url;
     [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
         

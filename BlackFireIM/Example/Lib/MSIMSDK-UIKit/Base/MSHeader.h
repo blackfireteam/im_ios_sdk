@@ -156,4 +156,15 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define Record_Title_Background_Color RGBA(186, 60, 65, 1.0)
 #define Record_Margin 8
 
+
+/** 自定义消息分类*/
+typedef NS_ENUM(NSUInteger, MSIMCustomSubType) {
+    
+    MSIMCustomSubTypeLike = 1,              //like
+    MSIMCustomSubTypeTexting = 100,         //正在输入
+    MSIMCustomSubTypeVoiceCall = 200,       //语音聊天
+    MSIMCustomSubTypeVideoCall = 300,       //视频聊天
+};
+
+
 #endif /* BFHeader_h */

@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
                   complete:(void(^)(NSArray<MSIMElem *> *data,BOOL hasMore))complete;
 
 
+- (void)requestHistoryMessageFromEnd:(NSInteger)msgEnd toStart:(NSInteger)msgStart partner_Id:(NSString *)partner_id result:(void(^)(NSArray<MSIMElem *> *elems))result;
+
 ///根据msg_id查询消息
 - (MSIMElem *)searchMessage:(NSString *)partner_id msg_id:(NSInteger)msg_id;
 

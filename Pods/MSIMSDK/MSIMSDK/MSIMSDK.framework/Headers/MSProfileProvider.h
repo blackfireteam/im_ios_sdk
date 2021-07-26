@@ -20,13 +20,13 @@ typedef void (^profileBlock)(MSProfileInfo * __nullable profile);
 
 
 /// 查询某个用户的个人信息
-/// @param user_id 用户uid
+/// @param uid 用户uid
 /// @param completed 异步返回查询结果。
-- (void)providerProfile:(NSInteger)user_id
+- (void)providerProfile:(NSString *)uid
                complete:(profileBlock)completed;
 
 ///只从本地查询用户的个人信息
-- (MSProfileInfo *)providerProfileFromLocal:(NSInteger)user_id;
+- (MSProfileInfo *)providerProfileFromLocal:(NSString *)uid;
 
 ///批量更新用户信息
 - (void)updateProfiles:(NSArray<MSProfileInfo *> *)infos;

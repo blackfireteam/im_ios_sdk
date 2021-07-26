@@ -31,8 +31,8 @@
     [self.window makeKeyAndVisible];
     
     IMSDKConfig *imConfig = [IMSDKConfig defaultConfig];
-    imConfig.logEnable = YES;
     imConfig.uploadMediator = [MSUploadManager sharedInstance];
+    imConfig.logEnable = YES;
     [[MSIMKit sharedInstance] initWithConfig:imConfig];
     
     if ([MSIMTools sharedInstance].user_id) {
@@ -92,14 +92,28 @@
 /** 点击推送消息进入的app,可以做些跳转操作*/
 - (void)didReceiveNotificationResponse:(NSDictionary *)userInfo
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (userInfo[@"im"]) {
-            if ([MSIMTools sharedInstance].user_id) {
-                BFTabBarController *tabBar = (BFTabBarController *)self.window.rootViewController;
-                tabBar.selectedIndex = 2;
+    NSDictionary *data = userInfo[@"data"];
+    if (data == nil) return;
+    if ([MSIMTools sharedInstance].user_id) {
+        if ([data[@"mtype"] integerValue] == MSIM_MSG_TYPE_CUSTOM_SIGNAL) {
+            NSDictionary *bodyDic = [data[@"body"] el_convertToDictionary];
+            MSIMCustomSubType subType = [bodyDic[@"type"] integerValue];
+            NSInteger event = [bodyDic[@"event"] integerValue];
+            NSString *fromUid = [NSString stringWithFormat:@"%@",data[@"from"]];
+            NSString *toUid = [NSString stringWithFormat:@"%@",data[@"to"]];
+            if (![fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
+                if (subType == MSIMCustomSubTypeVoiceCall) {
+                    [[MSCallManager shareInstance] call:fromUid toUser:toUid callType:MSCallType_Voice action:event];
+                    return;
+                }else {
+                    [[MSCallManager shareInstance] call:fromUid toUser:toUid callType:MSCallType_Video action:event];
+                    return;
+                }
             }
         }
-    });
+        BFTabBarController *tabBar = (BFTabBarController *)self.window.rootViewController;
+        tabBar.selectedIndex = 2;
+    }
 }
 
 @end

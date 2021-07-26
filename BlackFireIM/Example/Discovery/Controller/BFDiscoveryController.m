@@ -102,7 +102,7 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     BFUserListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"userCell" forIndexPath:indexPath];
-    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:self.dataArray[indexPath.row].integerValue];
+    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[NSString stringWithFormat:@"%@",self.dataArray[indexPath.row]]];
     [cell configWithInfo:info];
     return cell;
 }

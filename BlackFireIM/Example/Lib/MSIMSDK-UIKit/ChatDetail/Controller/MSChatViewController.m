@@ -118,7 +118,7 @@
     if (lastData == nil || lastData.elem.fromUid.length == 0) return;
     NSInteger diff = [MSIMTools sharedInstance].adjustLocalTimeInterval - lastData.elem.msg_sign;
     if (_textingFlag == NO && lastData.elem.isSelf == NO && diff <= 10*1000*1000) {
-        NSDictionary *extDic = @{@"type": @(200),@"notice": @"我正在输入..."};
+        NSDictionary *extDic = @{@"type": @(MSIMCustomSubTypeTexting),@"desc": @"我正在输入..."};
         MSIMCustomElem *customElem = [[MSIMManager sharedInstance] createCustomMessage:[extDic el_convertJsonString] option:IMCUSTOM_SIGNAL pushExt:nil];
         [[MSIMManager sharedInstance]sendC2CMessage:customElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
 
@@ -161,7 +161,7 @@
         if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
         MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
         NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-        if ([dic[@"type"]integerValue] == 200) {//收到对方正在输入
+        if ([dic[@"type"]integerValue] == MSIMCustomSubTypeTexting) {//收到对方正在输入
             if ([self.delegate respondsToSelector:@selector(chatController:onRecieveTextingMessage:)]) {
                 return [self.delegate chatController:self onRecieveTextingMessage:elem];
             }

@@ -40,7 +40,7 @@
         self.headImg.contentMode = UIViewContentModeScaleAspectFill;
         self.headImg.layer.cornerRadius = 4;
         self.headImg.layer.masksToBounds = YES;
-        MSProfileInfo *me = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id.integerValue];
+        MSProfileInfo *me = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id];
         if (me) {
             [self.headImg sd_setImageWithURL:[NSURL URLWithString:me.avatar]];
         }

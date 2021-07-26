@@ -1,0 +1,138 @@
+/*
+  Localizable.strings
+  BlackFireIM
+
+  Created by benny wang on 2021/3/4.
+  
+*/
+
+"TUIKitTipsMostSelectTextFormat" = "最多选择%ld个";
+
+"Home_tab" = "首页";
+"Discovery_tab" = "探索";
+"Message_tab" = "消息";
+"Profile_tab" = "我的";
+
+"WelcomeBack" = "登录";
+"LOGIN" = "登录";
+"You-phone-number" = "你的电话号码...";
+"You-nickname" = "你的昵称";
+"Next-button" = "下一步";
+
+"Confirm" = "确定";
+"Cancel" = "取消";
+"Send" = "发送";
+"Save" = "保存";
+"You" = "您";
+"you" = "您";
+"Male" = "男";
+"Female" = "女";
+"File" = "文件";
+"Download" = "下载";
+"Unsetted" = "未设置";
+
+"Monday" = "星期一";
+"Tuesday" = "星期二";
+"Wednesday" = "星期三";
+"Thursday" = "星期四";
+"Friday" = "星期五";
+"Saturday" = "星期六";
+"Sunday" = "星期日";
+"Yesterday" = "昨天";
+"am" = "上午";
+"pm" = "下午";
+"YesterdayDateFormat" = "aHH:mm";
+
+"Read" = "已读";
+"Deliveried" = "已送达";
+"NotDeliveried" = "未送达";
+"Sending" = "发送中...";
+
+"Copy" = "复制";
+"Delete" = "删除";
+"Revoke" = "撤回";
+"Retry" = "重试";
+"Re-send" = "重发";
+"Done" = "完成";
+"All" = "所有人";
+"Agreed" = "已同意";
+"Disclined" = "已拒绝";
+"Agree" = "同意";
+"Have-been-sent" = "已发送";
+"View-the-original" = "查看原图";
+
+"TUIKitMicCamerAuthTips" = "请开启麦克风和摄像头权限";
+"TUIKitMicAuth" = "请开启麦克风权限";
+"TUIKitTipsConfirmResendMessage" = "确定重发此消息吗? ";
+
+"TUIKitInputHoldToTalk" = "按住 说话";
+"TUIKitInputReleaseToSend" = "松开 结束";
+"TUIKitInputReleaseToCancel" = "松开 取消";
+"TUIKitInputNoMicTitle" = "无法访问麦克风";
+"TUIKitInputNoMicTips"  = "开启麦克风权限才能发送语音消息";
+"TUIKitInputNoMicOperateLater" = "以后再说";
+"TUIKitInputNoMicOperateEnable" = "去开启";
+"TUIKitInputBlankMessageTitle" = "不能发送空白消息";
+"TUIKitInputWillFinishRecordInSeconds" = "将在 %ld 秒后结束录制";
+"TUIKitInputRecordSlideToCancel" = "手指上滑，取消发送";
+"TUIKitInputRecordReleaseToCancel" = "松开手指，取消发送";
+"TUIKitInputRecordTimeshort" = "说话时间太短";
+"TUIKitInputRecordTimeLong" = "说话时间太长";
+
+
+"TUIKitMessageTipsYouRecallMessage" = "您撤回了一条消息";
+"TUIKitMessageTipsRecallMessageFormat" = "\"%@\"撤回了一条消息";
+"TUIkitMessageTipsOthersRecallMessage" = "对方撤回了一条消息";
+"TUIkitMessageTipsUnknowMessage" = "不支持的消息类型，请升级SDK查看";
+"TUIkitMessageTipsTextingMessage" = "对方正在输入...";
+
+"TUIKitSignalingFinishGroupChat" = "结束群聊";
+"TUIKitSignalingVoiceCallEnd" = "语音通话时长: %02zd:%02zd";
+"TUIKitSignalingVideoCallEnd" = "视频通话时长: %02zd:%02zd";
+"TUIKitSignalingNewCall" = "发起通话";
+"TUIKitSignalingNewGroupCallFormat" = "\"%@\" 发起群通话";
+"TUIkitSignalingCancelCall" = "取消通话";
+"TUIkitSignalingCancelGroupCallFormat" = "\"%@\" 取消群通话";
+"TUIkitSignalingHangonCall" = "已接听";
+"TUIKitSignalingHangonCallFormat" = "\"%@\" 已接听";
+"TUIKitSignalingBusyFormat" = "\"%@\" 忙线";
+"TUIKitSignalingCallBusy" = "对方忙线";
+"TUIkitSignalingDecline" = "拒绝通话";
+"TUIKitSignalingNoResponse" = "无应答";
+"TUIkitSignalingUnrecognlize" = "不能识别的通话指令";
+
+"TUIkitMessageTypeImage" = "[图片]";
+"TUIKitMessageTypeVoice" = "[语音]";
+"TUIkitMessageTypeVideo" = "[视频]";
+"TUIkitMessageTypeFile" = "[文件]";
+"TUIkitMessageTypeVoiceCall" = "[语音电话]";
+"TUIkitMessageTypeVideoCall" = "[视频电话]";
+"TUIKitMessageTypeAnimateEmoji" = "[动画表情]";
+"TUIKitMessageTipsUnsupportCustomMessage" = "[自定义消息]";
+"TUIKitMessageTypeDraft" = "[草稿]";
+
+"TUIKitMoreCamera" = "拍摄";
+"TUIKitMorePhoto" = "照片";
+"TUIKitMoreVideo" = "视频";
+"TUIKitMoreLocation" = "位置";
+"TUIKitMoreFile" = "文件";
+"TUIKitMoreVideoCall" = "视频通话";
+"TUIKitMoreVoiceCall" = "语音通话";
+"TUIKitMoreGroupLive" = "群直播";
+
+"TUIKitCallInviteYouVoiceCall" = "邀请你语音通话...";
+"TUIKitCallInviteYouVideoCall" = "邀请你视频通话...";
+"TUIKitCallWaitingForAccept" = "正在等待对方接受邀请...";
+"TUIKitCallTurningOnMute" = "麦克风已开";
+"TUIKitCallTurningOffMute" = "麦克风已关";
+"TUIKitCallUsingSpeaker" = "扬声器已开";
+"TUIKitCallUsingHeadphone" = "扬声器已关";
+"TUIKitCallCameraSwitch" = "切换摄像头";
+"TUIKitCallReject" = "拒绝";
+"TUIKitCallAccept" = "接听";
+"TUIKitCallCancel" = "挂断";
+
+"TUIKitNoMoreData" = "没有更多了~";
+"TUIKitRefresh" = "点击刷新试试";
+
+
