@@ -32,6 +32,12 @@
 
 @property(nonatomic,assign) NSInteger duration;
 
+@property(nonatomic,assign) NSInteger callUidOfMe;
+
+@property(nonatomic,assign) NSInteger callUidOfOther;
+
+@property(nonatomic,assign) BOOL mainLocal;
+
 @end
 
 @implementation MSCallViewController
@@ -40,6 +46,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor blackColor];
+    self.mainLocal = YES;
     
     if (self.callType == MSCallType_Voice) {
         [self.view addSubview:self.voiceCallView];
@@ -88,6 +95,7 @@
 {
     [super viewDidDisappear:animated];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
+    [self stopAlerm];
     [self stopVoice];
 }
 
@@ -122,6 +130,7 @@
         self.videoCallView.remoteView.hidden = NO;
     }
     [self startDurationTimer];
+    [self stopAlerm];
 }
 
 /// 对方拒绝通话
@@ -197,9 +206,17 @@
 
 - (void)playAlerm
 {
-//    [UIDevice playShortSound:@"00" soundExtension:@"caf"];
+    if (self.callType == MSCallType_Voice) {
+        [UIDevice playShortSound:@"00" soundExtension:@"caf"];
+    }else {
+        [UIDevice playShortSound:@"call" soundExtension:@"caf"];
+    }
 }
 
+- (void)stopAlerm
+{
+    [UIDevice stopPlaySystemSound];
+}
 
 #pragma mark - MSVoiceCallViewDelegate
 - (void)voice_cancelBtnDidClick
@@ -243,6 +260,7 @@
     [self startDurationTimer];
     self.curState = CallState_Calling;
     [self joinChannel];
+    [self stopAlerm];
 }
 
 - (void)voice_hangupBtnDidClick
@@ -262,10 +280,10 @@
 {
     if (self.callType == MSCallType_Voice) {
         [self.agoraKit setDefaultAudioRouteToSpeakerphone:NO];
-        [self.agoraKit joinChannelByToken:@"0061a3bdfc8f46b4060bed01d15b75a5ed9IACEHM9wcpzpdCUMiyJ+KVf+hyG994FZZ+k46385Jgknyj1Ra00AAAAAEAA7+TVQJmf/YAEAAQAkZ/9g" channelId:@"111" info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
+        [self.agoraKit joinChannelByToken:@"0061a3bdfc8f46b4060bed01d15b75a5ed9IAAkwk2clKKUPFVwhf48InfeeGIcyNRt+YNC7/M+xBoYBz1Ra00AAAAAEAD7XOPUC78AYQEAAQALvwBh" channelId:@"111" info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
         [self.agoraKit enableInEarMonitoring:YES];//开启耳返
     }else {
-        [self.agoraKit joinChannelByToken:@"0061a3bdfc8f46b4060bed01d15b75a5ed9IACEHM9wcpzpdCUMiyJ+KVf+hyG994FZZ+k46385Jgknyj1Ra00AAAAAEAA7+TVQJmf/YAEAAQAkZ/9g" channelId:@"111" info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
+        [self.agoraKit joinChannelByToken:@"0061a3bdfc8f46b4060bed01d15b75a5ed9IAAkwk2clKKUPFVwhf48InfeeGIcyNRt+YNC7/M+xBoYBz1Ra00AAAAAEAD7XOPUC78AYQEAAQALvwBh" channelId:@"111" info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
     }
 }
 
@@ -310,12 +328,29 @@
     [self startDurationTimer];
     self.curState = CallState_Calling;
     [self joinChannel];
+    [self stopAlerm];
 }
 
 - (void)video_hangupBtnDidClick
 {
     [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Video action:CallAction_End];
     [self stopDurationTimer];
+}
+
+- (void)video_remoteViewDidTap
+{
+    self.mainLocal = !self.mainLocal;
+    AgoraRtcVideoCanvas *meCanvas = [[AgoraRtcVideoCanvas alloc]init];
+    meCanvas.uid = self.callUidOfMe;
+    meCanvas.renderMode = AgoraVideoRenderModeHidden;
+    meCanvas.view = self.mainLocal ? self.videoCallView.localView : self.videoCallView.remoteView;
+    [self.agoraKit setupLocalVideo:meCanvas];
+    
+    AgoraRtcVideoCanvas *otherCanvas = [[AgoraRtcVideoCanvas alloc] init];
+    otherCanvas.uid = self.callUidOfOther;
+    otherCanvas.renderMode = AgoraVideoRenderModeHidden;
+    otherCanvas.view = self.mainLocal == NO ? self.videoCallView.localView : self.videoCallView.remoteView;
+    [self.agoraKit setupRemoteVideo:otherCanvas];
 }
 
 #pragma mark - AgoraRtcEngineDelegate
@@ -331,6 +366,7 @@
 
 - (void)rtcEngine:(AgoraRtcEngineKit* _Nonnull)engine didJoinChannel:(NSString* _Nonnull)channel withUid:(NSUInteger)uid elapsed:(NSInteger)elapsed
 {
+    self.callUidOfMe = uid;
     MSLog(@"didJoinChannel uid == %zd",uid);
 }
 
@@ -346,14 +382,9 @@
 
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed
 {
+    self.callUidOfOther = uid;
+    [self video_remoteViewDidTap];
     MSLog(@"didJoinedOfUid uid = %zd",uid);
-    if (self.callType == MSCallType_Video) {//设置远端视图
-        AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc] init];
-        videoCanvas.uid = uid;
-        videoCanvas.renderMode = AgoraVideoRenderModeHidden;
-        videoCanvas.view = self.videoCallView.remoteView;
-        [self.agoraKit setupRemoteVideo:videoCanvas];
-    }
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason

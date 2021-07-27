@@ -24,6 +24,8 @@
         self.remoteView.layer.cornerRadius = 6;
         self.remoteView.clipsToBounds = YES;
         [self addSubview:self.remoteView];
+        UITapGestureRecognizer *remoteTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(remoteViewTap)];
+        [self.remoteView addGestureRecognizer:remoteTap];
         
         self.avatarIcon = [[UIImageView alloc]initWithFrame:CGRectMake(20, StatusBar_Height + NavBar_Height, 70, 70)];
         self.avatarIcon.layer.cornerRadius = 4;
@@ -119,6 +121,13 @@
 }
 
 #pragma mark - btn event
+
+- (void)remoteViewTap
+{
+    if ([self.delegate respondsToSelector:@selector(video_remoteViewDidTap)]) {
+        [self.delegate video_remoteViewDidTap];
+    }
+}
 
 - (void)cancelBtnDidClick:(UIButton *)sender
 {

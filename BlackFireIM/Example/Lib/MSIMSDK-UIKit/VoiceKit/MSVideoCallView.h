@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MSVideoCallViewDelegate<NSObject>
 
+- (void)video_remoteViewDidTap;
 
 - (void)video_cancelBtnDidClick;
 

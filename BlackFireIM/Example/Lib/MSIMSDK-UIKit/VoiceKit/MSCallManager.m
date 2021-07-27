@@ -148,7 +148,7 @@
     NSDictionary *extDic = @{@"type": @(self.callType == MSCallType_Voice ? MSIMCustomSubTypeVoiceCall : MSIMCustomSubTypeVideoCall),@"event":@(CallAction_Call)};
     MSIMPushInfo *push = [[MSIMPushInfo alloc]init];
     push.body = [NSString stringWithFormat:@"%@ Start Call",attachExt];
-    push.sound = @"00.caf";
+    push.sound = (self.callType == MSCallType_Voice ? @"00.caf" : @"call.caf");
     MSIMCustomElem *custom = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertJsonString] option:IMCUSTOM_SIGNAL pushExt:push];
     [[MSIMManager sharedInstance]sendC2CMessage:custom toReciever:self.partner_id successed:^(NSInteger msg_id) {
         
