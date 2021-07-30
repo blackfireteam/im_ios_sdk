@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<MSIMConversation *> *)allConvesations;
 
 ///查询某一条会话
-- (MSIMConversation *)searchConversation:(NSString *)conv_id;
+- (nullable MSIMConversation *)searchConversation:(NSString *)conv_id;
 
 /// 分页获取会话记录
 - (void)conversationsWithLast_seq:(NSInteger)last_seq

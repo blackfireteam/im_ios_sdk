@@ -62,7 +62,7 @@ typedef void (^TCPBlock)(NSInteger code, id _Nullable response, NSString * _Null
 - (void)send:(NSData *)sendData protoType:(XMChatProtoType)protoType needToEncry:(BOOL)encry sign:(int64_t)sign callback:(TCPBlock)block;
 
 /** 鉴权*/
-- (void)imLogin:(NSString *)user_sign;
+- (void)imLogin:(NSString *)user_sign subAppID:(NSInteger)subID;
 
 - (void)cleanCache;
 

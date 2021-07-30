@@ -101,11 +101,12 @@
         //2.登录
         weakSelf.registerInfo.userToken = userToken;
         weakSelf.registerInfo.imUrl = im_url;
-        [[MSIMManager sharedInstance] login:userToken imUrl:im_url succ:^{
-                  
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
-            
+        //子应用id = 1,用于demo测试，使用方根据需要设置自己的子应用id
+        [[MSIMManager sharedInstance] login:userToken imUrl:im_url subAppID:1 succ:^{
+                    
+                    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                    appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
+                    
                 } failed:^(NSInteger code, NSString *desc) {
                     [MSHelper showToastFail:desc];
         }];

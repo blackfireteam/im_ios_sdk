@@ -27,8 +27,7 @@ static NSBundle *resourceBundle = nil;
         language = [@"Localizable" stringByAppendingPathComponent:language];
         bundle = [NSBundle bundleWithPath:[self.bf_resourceBundle pathForResource:language ofType:@"lproj"]];
     }
-    value = [bundle localizedStringForKey:key value:value table:nil];
-    return [[NSBundle mainBundle] localizedStringForKey:key value:value table:nil];
+    return [bundle localizedStringForKey:key value:value table:nil];
 }
 
 + (NSString *)bf_localizedStringForKey:(NSString *)key

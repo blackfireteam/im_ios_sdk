@@ -98,11 +98,13 @@
             NSString *im_url = dic[@"url"];
             weakSelf.info.userToken = userToken;
             weakSelf.info.imUrl = im_url;
-            [[MSIMManager sharedInstance] login:weakSelf.info.userToken imUrl:weakSelf.info.imUrl succ:^{
-                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-                appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
-            } failed:^(NSInteger code, NSString *desc) {
-                [MSHelper showToastFail:desc];
+            [[MSIMManager sharedInstance] login:weakSelf.info.userToken imUrl:weakSelf.info.imUrl subAppID:1 succ:^{
+                            
+                            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                            appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
+                            
+                        } failed:^(NSInteger code, NSString *desc) {
+                            [MSHelper showToastFail:desc];
             }];
             
         } fail:^(NSError * _Nonnull error) {

@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addProfiles:(NSArray<MSProfileInfo *> *)profiles;
 
 ///查找某一条profle
-- (MSProfileInfo *)searchProfile:(NSString *)user_id;
+- (nullable MSProfileInfo *)searchProfile:(NSString *)user_id;
 
 ///返回数据库中所有的记录
 - (NSArray *)allProfiles;

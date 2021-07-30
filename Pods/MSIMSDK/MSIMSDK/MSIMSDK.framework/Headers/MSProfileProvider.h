@@ -16,7 +16,7 @@ typedef void (^profileBlock)(MSProfileInfo * __nullable profile);
 @interface MSProfileProvider : NSObject
 
 ///单例
-+ (instancetype)provider;
++ (instancetype)provider NS_SWIFT_NAME(shared());
 
 
 /// 查询某个用户的个人信息
@@ -26,7 +26,7 @@ typedef void (^profileBlock)(MSProfileInfo * __nullable profile);
                complete:(profileBlock)completed;
 
 ///只从本地查询用户的个人信息
-- (MSProfileInfo *)providerProfileFromLocal:(NSString *)uid;
+- (nullable MSProfileInfo *)providerProfileFromLocal:(NSString *)uid;
 
 ///批量更新用户信息
 - (void)updateProfiles:(NSArray<MSProfileInfo *> *)infos;

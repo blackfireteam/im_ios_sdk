@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSConversationProvider : NSObject
 
 ///单例
-+ (instancetype)provider;
++ (instancetype)provider NS_SWIFT_NAME(shared());
 
-- (MSIMConversation *)providerConversation:(NSString *)partner_id;
+- (nullable MSIMConversation *)providerConversation:(NSString *)partner_id;
 
 - (void)updateConversations:(NSArray<MSIMConversation *> *)convs;
 

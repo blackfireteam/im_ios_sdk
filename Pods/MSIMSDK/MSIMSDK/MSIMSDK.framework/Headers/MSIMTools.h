@@ -24,6 +24,8 @@ typedef NS_ENUM(NSInteger ,MSIMServerType){
 
 @property(nonatomic,copy) NSString * _Nullable user_sign;
 
+@property(nonatomic,assign) NSInteger sub_app_id;
+
 @property(nonatomic,assign,readonly) NSInteger currentLocalTimeInterval;
 
 @property(nonatomic,assign,readonly) NSInteger adjustLocalTimeInterval;

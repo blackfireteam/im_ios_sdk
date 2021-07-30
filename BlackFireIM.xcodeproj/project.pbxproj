@@ -727,32 +727,32 @@
 		F04CF5B726AFAFE100DB452E /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF5B826AFAFE100DB452E /* UIColor+BFDarkMode.h */,
-				F04CF5B926AFAFE100DB452E /* NSDate+MSKit.h */,
-				F04CF5BA26AFAFE100DB452E /* MSHelper.m */,
-				F04CF5BB26AFAFE100DB452E /* UIView+BFExtension.m */,
-				F04CF5BC26AFAFE100DB452E /* UIView+Frame.m */,
-				F04CF5BD26AFAFE100DB452E /* MSPushMediator.h */,
-				F04CF5BE26AFAFE100DB452E /* UIImage+BFKit.m */,
-				F04CF5BF26AFAFE100DB452E /* NSBundle+BFKit.h */,
-				F04CF5C026AFAFE100DB452E /* UIImage+BFDarkMode.m */,
-				F04CF5C126AFAFE100DB452E /* UIDevice+Ext.h */,
-				F04CF5C226AFAFE100DB452E /* NSString+Encry.h */,
-				F04CF5C326AFAFE100DB452E /* MSUploadManager.h */,
-				F04CF5C426AFAFE100DB452E /* UIButton+positon.h */,
-				F04CF5C526AFAFE100DB452E /* MSHelper.h */,
-				F04CF5C626AFAFE100DB452E /* NSDate+MSKit.m */,
-				F04CF5C726AFAFE100DB452E /* UIColor+BFDarkMode.m */,
 				F04CF5C826AFAFE100DB452E /* MSHeader.h */,
+				F04CF5B926AFAFE100DB452E /* NSDate+MSKit.h */,
+				F04CF5C626AFAFE100DB452E /* NSDate+MSKit.m */,
+				F04CF5B826AFAFE100DB452E /* UIColor+BFDarkMode.h */,
+				F04CF5C726AFAFE100DB452E /* UIColor+BFDarkMode.m */,
+				F04CF5C526AFAFE100DB452E /* MSHelper.h */,
+				F04CF5BA26AFAFE100DB452E /* MSHelper.m */,
 				F04CF5C926AFAFE100DB452E /* UIView+BFExtension.h */,
+				F04CF5BB26AFAFE100DB452E /* UIView+BFExtension.m */,
+				F04CF5C226AFAFE100DB452E /* NSString+Encry.h */,
 				F04CF5CA26AFAFE100DB452E /* NSString+Encry.m */,
+				F04CF5C126AFAFE100DB452E /* UIDevice+Ext.h */,
 				F04CF5CB26AFAFE100DB452E /* UIDevice+Ext.m */,
+				F04CF5BF26AFAFE100DB452E /* NSBundle+BFKit.h */,
 				F04CF5CC26AFAFE100DB452E /* NSBundle+BFKit.m */,
 				F04CF5CD26AFAFE100DB452E /* UIImage+BFDarkMode.h */,
+				F04CF5C026AFAFE100DB452E /* UIImage+BFDarkMode.m */,
 				F04CF5CE26AFAFE100DB452E /* UIImage+BFKit.h */,
+				F04CF5BE26AFAFE100DB452E /* UIImage+BFKit.m */,
 				F04CF5CF26AFAFE100DB452E /* UIView+Frame.h */,
+				F04CF5BC26AFAFE100DB452E /* UIView+Frame.m */,
+				F04CF5BD26AFAFE100DB452E /* MSPushMediator.h */,
 				F04CF5D026AFAFE100DB452E /* MSPushMediator.m */,
+				F04CF5C426AFAFE100DB452E /* UIButton+positon.h */,
 				F04CF5D126AFAFE100DB452E /* UIButton+positon.m */,
+				F04CF5C326AFAFE100DB452E /* MSUploadManager.h */,
 				F04CF5D226AFAFE100DB452E /* MSUploadManager.m */,
 			);
 			path = Base;
@@ -979,12 +979,12 @@
 		F04CF64826AFAFE200DB452E /* Super */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF64926AFAFE200DB452E /* BFBaseViewController.m */,
-				F04CF64A26AFAFE200DB452E /* BFNavigationController.m */,
 				F04CF64B26AFAFE200DB452E /* BFTabBarController.h */,
-				F04CF64C26AFAFE200DB452E /* BFNavigationController.h */,
-				F04CF64D26AFAFE200DB452E /* BFBaseViewController.h */,
 				F04CF64E26AFAFE200DB452E /* BFTabBarController.m */,
+				F04CF64C26AFAFE200DB452E /* BFNavigationController.h */,
+				F04CF64A26AFAFE200DB452E /* BFNavigationController.m */,
+				F04CF64D26AFAFE200DB452E /* BFBaseViewController.h */,
+				F04CF64926AFAFE200DB452E /* BFBaseViewController.m */,
 			);
 			path = Super;
 			sourceTree = "<group>";
@@ -1001,12 +1001,12 @@
 		F04CF65026AFAFE300DB452E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF65126AFAFE300DB452E /* BFSignInStepTwoController.h */,
 				F04CF65226AFAFE300DB452E /* BFLoginController.h */,
-				F04CF65326AFAFE300DB452E /* BFSignInStepOneController.h */,
 				F04CF65426AFAFE300DB452E /* BFLoginController.m */,
-				F04CF65526AFAFE300DB452E /* BFSignInStepTwoController.m */,
+				F04CF65326AFAFE300DB452E /* BFSignInStepOneController.h */,
 				F04CF65626AFAFE300DB452E /* BFSignInStepOneController.m */,
+				F04CF65126AFAFE300DB452E /* BFSignInStepTwoController.h */,
+				F04CF65526AFAFE300DB452E /* BFSignInStepTwoController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1059,8 +1059,8 @@
 		F04CF66226AFAFE300DB452E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF66326AFAFE300DB452E /* BFHomeController.m */,
 				F04CF66426AFAFE300DB452E /* BFHomeController.h */,
+				F04CF66326AFAFE300DB452E /* BFHomeController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1068,13 +1068,13 @@
 		F04CF66526AFAFE300DB452E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF66626AFAFE300DB452E /* BFSparkLoadingView.m */,
 				F04CF66726AFAFE300DB452E /* BFSparkCardView.h */,
-				F04CF66826AFAFE300DB452E /* BFSparkCardCell.h */,
-				F04CF66926AFAFE300DB452E /* BFSparkEmptyView.h */,
 				F04CF66A26AFAFE300DB452E /* BFSparkCardView.m */,
 				F04CF66B26AFAFE300DB452E /* BFSparkLoadingView.h */,
+				F04CF66626AFAFE300DB452E /* BFSparkLoadingView.m */,
+				F04CF66826AFAFE300DB452E /* BFSparkCardCell.h */,
 				F04CF66C26AFAFE300DB452E /* BFSparkCardCell.m */,
+				F04CF66926AFAFE300DB452E /* BFSparkEmptyView.h */,
 				F04CF66D26AFAFE300DB452E /* BFSparkEmptyView.m */,
 			);
 			path = View;
@@ -1092,10 +1092,10 @@
 		F04CF66F26AFAFE300DB452E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				F04CF67326AFAFE300DB452E /* BFProfileViewController.h */,
 				F04CF67026AFAFE300DB452E /* BFProfileViewController.m */,
 				F04CF67126AFAFE300DB452E /* BFProfileService.h */,
 				F04CF67226AFAFE300DB452E /* BFProfileService.m */,
-				F04CF67326AFAFE300DB452E /* BFProfileViewController.h */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
