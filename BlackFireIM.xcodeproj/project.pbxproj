@@ -619,19 +619,19 @@
 		F04CF57926AFAFE100DB452E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF57A26AFAFE100DB452E /* MSSystemMessageCellData.m */,
-				F04CF57B26AFAFE100DB452E /* MSBubbleMessageCellData.m */,
-				F04CF57C26AFAFE100DB452E /* MSTextMessageCellData.m */,
-				F04CF57D26AFAFE100DB452E /* MSVideoMessageCellData.h */,
-				F04CF57E26AFAFE100DB452E /* MSVoiceMessageCellData.h */,
-				F04CF57F26AFAFE100DB452E /* MSMessageCellData.m */,
-				F04CF58026AFAFE100DB452E /* MSImageMessageCellData.h */,
-				F04CF58126AFAFE100DB452E /* MSSystemMessageCellData.h */,
-				F04CF58226AFAFE100DB452E /* MSBubbleMessageCellData.h */,
-				F04CF58326AFAFE100DB452E /* MSTextMessageCellData.h */,
-				F04CF58426AFAFE100DB452E /* MSImageMessageCellData.m */,
 				F04CF58526AFAFE100DB452E /* MSMessageCellData.h */,
+				F04CF57F26AFAFE100DB452E /* MSMessageCellData.m */,
+				F04CF58326AFAFE100DB452E /* MSTextMessageCellData.h */,
+				F04CF57C26AFAFE100DB452E /* MSTextMessageCellData.m */,
+				F04CF58026AFAFE100DB452E /* MSImageMessageCellData.h */,
+				F04CF58426AFAFE100DB452E /* MSImageMessageCellData.m */,
+				F04CF58126AFAFE100DB452E /* MSSystemMessageCellData.h */,
+				F04CF57A26AFAFE100DB452E /* MSSystemMessageCellData.m */,
+				F04CF58226AFAFE100DB452E /* MSBubbleMessageCellData.h */,
+				F04CF57B26AFAFE100DB452E /* MSBubbleMessageCellData.m */,
+				F04CF57E26AFAFE100DB452E /* MSVoiceMessageCellData.h */,
 				F04CF58626AFAFE100DB452E /* MSVoiceMessageCellData.m */,
+				F04CF57D26AFAFE100DB452E /* MSVideoMessageCellData.h */,
 				F04CF58726AFAFE100DB452E /* MSVideoMessageCellData.m */,
 			);
 			path = Model;
@@ -640,13 +640,13 @@
 		F04CF58826AFAFE100DB452E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF58926AFAFE100DB452E /* MSResponderTextView.h */,
 				F04CF58A26AFAFE100DB452E /* Face */,
-				F04CF59326AFAFE100DB452E /* MSInputBarView.h */,
 				F04CF59426AFAFE100DB452E /* Message */,
 				F04CF5A526AFAFE100DB452E /* More */,
 				F04CF5AA26AFAFE100DB452E /* Voice */,
+				F04CF58926AFAFE100DB452E /* MSResponderTextView.h */,
 				F04CF5AD26AFAFE100DB452E /* MSResponderTextView.m */,
+				F04CF59326AFAFE100DB452E /* MSInputBarView.h */,
 				F04CF5AE26AFAFE100DB452E /* MSInputBarView.m */,
 			);
 			path = View;
@@ -655,13 +655,13 @@
 		F04CF58A26AFAFE100DB452E /* Face */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF58B26AFAFE100DB452E /* MSMenuView.m */,
-				F04CF58C26AFAFE100DB452E /* MSFaceCollectionCell.m */,
-				F04CF58D26AFAFE100DB452E /* MSFaceUtil.m */,
-				F04CF58E26AFAFE100DB452E /* MSFaceView.h */,
 				F04CF58F26AFAFE100DB452E /* MSFaceUtil.h */,
+				F04CF58D26AFAFE100DB452E /* MSFaceUtil.m */,
 				F04CF59026AFAFE100DB452E /* MSFaceCollectionCell.h */,
+				F04CF58C26AFAFE100DB452E /* MSFaceCollectionCell.m */,
 				F04CF59126AFAFE100DB452E /* MSMenuView.h */,
+				F04CF58B26AFAFE100DB452E /* MSMenuView.m */,
+				F04CF58E26AFAFE100DB452E /* MSFaceView.h */,
 				F04CF59226AFAFE100DB452E /* MSFaceView.m */,
 			);
 			path = Face;
@@ -670,21 +670,21 @@
 		F04CF59426AFAFE100DB452E /* Message */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF59526AFAFE100DB452E /* MSTextMessageCell.h */,
-				F04CF59626AFAFE100DB452E /* MSNoticeCountView.m */,
-				F04CF59726AFAFE100DB452E /* MSVoiceMessageCell.h */,
-				F04CF59826AFAFE100DB452E /* MSVideoMessageCell.m */,
-				F04CF59926AFAFE100DB452E /* MSMessageCell.h */,
-				F04CF59A26AFAFE100DB452E /* MSSystemMessageCell.m */,
-				F04CF59B26AFAFE100DB452E /* MSImageMessageCell.m */,
-				F04CF59C26AFAFE100DB452E /* MSBubbleMessageCell.h */,
 				F04CF59D26AFAFE100DB452E /* MSVideoMessageCell.h */,
+				F04CF59826AFAFE100DB452E /* MSVideoMessageCell.m */,
+				F04CF59726AFAFE100DB452E /* MSVoiceMessageCell.h */,
 				F04CF59E26AFAFE100DB452E /* MSVoiceMessageCell.m */,
 				F04CF59F26AFAFE100DB452E /* MSNoticeCountView.h */,
+				F04CF59626AFAFE100DB452E /* MSNoticeCountView.m */,
+				F04CF59526AFAFE100DB452E /* MSTextMessageCell.h */,
 				F04CF5A026AFAFE100DB452E /* MSTextMessageCell.m */,
+				F04CF59926AFAFE100DB452E /* MSMessageCell.h */,
 				F04CF5A126AFAFE100DB452E /* MSMessageCell.m */,
 				F04CF5A226AFAFE100DB452E /* MSImageMessageCell.h */,
+				F04CF59B26AFAFE100DB452E /* MSImageMessageCell.m */,
 				F04CF5A326AFAFE100DB452E /* MSSystemMessageCell.h */,
+				F04CF59A26AFAFE100DB452E /* MSSystemMessageCell.m */,
+				F04CF59C26AFAFE100DB452E /* MSBubbleMessageCell.h */,
 				F04CF5A426AFAFE100DB452E /* MSBubbleMessageCell.m */,
 			);
 			path = Message;
@@ -693,10 +693,10 @@
 		F04CF5A526AFAFE100DB452E /* More */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF5A626AFAFE100DB452E /* MSInputMoreCell.m */,
+				F04CF5A926AFAFE100DB452E /* MSChatMoreView.h */,
 				F04CF5A726AFAFE100DB452E /* MSChatMoreView.m */,
 				F04CF5A826AFAFE100DB452E /* MSInputMoreCell.h */,
-				F04CF5A926AFAFE100DB452E /* MSChatMoreView.h */,
+				F04CF5A626AFAFE100DB452E /* MSInputMoreCell.m */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -704,8 +704,8 @@
 		F04CF5AA26AFAFE100DB452E /* Voice */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF5AB26AFAFE100DB452E /* MSRecordView.m */,
 				F04CF5AC26AFAFE100DB452E /* MSRecordView.h */,
+				F04CF5AB26AFAFE100DB452E /* MSRecordView.m */,
 			);
 			path = Voice;
 			sourceTree = "<group>";
@@ -762,10 +762,10 @@
 			isa = PBXGroup;
 			children = (
 				F04CF5D426AFAFE100DB452E /* MSUIConversationCellData.h */,
-				F04CF5D526AFAFE100DB452E /* MSUIConversationListController.m */,
 				F04CF5D626AFAFE100DB452E /* MSUIConversationCellData.m */,
-				F04CF5D726AFAFE100DB452E /* View */,
 				F04CF5DC26AFAFE100DB452E /* MSUIConversationListController.h */,
+				F04CF5D526AFAFE100DB452E /* MSUIConversationListController.m */,
+				F04CF5D726AFAFE100DB452E /* View */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -773,9 +773,9 @@
 		F04CF5D726AFAFE100DB452E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F04CF5DA26AFAFE100DB452E /* MSUnreadView.h */,
 				F04CF5D826AFAFE100DB452E /* MSUnreadView.m */,
 				F04CF5D926AFAFE100DB452E /* MSUIConversationCell.h */,
-				F04CF5DA26AFAFE100DB452E /* MSUnreadView.h */,
 				F04CF5DB26AFAFE100DB452E /* MSUIConversationCell.m */,
 			);
 			path = View;

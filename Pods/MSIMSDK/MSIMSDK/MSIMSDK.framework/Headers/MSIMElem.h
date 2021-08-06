@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSIMImageElem : MSIMElem
 
 /** 图片 ID，内部标识，可用于外部缓存key*/
-@property(nonatomic,copy) NSString *uuid;
+@property(nonatomic,copy,nullable) NSString *uuid;
 /** 图片大小*/
 @property(nonatomic,assign) NSInteger size;
 /** 图片宽*/
@@ -81,11 +81,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 图片高*/
 @property(nonatomic,assign) NSInteger height;
 /** 下载URL*/
-@property(nonatomic,copy) NSString *url;
+@property(nonatomic,copy,nullable) NSString *url;
 /** 待发送的图片*/
-@property(nonatomic,strong) UIImage *image;
+@property(nonatomic,strong,nullable) UIImage *image;
 /** 保存在沙盒中的地址*/
-@property(nonatomic,copy) NSString *path;
+@property(nonatomic,copy,nullable) NSString *path;
 /** 图片上传的进度 0 ~ 1*/
 @property(nonatomic,assign) CGFloat progress;
 
@@ -99,9 +99,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSIMVoiceElem : MSIMElem
 
 /** 语音本地地址*/
-@property(nonatomic,copy) NSString * path;
+@property(nonatomic,copy,nullable) NSString * path;
 /** 语音远程地址*/
-@property(nonatomic,copy) NSString *url;
+@property(nonatomic,copy,nullable) NSString *url;
 
 /** 语音数据大小*/
 @property(nonatomic,assign) NSInteger dataSize;
@@ -119,17 +119,17 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSIMVideoElem : MSIMElem
 
 /** 视频 ID，内部标识，可用于外部缓存key*/
-@property(nonatomic,copy) NSString *uuid;
+@property(nonatomic,copy,nullable) NSString *uuid;
 /** 视频本地地址*/
-@property(nonatomic,copy) NSString *videoPath;
+@property(nonatomic,copy,nullable) NSString *videoPath;
 /** 视频上传完成的远程地址*/
-@property(nonatomic,copy) NSString *videoUrl;
+@property(nonatomic,copy,nullable) NSString *videoUrl;
 /** 封面图片*/
-@property(nonatomic,strong) UIImage *coverImage;
+@property(nonatomic,strong,nullable) UIImage *coverImage;
 /** 封面上传成功远程地址*/
-@property(nonatomic,copy) NSString *coverUrl;
+@property(nonatomic,copy,nullable) NSString *coverUrl;
 /** 封面本地坡地*/
-@property(nonatomic,copy) NSString *coverPath;
+@property(nonatomic,copy,nullable) NSString *coverPath;
 /** 视频宽*/
 @property(nonatomic,assign) NSInteger width;
 /** 视频高*/
@@ -157,7 +157,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) MSIMCustomOption option;
 
 /** 推送相关的配置*/
-@property(nonatomic,strong) MSIMPushInfo *pushExt;
+@property(nonatomic,strong,nullable) MSIMPushInfo *pushExt;
 
 @property(nonatomic,assign,readonly) BOOL canCount;
 
@@ -179,7 +179,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) BOOL isMute;
 
 /** sound为空时，接收时播放系统声音。如果需要自定义音效，需要先把语音文件链接进 Xcode 工程，然后把语音文件名（带后缀）设置给 sound。*/
-@property(nonatomic,copy) NSString *sound;
+@property(nonatomic,copy,nullable) NSString *sound;
 
 @end
 

@@ -223,4 +223,5 @@
     [_faceCollectionView scrollRectToVisible:rect animated:NO];
     [self scrollViewDidScroll:_faceCollectionView];
 }
+
 @end
