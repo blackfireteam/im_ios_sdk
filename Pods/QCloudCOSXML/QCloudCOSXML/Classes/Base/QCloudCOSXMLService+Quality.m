@@ -5,8 +5,6 @@
 //  Created by erichmzhang(张恒铭) on 2018/8/23.
 //
 #define kQAUploadStrategy @(2)
-#define kQAccount @"0AND0VEVB24UBGDU"
-
 #import "QCloudCOSXMLService+Quality.h"
 #import <objc/runtime.h>
 
@@ -39,6 +37,9 @@
 }
 
 + (void)initMTA {
-    [QualityDataUploader startWithAppkey:kQAccount];
+#if defined(DEBUG) && DEBUG
+#else
+    [QualityDataUploader startWithAppkey:kQCloudUploadAppReleaseKey];
+#endif
 }
 @end

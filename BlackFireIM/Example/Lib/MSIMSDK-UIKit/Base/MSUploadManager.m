@@ -10,9 +10,11 @@
 #import <QCloudCOSXML/QCloudCOSXMLDownloadObjectRequest.h>
 
 
+@interface MSUploadManager()<QCloudSignatureProvider,QCloudCredentailFenceQueueDelegate>
 
-@interface MSUploadManager()
+@property (nonatomic,strong) QCloudCredentailFenceQueue* credentialFenceQueue;
 
+@property(nonatomic,strong) MSCOSInfo *cosInfo;
 
 @end
 @implementation MSUploadManager
@@ -27,6 +29,57 @@ static MSUploadManager *_manager;
     return _manager;
 }
 
+//配置cos @"ap-chengdu"
+- (void)cosServiceConfig
+{
+    QCloudServiceConfiguration* configuration = [QCloudServiceConfiguration new];
+    QCloudCOSXMLEndPoint* endpoint = [[QCloudCOSXMLEndPoint alloc] init];
+    endpoint.regionName = self.cosInfo.region;
+    endpoint.useHTTPS = true;
+    configuration.endpoint = endpoint;
+    configuration.signatureProvider = self;
+    [QCloudCOSXMLService registerDefaultCOSXMLWithConfiguration:configuration];
+    [QCloudCOSTransferMangerService registerDefaultCOSTransferMangerWithConfiguration:configuration];
+    self.credentialFenceQueue = [QCloudCredentailFenceQueue new];
+    self.credentialFenceQueue.delegate = self;
+}
+
+- (void) fenceQueue:(QCloudCredentailFenceQueue * )queue requestCreatorWithContinue:(QCloudCredentailFenceQueueContinue)continueBlock
+{
+  //这里同步从◊后台服务器获取临时密钥，强烈建议将获取临时密钥的逻辑放在这里，最大程度上保证密钥的可用性
+    [[MSIMManager sharedInstance]getCOSToken:^(MSCOSInfo * _Nonnull cosInfo) {
+        self.cosInfo = cosInfo;
+        QCloudCredential* credential = [QCloudCredential new];
+        credential.secretID = self.cosInfo.secretID;
+        credential.secretKey = self.cosInfo.secretKey;
+        credential.token = self.cosInfo.token;
+        credential.startDate = [NSDate dateWithTimeIntervalSince1970:self.cosInfo.start_time]; // 单位是秒
+        credential.expirationDate = [NSDate dateWithTimeIntervalSince1970:self.cosInfo.exp_time];// 单位是秒
+        QCloudAuthentationV5Creator* creator = [[QCloudAuthentationV5Creator alloc]
+           initWithCredential:credential];
+        continueBlock(creator, nil);
+    } failed:^(NSInteger code, NSString *desc) {
+        MSLog(@"请求cos临时密钥错误。。%zd--%@",code,desc);
+        continueBlock(nil,[[NSError alloc]initWithDomain:desc code:code userInfo:nil]);
+    }];
+}
+
+- (void) signatureWithFields:(QCloudSignatureFields*)fileds
+                   request:(QCloudBizHTTPRequest*)request
+                urlRequest:(NSMutableURLRequest*)urlRequst
+                 compelete:(QCloudHTTPAuthentationContinueBlock)continueBlock
+{
+      [self.credentialFenceQueue performAction:^(QCloudAuthentationCreator *creator,
+          NSError *error) {
+          if (error) {
+              continueBlock(nil, error);
+          } else {
+              QCloudSignature* signature =  [creator signatureForData:urlRequst];
+              continueBlock(signature, nil);
+          }
+      }];
+}
+
 - (void)ms_uploadWithObject:(id)object
                    fileType:(MSUploadFileType)type
                    progress:(normalProgress)progress
@@ -34,9 +87,29 @@ static MSUploadManager *_manager;
                        fail:(normalFail)fail
 {
     if (object == nil) {
-        fail(-99,@"");
+        if (fail) fail(-99,@"");
         return;
     }
+    if (self.cosInfo == nil) {
+        [[MSIMManager sharedInstance]getCOSToken:^(MSCOSInfo * _Nonnull cosInfo) {
+            self.cosInfo = cosInfo;
+            [self cosServiceConfig];
+            [self ms_cosUploadWithObject:object fileType:type progress:progress succ:succ fail:fail];
+        } failed:^(NSInteger code, NSString *desc) {
+            MSLog(@"请求cos临时密钥错误。。%zd--%@",code,desc);
+            if (fail) fail(code,desc);
+        }];
+        return;
+    }
+    [self ms_cosUploadWithObject:object fileType:type progress:progress succ:succ fail:fail];
+}
+
+- (void)ms_cosUploadWithObject:(id)object
+                      fileType:(MSUploadFileType)type
+                      progress:(normalProgress)progress
+                          succ:(normalSucc)succ
+                          fail:(normalFail)fail
+{
     QCloudCOSXMLUploadObjectRequest *put = [QCloudCOSXMLUploadObjectRequest new];
     if (type == MSUploadFileTypeImage || type == MSUploadFileTypeAvatar) {
         if ([object isKindOfClass:[UIImage class]]) {
@@ -48,20 +121,20 @@ static MSUploadManager *_manager;
             put.body = [NSURL fileURLWithPath:path];
         }
         if (type == MSUploadFileTypeAvatar) {
-            put.object = [NSString stringWithFormat:@"common/%@.jpg",[NSString uuidString]];
+            put.object = [NSString stringWithFormat:@"%@%@.jpg",self.cosInfo.other_path,[NSString uuidString]];
         }else {
-            put.object = [NSString stringWithFormat:@"im_image/%@.jpg",[NSString uuidString]];
+            put.object = [NSString stringWithFormat:@"%@im_image/%@.jpg",self.cosInfo.im_path,[NSString uuidString]];
         }
     }else if (type == MSUploadFileTypeVideo) {
         NSString *path = object;
         put.body = [NSURL fileURLWithPath:path];
-        put.object = [NSString stringWithFormat:@"im_video/%@.mp4",[NSString uuidString]];
+        put.object = [NSString stringWithFormat:@"%@im_video/%@.mp4",self.cosInfo.im_path,[NSString uuidString]];
     }else if (type == MSUploadFileTypeVoice) {
         NSString *path = object;
         put.body = [NSURL fileURLWithPath:path];
-        put.object = [NSString stringWithFormat:@"im_voice/%@",[path lastPathComponent]];
+        put.object = [NSString stringWithFormat:@"%@im_voice/%@",self.cosInfo.im_path,[path lastPathComponent]];
     }
-    put.bucket = @"msim-1252460681";
+    put.bucket = self.cosInfo.bucket;
     [put setSendProcessBlock:^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (progress) progress(totalBytesSent*1.0/totalBytesExpectedToSend*1.0);
@@ -80,8 +153,6 @@ static MSUploadManager *_manager;
     [[QCloudCOSTransferMangerService defaultCOSTransferManager]UploadObject:put];
 }
 
-
-
 - (void)ms_downloadFromUrl:(NSString *)url
                 toSavePath:(NSString *)savePath
                   progress:(normalProgress)progress
@@ -93,7 +164,7 @@ static MSUploadManager *_manager;
         return;
     }
     QCloudCOSXMLDownloadObjectRequest *request = [QCloudCOSXMLDownloadObjectRequest new];
-    request.bucket = @"msim-1252460681";
+    request.bucket = self.cosInfo.bucket ? self.cosInfo.bucket : @"msim-test-1252460681";
     request.object = [NSURL URLWithString:url].path;
     request.downloadingURL = [NSURL fileURLWithPath:savePath];
     [request setFinishBlock:^(id  _Nullable outputObject, NSError * _Nullable error) {

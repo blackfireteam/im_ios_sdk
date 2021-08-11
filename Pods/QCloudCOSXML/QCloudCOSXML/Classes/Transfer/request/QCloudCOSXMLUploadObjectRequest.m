@@ -29,6 +29,7 @@
 #import "QCloudPutObjectRequest+Custom.h"
 #import <QCloudCore/QCloudSupervisoryRecord.h>
 #import <QCloudCore/QCloudHTTPRetryHanlder.h>
+#import "QualityDataUploader.h"
 static NSUInteger kQCloudCOSXMLUploadLengthLimit = 1 * 1024 * 1024;
 static NSUInteger kQCloudCOSXMLUploadSliceLength = 1 * 1024 * 1024;
 static NSUInteger kQCloudCOSXMLMD5Length = 32;
@@ -66,7 +67,7 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
 @implementation QCloudCOSXMLUploadObjectRequest
 
 - (void)dealloc {
-    NSLog(@"QCloudCOSXMLUploadObjectRequest = %@ dealloc", self);
+    QCloudLogInfo(@"QCloudCOSXMLUploadObjectRequest = %@ dealloc", self);
     if (NULL != _queueSource) {
         dispatch_source_cancel(_queueSource);
     }
@@ -89,13 +90,14 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
     _recursiveLock = [NSRecursiveLock new];
     _progressLock = [NSRecursiveLock new];
     _requstMetricArray = [NSMutableArray array];
-    ;
+    _mutilThreshold = kQCloudCOSXMLUploadLengthLimit;
     _enableMD5Verification = YES;
     _retryHandler = [QCloudHTTPRetryHanlder defaultRetryHandler];
     startPartNumber = -1;
     self.priority = QCloudAbstractRequestPriorityHigh;
     return self;
 }
+
 - (NSDictionary *)modelCustomWillTransformFromDictionary:(NSDictionary *)dictionary {
     NSMutableDictionary *dict = [dictionary mutableCopy];
     if ([dictionary valueForKey:@"body"]) {
@@ -248,7 +250,15 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
             return;
         }
         self.dataContentLength = QCloudFileSize(url.path);
-        if (self.dataContentLength > kQCloudCOSXMLUploadLengthLimit) {
+        if(_mutilThreshold<kQCloudCOSXMLUploadLengthLimit){
+            @throw [NSException
+                exceptionWithName:QCloudErrorDomain
+                           reason:[NSString
+                                      stringWithFormat:
+                                   @"分块接口的阈值不能小于 1MB ，当前阈值为 %ld", (long)_mutilThreshold]
+                         userInfo:nil];
+        }
+        if (self.dataContentLength > _mutilThreshold) {
             //开始分片上传的时候，上传的起始位置是0
             uploadedSize = 0;
             startPartNumber = 0;
@@ -276,8 +286,10 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
     request.finishBlock = ^(id outputObject, NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         __strong typeof(weakRequest) strongRequst = weakRequest;
-        [strongSelf.requstMetricArray addObject:@{ [NSString stringWithFormat:@"%@", strongRequst] : weakRequest.benchMarkMan.tastMetrics }];
-
+        [weakSelf.requstMetricArray addObject:@{ [NSString stringWithFormat:@"%@", strongRequst] : weakRequest.benchMarkMan.tastMetrics }];
+        if (self.requstsMetricArrayBlock) {
+            self.requstsMetricArrayBlock(weakSelf.requstMetricArray);
+        }
         if (error) {
             [weakSelf onError:error];
             [self cancel];
@@ -362,26 +374,25 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
 
     [self.requestCacheArray addPointer:(__bridge void *_Nullable)(uploadRequet)];
     [self.transferManager.cosService InitiateMultipartUpload:uploadRequet];
-
-    QCloudLogDebug(@"initPart self.transferManager :%@  self.transferManager.cosService :%@", self.transferManager, self.transferManager.cosService);
 }
 
 - (NSArray<QCloudFileOffsetBody *> *)getFileLocalUploadParts {
-    QCloudLogDebug(@"url.relativePath = %@", self.body);
     NSMutableArray *allParts = [NSMutableArray new];
     if (self.canceled) {
         return nil;
     }
     NSURL *url = (NSURL *)self.body;
-    self.dataContentLength = QCloudFileSize(url.relativePath);
+    if([self.body isKindOfClass:NSURL.class]){
+        self.dataContentLength = QCloudFileSize(url.relativePath);
+    }
     int64_t restContentLength = self.dataContentLength - uploadedSize;
     //便宜的起始位置
     int64_t offset = uploadedSize;
     for (int i = startPartNumber;; i++) {
         int64_t slice = 0;
-        NSUInteger maxSlice = ceil(QCloudFileSize(url.relativePath) * 1.0 / (10000));
+        NSUInteger maxSlice = ceil(self.dataContentLength * 1.0 / (10000));
         NSUInteger uploadSliceLength = self.sliceSize > 10 ? self.sliceSize : kQCloudCOSXMLUploadSliceLength;
-        uploadSliceLength = (QCloudFileSize(url.relativePath) * 1.0 / uploadSliceLength) > 10000 ? maxSlice : uploadSliceLength;
+        uploadSliceLength = self.dataContentLength * 1.0 / uploadSliceLength > 10000 ? maxSlice : uploadSliceLength;
         if (restContentLength >= uploadSliceLength) {
             slice = uploadSliceLength;
         } else {
@@ -417,6 +428,7 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
         totalTempBytesSend += body.sliceLength;
     }
     _totalBytesSent = _dataContentLength - totalTempBytesSend;
+    [self.benchMarkMan directSetValue:@(totalTempBytesSend) forKey:kTotalSize];
     //
     __weak typeof(self) weakSelf = self;
     _queueSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
@@ -503,6 +515,7 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
                                 [errorMessageString appendFormat:@", Request id:%@", requestID];
                             }
                             NSError *error = [NSError qcloud_errorWithCode:QCloudNetworkErrorCodeNotMatch message:errorMessageString];
+                    
                             [weakSelf onError:error];
                             [weakSelf cancel];
                             return;
@@ -538,6 +551,7 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
     self.uploadId = result.uploadId;
     NSArray *allParts = [self getFileLocalUploadParts];
     [self uploadOffsetBodys:allParts];
+    
 }
 
 - (void)markPartFinish:(QCloudMultipartInfo *)info {
@@ -560,14 +574,15 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
 
 - (void)finishUpload:(NSString *)uploadId {
     NSURL *url = (NSURL *)self.body;
-    NSInteger fileSize = QCloudFileSize(url.relativePath);
-    if (fileSize != self.dataContentLength || !self.uploadBodyIsCompleted) {
+    if(self.canceled){
+        return;
+    }
+    if(!self.uploadBodyIsCompleted){
         NSError *error = [NSError qcloud_errorWithCode:QCloudNetworkErrorCodeImCompleteData
                                                message:@"DataIntegrityError分片:文件大小与原始文件大小不一致，请检查文件在上传的过程中是否发生改变"];
         [self onError:error];
         return;
     }
-
     QCloudCompleteMultipartUploadRequest *complete = [QCloudCompleteMultipartUploadRequest new];
     complete.enableQuic = self.enableQuic;
     complete.object = self.object;
@@ -675,7 +690,7 @@ NSString *const QCloudUploadResumeDataKey = @"__QCloudUploadResumeDataKey__";
 }
 
 - (QCloudCOSXMLUploadObjectResumeData)productingReqsumeData:(NSError *__autoreleasing *)error {
-    if (_dataContentLength <= kQCloudCOSXMLUploadLengthLimit) {
+    if (_dataContentLength <= _mutilThreshold) {
         if (NULL != error) {
             *error = [NSError qcloud_errorWithCode:QCloudNetworkErrorUnsupportOperationError
                                            message:@"UnsupportOperation:无法暂停当前的上传请求，因为使用的是单次上传"];

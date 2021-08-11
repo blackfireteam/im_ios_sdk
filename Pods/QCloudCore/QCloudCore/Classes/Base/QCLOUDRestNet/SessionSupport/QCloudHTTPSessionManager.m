@@ -29,6 +29,10 @@
 #import "QCloudThreadSafeMutableDictionary.h"
 #import "QCloudWeakProxy.h"
 
+#ifndef __IPHONE_13_0
+#define __IPHONE_13_0    130000
+#endif
+
 NSString *TaskDataKey(int64_t identifier) {
     return [NSString stringWithFormat:@"data-%lld", identifier];
 }
@@ -179,7 +183,7 @@ QCloudThreadSafeMutableDictionary *QCloudBackgroundSessionManagerCache() {
     [_operationQueue addOpreation:operation];
     return (int)request.requestID;
 }
-
+#if TARGET_OS_IOS
 // only work at iOS 10 and up
 - (void)URLSession:(NSURLSession *)session
                           task:(NSURLSessionTask *)task
@@ -207,18 +211,17 @@ QCloudThreadSafeMutableDictionary *QCloudBackgroundSessionManagerCache() {
                 directSetCost:[networkMetrics.domainLookupEndDate timeIntervalSinceDate:networkMetrics.domainLookupStartDate]
                        forKey:kDnsLookupTookTime];
         }
-        if (@available(ios 13.0, *)) {
-            [taskData.httpRequest.benchMarkMan directSetValue:networkMetrics.localAddress forKey:kLocalAddress];
+       #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_13_0
+        if ([UIDevice currentDevice].systemVersion.floatValue >= 13.0) {
             [taskData.httpRequest.benchMarkMan directSetValue:networkMetrics.localPort forKey:kLocalPort];
             [taskData.httpRequest.benchMarkMan directSetValue:networkMetrics.remoteAddress forKey:kRemoteAddress];
             [taskData.httpRequest.benchMarkMan directSetValue:networkMetrics.remotePort forKey:kRemotePort];
         }
-        //            [taskData.httpRequest.benchMarkMan directSetCost:[networkMetrics.requestEndDate
-        //            timeIntervalSinceDate:networkMetrics.requestStartDate] forKey:@"upload"]; [taskData.httpRequest.benchMarkMan
-        //            directSetCost:[networkMetrics.responseEndDate timeIntervalSinceDate:networkMetrics.responseStartDate] forKey:@"download"];
+        
+       #endif
     }
 }
-
+#endif
 - (void)URLSession:(NSURLSession *)session
               dataTask:(NSURLSessionDataTask *)dataTask
     didReceiveResponse:(NSURLResponse *)response
@@ -519,7 +522,6 @@ QCloudThreadSafeMutableDictionary *QCloudBackgroundSessionManagerCache() {
         [httpRequest onError:error];
         return;
     }
-
     NSURLSessionDataTask *task = nil;
     id quicTask = nil;
 
@@ -582,10 +584,7 @@ QCloudThreadSafeMutableDictionary *QCloudBackgroundSessionManagerCache() {
         [self cacheTask:quicTask data:taskData forSEQ:(int)httpRequest.requestID];
     }
     [httpRequest configTaskResume];
-    NSString *host = [[task.currentRequest.URL.absoluteString stringByReplacingOccurrencesOfString:task.currentRequest.URL.scheme
-                                                                                        withString:@""] stringByReplacingOccurrencesOfString:@"://"
-                                                                                                                                  withString:@""];
-    [httpRequest.benchMarkMan directSetValue:host forKey:kHost];
+    [httpRequest.benchMarkMan directSetValue:transformRequest.URL.host forKey:kHost];
     //先创建task，在启动
     SEL quicStartSelector = NSSelectorFromString(@"start");
     if (quicTask && [quicTask respondsToSelector:quicStartSelector]) {

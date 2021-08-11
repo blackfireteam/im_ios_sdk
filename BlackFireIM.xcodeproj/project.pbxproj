@@ -604,14 +604,14 @@
 		F04CF57026AFAFE100DB452E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF57126AFAFE100DB452E /* MSChatViewController+More.m */,
 				F04CF57226AFAFE100DB452E /* MSMessageController.h */,
+				F04CF57826AFAFE100DB452E /* MSMessageController.m */,
 				F04CF57326AFAFE100DB452E /* MSInputViewController.h */,
+				F04CF57726AFAFE100DB452E /* MSInputViewController.m */,
+				F04CF57626AFAFE100DB452E /* MSChatViewController.h */,
 				F04CF57426AFAFE100DB452E /* MSChatViewController.m */,
 				F04CF57526AFAFE100DB452E /* MSChatViewController+More.h */,
-				F04CF57626AFAFE100DB452E /* MSChatViewController.h */,
-				F04CF57726AFAFE100DB452E /* MSInputViewController.m */,
-				F04CF57826AFAFE100DB452E /* MSMessageController.m */,
+				F04CF57126AFAFE100DB452E /* MSChatViewController+More.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -961,8 +961,8 @@
 		F04CF64226AFAFE200DB452E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF64326AFAFE200DB452E /* BFConversationListController.m */,
 				F04CF64426AFAFE200DB452E /* BFConversationListController.h */,
+				F04CF64326AFAFE200DB452E /* BFConversationListController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -970,8 +970,8 @@
 		F04CF64526AFAFE200DB452E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF64626AFAFE200DB452E /* BFNaviBarIndicatorView.m */,
 				F04CF64726AFAFE200DB452E /* BFNaviBarIndicatorView.h */,
+				F04CF64626AFAFE200DB452E /* BFNaviBarIndicatorView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";

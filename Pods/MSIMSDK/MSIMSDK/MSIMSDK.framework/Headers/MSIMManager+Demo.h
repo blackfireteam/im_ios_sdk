@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class MSProfileInfo;
+@class MSCOSInfo;
 @interface MSIMManager (Demo)
 
 ///获取首页Spark相关数据
@@ -29,6 +30,30 @@ NS_ASSUME_NONNULL_BEGIN
             avatar:(NSString *)avatar
               succ:(void(^)(NSString *userToken))succ
             failed:(MSIMFail)fail;
+
+- (void)getCOSToken:(void(^)(MSCOSInfo *cosInfo))succ
+             failed:(MSIMFail)fail;
 @end
 
+@interface MSCOSInfo: NSObject
+
+@property(nonatomic,copy) NSString *region;
+
+@property(nonatomic,copy) NSString *bucket;
+
+@property(nonatomic,copy) NSString *secretID;
+
+@property(nonatomic,copy) NSString *secretKey;
+
+@property(nonatomic,copy) NSString *token;
+
+@property(nonatomic,copy,nullable) NSString *other_path;
+
+@property(nonatomic,copy,nullable) NSString *im_path;
+
+@property(nonatomic,assign) NSInteger start_time;
+
+@property(nonatomic,assign) NSInteger exp_time;
+
+@end
 NS_ASSUME_NONNULL_END

@@ -1,0 +1,1 @@
+../../../QCloudCore/QCloudCore/Classes/Base/QCloudCategory/QCloudCRC64.h

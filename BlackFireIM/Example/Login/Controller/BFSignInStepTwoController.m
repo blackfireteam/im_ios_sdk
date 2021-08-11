@@ -66,25 +66,10 @@
 
 - (void)nextBtnDidClick
 {
-    if (!self.info.avatarImage) {
-        [MSHelper showToastString:@"请上传头像"];
-        return;
-    }
     [MSHelper showToast];
-    MSIMImageElem *elem = [[MSIMImageElem alloc]init];
-    elem.image = self.info.avatarImage;
-    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:elem.image fileType:MSUploadFileTypeAvatar progress:^(CGFloat progress) {
-        
-    } succ:^(NSString * _Nonnull url) {
-        
-        self.info.avatarUrl = url;
-        [self reqeustToSignUp];
-        
-    } fail:^(NSInteger code, NSString * _Nonnull desc) {
-        
-        [MSHelper showToastFail:desc];
-        
-    }];
+    //先给个默认的头像，注册成功后再上传头像
+    self.info.avatarUrl = @"https://msim-test-1252460681.cos.na-siliconvalley.myqcloud.com/pers/612FA7A3-144E-4978-A75C-9D9277167292.jpeg";
+    [self reqeustToSignUp];
 }
 
 - (void)reqeustToSignUp
@@ -100,9 +85,11 @@
             weakSelf.info.imUrl = im_url;
             [[MSIMManager sharedInstance] login:weakSelf.info.userToken imUrl:weakSelf.info.imUrl subAppID:1 succ:^{
                             
+                STRONG_SELF(strongSelf)
                             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
                             appDelegate.window.rootViewController = [[BFTabBarController alloc]init];
                             
+                            [strongSelf uploadAvatar];
                         } failed:^(NSInteger code, NSString *desc) {
                             [MSHelper showToastFail:desc];
             }];
@@ -113,6 +100,30 @@
         
     } failed:^(NSError * _Nonnull error) {
         [MSHelper showToastFail:error.localizedDescription];
+    }];
+}
+
+- (void)uploadAvatar
+{
+    if (self.info.avatarImage == nil) return;
+    MSIMImageElem *elem = [[MSIMImageElem alloc]init];
+    elem.image = self.info.avatarImage;
+    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:elem.image fileType:MSUploadFileTypeAvatar progress:^(CGFloat progress) {
+
+    } succ:^(NSString * _Nonnull url) {
+
+        MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id];
+        info.avatar = url;
+        [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
+            
+            [[MSProfileProvider provider]updateProfiles:@[info]];
+            
+        } fail:^(NSError * _Nonnull error) {
+            
+        }];
+
+    } fail:^(NSInteger code, NSString * _Nonnull desc) {
+
     }];
 }
 

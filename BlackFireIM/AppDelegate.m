@@ -11,13 +11,11 @@
 #import "BFNavigationController.h"
 #import <MSIMSDK/MSIMSDK.h>
 #import "MSIMSDK-UIKit.h"
-#import "MSUploadManager.h"
-#import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
 #import <Bugly/Bugly.h>
 #import "MSPushMediator.h"
 
 
-@interface AppDelegate ()<QCloudSignatureProvider,MSPushMediatorDelegate>
+@interface AppDelegate ()<MSPushMediatorDelegate>
 
 @end
 
@@ -32,7 +30,6 @@
     
     IMSDKConfig *imConfig = [IMSDKConfig defaultConfig];
     imConfig.uploadMediator = [MSUploadManager sharedInstance];
-    imConfig.logEnable = YES;
     [[MSIMKit sharedInstance] initWithConfig:imConfig];
     
     if ([MSIMTools sharedInstance].user_id) {
@@ -40,39 +37,12 @@
     }else {
         self.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
     }
-    
-    //配置cos
-    QCloudServiceConfiguration* configuration = [QCloudServiceConfiguration new];
-    QCloudCOSXMLEndPoint* endpoint = [[QCloudCOSXMLEndPoint alloc] init];
-    endpoint.regionName = @"ap-chengdu";
-    endpoint.useHTTPS = true;
-    configuration.endpoint = endpoint;
-    configuration.signatureProvider = self;
-    [QCloudCOSXMLService registerDefaultCOSXMLWithConfiguration:configuration];
-    [QCloudCOSTransferMangerService registerDefaultCOSTransferMangerWithConfiguration:configuration];
-    
     BuglyConfig *config = [[BuglyConfig alloc]init];
     [Bugly startWithAppId:@"f8db8c69b8" config:config];
     
     [[MSPushMediator sharedInstance] applicationDidFinishLaunchingWithOptions:launchOptions];
     [MSPushMediator sharedInstance].delegate = self;
     return YES;
-}
-
-- (void) signatureWithFields:(QCloudSignatureFields*)fileds
-                   request:(QCloudBizHTTPRequest*)request
-                urlRequest:(NSMutableURLRequest*)urlRequst
-                 compelete:(QCloudHTTPAuthentationContinueBlock)continueBlock
-{
-
-      QCloudCredential* credential = [QCloudCredential new];
-      credential.secretID = @"AKIDiARZwekKIK7f18alpjsqdOzmQAplexA5"; // 永久密钥 SecretId
-      credential.secretKey = @"f7MLJ3YnoX2KLKBmBeAVeWNVLaYEmGYa"; // 永久密钥 SecretKey
-       // 使用永久密钥计算签名
-      QCloudAuthentationV5Creator* creator = [[QCloudAuthentationV5Creator alloc]
-          initWithCredential:credential];
-      QCloudSignature* signature = [creator signatureForData:urlRequst];
-      continueBlock(signature, nil);
 }
 
 ///** 请求APNs建立连接并获得deviceToken*/
