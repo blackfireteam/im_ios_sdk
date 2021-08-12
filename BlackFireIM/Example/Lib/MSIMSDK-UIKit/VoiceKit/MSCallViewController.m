@@ -24,6 +24,10 @@
 
 @property(nonatomic,assign) CallState curState;
 
+@property(nonatomic,copy) NSString *token;
+
+@property(nonatomic,copy) NSString *channel;
+
 @property(nonatomic,strong) MSVoiceCallView *voiceCallView;
 
 @property(nonatomic,strong) MSVideoCallView *videoCallView;
@@ -51,22 +55,11 @@
     if (self.callType == MSCallType_Voice) {
         [self.view addSubview:self.voiceCallView];
         [self.voiceCallView initDataWithSponsor:(self.curState == CallState_Dailing) partner_id:self.partner_id];
-        [self initializeAgoraEngine];
-        [self.agoraKit enableAudio];
     }else {
         [self.view addSubview:self.videoCallView];
         [self.videoCallView initDataWithSponsor:(self.curState == CallState_Dailing) partner_id:self.partner_id];
-        [self initializeAgoraEngine];
-        [self.agoraKit enableVideo];
-        AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc]init];
-        videoCanvas.uid = 0;
-        videoCanvas.renderMode = AgoraVideoRenderModeHidden;
-        videoCanvas.view = self.videoCallView.localView;
-        [self.agoraKit setupLocalVideo:videoCanvas];
     }
-    if (self.curState == CallState_Dailing) {
-        [self joinChannel];
-    }
+    [self initializeAgoraEngine];
 }
 
 - (instancetype)initWithCallType:(MSCallType)type sponsor:(NSString *)sponsor invitee:(NSString *)invitee
@@ -82,6 +75,69 @@
         }
     }
     return self;
+}
+
+- (void)initializeAgoraEngine
+{
+    NSString *sponsor = (self.curState == CallState_Dailing ? [MSIMTools sharedInstance].user_id : self.partner_id);
+    NSString *invitee = (self.curState == CallState_Dailing ? self.partner_id : [MSIMTools sharedInstance].user_id);
+    self.channel = [NSString stringWithFormat:@"c2c_%@_%@",sponsor,invitee];
+    [[MSIMManager sharedInstance] getAgoraToken:self.channel succ:^(NSString * _Nonnull app_id, NSString * _Nonnull token) {
+        self.token = token;
+        self.agoraKit = [AgoraRtcEngineKit sharedEngineWithAppId:app_id delegate:self];
+        if (self.callType == MSCallType_Voice) {
+            [self.agoraKit enableAudio];
+        }else {
+            [self.agoraKit enableVideo];
+            AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc]init];
+            videoCanvas.uid = 0;
+            videoCanvas.renderMode = AgoraVideoRenderModeHidden;
+            videoCanvas.view = self.videoCallView.localView;
+            [self.agoraKit setupLocalVideo:videoCanvas];
+        }
+        if (self.curState == CallState_Dailing) {
+            [self joinChannel];
+        }
+    } failed:^(NSInteger code, NSString *desc) {
+        MSLog(@"请求声网token失败：%zd--%@",code,desc);
+    }];
+}
+
+- (void)joinChannel
+{
+    if (self.callType == MSCallType_Voice) {
+        [self.agoraKit setDefaultAudioRouteToSpeakerphone:NO];
+        [self.agoraKit joinChannelByToken:self.token channelId:self.channel info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
+        [self.agoraKit enableInEarMonitoring:YES];//开启耳返
+    }else {
+        [self.agoraKit joinChannelByToken:self.token channelId:self.channel info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
+    }
+}
+
+- (void)needToJoinChannel
+{
+    if (self.token) {
+        [self joinChannel];
+        return;
+    }
+    [[MSIMManager sharedInstance] getAgoraToken:self.channel succ:^(NSString * _Nonnull app_id, NSString * _Nonnull token) {
+        self.token = token;
+        [AgoraRtcEngineKit destroy];
+        self.agoraKit = [AgoraRtcEngineKit sharedEngineWithAppId:app_id delegate:self];
+        if (self.callType == MSCallType_Voice) {
+            [self.agoraKit enableAudio];
+        }else {
+            [self.agoraKit enableVideo];
+            AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc]init];
+            videoCanvas.uid = 0;
+            videoCanvas.renderMode = AgoraVideoRenderModeHidden;
+            videoCanvas.view = self.videoCallView.localView;
+            [self.agoraKit setupLocalVideo:videoCanvas];
+        }
+        [self joinChannel];
+    } failed:^(NSInteger code, NSString *desc) {
+        MSLog(@"请求声网token失败：%zd--%@",code,desc);
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -259,7 +315,7 @@
     self.voiceCallView.durationL.hidden = NO;
     [self startDurationTimer];
     self.curState = CallState_Calling;
-    [self joinChannel];
+    [self needToJoinChannel];
     [self stopAlerm];
 }
 
@@ -267,24 +323,6 @@
 {
     [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Voice action:CallAction_End];
     [self stopDurationTimer];
-}
-
-
-- (void)initializeAgoraEngine
-{
-    /// 初始化 AgoraRtcEngineKit 对象
-    self.agoraKit = [AgoraRtcEngineKit sharedEngineWithAppId:@"1a3bdfc8f46b4060bed01d15b75a5ed9" delegate:self];
-}
-
-- (void)joinChannel
-{
-    if (self.callType == MSCallType_Voice) {
-        [self.agoraKit setDefaultAudioRouteToSpeakerphone:NO];
-        [self.agoraKit joinChannelByToken:@"0061a3bdfc8f46b4060bed01d15b75a5ed9IAAkwk2clKKUPFVwhf48InfeeGIcyNRt+YNC7/M+xBoYBz1Ra00AAAAAEAD7XOPUC78AYQEAAQALvwBh" channelId:@"111" info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
-        [self.agoraKit enableInEarMonitoring:YES];//开启耳返
-    }else {
-        [self.agoraKit joinChannelByToken:@"0061a3bdfc8f46b4060bed01d15b75a5ed9IAAkwk2clKKUPFVwhf48InfeeGIcyNRt+YNC7/M+xBoYBz1Ra00AAAAAEAD7XOPUC78AYQEAAQALvwBh" channelId:@"111" info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
-    }
 }
 
 ///根据场景需要，如结束通话、关闭 app 或 app 切换至后台时，调用 leaveChannel 离开当前通话频道。
@@ -327,7 +365,7 @@
     self.videoCallView.durationL.hidden = NO;
     [self startDurationTimer];
     self.curState = CallState_Calling;
-    [self joinChannel];
+    [self needToJoinChannel];
     [self stopAlerm];
 }
 

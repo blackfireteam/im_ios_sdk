@@ -53,6 +53,8 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
     XMChatProtoTypeRefreshPushToken = 21,//客户端更新push token
     XMChatProtoTypeGetCosToken = 22,//请求cos的临时证书
     XMChatProtoTypeCosTokenResponse = 23,//cos的临时证书结果
+    XMChatProtoTypeGetAgoraToken = 24,//请求声网的临时token
+    XMChatProtoTypeAgoraTokenResponse = 25,//声网的临时token结果
     
     XMChatProtoTypeProfileOnline = 50,//通知客户端用户上线事件
     XMChatProtoTypeProfileOffline = 52,//通知客户端用户下线事件

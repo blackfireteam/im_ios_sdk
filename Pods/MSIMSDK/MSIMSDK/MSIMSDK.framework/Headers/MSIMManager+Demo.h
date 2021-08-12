@@ -31,8 +31,15 @@ NS_ASSUME_NONNULL_BEGIN
               succ:(void(^)(NSString *userToken))succ
             failed:(MSIMFail)fail;
 
+///申请cos上传的临时密钥
 - (void)getCOSToken:(void(^)(MSCOSInfo *cosInfo))succ
              failed:(MSIMFail)fail;
+
+///申请声网密钥
+- (void)getAgoraToken:(NSString *)channel
+                 succ:(void(^)(NSString *app_id,NSString * token))succ
+               failed:(MSIMFail)fail;
+
 @end
 
 @interface MSCOSInfo: NSObject

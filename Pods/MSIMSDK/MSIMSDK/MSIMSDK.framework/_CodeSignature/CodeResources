@@ -38,7 +38,7 @@
 		</data>
 		<key>Headers/MSIMConst.h</key>
 		<data>
-		CE6nx1xFLwgGxgrniES6rE0qVlc=
+		HGGBvJHkXgQ7EmRfyxEJjEqJH1Y=
 		</data>
 		<key>Headers/MSIMConversation.h</key>
 		<data>
@@ -66,7 +66,7 @@
 		</data>
 		<key>Headers/MSIMManager+Demo.h</key>
 		<data>
-		tsBNFU6XAoOGm7Xb1OXef86KYsY=
+		sR5DCyDmylOaenBS2IwabyJBZLk=
 		</data>
 		<key>Headers/MSIMManager+Message.h</key>
 		<data>
@@ -231,11 +231,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			CE6nx1xFLwgGxgrniES6rE0qVlc=
+			HGGBvJHkXgQ7EmRfyxEJjEqJH1Y=
 			</data>
 			<key>hash2</key>
 			<data>
-			cVN+Y5qRt22Viya/Y7EHKmcNXNfkO+owOefnbFQvXC8=
+			coAo9NpvrKoCZJXoyrr7F3s5BvYDny8wRtMkbxFgqEY=
 			</data>
 		</dict>
 		<key>Headers/MSIMConversation.h</key>
@@ -308,11 +308,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			tsBNFU6XAoOGm7Xb1OXef86KYsY=
+			sR5DCyDmylOaenBS2IwabyJBZLk=
 			</data>
 			<key>hash2</key>
 			<data>
-			1i6bt0pYPp5ukYyUorYhHJG+k++qtlr8M8ZlcYb9dWM=
+			S5oqK9LxImUYLGM+VLhaoSW1JVNYEFYGAFkzlTjGT8U=
 			</data>
 		</dict>
 		<key>Headers/MSIMManager+Message.h</key>
