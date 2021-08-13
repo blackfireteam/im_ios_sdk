@@ -163,8 +163,28 @@ static MSUploadManager *_manager;
         fail(-99,@"待下载的文件地址非法");
         return;
     }
+    if (self.cosInfo == nil) {
+        [[MSIMManager sharedInstance]getCOSToken:^(MSCOSInfo * _Nonnull cosInfo) {
+            self.cosInfo = cosInfo;
+            [self cosServiceConfig];
+            [self ms_cosDownloadFromUrl:url toSavePath:savePath progress:progress succ:succ fail:fail];
+        } failed:^(NSInteger code, NSString *desc) {
+            MSLog(@"请求cos临时密钥错误。。%zd--%@",code,desc);
+            if (fail) fail(code,desc);
+        }];
+        return;
+    }
+    [self ms_cosDownloadFromUrl:url toSavePath:savePath progress:progress succ:succ fail:fail];
+}
+
+- (void)ms_cosDownloadFromUrl:(NSString *)url
+                toSavePath:(NSString *)savePath
+                  progress:(normalProgress)progress
+                      succ:(normalSucc)succ
+                      fail:(normalFail)fail
+{
     QCloudCOSXMLDownloadObjectRequest *request = [QCloudCOSXMLDownloadObjectRequest new];
-    request.bucket = self.cosInfo.bucket ? self.cosInfo.bucket : @"msim-test-1252460681";
+    request.bucket = self.cosInfo.bucket;
     request.object = [NSURL URLWithString:url].path;
     request.downloadingURL = [NSURL fileURLWithPath:savePath];
     [request setFinishBlock:^(id  _Nullable outputObject, NSError * _Nullable error) {
@@ -172,6 +192,7 @@ static MSUploadManager *_manager;
             if (error == nil) {
                 if (succ) succ(savePath);
             }else {
+                [[NSFileManager defaultManager]removeItemAtPath:savePath error:nil];
                 if (fail) fail(error.code,error.localizedDescription);
             }
         });
@@ -183,6 +204,5 @@ static MSUploadManager *_manager;
     }];
     [[QCloudCOSTransferMangerService defaultCOSTransferManager]DownloadObject:request];
 }
-
 
 @end
