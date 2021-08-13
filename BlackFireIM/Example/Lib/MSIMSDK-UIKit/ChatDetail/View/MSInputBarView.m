@@ -75,7 +75,7 @@
     [_recordButton addTarget:self action:@selector(recordBtnCancel:) forControlEvents:UIControlEventTouchUpOutside | UIControlEventTouchCancel];
     [_recordButton addTarget:self action:@selector(recordBtnExit:) forControlEvents:UIControlEventTouchDragExit];
     [_recordButton addTarget:self action:@selector(recordBtnEnter:) forControlEvents:UIControlEventTouchDragEnter];
-    [_recordButton setTitle:NSLocalizedString(@"TUIKitInputHoldToTalk",nil) forState:UIControlStateNormal];
+    [_recordButton setTitle:TUILocalizableString(TUIKitInputHoldToTalk) forState:UIControlStateNormal];
     [_recordButton setTitleColor:[UIColor d_colorWithColorLight:TText_Color dark:TText_Color_Dark] forState:UIControlStateNormal];
     _recordButton.hidden = YES;
     [self addSubview:_recordButton];
@@ -319,8 +319,8 @@
         if(_delegate && [_delegate respondsToSelector:@selector(inputBar:didSendText:)]) {
             NSString *sp = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             if (sp.length == 0) {
-                UIAlertController *ac = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"TUIKitInputBlankMessageTitle", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
-                [ac addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm",nil) style:UIAlertActionStyleDefault handler:nil]];
+                UIAlertController *ac = [UIAlertController alertControllerWithTitle:TUILocalizableString(TUIKitInputBlankMessageTitle) message:nil preferredStyle:UIAlertControllerStyleAlert];
+                [ac addAction:[UIAlertAction actionWithTitle:TUILocalizableString(Confirm) style:UIAlertActionStyleDefault handler:nil]];
                 [self.bf_viewController presentViewController:ac animated:YES completion:nil];
             } else {
                 [_delegate inputBar:self didSendText:textView.text];

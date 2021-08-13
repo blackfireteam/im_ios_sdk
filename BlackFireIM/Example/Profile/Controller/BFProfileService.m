@@ -112,7 +112,11 @@
     [params setValue:@(info.gender) forKey:@"gender"];
     [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
-        if (succ) succ(dic);
+        if ([dic[@"code"]integerValue] == 0) {
+            if (succ) succ(dic);
+        }else {
+            if (fail) fail([[NSError alloc]initWithDomain:dic[@"msg"] code:[dic[@"code"]integerValue] userInfo:nil]);
+        }
         
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             
