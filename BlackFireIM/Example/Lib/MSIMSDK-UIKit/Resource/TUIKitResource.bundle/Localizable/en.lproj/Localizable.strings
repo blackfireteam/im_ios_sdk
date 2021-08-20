@@ -89,18 +89,22 @@
 "TUIkitMessageTipsTextingMessage" = "Other is texting...";
 
 "TUIKitSignalingFinishGroupChat" = "End Group Chat";
-"TUIKitSignalingVoiceCallEnd" = "Voice call Duration: %02zd:%02zd";
-"TUIKitSignalingVideoCallEnd" = "Video call Duration: %02zd:%02zd";
+"TUIKitSignalingVoiceCallEnd" = "call Duration: %02zd:%02zd";
+"TUIKitSignalingVideoCallEnd" = "call Duration: %02zd:%02zd";
 "TUIKitSignalingNewCall" = "Start Call";
 "TUIKitSignalingNewGroupCallFormat" = "\"%@\" initiated a group call.";
-"TUIkitSignalingCancelCall" = "Call cancelled by caller";
+"TUIkitSignalingCancelCall" = "Call cancelled";
+"TUIkitSignalingCancelCallOther" = "Call cancelled by caller";
 "TUIkitSignalingCancelGroupCallFormat" = "\"%@\" canceled the group call.";
 "TUIkitSignalingHangonCall" = "Answered";
 "TUIKitSignalingHangonCallFormat" = "\"%@\" answered.";
 "TUIKitSignalingBusyFormat" = "\"%@\" is busy.";
-"TUIKitSignalingCallBusy" = "Line busy";
-"TUIkitSignalingDecline" = "Call declined by user";
+"TUIKitSignalingCallBusy" = "Line is busy";
+"TUIKitSignalingCallBusyOther" = "Line is busy";
+"TUIkitSignalingDecline" = "Call declined";
+"TUIkitSignalingDeclineOther" = "Call declined by user";
 "TUIKitSignalingNoResponse" = "No answer";
+"TUIKitSignalingNoResponseOther" = "No answer";
 "TUIkitSignalingUnrecognlize" = "Unrecognized call instruction";
 
 "TUIkitMessageTypeImage" = "[Image]";

@@ -36,13 +36,25 @@ typedef NS_ENUM(NSInteger, CallState) {
 
 + (instancetype)shareInstance;
 
-- (void)call:(NSString *)from toUser:(NSString *)toUid callType:(MSCallType)callType action:(CallAction)action;
+- (void)callToPartner:(NSString *)partner_id
+              creator:(NSString *)creator
+             callType:(MSCallType)callType
+               action:(CallAction)action
+              room_id:(nullable NSString *)room_id;
+
+- (void)recieveCall:(NSString *)from
+            creator:(NSString *)creator
+           callType:(MSCallType)callType
+             action:(CallAction)action
+            room_id:(nullable NSString *)room_id;
 
 /// 根据自定义参数解析出消息中展示的内容
-+ (NSString *)parseToMessageShow:(NSDictionary *)customParams callType:(MSCallType)callType;
++ (NSString *)parseToMessageShow:(NSDictionary *)customParams callType:(MSCallType)callType isSelf:(BOOL)isSelf;
 
 /// 根据自定义参数解析出在会话中展示的内容
-+ (NSString *)parseToConversationShow:(NSDictionary *)customParams callType:(MSCallType)callType;
++ (NSString *)parseToConversationShow:(NSDictionary *)customParams callType:(MSCallType)callType isSelf:(BOOL)isSelf;
+
++ (NSString *)getCreatorFrom:(NSString *)room_id;
 
 @end
 

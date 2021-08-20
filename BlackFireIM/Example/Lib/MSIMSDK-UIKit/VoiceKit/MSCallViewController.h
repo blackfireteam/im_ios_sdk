@@ -16,17 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSCallViewController : UIViewController
 
 ///  sponsor: 邀请者    invitee: 被邀请者uid
-- (instancetype)initWithCallType:(MSCallType)type sponsor:(NSString *)sponsor invitee:(NSString *)invitee;
+- (instancetype)initWithCallType:(MSCallType)type sponsor:(NSString *)sponsor invitee:(NSString *)invitee room_id:(NSString *)room_id;
 
 @property(nonatomic,assign,readonly) NSInteger duration;
 
-- (void)recieveAccept:(MSCallType)callType;
+- (void)recieveAccept:(MSCallType)callType room_id:(NSString *)room_id;
 
-- (void)recieveReject:(MSCallType)callType;
-
-- (void)recieveHangup:(MSCallType)callType;
-
-- (void)recieveCancel:(MSCallType)callType;
+- (void)recieveHangup:(MSCallType)callType room_id:(NSString *)room_id;
 
 @end
 

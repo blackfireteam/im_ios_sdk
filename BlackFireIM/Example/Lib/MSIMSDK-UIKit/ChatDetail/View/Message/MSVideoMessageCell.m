@@ -51,11 +51,14 @@
     return self;
 }
 
+- (MSVideoMessageCellData *)videoData
+{
+    return (MSVideoMessageCellData *)self.messageData;
+}
+
 - (void)fillWithData:(MSVideoMessageCellData *)data
 {
-    //set data
     [super fillWithData:data];
-    self.videoData = data;
     self.durationL.text = [NSString stringWithFormat:@"%02zd:%02zd",data.videoElem.duration/60,data.videoElem.duration%60];
     [self.durationL sizeToFit];
     NSInteger progress = data.videoElem.progress*100;

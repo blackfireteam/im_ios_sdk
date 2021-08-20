@@ -71,22 +71,7 @@
     NSDictionary *data = userInfo[@"data"];
     if (data == nil) return;
     if ([MSIMTools sharedInstance].user_id) {
-        if ([data[@"mtype"] integerValue] == MSIM_MSG_TYPE_CUSTOM_SIGNAL) {
-            NSDictionary *bodyDic = [data[@"body"] el_convertToDictionary];
-            MSIMCustomSubType subType = [bodyDic[@"type"] integerValue];
-            NSInteger event = [bodyDic[@"event"] integerValue];
-            NSString *fromUid = [NSString stringWithFormat:@"%@",data[@"from"]];
-            NSString *toUid = [NSString stringWithFormat:@"%@",data[@"to"]];
-            if (![fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
-                if (subType == MSIMCustomSubTypeVoiceCall) {
-                    [[MSCallManager shareInstance] call:fromUid toUser:toUid callType:MSCallType_Voice action:event];
-                    return;
-                }else {
-                    [[MSCallManager shareInstance] call:fromUid toUser:toUid callType:MSCallType_Video action:event];
-                    return;
-                }
-            }
-        }
+        
         BFTabBarController *tabBar = (BFTabBarController *)self.window.rootViewController;
         tabBar.selectedIndex = 2;
     }

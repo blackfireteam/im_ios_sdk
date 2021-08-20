@@ -87,18 +87,22 @@
 "TUIkitMessageTipsTextingMessage" = "对方正在输入...";
 
 "TUIKitSignalingFinishGroupChat" = "结束群聊";
-"TUIKitSignalingVoiceCallEnd" = "语音通话时长: %02zd:%02zd";
-"TUIKitSignalingVideoCallEnd" = "视频通话时长: %02zd:%02zd";
+"TUIKitSignalingVoiceCallEnd" = "通话时长: %02zd:%02zd";
+"TUIKitSignalingVideoCallEnd" = "通话时长: %02zd:%02zd";
 "TUIKitSignalingNewCall" = "发起通话";
 "TUIKitSignalingNewGroupCallFormat" = "\"%@\" 发起群通话";
-"TUIkitSignalingCancelCall" = "取消通话";
+"TUIkitSignalingCancelCall" = "已取消";
+"TUIkitSignalingCancelCallOther" = "对方已取消";
 "TUIkitSignalingCancelGroupCallFormat" = "\"%@\" 取消群通话";
 "TUIkitSignalingHangonCall" = "已接听";
 "TUIKitSignalingHangonCallFormat" = "\"%@\" 已接听";
 "TUIKitSignalingBusyFormat" = "\"%@\" 忙线";
-"TUIKitSignalingCallBusy" = "对方忙线";
-"TUIkitSignalingDecline" = "拒绝通话";
+"TUIKitSignalingCallBusy" = "对方忙线未接听";
+"TUIKitSignalingCallBusyOther" = "忙线未接听";
+"TUIkitSignalingDecline" = "已拒绝";
+"TUIkitSignalingDeclineOther" = "对方已拒绝";
 "TUIKitSignalingNoResponse" = "无应答";
+"TUIKitSignalingNoResponseOther" = "对方无应答";
 "TUIkitSignalingUnrecognlize" = "不能识别的通话指令";
 
 "TUIkitMessageTypeImage" = "[图片]";

@@ -22,10 +22,14 @@
     return self;
 }
 
+- (MSBubbleMessageCellData *)bubbleData
+{
+    return (MSBubbleMessageCellData *)self.messageData;
+}
+
 - (void)fillWithData:(MSBubbleMessageCellData *)data
 {
     [super fillWithData:data];
-    self.bubbleData = data;
     self.bubbleView.image = data.bubble;
     self.bubbleView.highlightedImage = data.highlightedBubble;
 }

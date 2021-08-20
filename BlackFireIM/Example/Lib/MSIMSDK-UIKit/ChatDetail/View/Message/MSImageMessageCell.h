@@ -27,9 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UILabel *progress;
 
 
-@property (nonatomic, strong) MSImageMessageCellData *imageData;
-
-- (void)fillWithData:(MSImageMessageCellData *)data;
+@property (nonatomic, strong,readonly) MSImageMessageCellData *imageData;
 
 @end
 

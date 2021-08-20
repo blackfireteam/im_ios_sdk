@@ -20,16 +20,16 @@
     return self;
 }
 
-
+- (MSTextMessageCellData *)textData
+{
+    return (MSTextMessageCellData *)self.messageData;
+}
 
 - (void)fillWithData:(MSTextMessageCellData *)data
 {
-    //set data
     [super fillWithData:data];
-    self.textData = data;
     self.content.attributedText = data.attributedString;
     self.content.textColor = data.textColor;
-//  font set in attributedString
 }
 
 - (void)layoutSubviews

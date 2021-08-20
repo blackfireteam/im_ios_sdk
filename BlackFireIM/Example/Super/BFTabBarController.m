@@ -116,12 +116,11 @@
     if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
     MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
     NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-    if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {//语音聊天
+    MSIMCustomSubType type = [dic[@"type"] integerValue];
+    if (type == MSIMCustomSubTypeVoiceCall || type == MSIMCustomSubTypeVideoCall) {
         NSInteger event = [dic[@"event"] integerValue];
-        [[MSCallManager shareInstance] call:customElem.fromUid toUser:customElem.toUid callType:MSCallType_Voice action:event];
-    }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {//视频聊天
-        NSInteger event = [dic[@"event"] integerValue];
-        [[MSCallManager shareInstance] call:customElem.fromUid toUser:customElem.toUid callType:MSCallType_Video action:event];
+        NSString *room_id = dic[@"room_id"];
+        [[MSCallManager shareInstance] recieveCall:customElem.partner_id creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
     }
 }
 
@@ -132,15 +131,12 @@
         if ([elem isKindOfClass:[MSIMCustomElem class]]) {
             MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
             NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-            if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {//语音聊天
+            MSIMCustomSubType type = [dic[@"type"] integerValue];
+            if (type == MSIMCustomSubTypeVoiceCall || type == MSIMCustomSubTypeVideoCall) {
                 NSInteger event = [dic[@"event"] integerValue];
+                NSString *room_id = dic[@"room_id"];
                 if (![customElem.fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
-                    [[MSCallManager shareInstance] call:customElem.fromUid toUser:customElem.toUid callType:MSCallType_Voice action:event];
-                }
-            }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {//视频聊天
-                NSInteger event = [dic[@"event"] integerValue];
-                if (![customElem.fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
-                    [[MSCallManager shareInstance] call:customElem.fromUid toUser:customElem.toUid callType:MSCallType_Video action:event];
+                    [[MSCallManager shareInstance] recieveCall:customElem.partner_id creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
                 }
             }
         }

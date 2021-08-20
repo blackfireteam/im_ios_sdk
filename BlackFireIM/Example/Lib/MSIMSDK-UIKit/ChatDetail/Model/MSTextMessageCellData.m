@@ -56,8 +56,6 @@
     return size;
 }
 
-
-
 - (NSAttributedString *)attributedString
 {
     if (!_attributedString) {
@@ -139,7 +137,7 @@ static UIColor *sOutgoingTextColor;
 + (UIColor *)outgoingTextColor
 {
     if (!sOutgoingTextColor) {
-        sOutgoingTextColor = [UIColor d_colorWithColorLight:[UIColor whiteColor] dark:TText_OutMessage_Color_Dark];
+        sOutgoingTextColor = [UIColor d_colorWithColorLight:[UIColor whiteColor] dark:[UIColor whiteColor]];
     }
     return sOutgoingTextColor;
 }

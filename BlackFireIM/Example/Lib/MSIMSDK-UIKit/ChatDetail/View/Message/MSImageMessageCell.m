@@ -39,11 +39,14 @@
     return self;
 }
 
+- (MSImageMessageCellData *)imageData
+{
+    return (MSImageMessageCellData *)self.messageData;
+}
+
 - (void)fillWithData:(MSImageMessageCellData *)data
 {
-    //set data
     [super fillWithData:data];
-    self.imageData = data;
     NSInteger progress = data.imageElem.progress*100;
     self.progress.text = [NSString stringWithFormat:@"%zd%%",progress];
     [self.progress setHidden:!(progress > 0 && progress < 100)];

@@ -25,14 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic,strong,readonly) MSSystemMessageCellData *systemData;
 
-/**
- *  填充数据
- *  根据 data 设置系统消息的数据
- *
- *  @param data 填充数据需要的数据源
- */
-- (void)fillWithData:(MSSystemMessageCellData *)data;
-
 @end
 
 NS_ASSUME_NONNULL_END

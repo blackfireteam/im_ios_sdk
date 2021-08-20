@@ -32,7 +32,7 @@
     if (self.direction == MsgDirectionOutgoing) {
         height += 20;
     }
-    height += 5;
+    height += 15;
     return height;
 }
 

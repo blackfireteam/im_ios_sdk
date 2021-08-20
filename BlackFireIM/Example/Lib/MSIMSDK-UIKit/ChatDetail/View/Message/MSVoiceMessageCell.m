@@ -29,15 +29,17 @@
 
 - (void)dealloc
 {
-    NSLog(@"%@ dealloc",self.class);
     [self.voiceData removeObserver:self forKeyPath:@"isPlaying"];
+}
+
+- (MSVoiceMessageCellData *)voiceData
+{
+    return (MSVoiceMessageCellData *)self.messageData;
 }
 
 - (void)fillWithData:(MSVoiceMessageCellData *)data
 {
-    //set data
     [super fillWithData:data];
-    self.voiceData = data;
     if (data.voiceElem.duration > 0) {
         _duration.text = [NSString stringWithFormat:@"%ld\"", (long)data.voiceElem.duration];
     } else {

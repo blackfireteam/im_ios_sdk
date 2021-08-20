@@ -25,9 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 视频上传进度标签*/
 @property(nonatomic,strong) UILabel *progressL;
 
-@property (nonatomic, strong) MSVideoMessageCellData *videoData;
-
-- (void)fillWithData:(MSVideoMessageCellData *)data;
+@property (nonatomic, strong,readonly) MSVideoMessageCellData *videoData;
 
 @end
 

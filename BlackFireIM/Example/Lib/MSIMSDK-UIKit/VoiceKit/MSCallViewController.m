@@ -24,9 +24,11 @@
 
 @property(nonatomic,assign) CallState curState;
 
+@property(nonatomic,assign) BOOL isCreator;
+
 @property(nonatomic,copy) NSString *token;
 
-@property(nonatomic,copy) NSString *channel;
+@property(nonatomic,copy) NSString *room_id;
 
 @property(nonatomic,strong) MSVoiceCallView *voiceCallView;
 
@@ -62,12 +64,14 @@
     [self initializeAgoraEngine];
 }
 
-- (instancetype)initWithCallType:(MSCallType)type sponsor:(NSString *)sponsor invitee:(NSString *)invitee
+- (instancetype)initWithCallType:(MSCallType)type sponsor:(NSString *)sponsor invitee:(NSString *)invitee room_id:(NSString *)room_id
 {
     if (self = [super init]) {
         _callType = type;
+        _room_id = room_id;
         if (sponsor && [sponsor isEqualToString:[MSIMTools sharedInstance].user_id]) {
             _partner_id = invitee;
+            _isCreator = YES;
             _curState = CallState_Dailing;
         }else {
             _partner_id = sponsor;
@@ -79,10 +83,7 @@
 
 - (void)initializeAgoraEngine
 {
-    NSString *sponsor = (self.curState == CallState_Dailing ? [MSIMTools sharedInstance].user_id : self.partner_id);
-    NSString *invitee = (self.curState == CallState_Dailing ? self.partner_id : [MSIMTools sharedInstance].user_id);
-    self.channel = [NSString stringWithFormat:@"c2c_%@_%@",sponsor,invitee];
-    [[MSIMManager sharedInstance] getAgoraToken:self.channel succ:^(NSString * _Nonnull app_id, NSString * _Nonnull token) {
+    [[MSIMManager sharedInstance] getAgoraToken:self.room_id succ:^(NSString * _Nonnull app_id, NSString * _Nonnull token) {
         self.token = token;
         self.agoraKit = [AgoraRtcEngineKit sharedEngineWithAppId:app_id delegate:self];
         if (self.callType == MSCallType_Voice) {
@@ -107,10 +108,10 @@
 {
     if (self.callType == MSCallType_Voice) {
         [self.agoraKit setDefaultAudioRouteToSpeakerphone:NO];
-        [self.agoraKit joinChannelByToken:self.token channelId:self.channel info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
+        [self.agoraKit joinChannelByToken:self.token channelId:self.room_id info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
         [self.agoraKit enableInEarMonitoring:YES];//开启耳返
     }else {
-        [self.agoraKit joinChannelByToken:self.token channelId:self.channel info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
+        [self.agoraKit joinChannelByToken:self.token channelId:self.room_id info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
     }
 }
 
@@ -120,7 +121,7 @@
         [self joinChannel];
         return;
     }
-    [[MSIMManager sharedInstance] getAgoraToken:self.channel succ:^(NSString * _Nonnull app_id, NSString * _Nonnull token) {
+    [[MSIMManager sharedInstance] getAgoraToken:self.room_id succ:^(NSString * _Nonnull app_id, NSString * _Nonnull token) {
         self.token = token;
         [AgoraRtcEngineKit destroy];
         self.agoraKit = [AgoraRtcEngineKit sharedEngineWithAppId:app_id delegate:self];
@@ -166,8 +167,9 @@
 }
 
 /// 对方同意通话
-- (void)recieveAccept:(MSCallType)callType
+- (void)recieveAccept:(MSCallType)callType room_id:(NSString *)room_id
 {
+    if (![room_id isEqualToString:self.room_id]) return;
     if (callType == MSCallType_Voice) {
         self.voiceCallView.cancelBtn.hidden = YES;
         self.voiceCallView.hangupBtn.hidden = NO;
@@ -189,30 +191,11 @@
     [self stopAlerm];
 }
 
-/// 对方拒绝通话
-- (void)recieveReject:(MSCallType)callType
-{
-    if (callType == MSCallType_Voice) {
-        self.voiceCallView.noticeL.hidden = YES;
-    }else {
-        self.videoCallView.noticeL.hidden = YES;
-    }
-}
-
 /// 对方挂断了通话
-- (void)recieveHangup:(MSCallType)callType
+- (void)recieveHangup:(MSCallType)callType room_id:(NSString *)room_id
 {
+    if (![room_id isEqualToString:self.room_id]) return;
     [self stopDurationTimer];
-}
-
-/// 对方取消了通话
-- (void)recieveCancel:(MSCallType)callType
-{
-    if (callType == MSCallType_Voice) {
-        self.voiceCallView.noticeL.hidden = YES;
-    }else {
-        self.videoCallView.noticeL.hidden = YES;
-    }
 }
 
 #pragma mark -timer
@@ -277,7 +260,7 @@
 #pragma mark - MSVoiceCallViewDelegate
 - (void)voice_cancelBtnDidClick
 {
-    [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Voice action:CallAction_Cancel];
+    [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Voice action:CallAction_Cancel room_id:self.room_id];
 }
 
 - (void)voice_mickBtnDidClick
@@ -298,13 +281,13 @@
 
 - (void)voice_rejectBtnDidClick
 {
-    [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Voice action:CallAction_Reject];
+    [[MSCallManager shareInstance] callToPartner:self.partner_id creator:self.partner_id callType:MSCallType_Voice action:CallAction_Reject room_id:self.room_id];
     [self stopDurationTimer];
 }
 
 - (void)voice_acceptBtnDidClick
 {
-    [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Voice action:CallAction_Accept];
+    [[MSCallManager shareInstance] callToPartner:self.partner_id creator:self.partner_id callType:MSCallType_Voice action:CallAction_Accept room_id:self.room_id];
     self.voiceCallView.rejectBtn.hidden = YES;
     self.voiceCallView.acceptBtn.hidden = YES;
     self.voiceCallView.micBtn.hidden = NO;
@@ -321,7 +304,7 @@
 
 - (void)voice_hangupBtnDidClick
 {
-    [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Voice action:CallAction_End];
+    [[MSCallManager shareInstance] callToPartner:self.partner_id creator:(self.isCreator ? [MSIMTools sharedInstance].user_id : self.partner_id) callType:MSCallType_Voice action:CallAction_End room_id:self.room_id];
     [self stopDurationTimer];
 }
 
@@ -336,7 +319,7 @@
 
 - (void)video_cancelBtnDidClick
 {
-    [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Video action:CallAction_Cancel];
+    [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Video action:CallAction_Cancel room_id:self.room_id];
 }
 
 - (void)video_cameraBtnDidClick
@@ -346,13 +329,13 @@
 
 - (void)video_rejectBtnDidClick
 {
-    [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Video action:CallAction_Reject];
+    [[MSCallManager shareInstance] callToPartner:self.partner_id creator:self.partner_id callType:MSCallType_Video action:CallAction_Reject room_id:self.room_id];
     [self stopDurationTimer];
 }
 
 - (void)video_acceptBtnDidClick
 {
-    [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Video action:CallAction_Accept];
+    [[MSCallManager shareInstance] callToPartner:self.partner_id creator:self.partner_id callType:MSCallType_Video action:CallAction_Accept room_id:self.room_id];
     self.videoCallView.rejectBtn.hidden = YES;
     self.videoCallView.acceptBtn.hidden = YES;
     self.videoCallView.remoteView.hidden = NO;
@@ -371,7 +354,7 @@
 
 - (void)video_hangupBtnDidClick
 {
-    [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Video action:CallAction_End];
+    [[MSCallManager shareInstance] callToPartner:self.partner_id creator:(self.isCreator ? [MSIMTools sharedInstance].user_id : self.partner_id) callType:MSCallType_Video action:CallAction_End room_id:self.room_id];
     [self stopDurationTimer];
 }
 

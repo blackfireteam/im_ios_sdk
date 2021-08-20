@@ -35,11 +35,14 @@
     return self;
 }
 
+- (MSSystemMessageCellData *)systemData
+{
+    return (MSSystemMessageCellData *)self.messageData;
+}
+
 - (void)fillWithData:(MSSystemMessageCellData *)data;
 {
     [super fillWithData:data];
-    self.systemData = data;
-    //set data
     self.messageLabel.text = data.content;
     self.messageLabel.textColor = data.contentColor;
     self.nameLabel.hidden = YES;

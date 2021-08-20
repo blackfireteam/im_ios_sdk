@@ -11,7 +11,8 @@
 #import "YBIBVideoData.h"
 #import "BFWinkMessageCell.h"
 #import "BFWinkMessageCellData.h"
-
+#import "BFCallMessageCell.h"
+#import "BFCallMessageCellData.h"
 
 @interface BFChatViewController ()<MSChatViewControllerDelegate>
 
@@ -60,10 +61,12 @@
         }else if(customElem.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
             MSIMCustomSubType subType = [dic[@"type"]integerValue];
             if (subType == MSIMCustomSubTypeVoiceCall || subType == MSIMCustomSubTypeVideoCall) {
-                MSSystemMessageCellData *voiceCallData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
-                voiceCallData.content = [MSCallManager parseToMessageShow:dic callType:(subType == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video)];
-                voiceCallData.elem = customElem;
-                return voiceCallData;
+                BFCallMessageCellData *callData = [[BFCallMessageCellData alloc] initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+                callData.callType = (subType == MSIMCustomSubTypeVideoCall ? MSCallType_Video : MSCallType_Voice);
+                callData.notice = [MSCallManager parseToMessageShow:dic callType:(subType == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) isSelf:customElem.isSelf];
+                callData.showName = YES;
+                callData.elem = customElem;
+                return callData;
             }
         }
     }
@@ -75,6 +78,8 @@
     //你可以自定义消息气泡的UI,对基本消息类型你可以直接返回nil，采用默认样式
     if ([cellData isKindOfClass:[BFWinkMessageCellData class]]) {
         return [BFWinkMessageCell class];
+    }else if ([cellData isKindOfClass:[BFCallMessageCellData class]]) {
+        return [BFCallMessageCell class];
     }
     return nil;
 }
@@ -83,12 +88,12 @@
 - (void)chatController:(MSChatViewController *)controller onSelectMoreCell:(MSInputMoreCell *)cell
 {
     if (cell.data.tye == MSIM_MORE_VOICE_CALL) {//语音通话
-
-        [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Voice action:CallAction_Call];
+        
+        [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Voice action:CallAction_Call room_id:nil];
         
     }else if (cell.data.tye == MSIM_MORE_VIDEO_CALL) {//视频通话
         
-        [[MSCallManager shareInstance] call:[MSIMTools sharedInstance].user_id toUser:self.partner_id callType:MSCallType_Video action:CallAction_Call];
+        [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Video action:CallAction_Call room_id:nil];
     }
 }
 
@@ -147,6 +152,11 @@
         browser.dataSourceArray = tempArr;
         browser.currentPage = defaultIndex;
         [browser show];
+    }else if ([cell isKindOfClass:[BFCallMessageCell class]]) {
+        MSIMCustomElem *customElem = (MSIMCustomElem *)cell.messageData.elem;
+        NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+        MSIMCustomSubType subType = [dic[@"type"]integerValue];
+        [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:(subType == MSIMCustomSubTypeVideoCall ? MSCallType_Video : MSCallType_Voice) action:CallAction_Call room_id:nil];
     }
 }
 

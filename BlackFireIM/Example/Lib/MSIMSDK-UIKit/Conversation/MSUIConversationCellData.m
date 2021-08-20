@@ -83,9 +83,9 @@
     MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
     NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
     if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {
-        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Voice];
+        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Voice isSelf:customElem.isSelf];
     }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {
-        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Video];
+        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Video isSelf:customElem.isSelf];
     }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeLike) {
         return @"[Like]";
     }else {
