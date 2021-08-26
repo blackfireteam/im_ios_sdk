@@ -11,7 +11,7 @@
 
 @interface MSCallManager()
 
-@property(nonatomic,assign) BOOL isOnCalling;
+@property(nonatomic,copy) NSString *isOnCallingWithUid;
 
 @property(nonatomic,strong) MSCallViewController *callVC;
 
@@ -22,6 +22,8 @@
 @property(nonatomic,assign) MSCallType callType;
 
 @property(nonatomic,strong) NSTimer *timer;
+
+@property(nonatomic,assign) NSInteger timerCount;
 
 @end
 @implementation MSCallManager
@@ -53,23 +55,19 @@
     switch (action) {
         case CallAction_Call:
         {
-            self.isOnCalling = YES;
+            self.isOnCallingWithUid = partner_id;
             self.partner_id = partner_id;
             self.callType = callType;
             self.callVC = [[MSCallViewController alloc]initWithCallType:self.callType sponsor:creator invitee:partner_id room_id:channel_id];
             self.callVC.modalPresentationStyle = UIModalPresentationFullScreen;
             [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.callVC animated:YES completion:nil];
-            [self sendMessageType:CallAction_Call option:IMCUSTOM_SIGNAL room_id:channel_id];
             
             WS(weakSelf)
+            self.timerCount = 0;
             [self.timer invalidate];
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:60 repeats:NO block:^(NSTimer * _Nonnull timer) {
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
                 
-                /// 作为邀请方，对方60秒内无应答，结束通话。补发一条超时的普通消息
-                [weakSelf.timer invalidate];
-                weakSelf.timer = nil;
-                [weakSelf destroyCallVC];
-                [weakSelf sendMessageType:CallAction_Timeout option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
+                [weakSelf inviteTimerAction: channel_id];
             }];
             [[NSRunLoop mainRunLoop]addTimer:self.timer forMode:NSRunLoopCommonModes];
         }
@@ -81,6 +79,7 @@
                 [self sendMessageType:CallAction_Cancel option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
                 [self.timer invalidate];
                 self.timer = nil;
+                self.timerCount = 0;
                 [self destroyCallVC];
             }
         }
@@ -138,12 +137,14 @@
     switch (action) {
         case CallAction_Call:
         {
-            if (self.isOnCalling) {
-                /// 如果正与某人聊天，收到另一邀请指令，会给对方回一条正忙的指令消息
-                [self sendMessageType:CallAction_Linebusy option:IMCUSTOM_SIGNAL room_id:channel_id];
+            if (self.isOnCallingWithUid) {
+                if (![self.isOnCallingWithUid isEqualToString:from]) {
+                    /// 如果正与某人聊天，收到另一邀请指令，会给对方回一条正忙的指令消息
+                    [self sendMessageType:CallAction_Linebusy option:IMCUSTOM_SIGNAL room_id:channel_id];
+                }
                 return;
             }
-            self.isOnCalling = YES;
+            self.isOnCallingWithUid = from;
             self.partner_id = from;
             self.callType = callType;
             self.callVC = [[MSCallViewController alloc]initWithCallType:self.callType sponsor:from invitee:[MSIMTools sharedInstance].user_id room_id:channel_id];
@@ -173,6 +174,7 @@
                 /// 作为邀请方，收到对方的拒绝指令，结束通话，同时补一条拒绝的普通消息
                 [self.timer invalidate];
                 self.timer = nil;
+                self.timerCount = 0;
                 [self destroyCallVC];
                 [self sendMessageType:CallAction_Reject option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
             }
@@ -197,6 +199,7 @@
                 /// 作为邀请方，收到一条对方正忙的指令，我会结束通话，同时补发一条对方正忙的普通消息
                 [self.timer invalidate];
                 self.timer = nil;
+                self.timerCount = 0;
                 [self destroyCallVC];
                 [self sendMessageType:CallAction_Linebusy option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
             }
@@ -208,6 +211,7 @@
                 /// 作为邀请方收到对方接受的指令消息
                 [self.timer invalidate];
                 self.timer = nil;
+                self.timerCount = 0;
                 [self.callVC recieveAccept:callType room_id:channel_id];
             }
         }
@@ -217,6 +221,19 @@
     }
 }
 
+- (void)inviteTimerAction:(NSString *)room_id
+{
+    [self sendMessageType:CallAction_Call option:IMCUSTOM_SIGNAL room_id:room_id];
+    /// 作为邀请方，对方60秒内无应答，结束通话。补发一条超时的普通消息
+    if (self.timerCount >= 60) {
+        [self.timer invalidate];
+        self.timer = nil;
+        self.timerCount = 0;
+        [self destroyCallVC];
+        [self sendMessageType:CallAction_Timeout option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:room_id];
+    }
+    self.timerCount++;
+}
 
 - (void)destroyCallVC
 {
@@ -224,7 +241,7 @@
         [UIDevice stopPlaySystemSound];
         [self.callVC dismissViewControllerAnimated:YES completion:nil];
         self.callVC = nil;
-        self.isOnCalling = NO;
+        self.isOnCallingWithUid = nil;
         self.action = CallAction_Unknown;
     }
 }
@@ -239,10 +256,12 @@
         push.body = [NSString stringWithFormat:@"%@ Call cancelled by caller",attachExt];
         push.sound = @"default";
     }else if (action == CallAction_Call) {
-        NSString *attachExt = self.callType == MSCallType_Voice ? @"[Voice call]" : @"[Video call]";
-        push = [[MSIMPushInfo alloc]init];
-        push.body = [NSString stringWithFormat:@"%@ Start Call",attachExt];
-        push.sound = (self.callType == MSCallType_Voice ? @"00.caf" : @"call.caf");
+        if (self.timerCount == 0) {
+            NSString *attachExt = self.callType == MSCallType_Voice ? @"[Voice call]" : @"[Video call]";
+            push = [[MSIMPushInfo alloc]init];
+            push.body = [NSString stringWithFormat:@"%@ Start Call",attachExt];
+            push.sound = (self.callType == MSCallType_Voice ? @"00.caf" : @"call.caf");
+        }
     }else if (action == CallAction_Linebusy || action == CallAction_End) {
         if (option != IMCUSTOM_SIGNAL) {
             NSString *attachExt = self.callType == MSCallType_Voice ? @"[Voice call]" : @"[Video call]";

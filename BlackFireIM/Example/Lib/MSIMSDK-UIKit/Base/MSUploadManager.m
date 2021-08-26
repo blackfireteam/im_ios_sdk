@@ -7,7 +7,7 @@
 
 #import "MSUploadManager.h"
 #import <QCloudCOSXML/QCloudCOSXMLTransfer.h>
-#import <QCloudCOSXML/QCloudCOSXMLDownloadObjectRequest.h>
+#import <AFNetworking.h>
 
 
 @interface MSUploadManager()<QCloudSignatureProvider,QCloudCredentailFenceQueueDelegate>
@@ -183,11 +183,19 @@ static MSUploadManager *_manager;
                       succ:(normalSucc)succ
                       fail:(normalFail)fail
 {
-    QCloudCOSXMLDownloadObjectRequest *request = [QCloudCOSXMLDownloadObjectRequest new];
-    request.bucket = self.cosInfo.bucket;
-    request.object = [NSURL URLWithString:url].path;
-    request.downloadingURL = [NSURL fileURLWithPath:savePath];
-    [request setFinishBlock:^(id  _Nullable outputObject, NSError * _Nullable error) {
+    /* 创建网络下载对象 */
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (progress) progress(downloadProgress.fractionCompleted);
+        });
+        
+    } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        
+        return [NSURL fileURLWithPath:savePath];
+                
+    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error == nil) {
                 if (succ) succ(savePath);
@@ -197,12 +205,7 @@ static MSUploadManager *_manager;
             }
         });
     }];
-    [request setDownProcessBlock:^(int64_t bytesDownload, int64_t totalBytesDownload, int64_t totalBytesExpectedToDownload) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (progress) progress(totalBytesDownload*1.0/totalBytesExpectedToDownload*1.0);
-        });
-    }];
-    [[QCloudCOSTransferMangerService defaultCOSTransferManager]DownloadObject:request];
+     [downloadTask resume];
 }
 
 @end
