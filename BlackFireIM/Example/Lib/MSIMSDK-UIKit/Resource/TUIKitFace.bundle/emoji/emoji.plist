@@ -4,385 +4,361 @@
 <array>
 	<dict>
 		<key>face_name</key>
-		<string>[龇牙]</string>
+		<string>[Grin]</string>
 		<key>face_id</key>
 		<string>001</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[调皮]</string>
+		<string>[Tongue]</string>
 		<key>face_id</key>
 		<string>002</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[流汗]</string>
+		<string>[Sweats]</string>
 		<key>face_id</key>
 		<string>003</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[偷笑]</string>
+		<string>[Chuckle]</string>
 		<key>face_id</key>
 		<string>004</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[再见]</string>
+		<string>[Bye]</string>
 		<key>face_id</key>
 		<string>005</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[敲打]</string>
+		<string>[Hammer]</string>
 		<key>face_id</key>
 		<string>006</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[擦汗]</string>
+		<string>[Speechless]</string>
 		<key>face_id</key>
 		<string>007</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[猪头]</string>
+		<string>[Pig]</string>
 		<key>face_id</key>
 		<string>008</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[玫瑰]</string>
+		<string>[Rose]</string>
 		<key>face_id</key>
 		<string>009</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[流泪]</string>
+		<string>[Hurt]</string>
 		<key>face_id</key>
 		<string>010</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[大哭]</string>
+		<string>[Sob]</string>
 		<key>face_id</key>
 		<string>011</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[嘘]</string>
+		<string>[Shhh]</string>
 		<key>face_id</key>
 		<string>012</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[酷]</string>
+		<string>[Cool]</string>
 		<key>face_id</key>
 		<string>013</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[抓狂]</string>
+		<string>[Screaming]</string>
 		<key>face_id</key>
 		<string>014</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[委屈]</string>
+		<string>[Shrunken]</string>
 		<key>face_id</key>
 		<string>015</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[便便]</string>
+		<string>[Shit]</string>
 		<key>face_id</key>
 		<string>016</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[炸弹]</string>
+		<string>[Bomb]</string>
 		<key>face_id</key>
 		<string>017</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[菜刀]</string>
+		<string>[Knife]</string>
 		<key>face_id</key>
 		<string>018</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[可爱]</string>
+		<string>[Joyful]</string>
 		<key>face_id</key>
 		<string>019</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[色]</string>
+		<string>[Drool]</string>
 		<key>face_id</key>
 		<string>020</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[害羞]</string>
+		<string>[Shy]</string>
 		<key>face_id</key>
 		<string>021</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[得意]</string>
+		<string>[CoolGuy]</string>
 		<key>face_id</key>
 		<string>022</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[吐]</string>
+		<string>[Puke]</string>
 		<key>face_id</key>
 		<string>023</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[微笑]</string>
+		<string>[Smile]</string>
 		<key>face_id</key>
 		<string>024</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[怒]</string>
+		<string>[Angry]</string>
 		<key>face_id</key>
 		<string>025</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[尴尬]</string>
+		<string>[Awkward]</string>
 		<key>face_id</key>
 		<string>026</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[惊恐]</string>
+		<string>[Panic]</string>
 		<key>face_id</key>
 		<string>027</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[冷汗]</string>
+		<string>[Sweats]</string>
 		<key>face_id</key>
 		<string>028</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[爱心]</string>
+		<string>[Heart]</string>
 		<key>face_id</key>
 		<string>029</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[示爱]</string>
+		<string>[Lips]</string>
 		<key>face_id</key>
 		<string>030</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[白眼]</string>
+		<string>[Boring]</string>
 		<key>face_id</key>
 		<string>031</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[傲慢]</string>
-		<key>face_id</key>
-		<string>032</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[难过]</string>
+		<string>[Frown]</string>
 		<key>face_id</key>
 		<string>033</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[惊讶]</string>
+		<string>[Surprise]</string>
 		<key>face_id</key>
 		<string>034</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[疑问]</string>
+		<string>[Shocked]</string>
 		<key>face_id</key>
 		<string>035</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[困]</string>
-		<key>face_id</key>
-		<string>036</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[么么哒]</string>
+		<string>[Emm]</string>
 		<key>face_id</key>
 		<string>037</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[憨笑]</string>
+		<string>[Laugh]</string>
 		<key>face_id</key>
 		<string>038</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[爱情]</string>
+		<string>[Love]</string>
 		<key>face_id</key>
 		<string>039</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[衰]</string>
+		<string>[Toasted]</string>
 		<key>face_id</key>
 		<string>040</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[撇嘴]</string>
+		<string>[Smug]</string>
 		<key>face_id</key>
 		<string>041</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[阴险]</string>
+		<string>[Dog]</string>
 		<key>face_id</key>
 		<string>042</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[奋斗]</string>
+		<string>[GoForlt]</string>
 		<key>face_id</key>
 		<string>043</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[发呆]</string>
+		<string>[Scowl]</string>
 		<key>face_id</key>
 		<string>044</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[右哼哼]</string>
-		<key>face_id</key>
-		<string>045</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[抱抱]</string>
+		<string>[Hug]</string>
 		<key>face_id</key>
 		<string>046</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[坏笑]</string>
+		<string>[Trick]</string>
 		<key>face_id</key>
 		<string>047</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[飞吻]</string>
-		<key>face_id</key>
-		<string>048</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[鄙视]</string>
+		<string>[Pooh-pooh]</string>
 		<key>face_id</key>
 		<string>049</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[晕]</string>
+		<string>[Dizzy]</string>
 		<key>face_id</key>
 		<string>050</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[大兵]</string>
+		<string>[Commando]</string>
 		<key>face_id</key>
 		<string>051</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[可怜]</string>
+		<string>[Whimper]</string>
 		<key>face_id</key>
 		<string>052</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[强]</string>
+		<string>[Good]</string>
 		<key>face_id</key>
 		<string>053</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[弱]</string>
+		<string>[Thumbdown]</string>
 		<key>face_id</key>
 		<string>054</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[握手]</string>
+		<string>[Shake]</string>
 		<key>face_id</key>
 		<string>055</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[胜利]</string>
+		<string>[Peace]</string>
 		<key>face_id</key>
 		<string>056</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[抱拳]</string>
+		<string>[Salute]</string>
 		<key>face_id</key>
 		<string>057</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[凋谢]</string>
+		<string>[Wilt]</string>
 		<key>face_id</key>
 		<string>058</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[米饭]</string>
+		<string>[Rice]</string>
 		<key>face_id</key>
 		<string>059</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[蛋糕]</string>
+		<string>[Cake]</string>
 		<key>face_id</key>
 		<string>060</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[西瓜]</string>
+		<string>[Watermelon]</string>
 		<key>face_id</key>
 		<string>061</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[啤酒]</string>
+		<string>[Beer]</string>
 		<key>face_id</key>
 		<string>062</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[瓢虫]</string>
+		<string>[Bug]</string>
 		<key>face_id</key>
 		<string>063</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[勾引]</string>
+		<string>[Beckon]</string>
 		<key>face_id</key>
 		<string>064</string>
 	</dict>
@@ -394,163 +370,145 @@
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[爱你]</string>
-		<key>face_id</key>
-		<string>066</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[咖啡]</string>
+		<string>[Coffe]</string>
 		<key>face_id</key>
 		<string>067</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[月亮]</string>
+		<string>[Moon]</string>
 		<key>face_id</key>
 		<string>068</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[刀]</string>
+		<string>[Cleaver]</string>
 		<key>face_id</key>
 		<string>069</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[发抖]</string>
+		<string>[Tremble]</string>
 		<key>face_id</key>
 		<string>070</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[差劲]</string>
+		<string>[Loser]</string>
 		<key>face_id</key>
 		<string>071</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[拳头]</string>
+		<string>[Fist]</string>
 		<key>face_id</key>
 		<string>072</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[心碎了]</string>
+		<string>[Brokenheart]</string>
 		<key>face_id</key>
 		<string>073</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[太阳]</string>
+		<string>[Sun]</string>
 		<key>face_id</key>
 		<string>074</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[礼物]</string>
+		<string>[Gift]</string>
 		<key>face_id</key>
 		<string>075</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[皮球]</string>
+		<string>[Football]</string>
 		<key>face_id</key>
 		<string>076</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[骷髅]</string>
+		<string>[Skull]</string>
 		<key>face_id</key>
 		<string>077</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[挥手]</string>
+		<string>[Wave]</string>
 		<key>face_id</key>
 		<string>078</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[闪电]</string>
+		<string>[Lightning]</string>
 		<key>face_id</key>
 		<string>079</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[饥饿]</string>
+		<string>[Hungry]</string>
 		<key>face_id</key>
 		<string>080</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[困]</string>
+		<string>[Sleepy]</string>
 		<key>face_id</key>
 		<string>081</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[咒骂]</string>
+		<string>[Scold]</string>
 		<key>face_id</key>
 		<string>082</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[折磨]</string>
+		<string>[Scream]</string>
 		<key>face_id</key>
 		<string>083</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[抠鼻]</string>
+		<string>[Nosepick]</string>
 		<key>face_id</key>
 		<string>084</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[鼓掌]</string>
+		<string>[Clap]</string>
 		<key>face_id</key>
 		<string>085</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[糗大了]</string>
+		<string>[Mybad]</string>
 		<key>face_id</key>
 		<string>086</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[左哼哼]</string>
-		<key>face_id</key>
-		<string>087</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[打哈欠]</string>
-		<key>face_id</key>
-		<string>088</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[快哭了]</string>
+		<string>[TearingUp]</string>
 		<key>face_id</key>
 		<string>089</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[吓]</string>
+		<string>[Terror]</string>
 		<key>face_id</key>
 		<string>090</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[篮球]</string>
+		<string>[Ball]</string>
 		<key>face_id</key>
 		<string>091</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[乒乓]</string>
+		<string>[Pingpong]</string>
 		<key>face_id</key>
 		<string>092</string>
 	</dict>
@@ -562,279 +520,219 @@
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[跳跳]</string>
+		<string>[Waddle]</string>
 		<key>face_id</key>
 		<string>094</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[怄火]</string>
-		<key>face_id</key>
-		<string>095</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[转圈]</string>
+		<string>[Twirl]</string>
 		<key>face_id</key>
 		<string>096</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[磕头]</string>
-		<key>face_id</key>
-		<string>097</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[回头]</string>
-		<key>face_id</key>
-		<string>098</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[跳绳]</string>
-		<key>face_id</key>
-		<string>099</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[激动]</string>
-		<key>face_id</key>
-		<string>100</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[街舞]</string>
+		<string>[Dance]</string>
 		<key>face_id</key>
 		<string>101</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[献吻]</string>
-		<key>face_id</key>
-		<string>102</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[左太极]</string>
-		<key>face_id</key>
-		<string>103</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[右太极]</string>
-		<key>face_id</key>
-		<string>104</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[闭嘴]</string>
+		<string>[Silent]</string>
 		<key>face_id</key>
 		<string>105</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[猫咪]</string>
+		<string>[Cat]</string>
 		<key>face_id</key>
 		<string>106</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[红双喜]</string>
-		<key>face_id</key>
-		<string>107</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[鞭炮]</string>
+		<string>[Firecracker]</string>
 		<key>face_id</key>
 		<string>108</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[红灯笼]</string>
+		<string>[Lantern]</string>
 		<key>face_id</key>
 		<string>109</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[麻将]</string>
+		<string>[Rich]</string>
 		<key>face_id</key>
 		<string>110</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[麦克风]</string>
+		<string>[Mic]</string>
 		<key>face_id</key>
 		<string>111</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[礼品袋]</string>
+		<string>[Packet]</string>
 		<key>face_id</key>
 		<string>112</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[信封]</string>
+		<string>[Envelope]</string>
 		<key>face_id</key>
 		<string>113</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[象棋]</string>
+		<string>[Chess]</string>
 		<key>face_id</key>
 		<string>114</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[彩带]</string>
+		<string>[Party]</string>
 		<key>face_id</key>
 		<string>115</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[蜡烛]</string>
+		<string>[Candle]</string>
 		<key>face_id</key>
 		<string>116</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[爆筋]</string>
-		<key>face_id</key>
-		<string>117</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[棒棒糖]</string>
+		<string>[Lollipop]</string>
 		<key>face_id</key>
 		<string>118</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[奶瓶]</string>
+		<string>[Feeder]</string>
 		<key>face_id</key>
 		<string>119</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[面条]</string>
+		<string>[Noodles]</string>
 		<key>face_id</key>
 		<string>120</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[香蕉]</string>
+		<string>[Banana]</string>
 		<key>face_id</key>
 		<string>121</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[飞机]</string>
+		<string>[Plane]</string>
 		<key>face_id</key>
 		<string>122</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[左车头]</string>
-		<key>face_id</key>
-		<string>124</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[车厢]</string>
+		<string>[Train]</string>
 		<key>face_id</key>
 		<string>125</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[右车头]</string>
-		<key>face_id</key>
-		<string>126</string>
-	</dict>
-	<dict>
-		<key>face_name</key>
-		<string>[多云]</string>
+		<string>[Cloud]</string>
 		<key>face_id</key>
 		<string>127</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[下雨]</string>
+		<string>[Rain]</string>
 		<key>face_id</key>
 		<string>128</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[钞票]</string>
+		<string>[Money]</string>
 		<key>face_id</key>
 		<string>129</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[熊猫]</string>
+		<string>[Panda]</string>
 		<key>face_id</key>
 		<string>130</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[灯泡]</string>
+		<string>[Bulb]</string>
 		<key>face_id</key>
 		<string>131</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[风车]</string>
+		<string>[Windmill]</string>
 		<key>face_id</key>
 		<string>132</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[闹钟]</string>
+		<string>[Clock]</string>
 		<key>face_id</key>
 		<string>133</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[雨伞]</string>
+		<string>[Umbrella]</string>
 		<key>face_id</key>
 		<string>134</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[彩球]</string>
+		<string>[Balloon]</string>
 		<key>face_id</key>
 		<string>135</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[钻戒]</string>
+		<string>[Ring]</string>
 		<key>face_id</key>
 		<string>136</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[沙发]</string>
+		<string>[Sofa]</string>
 		<key>face_id</key>
 		<string>137</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[纸巾]</string>
+		<string>[Tissue]</string>
 		<key>face_id</key>
 		<string>138</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[手枪]</string>
+		<string>[Gun]</string>
 		<key>face_id</key>
 		<string>140</string>
 	</dict>
 	<dict>
 		<key>face_name</key>
-		<string>[青蛙]</string>
+		<string>[Frog]</string>
 		<key>face_id</key>
 		<string>141</string>
 	</dict>
+    <dict>
+        <key>face_name</key>
+        <string>[Car]</string>
+        <key>face_id</key>
+        <string>142</string>
+    </dict>
+    <dict>
+        <key>face_name</key>
+        <string>[Ring]</string>
+        <key>face_id</key>
+        <string>143</string>
+    </dict>
 </array>
 </plist>

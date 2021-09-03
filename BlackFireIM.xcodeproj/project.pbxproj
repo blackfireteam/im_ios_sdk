@@ -59,7 +59,6 @@
 		F04CF69F26AFAFE300DB452E /* wink.json in Resources */ = {isa = PBXBuildFile; fileRef = F04CF5B326AFAFE100DB452E /* wink.json */; };
 		F04CF6A026AFAFE300DB452E /* spark_loading.json in Resources */ = {isa = PBXBuildFile; fileRef = F04CF5B426AFAFE100DB452E /* spark_loading.json */; };
 		F04CF6A126AFAFE300DB452E /* call.caf in Resources */ = {isa = PBXBuildFile; fileRef = F04CF5B526AFAFE100DB452E /* call.caf */; };
-		F04CF6A226AFAFE300DB452E /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F04CF5B626AFAFE100DB452E /* TUIKitFace.bundle */; };
 		F04CF6A326AFAFE300DB452E /* MSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF5BA26AFAFE100DB452E /* MSHelper.m */; };
 		F04CF6A426AFAFE300DB452E /* UIView+BFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF5BB26AFAFE100DB452E /* UIView+BFExtension.m */; };
 		F04CF6A526AFAFE300DB452E /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF5BC26AFAFE100DB452E /* UIView+Frame.m */; };
@@ -135,6 +134,7 @@
 		F04CF6EB26AFAFE300DB452E /* BFProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF67026AFAFE300DB452E /* BFProfileViewController.m */; };
 		F04CF6EC26AFAFE300DB452E /* BFProfileService.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF67226AFAFE300DB452E /* BFProfileService.m */; };
 		F04CF6ED26AFAFE300DB452E /* BFProfileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF67626AFAFE300DB452E /* BFProfileHeaderView.m */; };
+		F052254026E218450048F588 /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F052253F26E218450048F588 /* TUIKitFace.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -270,7 +270,6 @@
 		F04CF5B326AFAFE100DB452E /* wink.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wink.json; sourceTree = "<group>"; };
 		F04CF5B426AFAFE100DB452E /* spark_loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spark_loading.json; sourceTree = "<group>"; };
 		F04CF5B526AFAFE100DB452E /* call.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = call.caf; sourceTree = "<group>"; };
-		F04CF5B626AFAFE100DB452E /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
 		F04CF5B826AFAFE100DB452E /* UIColor+BFDarkMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+BFDarkMode.h"; sourceTree = "<group>"; };
 		F04CF5B926AFAFE100DB452E /* NSDate+MSKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+MSKit.h"; sourceTree = "<group>"; };
 		F04CF5BA26AFAFE100DB452E /* MSHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSHelper.m; sourceTree = "<group>"; };
@@ -434,6 +433,7 @@
 		F04CF67326AFAFE300DB452E /* BFProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFProfileViewController.h; sourceTree = "<group>"; };
 		F04CF67526AFAFE300DB452E /* BFProfileHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFProfileHeaderView.h; sourceTree = "<group>"; };
 		F04CF67626AFAFE300DB452E /* BFProfileHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFProfileHeaderView.m; sourceTree = "<group>"; };
+		F052253F26E218450048F588 /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -726,10 +726,10 @@
 				F027973E26CE5C26003BD664 /* TUIKitResource.bundle */,
 				F04CF5B126AFAFE100DB452E /* 00.caf */,
 				F04CF5B226AFAFE100DB452E /* 01.caf */,
+				F052253F26E218450048F588 /* TUIKitFace.bundle */,
 				F04CF5B326AFAFE100DB452E /* wink.json */,
 				F04CF5B426AFAFE100DB452E /* spark_loading.json */,
 				F04CF5B526AFAFE100DB452E /* call.caf */,
-				F04CF5B626AFAFE100DB452E /* TUIKitFace.bundle */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -1247,8 +1247,8 @@
 				F011D58C25E736C10061F9D6 /* LaunchScreen.storyboard in Resources */,
 				F04CF6A126AFAFE300DB452E /* call.caf in Resources */,
 				F04CF6BE26AFAFE300DB452E /* YBImageBrowserVideo.bundle in Resources */,
+				F052254026E218450048F588 /* TUIKitFace.bundle in Resources */,
 				F04CF69D26AFAFE300DB452E /* 00.caf in Resources */,
-				F04CF6A226AFAFE300DB452E /* TUIKitFace.bundle in Resources */,
 				F04CF69F26AFAFE300DB452E /* wink.json in Resources */,
 				F011D58925E736C10061F9D6 /* Assets.xcassets in Resources */,
 				F027973F26CE5C26003BD664 /* TUIKitResource.bundle in Resources */,
