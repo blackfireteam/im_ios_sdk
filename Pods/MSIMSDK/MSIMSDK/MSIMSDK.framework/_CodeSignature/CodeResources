@@ -22,7 +22,7 @@
 		</data>
 		<key>Headers/MSDBFileRecordStore.h</key>
 		<data>
-		HDH+MYbYl9VE3MEZBBWL1Xqv4m8=
+		ANc8Y/uJyACM7dUShy0S0NyKTO4=
 		</data>
 		<key>Headers/MSDBManager.h</key>
 		<data>
@@ -130,7 +130,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		84lHywqrW2hLqvijVsNLZU6LaSc=
+		CyELwcMXxmqf6JXn9WF8PcVdQjk=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -187,11 +187,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HDH+MYbYl9VE3MEZBBWL1Xqv4m8=
+			ANc8Y/uJyACM7dUShy0S0NyKTO4=
 			</data>
 			<key>hash2</key>
 			<data>
-			h8KrabsJIJN2iAN8zhya18y6BffG/7DDpkThmWYx9Oc=
+			aEmNQI5xKQKdWRPr875/HjLKh24Frx1qK0BlCrGZUjo=
 			</data>
 		</dict>
 		<key>Headers/MSDBManager.h</key>
