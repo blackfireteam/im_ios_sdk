@@ -296,7 +296,7 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
         cameraData.image = [UIImage bf_imageNamed:@"more_picture"];
         
         MSInputMoreCellData *photoData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VIDEO];
-        photoData.title = TUILocalizableString(TUIKitMoreCamera);
+        photoData.title = TUILocalizableString(TUIKitMoreVideo);
         photoData.image = [UIImage bf_imageNamed:@"more_camera"];
         
         MSInputMoreCellData *voiceData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VOICE_CALL];

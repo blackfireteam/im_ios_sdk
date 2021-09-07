@@ -15,10 +15,10 @@
 #import <SDWebImage.h>
 #import "BFProfileHeaderView.h"
 #import "BFProfileService.h"
-#import <Photos/Photos.h>
-#import <MobileCoreServices/MobileCoreServices.h>
+#import <TZImagePickerController.h>
 
-@interface BFProfileViewController ()<UITableViewDelegate,UITableViewDataSource,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+
+@interface BFProfileViewController ()<UITableViewDelegate,UITableViewDataSource,TZImagePickerControllerDelegate>
 
 @property(nonatomic,strong) UITableView *myTableView;
 
@@ -159,13 +159,10 @@
 
 - (void)avatarTap
 {
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        picker.mediaTypes = [NSArray arrayWithObjects: @"public.image", nil];
-        picker.delegate = self;
-        [self presentViewController:picker animated:YES completion:nil];
-    }
+    TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
+    picker.allowPickingVideo = NO;
+    picker.allowPickingImage = YES;
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -217,53 +214,31 @@
     }
 }
 
-#pragma mark -
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+#pragma mark - TZImagePickerControllerDelegate
+
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto infos:(NSArray<NSDictionary *> *)infos
 {
-    picker.delegate = nil;
+    UIImage *image = photos.firstObject;
+    PHAsset *asset = assets.firstObject;
+    MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
+    imageElem.type = MSIM_MSG_TYPE_IMAGE;
+    imageElem.image = image;
+    imageElem.width = image.size.width;
+    imageElem.height = image.size.height;
+    imageElem.uuid = asset.localIdentifier;
+    
     WS(weakSelf)
-    [picker dismissViewControllerAnimated:YES completion:^{
-        NSString *mediaType = info[UIImagePickerControllerMediaType];
-        PHAsset *imageAsset = info[UIImagePickerControllerPHAsset];
+    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:MSUploadFileTypeAvatar progress:^(CGFloat progress) {
         
-        if([mediaType isEqualToString:(NSString *)kUTTypeImage]){
-            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            UIImageOrientation imageOrientation = image.imageOrientation;
-            if(imageOrientation != UIImageOrientationUp) {
-                CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height);
-                CGFloat aspectWidth = image.size.width * aspectRatio;
-                CGFloat aspectHeight = image.size.height * aspectRatio;
-
-                UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
-                [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-            }
-            MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
-            imageElem.type = MSIM_MSG_TYPE_IMAGE;
-            imageElem.image = image;
-            imageElem.width = image.size.width;
-            imageElem.height = image.size.height;
-            imageElem.uuid = imageAsset.localIdentifier;
-            
-            [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:MSUploadFileTypeAvatar progress:^(CGFloat progress) {
-                
-            } succ:^(NSString * _Nonnull url) {
-                
-                [weakSelf editAvatar:url];
-                
-            } fail:^(NSInteger code, NSString * _Nonnull desc) {
-                
-                [MSHelper showToastFail:desc];
-                
-            }];
-        }
+    } succ:^(NSString * _Nonnull url) {
+        
+        [weakSelf editAvatar:url];
+        
+    } fail:^(NSInteger code, NSString * _Nonnull desc) {
+        
+        [MSHelper showToastFail:desc];
+        
     }];
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)logoutBtnClick

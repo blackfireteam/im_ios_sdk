@@ -178,6 +178,10 @@
     _numberLabel.text = [NSString stringWithFormat:@"%zd",_tzImagePickerVc.selectedModels.count];
     _numberLabel.hidden = _tzImagePickerVc.selectedModels.count <= 0;
     _numberLabel.backgroundColor = [UIColor clearColor];
+    _numberLabel.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doneButtonClick)];
+    [_numberLabel addGestureRecognizer:tapGesture];
     
     [_originalPhotoButton addSubview:_originalPhotoLabel];
     [_toolBar addSubview:_doneButton];
@@ -284,7 +288,7 @@
         _originalPhotoLabel.frame = CGRectMake(fullImageWidth + 42, 0, 80, 44);
     }
     [_doneButton sizeToFit];
-    _doneButton.frame = CGRectMake(self.view.tz_width - _doneButton.tz_width - 12, 0, _doneButton.tz_width, 44);
+    _doneButton.frame = CGRectMake(self.view.tz_width - _doneButton.tz_width - 12, 0, MAX(44, _doneButton.tz_width), 44);
     _numberImageView.frame = CGRectMake(_doneButton.tz_left - 24 - 5, 10, 24, 24);
     _numberLabel.frame = _numberImageView.frame;
     
@@ -318,6 +322,7 @@
                 return;
             }
             [_tzImagePickerVc addSelectedModel:model];
+            [self setAsset:model.asset isSelect:YES];
             if (self.photos) {
                 [_tzImagePickerVc.selectedAssets addObject:_assetsTemp[self.currentIndex]];
                 [self.photos addObject:_photosTemp[self.currentIndex]];
@@ -353,6 +358,7 @@
                     // [_tzImagePickerVc.selectedAssets removeObject:_assetsTemp[self.currentIndex]];
                     [self.photos removeObject:_photosTemp[self.currentIndex]];
                 }
+                [self setAsset:model.asset isSelect:NO];
                 break;
             }
         }
@@ -577,7 +583,7 @@
             _originalPhotoLabel.hidden = YES;
         } else {
             _originalPhotoButton.hidden = NO;
-            if (_isSelectOriginalPhoto)  _originalPhotoLabel.hidden = NO;
+            if (_isSelectOriginalPhoto) _originalPhotoLabel.hidden = NO;
         }
     }
     
@@ -623,8 +629,10 @@
             self->_doneButton.enabled = YES;
         }
         self->_selectButton.hidden = currentModel.iCloudFailed || !_tzImagePickerVc.showSelectBtn;
-        self->_originalPhotoButton.hidden = currentModel.iCloudFailed;
-        self->_originalPhotoLabel.hidden = currentModel.iCloudFailed;
+        if (currentModel.iCloudFailed) {
+            self->_originalPhotoButton.hidden = YES;
+            self->_originalPhotoLabel.hidden = YES;
+        }
     });
 }
 
@@ -636,6 +644,34 @@
 
 - (NSInteger)currentIndex {
     return [TZCommonTools tz_isRightToLeftLayout] ? self.models.count - _currentIndex - 1 : _currentIndex;
+}
+
+/// 选中/取消选中某张照片
+- (void)setAsset:(PHAsset *)asset isSelect:(BOOL)isSelect {
+    TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+    if (isSelect && [tzImagePickerVc.pickerDelegate respondsToSelector:@selector(imagePickerController:didSelectAsset:photo:isSelectOriginalPhoto:)]) {
+        [self callDelegate:asset isSelect:YES];
+    }
+    if (!isSelect && [tzImagePickerVc.pickerDelegate respondsToSelector:@selector(imagePickerController:didDeselectAsset:photo:isSelectOriginalPhoto:)]) {
+        [self callDelegate:asset isSelect:NO];
+    }
+}
+
+/// 调用选中/取消选中某张照片的代理方法
+- (void)callDelegate:(PHAsset *)asset isSelect:(BOOL)isSelect {
+    TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(tzImagePickerVc) weakImagePickerVc= tzImagePickerVc;
+    [[TZImageManager manager] getPhotoWithAsset:asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+        if (isDegraded) return;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        __strong typeof(weakImagePickerVc) strongImagePickerVc = weakImagePickerVc;
+        if (isSelect) {
+            [strongImagePickerVc.pickerDelegate imagePickerController:strongImagePickerVc didSelectAsset:asset photo:photo isSelectOriginalPhoto:strongSelf.isSelectOriginalPhoto];
+        } else {
+            [strongImagePickerVc.pickerDelegate imagePickerController:strongImagePickerVc didDeselectAsset:asset photo:photo isSelectOriginalPhoto:strongSelf.isSelectOriginalPhoto];
+        }
+    }];
 }
 
 @end

@@ -11,9 +11,11 @@
 #import "AppDelegate.h"
 #import "BFTabBarController.h"
 #import "BFProfileService.h"
-#import <MobileCoreServices/MobileCoreServices.h>
+#import <TZImagePickerController.h>
 
-@interface BFSignInStepTwoController()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+
+
+@interface BFSignInStepTwoController()<TZImagePickerControllerDelegate>
 
 @property(nonatomic,strong) UIImageView *avatarIcon;
 
@@ -55,13 +57,11 @@
 
 - (void)avatarDidTap
 {
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        picker.mediaTypes = [NSArray arrayWithObjects: @"public.image", nil];
-        picker.delegate = self;
-        [self presentViewController:picker animated:YES completion:nil];
-    }
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.mediaTypes = [NSArray arrayWithObjects: @"public.image", nil];
+    picker.delegate = self;
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 - (void)nextBtnDidClick
@@ -127,36 +127,12 @@
     }];
 }
 
-#pragma mark -
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
-{
-    picker.delegate = nil;
-    WS(weakSelf)
-    [picker dismissViewControllerAnimated:YES completion:^{
-        NSString *mediaType = info[UIImagePickerControllerMediaType];
-        
-        if([mediaType isEqualToString:(NSString *)kUTTypeImage]){
-            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            UIImageOrientation imageOrientation = image.imageOrientation;
-            if(imageOrientation != UIImageOrientationUp) {
-                CGFloat aspectRatio = MIN ( 1920 / image.size.width, 1920 / image.size.height);
-                CGFloat aspectWidth = image.size.width * aspectRatio;
-                CGFloat aspectHeight = image.size.height * aspectRatio;
+#pragma mark - TZImagePickerControllerDelegate
 
-                UIGraphicsBeginImageContext(CGSizeMake(aspectWidth, aspectHeight));
-                [image drawInRect:CGRectMake(0, 0, aspectWidth, aspectHeight)];
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
-            }
-            weakSelf.avatarIcon.image = image;
-            weakSelf.info.avatarImage = image;
-        }
-    }];
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto infos:(NSArray<NSDictionary *> *)infos
 {
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    self.avatarIcon.image = photos.firstObject;
+    self.info.avatarImage = photos.firstObject;
 }
 
 @end

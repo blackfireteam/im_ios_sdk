@@ -25,6 +25,7 @@ PODS:
     - SDWebImage/Core (= 5.9.0)
   - SDWebImage/Core (5.9.0)
   - SVProgressHUD (2.2.5)
+  - TZImagePickerController (3.6.4)
 
 DEPENDENCIES:
   - AFNetworking
@@ -35,6 +36,7 @@ DEPENDENCIES:
   - QCloudCOSXML/Transfer
   - SDWebImage
   - SVProgressHUD
+  - TZImagePickerController
 
 SPEC REPOS:
   trunk:
@@ -47,6 +49,7 @@ SPEC REPOS:
     - QCloudCOSXML
     - SDWebImage
     - SVProgressHUD
+    - TZImagePickerController
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
@@ -58,7 +61,8 @@ SPEC CHECKSUMS:
   QCloudCOSXML: afc6c686f85a89e4a9f0b8adcb6368913828ad50
   SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  TZImagePickerController: 1cc39ec0454d6e94d0397418953164d7aa631719
 
-PODFILE CHECKSUM: c61b9836c21fef4ca9e2ec268e55d1713208aee4
+PODFILE CHECKSUM: 1655919b38b84fcfefd3e9682a180155f5c96a3c
 
 COCOAPODS: 1.10.1

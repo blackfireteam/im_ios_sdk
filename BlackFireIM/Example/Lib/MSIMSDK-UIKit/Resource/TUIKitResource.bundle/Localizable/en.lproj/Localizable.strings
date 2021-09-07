@@ -118,7 +118,7 @@
 "TUIKitMessageTypeDraft" = "[Draft]";
 
 "TUIKitMoreCamera" = "Take Photo";
-"TUIKitMorePhoto" = "Album";
+"TUIKitMorePhoto" = "Photo";
 "TUIKitMoreVideo" = "Video";
 "TUIKitMoreLocation" = "Location";
 "TUIKitMoreFile" = "Files";

@@ -11,6 +11,7 @@ pod 'lottie-ios','2.5.3'
 pod 'MJRefresh'
 pod 'SDWebImage'
 pod 'SVProgressHUD'
+pod 'TZImagePickerController'
 pod 'QCloudCOSXML/Transfer'
 pod 'Bugly'
 
