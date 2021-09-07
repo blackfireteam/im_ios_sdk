@@ -17,6 +17,8 @@
 
 @property(nonatomic,strong) MSUIConversationListController *conVC;
 
+@property(nonatomic,strong) UIView *networkBarView;
+
 @end
 
 @implementation BFConversationListController
@@ -24,19 +26,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.conVC = [[MSUIConversationListController alloc]init];
+    self.conVC.delegate = self;
     [self addChildViewController:self.conVC];
     [self.view addSubview:self.conVC.view];
     [self setupNavigation];
-}
-
-- (instancetype)init
-{
-    if (self = [super init]) {
-        self.conVC = [[MSUIConversationListController alloc]init];
-        self.conVC.delegate = self;
-        [self addNotifications];
-    }
-    return self;
+    
+    [self addNotifications];
+    /// 当前的连接状态
+    MSIMNetStatus status = [MSIMManager sharedInstance].connStatus;
+    [self updateTitleViewWith: status];
 }
 
 - (void)addNotifications
@@ -62,8 +61,8 @@
 
 - (void)onNetworkChanged:(NSNotification *)notification
 {
-    MSIMNetStatus status = [notification.object intValue];
-    [self updateTitleViewWith:status];
+    NSNumber *codeNum = notification.object;
+    [self updateTitleViewWith:codeNum.integerValue];
 }
 
 - (void)updateTitleViewWith:(MSIMNetStatus)status
@@ -74,16 +73,18 @@
             [_titleView setTitle:@"MESSAGE"];
             break;
         case IMNET_STATUS_CONNECTING:
+            [self hideNetworkDisconnetBar];
             [_titleView startAnimating];
             [_titleView setTitle:@"连接中..."];
             break;
         case IMNET_STATUS_DISCONNECT:
             [_titleView stopAnimating];
-            [_titleView setTitle:@"MESSAGE(无网络)"];
+            [_titleView setTitle:@"MESSAGE(断开连接)"];
+            [self showNetworkDisconnetBar];
             break;
         case IMNET_STATUS_CONNFAILED:
             [_titleView stopAnimating];
-            [_titleView setTitle:@"MESSAGE(未连接)"];
+            [_titleView setTitle:@"MESSAGE(连接失败)"];
             break;
         default:
             break;
@@ -92,15 +93,34 @@
 
 - (void)conversationSyncStart
 {
+    [self.titleView startAnimating];
     [self.titleView setTitle:@"拉取中..."];
 }
 
 - (void)conversationSyncFinish
 {
+    [self.titleView stopAnimating];
     [self.titleView setTitle:@"MESSAGE"];
     [self updateTabbarUnreadCount];
 }
 
+- (void)showNetworkDisconnetBar
+{
+    self.networkBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, Screen_Width, 40)];
+    self.networkBarView.backgroundColor = [UIColor redColor];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, Screen_Width - 20, 40)];
+    label.font = [UIFont systemFontOfSize:15];
+    label.textColor = [UIColor whiteColor];
+    label.text = @"当前网络不可用，请检查网络设置";
+    [self.networkBarView addSubview:label];
+    self.conVC.tableView.tableHeaderView = self.networkBarView;
+}
+
+- (void)hideNetworkDisconnetBar
+{
+    self.conVC.tableView.tableHeaderView = nil;
+    self.networkBarView = nil;
+}
 
 - (void)updateTabbarUnreadCount
 {
