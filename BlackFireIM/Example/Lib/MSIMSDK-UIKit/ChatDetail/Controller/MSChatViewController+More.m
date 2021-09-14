@@ -38,17 +38,35 @@
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto infos:(NSArray<NSDictionary *> *)infos
 {
-    for (NSInteger i = 0; i < photos.count; i++) {
-        UIImage *image = photos[i];
-        PHAsset *asset = assets[i];
-        MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
-        imageElem.type = MSIM_MSG_TYPE_IMAGE;
-        imageElem.image = image;
-        imageElem.width = image.size.width;
-        imageElem.height = image.size.height;
-        imageElem.uuid = asset.localIdentifier;
-        [self sendImage:imageElem];
+    if (isSelectOriginalPhoto) {
+        for (NSInteger i = 0; i < photos.count; i++) {
+            PHAsset *asset = assets[i];
+            [[TZImageManager manager] getOriginalPhotoWithAsset:asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
+                if (!isDegraded) {
+                    MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
+                    imageElem.type = MSIM_MSG_TYPE_IMAGE;
+                    imageElem.image = photo;
+                    imageElem.width = photo.size.width;
+                    imageElem.height = photo.size.height;
+                    imageElem.uuid = asset.localIdentifier;
+                    [self sendImage:imageElem];
+                }
+            }];
+        }
+    }else {
+        for (NSInteger i = 0; i < photos.count; i++) {
+            UIImage *image = photos[i];
+            PHAsset *asset = assets[i];
+            MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
+            imageElem.type = MSIM_MSG_TYPE_IMAGE;
+            imageElem.image = image;
+            imageElem.width = image.size.width;
+            imageElem.height = image.size.height;
+            imageElem.uuid = asset.localIdentifier;
+            [self sendImage:imageElem];
+        }
     }
+    
 }
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingVideo:(UIImage *)coverImage sourceAssets:(PHAsset *)asset

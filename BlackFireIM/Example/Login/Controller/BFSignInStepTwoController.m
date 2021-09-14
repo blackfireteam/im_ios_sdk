@@ -57,10 +57,9 @@
 
 - (void)avatarDidTap
 {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    picker.mediaTypes = [NSArray arrayWithObjects: @"public.image", nil];
-    picker.delegate = self;
+    TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
+    picker.allowPickingVideo = NO;
+    picker.allowPickingImage = YES;
     [self presentViewController:picker animated:YES completion:nil];
 }
 
