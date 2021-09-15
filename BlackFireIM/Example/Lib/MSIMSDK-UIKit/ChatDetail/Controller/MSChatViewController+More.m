@@ -31,6 +31,7 @@
     TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
     picker.allowPickingVideo = YES;
     picker.allowPickingImage = NO;
+    picker.autoDismiss = NO;
     [self presentViewController:picker animated:YES completion:nil];
 }
 
@@ -71,6 +72,7 @@
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingVideo:(UIImage *)coverImage sourceAssets:(PHAsset *)asset
 {
+    [MSHelper showToast];
     [[TZImageManager manager] getVideoOutputPathWithAsset:asset success:^(NSString *outputPath) {
         MSIMVideoElem *videoElem = [[MSIMVideoElem alloc]init];
         videoElem.type = MSIM_MSG_TYPE_VIDEO;
@@ -79,9 +81,13 @@
         videoElem.height = ABS(asset.pixelHeight);
         videoElem.videoPath = outputPath;
         videoElem.duration = asset.duration;
+        videoElem.uuid = asset.localIdentifier;
         [self sendVideo:videoElem];
+        [MSHelper dismissToast];
+        [picker dismissViewControllerAnimated:YES completion:nil];
     } failure:^(NSString *errorMessage, NSError *error) {
-        MSLog(@"视频导出错误.");
+        MSLog(@"%@",error);
+        [MSHelper showToastFail:error.localizedDescription];
     }];
 }
 

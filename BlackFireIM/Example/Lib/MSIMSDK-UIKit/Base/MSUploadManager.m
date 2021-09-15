@@ -110,7 +110,7 @@ static MSUploadManager *_manager;
                           succ:(normalSucc)succ
                           fail:(normalFail)fail
 {
-    QCloudCOSXMLUploadObjectRequest *put = [QCloudCOSXMLUploadObjectRequest new];
+    QCloudPutObjectRequest* put = [QCloudPutObjectRequest new];
     if (type == MSUploadFileTypeImage || type == MSUploadFileTypeAvatar) {
         if ([object isKindOfClass:[UIImage class]]) {
             UIImage *image = object;
@@ -140,17 +140,22 @@ static MSUploadManager *_manager;
             if (progress) progress(totalBytesSent*1.0/totalBytesExpectedToSend*1.0);
         });
     }];
-    [put setFinishBlock:^(QCloudUploadObjectResult * _Nullable result, NSError * _Nullable error) {
-            
+    NSString *bucketStr = put.bucket;
+    NSString *objectStr = put.object;
+    NSString *region = self.cosInfo.region;
+    [put setFinishBlock:^(id outputObject, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error == nil) {
-                if (succ) succ(result.location);
+                NSString *resultUrl = [NSString stringWithFormat:@"https://%@.cos.%@.myqcloud.com%@",bucketStr,region,objectStr];
+                //@"https://msim-1252460681.cos.ap-chengdu.myqcloud.com/tmp/18030740093/im_video/765F012F-6F0D-45AB-A468-27441D411243.mp4";
+                
+                if (succ) succ(resultUrl);
             }else {
                 if (fail) fail(error.code,error.localizedDescription);
             }
         });
     }];
-    [[QCloudCOSTransferMangerService defaultCOSTransferManager]UploadObject:put];
+    [[QCloudCOSXMLService defaultCOSXML] PutObject:put];
 }
 
 - (void)ms_downloadFromUrl:(NSString *)url
