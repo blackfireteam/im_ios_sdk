@@ -26,16 +26,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.conVC = [[MSUIConversationListController alloc]init];
-    self.conVC.delegate = self;
     [self addChildViewController:self.conVC];
     [self.view addSubview:self.conVC.view];
     [self setupNavigation];
-    
-    [self addNotifications];
+
     /// 当前的连接状态
     MSIMNetStatus status = [MSIMManager sharedInstance].connStatus;
     [self updateTitleViewWith: status];
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        self.conVC = [[MSUIConversationListController alloc]init];
+        self.conVC.delegate = self;
+        [self addNotifications];
+    }
+    return self;
 }
 
 - (void)addNotifications

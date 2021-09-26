@@ -29,7 +29,8 @@
     [self.window makeKeyAndVisible];
     
     IMSDKConfig *imConfig = [IMSDKConfig defaultConfig];
-    imConfig.uploadMediator = [MSUploadManager sharedInstance];
+    imConfig.logEnable = YES; // 打印日志
+    imConfig.uploadMediator = [MSUploadManager sharedInstance];  // 附件上传插件，用户可以自定义
     [[MSIMKit sharedInstance] initWithConfig:imConfig];
     
     if ([MSIMTools sharedInstance].user_id) {
@@ -40,6 +41,7 @@
     BuglyConfig *config = [[BuglyConfig alloc]init];
     [Bugly startWithAppId:@"f8db8c69b8" config:config];
     
+    //推送相关配置
     [[MSPushMediator sharedInstance] applicationDidFinishLaunchingWithOptions:launchOptions];
     [MSPushMediator sharedInstance].delegate = self;
     return YES;

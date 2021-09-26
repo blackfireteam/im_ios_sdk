@@ -17,8 +17,7 @@
 		F027973C26CE5A3F003BD664 /* BFCallMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F027973926CE5A3F003BD664 /* BFCallMessageCell.m */; };
 		F027973D26CE5A3F003BD664 /* BFCallMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F027973B26CE5A3F003BD664 /* BFCallMessageCellData.m */; };
 		F027973F26CE5C26003BD664 /* TUIKitResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F027973E26CE5C26003BD664 /* TUIKitResource.bundle */; };
-		F04CF67726AFAFE300DB452E /* BFVoiceChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF55A26AFAFE100DB452E /* BFVoiceChatController.m */; };
-		F04CF67826AFAFE300DB452E /* BFWinkMessageCell..m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF55B26AFAFE100DB452E /* BFWinkMessageCell..m */; };
+		F04CF67826AFAFE300DB452E /* BFWinkMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF55B26AFAFE100DB452E /* BFWinkMessageCell.m */; };
 		F04CF67926AFAFE300DB452E /* BFChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF55C26AFAFE100DB452E /* BFChatViewController.m */; };
 		F04CF67A26AFAFE300DB452E /* BFWinkMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF55F26AFAFE100DB452E /* BFWinkMessageCellData.m */; };
 		F04CF67B26AFAFE300DB452E /* MSVoiceCallView.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF56526AFAFE100DB452E /* MSVoiceCallView.m */; };
@@ -191,11 +190,9 @@
 		F027973E26CE5C26003BD664 /* TUIKitResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitResource.bundle; sourceTree = "<group>"; };
 		F042C8522679E00D0067547E /* BlackFireIM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlackFireIM.entitlements; sourceTree = "<group>"; };
 		F04CF55926AFAFE100DB452E /* BFWinkMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFWinkMessageCell.h; sourceTree = "<group>"; };
-		F04CF55A26AFAFE100DB452E /* BFVoiceChatController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFVoiceChatController.m; sourceTree = "<group>"; };
-		F04CF55B26AFAFE100DB452E /* BFWinkMessageCell..m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFWinkMessageCell..m; sourceTree = "<group>"; };
+		F04CF55B26AFAFE100DB452E /* BFWinkMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFWinkMessageCell.m; sourceTree = "<group>"; };
 		F04CF55C26AFAFE100DB452E /* BFChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFChatViewController.m; sourceTree = "<group>"; };
 		F04CF55D26AFAFE100DB452E /* BFWinkMessageCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFWinkMessageCellData.h; sourceTree = "<group>"; };
-		F04CF55E26AFAFE100DB452E /* BFVoiceChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFVoiceChatController.h; sourceTree = "<group>"; };
 		F04CF55F26AFAFE100DB452E /* BFWinkMessageCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFWinkMessageCellData.m; sourceTree = "<group>"; };
 		F04CF56026AFAFE100DB452E /* BFChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFChatViewController.h; sourceTree = "<group>"; };
 		F04CF56326AFAFE100DB452E /* MSIMSDK-UIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSIMSDK-UIKit.h"; sourceTree = "<group>"; };
@@ -545,12 +542,10 @@
 		F04CF55826AFAFE100DB452E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF55E26AFAFE100DB452E /* BFVoiceChatController.h */,
-				F04CF55A26AFAFE100DB452E /* BFVoiceChatController.m */,
-				F04CF55926AFAFE100DB452E /* BFWinkMessageCell.h */,
-				F04CF55B26AFAFE100DB452E /* BFWinkMessageCell..m */,
 				F04CF56026AFAFE100DB452E /* BFChatViewController.h */,
 				F04CF55C26AFAFE100DB452E /* BFChatViewController.m */,
+				F04CF55926AFAFE100DB452E /* BFWinkMessageCell.h */,
+				F04CF55B26AFAFE100DB452E /* BFWinkMessageCell.m */,
 				F04CF55D26AFAFE100DB452E /* BFWinkMessageCellData.h */,
 				F04CF55F26AFAFE100DB452E /* BFWinkMessageCellData.m */,
 				F027973826CE5A3E003BD664 /* BFCallMessageCell.h */,
@@ -1353,7 +1348,6 @@
 				F04CF6B826AFAFE300DB452E /* YYAnimatedImageView.m in Sources */,
 				F04CF6D626AFAFE300DB452E /* YBIBCollectionView.m in Sources */,
 				F04CF69926AFAFE300DB452E /* MSRecordView.m in Sources */,
-				F04CF67726AFAFE300DB452E /* BFVoiceChatController.m in Sources */,
 				F04CF6C626AFAFE300DB452E /* YBIBImageCell.m in Sources */,
 				F04CF6EC26AFAFE300DB452E /* BFProfileService.m in Sources */,
 				F04CF69B26AFAFE300DB452E /* MSInputBarView.m in Sources */,
@@ -1442,7 +1436,7 @@
 				F04CF69226AFAFE300DB452E /* MSImageMessageCell.m in Sources */,
 				F027973C26CE5A3F003BD664 /* BFCallMessageCell.m in Sources */,
 				F04CF68C26AFAFE300DB452E /* MSFaceCollectionCell.m in Sources */,
-				F04CF67826AFAFE300DB452E /* BFWinkMessageCell..m in Sources */,
+				F04CF67826AFAFE300DB452E /* BFWinkMessageCell.m in Sources */,
 				F04CF6B626AFAFE300DB452E /* YYImageCoder.m in Sources */,
 				F04CF6C126AFAFE300DB452E /* YBIBImageLayout.m in Sources */,
 				F04CF6B526AFAFE300DB452E /* YYImage.m in Sources */,

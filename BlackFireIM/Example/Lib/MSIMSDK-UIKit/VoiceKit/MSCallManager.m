@@ -15,8 +15,6 @@
 
 @property(nonatomic,strong) MSCallViewController *callVC;
 
-@property(nonatomic,copy) NSString *partner_id;
-
 @property(nonatomic,assign) CallAction action;
 
 @property(nonatomic,assign) MSCallType callType;
@@ -56,7 +54,6 @@
         case CallAction_Call:
         {
             self.isOnCallingWithUid = partner_id;
-            self.partner_id = partner_id;
             self.callType = callType;
             self.callVC = [[MSCallViewController alloc]initWithCallType:self.callType sponsor:creator invitee:partner_id room_id:channel_id];
             self.callVC.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -67,7 +64,7 @@
             [self.timer invalidate];
             self.timer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
                 
-                [weakSelf inviteTimerAction: channel_id];
+                [weakSelf inviteTimerAction: channel_id toReciever:partner_id];
             }];
             [[NSRunLoop mainRunLoop]addTimer:self.timer forMode:NSRunLoopCommonModes];
         }
@@ -76,7 +73,7 @@
         {
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id]) {
                 /// 作为邀请方，取消通话，会补发一条取消通话的普通消息
-                [self sendMessageType:CallAction_Cancel option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
+                [self sendMessageType:CallAction_Cancel option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id toReciever:partner_id];
                 [self.timer invalidate];
                 self.timer = nil;
                 self.timerCount = 0;
@@ -88,7 +85,7 @@
         {
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id] == NO) {
                 /// 作为被邀请方，点击拒绝，结束通话。补一条拒绝的指令消息
-                [self sendMessageType:CallAction_Reject option:IMCUSTOM_SIGNAL room_id:channel_id];
+                [self sendMessageType:CallAction_Reject option:IMCUSTOM_SIGNAL room_id:channel_id toReciever:partner_id];
                 [self destroyCallVC];
             }
         }
@@ -97,11 +94,11 @@
         {
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id]) {
                 /// 自己是邀请方主动挂断，结束通话同时补发一条结束的普通消息
-                [self sendMessageType:CallAction_End option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
+                [self sendMessageType:CallAction_End option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id toReciever:partner_id];
                 [self destroyCallVC];
             }else {
                 ///自己是被邀请方主动挂断，结束通话同时补发一条结束的指令消息
-                [self sendMessageType:CallAction_End option:IMCUSTOM_SIGNAL room_id:channel_id];
+                [self sendMessageType:CallAction_End option:IMCUSTOM_SIGNAL room_id:channel_id toReciever:partner_id];
                 [self destroyCallVC];
             }
         }
@@ -111,7 +108,7 @@
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id] == NO) {
                 /// 作为被邀请方，点击接受，补一条接受的指令消息
                 [self.callVC recieveAccept:callType room_id:channel_id];
-                [self sendMessageType:CallAction_Accept option:IMCUSTOM_SIGNAL room_id:channel_id];
+                [self sendMessageType:CallAction_Accept option:IMCUSTOM_SIGNAL room_id:channel_id toReciever:partner_id];
             }
         }
             break;
@@ -140,12 +137,11 @@
             if (self.isOnCallingWithUid) {
                 if (![self.isOnCallingWithUid isEqualToString:from]) {
                     /// 如果正与某人聊天，收到另一邀请指令，会给对方回一条正忙的指令消息
-                    [self sendMessageType:CallAction_Linebusy option:IMCUSTOM_SIGNAL room_id:channel_id];
+                    [self sendMessageType:CallAction_Linebusy option:IMCUSTOM_SIGNAL room_id:channel_id toReciever:from];
                 }
                 return;
             }
             self.isOnCallingWithUid = from;
-            self.partner_id = from;
             self.callType = callType;
             self.callVC = [[MSCallViewController alloc]initWithCallType:self.callType sponsor:from invitee:[MSIMTools sharedInstance].user_id room_id:channel_id];
             self.callVC.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -176,7 +172,7 @@
                 self.timer = nil;
                 self.timerCount = 0;
                 [self destroyCallVC];
-                [self sendMessageType:CallAction_Reject option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
+                [self sendMessageType:CallAction_Reject option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id toReciever:from];
             }
         }
             break;
@@ -184,7 +180,7 @@
         {
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id]) {
                 /// 作为邀请方，收到对方挂断指令，会结束通话。同时发一条结束的普通消息
-                [self sendMessageType:CallAction_End option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
+                [self sendMessageType:CallAction_End option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id toReciever:from];
                 [self destroyCallVC];
             }else {
                 /// 作为被邀请方，收到对方挂断的消息，会结束通话
@@ -201,7 +197,7 @@
                 self.timer = nil;
                 self.timerCount = 0;
                 [self destroyCallVC];
-                [self sendMessageType:CallAction_Linebusy option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id];
+                [self sendMessageType:CallAction_Linebusy option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:channel_id toReciever:from];
             }
         }
             break;
@@ -221,16 +217,16 @@
     }
 }
 
-- (void)inviteTimerAction:(NSString *)room_id
+- (void)inviteTimerAction:(NSString *)room_id toReciever:(NSString *)reciever
 {
-    [self sendMessageType:CallAction_Call option:IMCUSTOM_SIGNAL room_id:room_id];
+    [self sendMessageType:CallAction_Call option:IMCUSTOM_SIGNAL room_id:room_id toReciever:reciever];
     /// 作为邀请方，对方60秒内无应答，结束通话。补发一条超时的普通消息
     if (self.timerCount >= 60) {
         [self.timer invalidate];
         self.timer = nil;
         self.timerCount = 0;
         [self destroyCallVC];
-        [self sendMessageType:CallAction_Timeout option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:room_id];
+        [self sendMessageType:CallAction_Timeout option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:room_id toReciever:reciever];
     }
     self.timerCount++;
 }
@@ -246,7 +242,7 @@
     }
 }
 
-- (void)sendMessageType:(CallAction)action option:(MSIMCustomOption)option room_id:(NSString *)room_id
+- (void)sendMessageType:(CallAction)action option:(MSIMCustomOption)option room_id:(NSString *)room_id toReciever:(NSString *)reciever
 {
     NSDictionary *extDic = @{@"room_id": room_id,@"type": @(self.callType == MSCallType_Voice ? MSIMCustomSubTypeVoiceCall : MSIMCustomSubTypeVideoCall),@"event":@(action),@"duration": @(self.callVC.duration)};
     MSIMPushInfo *push;
@@ -276,7 +272,7 @@
         push.sound = @"default";
     }
     MSIMCustomElem *custom = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertJsonString] option:option pushExt:push];
-    [[MSIMManager sharedInstance]sendC2CMessage:custom toReciever:self.partner_id successed:^(NSInteger msg_id) {
+    [[MSIMManager sharedInstance]sendC2CMessage:custom toReciever:reciever successed:^(NSInteger msg_id) {
         
             } failed:^(NSInteger code, NSString *desc) {
                 MSLog(@"%@",desc);
