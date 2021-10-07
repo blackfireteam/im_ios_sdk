@@ -1,0 +1,1226 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A5ABB1E519607F699BC02D21 /* Pods_MSIM_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58ECB6D4A404D9E157FA0CF3 /* Pods_MSIM_Swift.framework */; };
+		F02636162702C0C9007E23F6 /* MSCallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02636152702C0C9007E23F6 /* MSCallModel.swift */; };
+		F02636182702C233007E23F6 /* MSVoiceCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02636172702C233007E23F6 /* MSVoiceCallView.swift */; };
+		F08FBA2F26C2064E00613FE0 /* MSVideoMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */; };
+		F08FBA3126C20A3600613FE0 /* MSVoiceMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */; };
+		F08FBA3326C20E9A00613FE0 /* MSSystemMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */; };
+		F08FBA3526C20FEB00613FE0 /* MSNoticeCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3426C20FEB00613FE0 /* MSNoticeCountView.swift */; };
+		F08FBA3926C212EE00613FE0 /* MSUnreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3826C212EE00613FE0 /* MSUnreadView.swift */; };
+		F08FBA3B26C2174900613FE0 /* MSUIConversationCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3A26C2174900613FE0 /* MSUIConversationCellData.swift */; };
+		F08FBA3D26C2205000613FE0 /* MSUIConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3C26C2205000613FE0 /* MSUIConversationCell.swift */; };
+		F08FBA3F26C222B100613FE0 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3E26C222B100613FE0 /* Date+Ext.swift */; };
+		F08FBA4126C24CA000613FE0 /* MSUIConversationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA4026C24CA000613FE0 /* MSUIConversationListController.swift */; };
+		F08FBA4426C25C4000613FE0 /* BFConversationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA4326C25C4000613FE0 /* BFConversationListController.swift */; };
+		F08FBA4626C25C5E00613FE0 /* BFNaviBarIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA4526C25C5E00613FE0 /* BFNaviBarIndicatorView.swift */; };
+		F08FBA4926C2658000613FE0 /* BFUserListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA4826C2658000613FE0 /* BFUserListCell.swift */; };
+		F08FBA4B26C266C900613FE0 /* BFDiscoveryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA4A26C266C900613FE0 /* BFDiscoveryController.swift */; };
+		F0CED8A12702E88600C31B65 /* MSVideoCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CED8A02702E88600C31B65 /* MSVideoCallView.swift */; };
+		F0CED8A32702F27200C31B65 /* MSCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CED8A22702F27200C31B65 /* MSCallViewController.swift */; };
+		F0CED8A52702F38B00C31B65 /* MSCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CED8A42702F38B00C31B65 /* MSCallManager.swift */; };
+		F0CED8D527093B1400C31B65 /* BFCallMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CED8D427093B1400C31B65 /* BFCallMessageCellData.swift */; };
+		F0CED8D727093FAF00C31B65 /* BFCallMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CED8D627093FAF00C31B65 /* BFCallMessageCell.swift */; };
+		F0E5659E26FC29EE00C3424D /* TUIKitResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659726FC29EE00C3424D /* TUIKitResource.bundle */; };
+		F0E5659F26FC29EE00C3424D /* 00.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659826FC29EE00C3424D /* 00.caf */; };
+		F0E565A026FC29EE00C3424D /* 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659926FC29EE00C3424D /* 01.caf */; };
+		F0E565A126FC29EE00C3424D /* wink.json in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659A26FC29EE00C3424D /* wink.json */; };
+		F0E565A226FC29EE00C3424D /* spark_loading.json in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659B26FC29EE00C3424D /* spark_loading.json */; };
+		F0E565A326FC29EE00C3424D /* call.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659C26FC29EE00C3424D /* call.caf */; };
+		F0E565A426FC29EE00C3424D /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659D26FC29EE00C3424D /* TUIKitFace.bundle */; };
+		F0E565A626FC4D3D00C3424D /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565A526FC4D3D00C3424D /* ImageStickerContainerView.swift */; };
+		F0E565B726FD783D00C3424D /* LanternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565A826FD783D00C3424D /* LanternView.swift */; };
+		F0E565B826FD783D00C3424D /* LanternAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565A926FD783D00C3424D /* LanternAnimatedTransitioning.swift */; };
+		F0E565B926FD783D00C3424D /* LanternNoneAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565AA26FD783D00C3424D /* LanternNoneAnimator.swift */; };
+		F0E565BA26FD783D00C3424D /* Lantern.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565AB26FD783D00C3424D /* Lantern.swift */; };
+		F0E565BB26FD783D00C3424D /* LanternCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565AC26FD783D00C3424D /* LanternCell.swift */; };
+		F0E565BC26FD783D00C3424D /* LanternPageIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565AD26FD783D00C3424D /* LanternPageIndicator.swift */; };
+		F0E565BD26FD783D00C3424D /* LanternNumberPageIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565AE26FD783D00C3424D /* LanternNumberPageIndicator.swift */; };
+		F0E565BE26FD783D00C3424D /* LanternLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565AF26FD783D00C3424D /* LanternLog.swift */; };
+		F0E565BF26FD783D00C3424D /* LanternDefaultPageIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565B026FD783D00C3424D /* LanternDefaultPageIndicator.swift */; };
+		F0E565C026FD783D00C3424D /* LanternZoomSupportedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565B126FD783D00C3424D /* LanternZoomSupportedCell.swift */; };
+		F0E565C126FD783D00C3424D /* LanternZoomAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565B226FD783D00C3424D /* LanternZoomAnimator.swift */; };
+		F0E565C226FD783D00C3424D /* LanternImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565B326FD783D00C3424D /* LanternImageCell.swift */; };
+		F0E565C326FD783D00C3424D /* LanternSmoothZoomAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565B426FD783D00C3424D /* LanternSmoothZoomAnimator.swift */; };
+		F0E565C426FD783D00C3424D /* LanternImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565B526FD783D00C3424D /* LanternImageView.swift */; };
+		F0E565C526FD783D00C3424D /* LanternFadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565B626FD783D00C3424D /* LanternFadeAnimator.swift */; };
+		F0E565C726FD788C00C3424D /* VideoZoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565C626FD788C00C3424D /* VideoZoomCell.swift */; };
+		F0FEA33A26DCC37A00BCF4B6 /* MSInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA33926DCC37A00BCF4B6 /* MSInputViewController.swift */; };
+		F0FEA33C26DDAF3900BCF4B6 /* MSMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA33B26DDAF3900BCF4B6 /* MSMessageController.swift */; };
+		F0FEA33E26DF0CDC00BCF4B6 /* MSChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA33D26DF0CDC00BCF4B6 /* MSChatViewController.swift */; };
+		F0FEA34126DF1B3300BCF4B6 /* BFChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA34026DF1B3300BCF4B6 /* BFChatViewController.swift */; };
+		F0FEA34526DF688400BCF4B6 /* BFWinkMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA34426DF688400BCF4B6 /* BFWinkMessageCell.swift */; };
+		F0FEA34726DF6A5800BCF4B6 /* BFWinkMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA34626DF6A5800BCF4B6 /* BFWinkMessageCellData.swift */; };
+		F0FF71B026B0E9CE0005F3CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71AF26B0E9CE0005F3CF /* AppDelegate.swift */; };
+		F0FF71B926B0E9D00005F3CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0FF71B826B0E9D00005F3CF /* Assets.xcassets */; };
+		F0FF71BC26B0E9D00005F3CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0FF71BA26B0E9D00005F3CF /* LaunchScreen.storyboard */; };
+		F0FF71C726B0E9D10005F3CF /* MSIM_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71C626B0E9D10005F3CF /* MSIM_SwiftTests.swift */; };
+		F0FF71D226B0E9D10005F3CF /* MSIM_SwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71D126B0E9D10005F3CF /* MSIM_SwiftUITests.swift */; };
+		F0FF71E326B0F2530005F3CF /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71E226B0F2530005F3CF /* UIView+Ext.swift */; };
+		F0FF71E526B0FA870005F3CF /* UIScreen+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71E426B0FA870005F3CF /* UIScreen+Ext.swift */; };
+		F0FF71E726B0FF4C0005F3CF /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71E626B0FF4C0005F3CF /* UIColor+Ext.swift */; };
+		F0FF71E926B104CB0005F3CF /* MSMcros.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71E826B104CB0005F3CF /* MSMcros.swift */; };
+		F0FF71EB26B121780005F3CF /* Bundle+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71EA26B121780005F3CF /* Bundle+Ext.swift */; };
+		F0FF71ED26B1329E0005F3CF /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71EC26B1329E0005F3CF /* UIImage+Ext.swift */; };
+		F0FF71EF26B14CBB0005F3CF /* MSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71EE26B14CBB0005F3CF /* MSHelper.swift */; };
+		F0FF71F126B14DD50005F3CF /* UIButton+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71F026B14DD50005F3CF /* UIButton+Ext.swift */; };
+		F0FF71F426B151180005F3CF /* BFBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71F326B151180005F3CF /* BFBaseViewController.swift */; };
+		F0FF71F626B151E60005F3CF /* BFNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71F526B151E60005F3CF /* BFNavigationController.swift */; };
+		F0FF71F826B1526F0005F3CF /* BFTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71F726B1526F0005F3CF /* BFTabBarController.swift */; };
+		F0FF71FB26B154390005F3CF /* BFRegisterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71FA26B154390005F3CF /* BFRegisterInfo.swift */; };
+		F0FF71FD26B154BF0005F3CF /* BFSignInStepOneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71FC26B154BF0005F3CF /* BFSignInStepOneController.swift */; };
+		F0FF71FF26B178720005F3CF /* BFSignInStepTwoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71FE26B178720005F3CF /* BFSignInStepTwoController.swift */; };
+		F0FF720126B1825E0005F3CF /* BFProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720026B1825E0005F3CF /* BFProfileService.swift */; };
+		F0FF720326B2433A0005F3CF /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720226B2433A0005F3CF /* String+Ext.swift */; };
+		F0FF720526B25CC50005F3CF /* BFLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720426B25CC50005F3CF /* BFLoginController.swift */; };
+		F0FF720826B27CED0005F3CF /* BFProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720726B27CED0005F3CF /* BFProfileViewController.swift */; };
+		F0FF720A26B27DF40005F3CF /* BFProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720926B27DF40005F3CF /* BFProfileHeaderView.swift */; };
+		F0FF720D26B29C550005F3CF /* BFSparkEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720C26B29C550005F3CF /* BFSparkEmptyView.swift */; };
+		F0FF720F26B29DCE0005F3CF /* BFSparkLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720E26B29DCE0005F3CF /* BFSparkLoadingView.swift */; };
+		F0FF721126B2D2600005F3CF /* BFSparkCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF721026B2D2600005F3CF /* BFSparkCardView.swift */; };
+		F0FF721326B77ED90005F3CF /* BFSparkCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF721226B77ED90005F3CF /* BFSparkCardCell.swift */; };
+		F0FF721526B782040005F3CF /* UIDevice+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF721426B782040005F3CF /* UIDevice+Ext.swift */; };
+		F0FF721726B783280005F3CF /* BFHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF721626B783280005F3CF /* BFHomeController.swift */; };
+		F0FF721926B78B410005F3CF /* NSDictionary+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF721826B78B410005F3CF /* NSDictionary+Ext.swift */; };
+		F0FF722B26B7E0190005F3CF /* MSUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF722A26B7E0190005F3CF /* MSUploadManager.swift */; };
+		F0FF722D26B8D0510005F3CF /* MSPushMediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF722C26B8D0510005F3CF /* MSPushMediator.swift */; };
+		F0FF723226B8E23D0005F3CF /* MSFaceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF723126B8E23D0005F3CF /* MSFaceUtil.swift */; };
+		F0FF723426B8E2DB0005F3CF /* MSFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF723326B8E2DB0005F3CF /* MSFaceView.swift */; };
+		F0FF723626B8EBEC0005F3CF /* MSFaceCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF723526B8EBEC0005F3CF /* MSFaceCollectionCell.swift */; };
+		F0FF723826B91F3C0005F3CF /* MSMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF723726B91F3C0005F3CF /* MSMenuView.swift */; };
+		F0FF723B26B924320005F3CF /* MSInputMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF723A26B924320005F3CF /* MSInputMoreCell.swift */; };
+		F0FF723D26B92A9D0005F3CF /* MSChatMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF723C26B92A9D0005F3CF /* MSChatMoreView.swift */; };
+		F0FF723F26BA1DE00005F3CF /* MSResponderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF723E26BA1DE00005F3CF /* MSResponderTextView.swift */; };
+		F0FF724126BA1E630005F3CF /* MSInputBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF724026BA1E630005F3CF /* MSInputBarView.swift */; };
+		F0FF724426BA2A380005F3CF /* MSRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF724326BA2A380005F3CF /* MSRecordView.swift */; };
+		F0FF724826BA88050005F3CF /* MSMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF724726BA88050005F3CF /* MSMessageCellData.swift */; };
+		F0FF724A26BA8B490005F3CF /* MSBubbleMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF724926BA8B490005F3CF /* MSBubbleMessageCellData.swift */; };
+		F0FF724C26BB6FA80005F3CF /* MSTextMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF724B26BB6FA80005F3CF /* MSTextMessageCellData.swift */; };
+		F0FF724E26BB822A0005F3CF /* MSImageMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF724D26BB822A0005F3CF /* MSImageMessageCellData.swift */; };
+		F0FF725026BB839E0005F3CF /* MSSystemMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF724F26BB839E0005F3CF /* MSSystemMessageCellData.swift */; };
+		F0FF725226BB84DC0005F3CF /* MSVoiceMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF725126BB84DC0005F3CF /* MSVoiceMessageCellData.swift */; };
+		F0FF725426BCC2320005F3CF /* MSVideoMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF725326BCC2320005F3CF /* MSVideoMessageCellData.swift */; };
+		F0FF725626BCC37F0005F3CF /* MSMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF725526BCC37F0005F3CF /* MSMessageCell.swift */; };
+		F0FF725826BCCCC30005F3CF /* MSBubbleMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF725726BCCCC30005F3CF /* MSBubbleMessageCell.swift */; };
+		F0FF725A26BCD1190005F3CF /* MSTextMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF725926BCD1190005F3CF /* MSTextMessageCell.swift */; };
+		F0FF725C26BCD20F0005F3CF /* MSImageMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF725B26BCD20F0005F3CF /* MSImageMessageCell.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F0FF71C326B0E9D10005F3CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0FF71A426B0E9CE0005F3CF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F0FF71AB26B0E9CE0005F3CF;
+			remoteInfo = "MSIM-Swift";
+		};
+		F0FF71CE26B0E9D10005F3CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0FF71A426B0E9CE0005F3CF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F0FF71AB26B0E9CE0005F3CF;
+			remoteInfo = "MSIM-Swift";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		031FF94276E10DFC1390628E /* Pods-MSIM-Swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSIM-Swift.debug.xcconfig"; path = "Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift.debug.xcconfig"; sourceTree = "<group>"; };
+		58ECB6D4A404D9E157FA0CF3 /* Pods_MSIM_Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MSIM_Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C79D5707EE87130B6417A80C /* Pods-MSIM-Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSIM-Swift.release.xcconfig"; path = "Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift.release.xcconfig"; sourceTree = "<group>"; };
+		F02636152702C0C9007E23F6 /* MSCallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSCallModel.swift; sourceTree = "<group>"; };
+		F02636172702C233007E23F6 /* MSVoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceCallView.swift; sourceTree = "<group>"; };
+		F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVideoMessageCell.swift; sourceTree = "<group>"; };
+		F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceMessageCell.swift; sourceTree = "<group>"; };
+		F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSSystemMessageCell.swift; sourceTree = "<group>"; };
+		F08FBA3426C20FEB00613FE0 /* MSNoticeCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSNoticeCountView.swift; sourceTree = "<group>"; };
+		F08FBA3826C212EE00613FE0 /* MSUnreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSUnreadView.swift; sourceTree = "<group>"; };
+		F08FBA3A26C2174900613FE0 /* MSUIConversationCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSUIConversationCellData.swift; sourceTree = "<group>"; };
+		F08FBA3C26C2205000613FE0 /* MSUIConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSUIConversationCell.swift; sourceTree = "<group>"; };
+		F08FBA3E26C222B100613FE0 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		F08FBA4026C24CA000613FE0 /* MSUIConversationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSUIConversationListController.swift; sourceTree = "<group>"; };
+		F08FBA4326C25C4000613FE0 /* BFConversationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFConversationListController.swift; sourceTree = "<group>"; };
+		F08FBA4526C25C5E00613FE0 /* BFNaviBarIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFNaviBarIndicatorView.swift; sourceTree = "<group>"; };
+		F08FBA4826C2658000613FE0 /* BFUserListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFUserListCell.swift; sourceTree = "<group>"; };
+		F08FBA4A26C266C900613FE0 /* BFDiscoveryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFDiscoveryController.swift; sourceTree = "<group>"; };
+		F0CED8A02702E88600C31B65 /* MSVideoCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVideoCallView.swift; sourceTree = "<group>"; };
+		F0CED8A22702F27200C31B65 /* MSCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSCallViewController.swift; sourceTree = "<group>"; };
+		F0CED8A42702F38B00C31B65 /* MSCallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSCallManager.swift; sourceTree = "<group>"; };
+		F0CED8D427093B1400C31B65 /* BFCallMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFCallMessageCellData.swift; sourceTree = "<group>"; };
+		F0CED8D627093FAF00C31B65 /* BFCallMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFCallMessageCell.swift; sourceTree = "<group>"; };
+		F0E5659726FC29EE00C3424D /* TUIKitResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitResource.bundle; sourceTree = "<group>"; };
+		F0E5659826FC29EE00C3424D /* 00.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 00.caf; sourceTree = "<group>"; };
+		F0E5659926FC29EE00C3424D /* 01.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 01.caf; sourceTree = "<group>"; };
+		F0E5659A26FC29EE00C3424D /* wink.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wink.json; sourceTree = "<group>"; };
+		F0E5659B26FC29EE00C3424D /* spark_loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spark_loading.json; sourceTree = "<group>"; };
+		F0E5659C26FC29EE00C3424D /* call.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = call.caf; sourceTree = "<group>"; };
+		F0E5659D26FC29EE00C3424D /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
+		F0E565A526FC4D3D00C3424D /* ImageStickerContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStickerContainerView.swift; sourceTree = "<group>"; };
+		F0E565A826FD783D00C3424D /* LanternView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternView.swift; sourceTree = "<group>"; };
+		F0E565A926FD783D00C3424D /* LanternAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		F0E565AA26FD783D00C3424D /* LanternNoneAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternNoneAnimator.swift; sourceTree = "<group>"; };
+		F0E565AB26FD783D00C3424D /* Lantern.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lantern.swift; sourceTree = "<group>"; };
+		F0E565AC26FD783D00C3424D /* LanternCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternCell.swift; sourceTree = "<group>"; };
+		F0E565AD26FD783D00C3424D /* LanternPageIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternPageIndicator.swift; sourceTree = "<group>"; };
+		F0E565AE26FD783D00C3424D /* LanternNumberPageIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternNumberPageIndicator.swift; sourceTree = "<group>"; };
+		F0E565AF26FD783D00C3424D /* LanternLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternLog.swift; sourceTree = "<group>"; };
+		F0E565B026FD783D00C3424D /* LanternDefaultPageIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternDefaultPageIndicator.swift; sourceTree = "<group>"; };
+		F0E565B126FD783D00C3424D /* LanternZoomSupportedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternZoomSupportedCell.swift; sourceTree = "<group>"; };
+		F0E565B226FD783D00C3424D /* LanternZoomAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternZoomAnimator.swift; sourceTree = "<group>"; };
+		F0E565B326FD783D00C3424D /* LanternImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternImageCell.swift; sourceTree = "<group>"; };
+		F0E565B426FD783D00C3424D /* LanternSmoothZoomAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternSmoothZoomAnimator.swift; sourceTree = "<group>"; };
+		F0E565B526FD783D00C3424D /* LanternImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternImageView.swift; sourceTree = "<group>"; };
+		F0E565B626FD783D00C3424D /* LanternFadeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternFadeAnimator.swift; sourceTree = "<group>"; };
+		F0E565C626FD788C00C3424D /* VideoZoomCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoZoomCell.swift; sourceTree = "<group>"; };
+		F0FEA33926DCC37A00BCF4B6 /* MSInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSInputViewController.swift; sourceTree = "<group>"; };
+		F0FEA33B26DDAF3900BCF4B6 /* MSMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMessageController.swift; sourceTree = "<group>"; };
+		F0FEA33D26DF0CDC00BCF4B6 /* MSChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSChatViewController.swift; sourceTree = "<group>"; };
+		F0FEA34026DF1B3300BCF4B6 /* BFChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatViewController.swift; sourceTree = "<group>"; };
+		F0FEA34426DF688400BCF4B6 /* BFWinkMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFWinkMessageCell.swift; sourceTree = "<group>"; };
+		F0FEA34626DF6A5800BCF4B6 /* BFWinkMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFWinkMessageCellData.swift; sourceTree = "<group>"; };
+		F0FF71AC26B0E9CE0005F3CF /* MSIM-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MSIM-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0FF71AF26B0E9CE0005F3CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F0FF71B826B0E9D00005F3CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F0FF71BB26B0E9D00005F3CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F0FF71BD26B0E9D00005F3CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0FF71C226B0E9D10005F3CF /* MSIM-SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MSIM-SwiftTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0FF71C626B0E9D10005F3CF /* MSIM_SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSIM_SwiftTests.swift; sourceTree = "<group>"; };
+		F0FF71C826B0E9D10005F3CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0FF71CD26B0E9D10005F3CF /* MSIM-SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MSIM-SwiftUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0FF71D126B0E9D10005F3CF /* MSIM_SwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSIM_SwiftUITests.swift; sourceTree = "<group>"; };
+		F0FF71D326B0E9D10005F3CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0FF71E226B0F2530005F3CF /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
+		F0FF71E426B0FA870005F3CF /* UIScreen+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Ext.swift"; sourceTree = "<group>"; };
+		F0FF71E626B0FF4C0005F3CF /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
+		F0FF71E826B104CB0005F3CF /* MSMcros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMcros.swift; sourceTree = "<group>"; };
+		F0FF71EA26B121780005F3CF /* Bundle+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Ext.swift"; sourceTree = "<group>"; };
+		F0FF71EC26B1329E0005F3CF /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
+		F0FF71EE26B14CBB0005F3CF /* MSHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSHelper.swift; sourceTree = "<group>"; };
+		F0FF71F026B14DD50005F3CF /* UIButton+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Ext.swift"; sourceTree = "<group>"; };
+		F0FF71F326B151180005F3CF /* BFBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFBaseViewController.swift; sourceTree = "<group>"; };
+		F0FF71F526B151E60005F3CF /* BFNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFNavigationController.swift; sourceTree = "<group>"; };
+		F0FF71F726B1526F0005F3CF /* BFTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFTabBarController.swift; sourceTree = "<group>"; };
+		F0FF71FA26B154390005F3CF /* BFRegisterInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFRegisterInfo.swift; sourceTree = "<group>"; };
+		F0FF71FC26B154BF0005F3CF /* BFSignInStepOneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSignInStepOneController.swift; sourceTree = "<group>"; };
+		F0FF71FE26B178720005F3CF /* BFSignInStepTwoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSignInStepTwoController.swift; sourceTree = "<group>"; };
+		F0FF720026B1825E0005F3CF /* BFProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFProfileService.swift; sourceTree = "<group>"; };
+		F0FF720226B2433A0005F3CF /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		F0FF720426B25CC50005F3CF /* BFLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFLoginController.swift; sourceTree = "<group>"; };
+		F0FF720726B27CED0005F3CF /* BFProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFProfileViewController.swift; sourceTree = "<group>"; };
+		F0FF720926B27DF40005F3CF /* BFProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFProfileHeaderView.swift; sourceTree = "<group>"; };
+		F0FF720C26B29C550005F3CF /* BFSparkEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSparkEmptyView.swift; sourceTree = "<group>"; };
+		F0FF720E26B29DCE0005F3CF /* BFSparkLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSparkLoadingView.swift; sourceTree = "<group>"; };
+		F0FF721026B2D2600005F3CF /* BFSparkCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSparkCardView.swift; sourceTree = "<group>"; };
+		F0FF721226B77ED90005F3CF /* BFSparkCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSparkCardCell.swift; sourceTree = "<group>"; };
+		F0FF721426B782040005F3CF /* UIDevice+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Ext.swift"; sourceTree = "<group>"; };
+		F0FF721626B783280005F3CF /* BFHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFHomeController.swift; sourceTree = "<group>"; };
+		F0FF721826B78B410005F3CF /* NSDictionary+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDictionary+Ext.swift"; sourceTree = "<group>"; };
+		F0FF722A26B7E0190005F3CF /* MSUploadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSUploadManager.swift; sourceTree = "<group>"; };
+		F0FF722C26B8D0510005F3CF /* MSPushMediator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSPushMediator.swift; sourceTree = "<group>"; };
+		F0FF723126B8E23D0005F3CF /* MSFaceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSFaceUtil.swift; sourceTree = "<group>"; };
+		F0FF723326B8E2DB0005F3CF /* MSFaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSFaceView.swift; sourceTree = "<group>"; };
+		F0FF723526B8EBEC0005F3CF /* MSFaceCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSFaceCollectionCell.swift; sourceTree = "<group>"; };
+		F0FF723726B91F3C0005F3CF /* MSMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMenuView.swift; sourceTree = "<group>"; };
+		F0FF723A26B924320005F3CF /* MSInputMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSInputMoreCell.swift; sourceTree = "<group>"; };
+		F0FF723C26B92A9D0005F3CF /* MSChatMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSChatMoreView.swift; sourceTree = "<group>"; };
+		F0FF723E26BA1DE00005F3CF /* MSResponderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSResponderTextView.swift; sourceTree = "<group>"; };
+		F0FF724026BA1E630005F3CF /* MSInputBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSInputBarView.swift; sourceTree = "<group>"; };
+		F0FF724326BA2A380005F3CF /* MSRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSRecordView.swift; sourceTree = "<group>"; };
+		F0FF724726BA88050005F3CF /* MSMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMessageCellData.swift; sourceTree = "<group>"; };
+		F0FF724926BA8B490005F3CF /* MSBubbleMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSBubbleMessageCellData.swift; sourceTree = "<group>"; };
+		F0FF724B26BB6FA80005F3CF /* MSTextMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTextMessageCellData.swift; sourceTree = "<group>"; };
+		F0FF724D26BB822A0005F3CF /* MSImageMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSImageMessageCellData.swift; sourceTree = "<group>"; };
+		F0FF724F26BB839E0005F3CF /* MSSystemMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSSystemMessageCellData.swift; sourceTree = "<group>"; };
+		F0FF725126BB84DC0005F3CF /* MSVoiceMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceMessageCellData.swift; sourceTree = "<group>"; };
+		F0FF725326BCC2320005F3CF /* MSVideoMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVideoMessageCellData.swift; sourceTree = "<group>"; };
+		F0FF725526BCC37F0005F3CF /* MSMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMessageCell.swift; sourceTree = "<group>"; };
+		F0FF725726BCCCC30005F3CF /* MSBubbleMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSBubbleMessageCell.swift; sourceTree = "<group>"; };
+		F0FF725926BCD1190005F3CF /* MSTextMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSTextMessageCell.swift; sourceTree = "<group>"; };
+		F0FF725B26BCD20F0005F3CF /* MSImageMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSImageMessageCell.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F0FF71A926B0E9CE0005F3CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5ABB1E519607F699BC02D21 /* Pods_MSIM_Swift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0FF71BF26B0E9D10005F3CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0FF71CA26B0E9D10005F3CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2E576A748DBACE13DBD584C8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				58ECB6D4A404D9E157FA0CF3 /* Pods_MSIM_Swift.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AA5FF783D44122ABFB35EE70 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				031FF94276E10DFC1390628E /* Pods-MSIM-Swift.debug.xcconfig */,
+				C79D5707EE87130B6417A80C /* Pods-MSIM-Swift.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		F02636142702C092007E23F6 /* CallKit */ = {
+			isa = PBXGroup;
+			children = (
+				F02636152702C0C9007E23F6 /* MSCallModel.swift */,
+				F02636172702C233007E23F6 /* MSVoiceCallView.swift */,
+				F0CED8A02702E88600C31B65 /* MSVideoCallView.swift */,
+				F0CED8A22702F27200C31B65 /* MSCallViewController.swift */,
+				F0CED8A42702F38B00C31B65 /* MSCallManager.swift */,
+			);
+			path = CallKit;
+			sourceTree = "<group>";
+		};
+		F08FBA3626C2129100613FE0 /* Conversation */ = {
+			isa = PBXGroup;
+			children = (
+				F08FBA3726C2129E00613FE0 /* View */,
+				F08FBA4026C24CA000613FE0 /* MSUIConversationListController.swift */,
+			);
+			path = Conversation;
+			sourceTree = "<group>";
+		};
+		F08FBA3726C2129E00613FE0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F08FBA3826C212EE00613FE0 /* MSUnreadView.swift */,
+				F08FBA3A26C2174900613FE0 /* MSUIConversationCellData.swift */,
+				F08FBA3C26C2205000613FE0 /* MSUIConversationCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F08FBA4226C25BB400613FE0 /* Conversation */ = {
+			isa = PBXGroup;
+			children = (
+				F08FBA4326C25C4000613FE0 /* BFConversationListController.swift */,
+				F08FBA4526C25C5E00613FE0 /* BFNaviBarIndicatorView.swift */,
+			);
+			path = Conversation;
+			sourceTree = "<group>";
+		};
+		F08FBA4726C2656300613FE0 /* Discovery */ = {
+			isa = PBXGroup;
+			children = (
+				F08FBA4A26C266C900613FE0 /* BFDiscoveryController.swift */,
+				F08FBA4826C2658000613FE0 /* BFUserListCell.swift */,
+			);
+			path = Discovery;
+			sourceTree = "<group>";
+		};
+		F0E5659626FC29EE00C3424D /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				F0E5659726FC29EE00C3424D /* TUIKitResource.bundle */,
+				F0E5659826FC29EE00C3424D /* 00.caf */,
+				F0E5659926FC29EE00C3424D /* 01.caf */,
+				F0E5659A26FC29EE00C3424D /* wink.json */,
+				F0E5659B26FC29EE00C3424D /* spark_loading.json */,
+				F0E5659C26FC29EE00C3424D /* call.caf */,
+				F0E5659D26FC29EE00C3424D /* TUIKitFace.bundle */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		F0E565A726FD783D00C3424D /* Lantern */ = {
+			isa = PBXGroup;
+			children = (
+				F0E565C626FD788C00C3424D /* VideoZoomCell.swift */,
+				F0E565A826FD783D00C3424D /* LanternView.swift */,
+				F0E565A926FD783D00C3424D /* LanternAnimatedTransitioning.swift */,
+				F0E565AA26FD783D00C3424D /* LanternNoneAnimator.swift */,
+				F0E565AB26FD783D00C3424D /* Lantern.swift */,
+				F0E565AC26FD783D00C3424D /* LanternCell.swift */,
+				F0E565AD26FD783D00C3424D /* LanternPageIndicator.swift */,
+				F0E565AE26FD783D00C3424D /* LanternNumberPageIndicator.swift */,
+				F0E565AF26FD783D00C3424D /* LanternLog.swift */,
+				F0E565B026FD783D00C3424D /* LanternDefaultPageIndicator.swift */,
+				F0E565B126FD783D00C3424D /* LanternZoomSupportedCell.swift */,
+				F0E565B226FD783D00C3424D /* LanternZoomAnimator.swift */,
+				F0E565B326FD783D00C3424D /* LanternImageCell.swift */,
+				F0E565B426FD783D00C3424D /* LanternSmoothZoomAnimator.swift */,
+				F0E565B526FD783D00C3424D /* LanternImageView.swift */,
+				F0E565B626FD783D00C3424D /* LanternFadeAnimator.swift */,
+			);
+			path = Lantern;
+			sourceTree = "<group>";
+		};
+		F0FEA33826DCC35F00BCF4B6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F0FEA33926DCC37A00BCF4B6 /* MSInputViewController.swift */,
+				F0FEA33B26DDAF3900BCF4B6 /* MSMessageController.swift */,
+				F0FEA33D26DF0CDC00BCF4B6 /* MSChatViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		F0FEA33F26DF1B2000BCF4B6 /* ChatDetail */ = {
+			isa = PBXGroup;
+			children = (
+				F0FEA34026DF1B3300BCF4B6 /* BFChatViewController.swift */,
+				F0E565A526FC4D3D00C3424D /* ImageStickerContainerView.swift */,
+				F0FEA34426DF688400BCF4B6 /* BFWinkMessageCell.swift */,
+				F0FEA34626DF6A5800BCF4B6 /* BFWinkMessageCellData.swift */,
+				F0CED8D427093B1400C31B65 /* BFCallMessageCellData.swift */,
+				F0CED8D627093FAF00C31B65 /* BFCallMessageCell.swift */,
+			);
+			path = ChatDetail;
+			sourceTree = "<group>";
+		};
+		F0FF71A326B0E9CE0005F3CF = {
+			isa = PBXGroup;
+			children = (
+				F0FF71AE26B0E9CE0005F3CF /* MSIM-Swift */,
+				F0FF71C526B0E9D10005F3CF /* MSIM-SwiftTests */,
+				F0FF71D026B0E9D10005F3CF /* MSIM-SwiftUITests */,
+				F0FF71AD26B0E9CE0005F3CF /* Products */,
+				AA5FF783D44122ABFB35EE70 /* Pods */,
+				2E576A748DBACE13DBD584C8 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F0FF71AD26B0E9CE0005F3CF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF71AC26B0E9CE0005F3CF /* MSIM-Swift.app */,
+				F0FF71C226B0E9D10005F3CF /* MSIM-SwiftTests.xctest */,
+				F0FF71CD26B0E9D10005F3CF /* MSIM-SwiftUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F0FF71AE26B0E9CE0005F3CF /* MSIM-Swift */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF71DF26B0F1F00005F3CF /* Lib */,
+				F0FEA33F26DF1B2000BCF4B6 /* ChatDetail */,
+				F0FF720B26B29B7A0005F3CF /* Home */,
+				F0FF720626B27CD90005F3CF /* Profile */,
+				F08FBA4226C25BB400613FE0 /* Conversation */,
+				F08FBA4726C2656300613FE0 /* Discovery */,
+				F0FF71F926B1540F0005F3CF /* Login */,
+				F0FF71F226B150F40005F3CF /* Super */,
+				F0FF71AF26B0E9CE0005F3CF /* AppDelegate.swift */,
+				F0FF71B826B0E9D00005F3CF /* Assets.xcassets */,
+				F0FF71BA26B0E9D00005F3CF /* LaunchScreen.storyboard */,
+				F0FF71BD26B0E9D00005F3CF /* Info.plist */,
+			);
+			path = "MSIM-Swift";
+			sourceTree = "<group>";
+		};
+		F0FF71C526B0E9D10005F3CF /* MSIM-SwiftTests */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF71C626B0E9D10005F3CF /* MSIM_SwiftTests.swift */,
+				F0FF71C826B0E9D10005F3CF /* Info.plist */,
+			);
+			path = "MSIM-SwiftTests";
+			sourceTree = "<group>";
+		};
+		F0FF71D026B0E9D10005F3CF /* MSIM-SwiftUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF71D126B0E9D10005F3CF /* MSIM_SwiftUITests.swift */,
+				F0FF71D326B0E9D10005F3CF /* Info.plist */,
+			);
+			path = "MSIM-SwiftUITests";
+			sourceTree = "<group>";
+		};
+		F0FF71DF26B0F1F00005F3CF /* Lib */ = {
+			isa = PBXGroup;
+			children = (
+				F0E565A726FD783D00C3424D /* Lantern */,
+				F0FF71E026B0F1F70005F3CF /* MSIMSDK-UIKit */,
+			);
+			path = Lib;
+			sourceTree = "<group>";
+		};
+		F0FF71E026B0F1F70005F3CF /* MSIMSDK-UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				F02636142702C092007E23F6 /* CallKit */,
+				F0FF722E26B8E2020005F3CF /* ChatDetail */,
+				F08FBA3626C2129100613FE0 /* Conversation */,
+				F0FF71E126B0F2020005F3CF /* Base */,
+				F0E5659626FC29EE00C3424D /* Resource */,
+			);
+			path = "MSIMSDK-UIKit";
+			sourceTree = "<group>";
+		};
+		F0FF71E126B0F2020005F3CF /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF71E226B0F2530005F3CF /* UIView+Ext.swift */,
+				F08FBA3E26C222B100613FE0 /* Date+Ext.swift */,
+				F0FF721426B782040005F3CF /* UIDevice+Ext.swift */,
+				F0FF71E426B0FA870005F3CF /* UIScreen+Ext.swift */,
+				F0FF71E626B0FF4C0005F3CF /* UIColor+Ext.swift */,
+				F0FF721826B78B410005F3CF /* NSDictionary+Ext.swift */,
+				F0FF71EC26B1329E0005F3CF /* UIImage+Ext.swift */,
+				F0FF71EE26B14CBB0005F3CF /* MSHelper.swift */,
+				F0FF71F026B14DD50005F3CF /* UIButton+Ext.swift */,
+				F0FF71EA26B121780005F3CF /* Bundle+Ext.swift */,
+				F0FF720226B2433A0005F3CF /* String+Ext.swift */,
+				F0FF71E826B104CB0005F3CF /* MSMcros.swift */,
+				F0FF722A26B7E0190005F3CF /* MSUploadManager.swift */,
+				F0FF722C26B8D0510005F3CF /* MSPushMediator.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		F0FF71F226B150F40005F3CF /* Super */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF71F326B151180005F3CF /* BFBaseViewController.swift */,
+				F0FF71F526B151E60005F3CF /* BFNavigationController.swift */,
+				F0FF71F726B1526F0005F3CF /* BFTabBarController.swift */,
+			);
+			path = Super;
+			sourceTree = "<group>";
+		};
+		F0FF71F926B1540F0005F3CF /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF720426B25CC50005F3CF /* BFLoginController.swift */,
+				F0FF71FC26B154BF0005F3CF /* BFSignInStepOneController.swift */,
+				F0FF71FE26B178720005F3CF /* BFSignInStepTwoController.swift */,
+				F0FF720026B1825E0005F3CF /* BFProfileService.swift */,
+				F0FF71FA26B154390005F3CF /* BFRegisterInfo.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		F0FF720626B27CD90005F3CF /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF720726B27CED0005F3CF /* BFProfileViewController.swift */,
+				F0FF720926B27DF40005F3CF /* BFProfileHeaderView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		F0FF720B26B29B7A0005F3CF /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF720C26B29C550005F3CF /* BFSparkEmptyView.swift */,
+				F0FF721226B77ED90005F3CF /* BFSparkCardCell.swift */,
+				F0FF720E26B29DCE0005F3CF /* BFSparkLoadingView.swift */,
+				F0FF721026B2D2600005F3CF /* BFSparkCardView.swift */,
+				F0FF721626B783280005F3CF /* BFHomeController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		F0FF722E26B8E2020005F3CF /* ChatDetail */ = {
+			isa = PBXGroup;
+			children = (
+				F0FEA33826DCC35F00BCF4B6 /* Controller */,
+				F0FF724626BA6D2B0005F3CF /* Model */,
+				F0FF722F26B8E2110005F3CF /* View */,
+			);
+			path = ChatDetail;
+			sourceTree = "<group>";
+		};
+		F0FF722F26B8E2110005F3CF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF724526BA6D000005F3CF /* Message */,
+				F0FF724226BA2A1C0005F3CF /* Voice */,
+				F0FF723926B924150005F3CF /* More */,
+				F0FF723026B8E2190005F3CF /* Face */,
+				F0FF723E26BA1DE00005F3CF /* MSResponderTextView.swift */,
+				F0FF724026BA1E630005F3CF /* MSInputBarView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F0FF723026B8E2190005F3CF /* Face */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF723126B8E23D0005F3CF /* MSFaceUtil.swift */,
+				F0FF723326B8E2DB0005F3CF /* MSFaceView.swift */,
+				F0FF723526B8EBEC0005F3CF /* MSFaceCollectionCell.swift */,
+				F0FF723726B91F3C0005F3CF /* MSMenuView.swift */,
+			);
+			path = Face;
+			sourceTree = "<group>";
+		};
+		F0FF723926B924150005F3CF /* More */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF723A26B924320005F3CF /* MSInputMoreCell.swift */,
+				F0FF723C26B92A9D0005F3CF /* MSChatMoreView.swift */,
+			);
+			path = More;
+			sourceTree = "<group>";
+		};
+		F0FF724226BA2A1C0005F3CF /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF724326BA2A380005F3CF /* MSRecordView.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		F0FF724526BA6D000005F3CF /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF725526BCC37F0005F3CF /* MSMessageCell.swift */,
+				F0FF725726BCCCC30005F3CF /* MSBubbleMessageCell.swift */,
+				F0FF725926BCD1190005F3CF /* MSTextMessageCell.swift */,
+				F0FF725B26BCD20F0005F3CF /* MSImageMessageCell.swift */,
+				F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */,
+				F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */,
+				F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */,
+				F08FBA3426C20FEB00613FE0 /* MSNoticeCountView.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		F0FF724626BA6D2B0005F3CF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F0FF724726BA88050005F3CF /* MSMessageCellData.swift */,
+				F0FF724926BA8B490005F3CF /* MSBubbleMessageCellData.swift */,
+				F0FF724B26BB6FA80005F3CF /* MSTextMessageCellData.swift */,
+				F0FF724D26BB822A0005F3CF /* MSImageMessageCellData.swift */,
+				F0FF724F26BB839E0005F3CF /* MSSystemMessageCellData.swift */,
+				F0FF725126BB84DC0005F3CF /* MSVoiceMessageCellData.swift */,
+				F0FF725326BCC2320005F3CF /* MSVideoMessageCellData.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F0FF71AB26B0E9CE0005F3CF /* MSIM-Swift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0FF71D626B0E9D10005F3CF /* Build configuration list for PBXNativeTarget "MSIM-Swift" */;
+			buildPhases = (
+				88D4061319BA3B5A23292582 /* [CP] Check Pods Manifest.lock */,
+				F0FF71A826B0E9CE0005F3CF /* Sources */,
+				F0FF71A926B0E9CE0005F3CF /* Frameworks */,
+				F0FF71AA26B0E9CE0005F3CF /* Resources */,
+				5CF9E16F178ACC08408E71A2 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MSIM-Swift";
+			productName = "MSIM-Swift";
+			productReference = F0FF71AC26B0E9CE0005F3CF /* MSIM-Swift.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F0FF71C126B0E9D10005F3CF /* MSIM-SwiftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0FF71D926B0E9D10005F3CF /* Build configuration list for PBXNativeTarget "MSIM-SwiftTests" */;
+			buildPhases = (
+				F0FF71BE26B0E9D10005F3CF /* Sources */,
+				F0FF71BF26B0E9D10005F3CF /* Frameworks */,
+				F0FF71C026B0E9D10005F3CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0FF71C426B0E9D10005F3CF /* PBXTargetDependency */,
+			);
+			name = "MSIM-SwiftTests";
+			productName = "MSIM-SwiftTests";
+			productReference = F0FF71C226B0E9D10005F3CF /* MSIM-SwiftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F0FF71CC26B0E9D10005F3CF /* MSIM-SwiftUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0FF71DC26B0E9D10005F3CF /* Build configuration list for PBXNativeTarget "MSIM-SwiftUITests" */;
+			buildPhases = (
+				F0FF71C926B0E9D10005F3CF /* Sources */,
+				F0FF71CA26B0E9D10005F3CF /* Frameworks */,
+				F0FF71CB26B0E9D10005F3CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0FF71CF26B0E9D10005F3CF /* PBXTargetDependency */,
+			);
+			name = "MSIM-SwiftUITests";
+			productName = "MSIM-SwiftUITests";
+			productReference = F0FF71CD26B0E9D10005F3CF /* MSIM-SwiftUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F0FF71A426B0E9CE0005F3CF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					F0FF71AB26B0E9CE0005F3CF = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					F0FF71C126B0E9D10005F3CF = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = F0FF71AB26B0E9CE0005F3CF;
+					};
+					F0FF71CC26B0E9D10005F3CF = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = F0FF71AB26B0E9CE0005F3CF;
+					};
+				};
+			};
+			buildConfigurationList = F0FF71A726B0E9CE0005F3CF /* Build configuration list for PBXProject "MSIM-Swift" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F0FF71A326B0E9CE0005F3CF;
+			productRefGroup = F0FF71AD26B0E9CE0005F3CF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F0FF71AB26B0E9CE0005F3CF /* MSIM-Swift */,
+				F0FF71C126B0E9D10005F3CF /* MSIM-SwiftTests */,
+				F0FF71CC26B0E9D10005F3CF /* MSIM-SwiftUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F0FF71AA26B0E9CE0005F3CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0E565A026FC29EE00C3424D /* 01.caf in Resources */,
+				F0E565A226FC29EE00C3424D /* spark_loading.json in Resources */,
+				F0E5659E26FC29EE00C3424D /* TUIKitResource.bundle in Resources */,
+				F0FF71BC26B0E9D00005F3CF /* LaunchScreen.storyboard in Resources */,
+				F0E565A326FC29EE00C3424D /* call.caf in Resources */,
+				F0E5659F26FC29EE00C3424D /* 00.caf in Resources */,
+				F0E565A426FC29EE00C3424D /* TUIKitFace.bundle in Resources */,
+				F0E565A126FC29EE00C3424D /* wink.json in Resources */,
+				F0FF71B926B0E9D00005F3CF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0FF71C026B0E9D10005F3CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0FF71CB26B0E9D10005F3CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5CF9E16F178ACC08408E71A2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		88D4061319BA3B5A23292582 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MSIM-Swift-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F0FF71A826B0E9CE0005F3CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0FF725226BB84DC0005F3CF /* MSVoiceMessageCellData.swift in Sources */,
+				F08FBA2F26C2064E00613FE0 /* MSVideoMessageCell.swift in Sources */,
+				F08FBA4126C24CA000613FE0 /* MSUIConversationListController.swift in Sources */,
+				F0E565B926FD783D00C3424D /* LanternNoneAnimator.swift in Sources */,
+				F0FF725826BCCCC30005F3CF /* MSBubbleMessageCell.swift in Sources */,
+				F0FF720D26B29C550005F3CF /* BFSparkEmptyView.swift in Sources */,
+				F0FF720326B2433A0005F3CF /* String+Ext.swift in Sources */,
+				F08FBA4626C25C5E00613FE0 /* BFNaviBarIndicatorView.swift in Sources */,
+				F0FF71E926B104CB0005F3CF /* MSMcros.swift in Sources */,
+				F0FEA33A26DCC37A00BCF4B6 /* MSInputViewController.swift in Sources */,
+				F0FF724E26BB822A0005F3CF /* MSImageMessageCellData.swift in Sources */,
+				F0E565C026FD783D00C3424D /* LanternZoomSupportedCell.swift in Sources */,
+				F0FF724C26BB6FA80005F3CF /* MSTextMessageCellData.swift in Sources */,
+				F0FF722D26B8D0510005F3CF /* MSPushMediator.swift in Sources */,
+				F0E565BF26FD783D00C3424D /* LanternDefaultPageIndicator.swift in Sources */,
+				F08FBA3F26C222B100613FE0 /* Date+Ext.swift in Sources */,
+				F0FF720F26B29DCE0005F3CF /* BFSparkLoadingView.swift in Sources */,
+				F0FF71B026B0E9CE0005F3CF /* AppDelegate.swift in Sources */,
+				F0FF723426B8E2DB0005F3CF /* MSFaceView.swift in Sources */,
+				F0FF720526B25CC50005F3CF /* BFLoginController.swift in Sources */,
+				F0FF725A26BCD1190005F3CF /* MSTextMessageCell.swift in Sources */,
+				F0FEA34726DF6A5800BCF4B6 /* BFWinkMessageCellData.swift in Sources */,
+				F0FF721726B783280005F3CF /* BFHomeController.swift in Sources */,
+				F0CED8D727093FAF00C31B65 /* BFCallMessageCell.swift in Sources */,
+				F0FEA34526DF688400BCF4B6 /* BFWinkMessageCell.swift in Sources */,
+				F0FF723D26B92A9D0005F3CF /* MSChatMoreView.swift in Sources */,
+				F08FBA4426C25C4000613FE0 /* BFConversationListController.swift in Sources */,
+				F0FF71F626B151E60005F3CF /* BFNavigationController.swift in Sources */,
+				F0FF721526B782040005F3CF /* UIDevice+Ext.swift in Sources */,
+				F0FF71FF26B178720005F3CF /* BFSignInStepTwoController.swift in Sources */,
+				F0FF724126BA1E630005F3CF /* MSInputBarView.swift in Sources */,
+				F0CED8A12702E88600C31B65 /* MSVideoCallView.swift in Sources */,
+				F0E565BB26FD783D00C3424D /* LanternCell.swift in Sources */,
+				F0FF725026BB839E0005F3CF /* MSSystemMessageCellData.swift in Sources */,
+				F02636182702C233007E23F6 /* MSVoiceCallView.swift in Sources */,
+				F0FF71FB26B154390005F3CF /* BFRegisterInfo.swift in Sources */,
+				F0FF723B26B924320005F3CF /* MSInputMoreCell.swift in Sources */,
+				F0FF71ED26B1329E0005F3CF /* UIImage+Ext.swift in Sources */,
+				F0E565C526FD783D00C3424D /* LanternFadeAnimator.swift in Sources */,
+				F08FBA3526C20FEB00613FE0 /* MSNoticeCountView.swift in Sources */,
+				F0E565BE26FD783D00C3424D /* LanternLog.swift in Sources */,
+				F0FF720126B1825E0005F3CF /* BFProfileService.swift in Sources */,
+				F0E565C726FD788C00C3424D /* VideoZoomCell.swift in Sources */,
+				F0CED8D527093B1400C31B65 /* BFCallMessageCellData.swift in Sources */,
+				F0FF71E726B0FF4C0005F3CF /* UIColor+Ext.swift in Sources */,
+				F0FF725626BCC37F0005F3CF /* MSMessageCell.swift in Sources */,
+				F0E565C126FD783D00C3424D /* LanternZoomAnimator.swift in Sources */,
+				F0E565BC26FD783D00C3424D /* LanternPageIndicator.swift in Sources */,
+				F0FF723626B8EBEC0005F3CF /* MSFaceCollectionCell.swift in Sources */,
+				F0FF71F126B14DD50005F3CF /* UIButton+Ext.swift in Sources */,
+				F0E565B726FD783D00C3424D /* LanternView.swift in Sources */,
+				F0FF720826B27CED0005F3CF /* BFProfileViewController.swift in Sources */,
+				F0FF71F826B1526F0005F3CF /* BFTabBarController.swift in Sources */,
+				F08FBA4B26C266C900613FE0 /* BFDiscoveryController.swift in Sources */,
+				F0FF724426BA2A380005F3CF /* MSRecordView.swift in Sources */,
+				F0FF720A26B27DF40005F3CF /* BFProfileHeaderView.swift in Sources */,
+				F0FF71F426B151180005F3CF /* BFBaseViewController.swift in Sources */,
+				F08FBA3326C20E9A00613FE0 /* MSSystemMessageCell.swift in Sources */,
+				F0E565BD26FD783D00C3424D /* LanternNumberPageIndicator.swift in Sources */,
+				F0FEA33E26DF0CDC00BCF4B6 /* MSChatViewController.swift in Sources */,
+				F0FF71EB26B121780005F3CF /* Bundle+Ext.swift in Sources */,
+				F0FF724A26BA8B490005F3CF /* MSBubbleMessageCellData.swift in Sources */,
+				F0FF722B26B7E0190005F3CF /* MSUploadManager.swift in Sources */,
+				F02636162702C0C9007E23F6 /* MSCallModel.swift in Sources */,
+				F08FBA3B26C2174900613FE0 /* MSUIConversationCellData.swift in Sources */,
+				F0FF725426BCC2320005F3CF /* MSVideoMessageCellData.swift in Sources */,
+				F0E565B826FD783D00C3424D /* LanternAnimatedTransitioning.swift in Sources */,
+				F0FF723F26BA1DE00005F3CF /* MSResponderTextView.swift in Sources */,
+				F0FF721926B78B410005F3CF /* NSDictionary+Ext.swift in Sources */,
+				F0FF71FD26B154BF0005F3CF /* BFSignInStepOneController.swift in Sources */,
+				F0E565A626FC4D3D00C3424D /* ImageStickerContainerView.swift in Sources */,
+				F0E565BA26FD783D00C3424D /* Lantern.swift in Sources */,
+				F0FF721326B77ED90005F3CF /* BFSparkCardCell.swift in Sources */,
+				F0FF724826BA88050005F3CF /* MSMessageCellData.swift in Sources */,
+				F08FBA3D26C2205000613FE0 /* MSUIConversationCell.swift in Sources */,
+				F0CED8A52702F38B00C31B65 /* MSCallManager.swift in Sources */,
+				F0CED8A32702F27200C31B65 /* MSCallViewController.swift in Sources */,
+				F0E565C326FD783D00C3424D /* LanternSmoothZoomAnimator.swift in Sources */,
+				F0FF71E326B0F2530005F3CF /* UIView+Ext.swift in Sources */,
+				F0FF721126B2D2600005F3CF /* BFSparkCardView.swift in Sources */,
+				F0E565C226FD783D00C3424D /* LanternImageCell.swift in Sources */,
+				F0FEA34126DF1B3300BCF4B6 /* BFChatViewController.swift in Sources */,
+				F0FF725C26BCD20F0005F3CF /* MSImageMessageCell.swift in Sources */,
+				F08FBA3126C20A3600613FE0 /* MSVoiceMessageCell.swift in Sources */,
+				F0FF71E526B0FA870005F3CF /* UIScreen+Ext.swift in Sources */,
+				F0FF723826B91F3C0005F3CF /* MSMenuView.swift in Sources */,
+				F0FF723226B8E23D0005F3CF /* MSFaceUtil.swift in Sources */,
+				F08FBA4926C2658000613FE0 /* BFUserListCell.swift in Sources */,
+				F0E565C426FD783D00C3424D /* LanternImageView.swift in Sources */,
+				F0FEA33C26DDAF3900BCF4B6 /* MSMessageController.swift in Sources */,
+				F0FF71EF26B14CBB0005F3CF /* MSHelper.swift in Sources */,
+				F08FBA3926C212EE00613FE0 /* MSUnreadView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0FF71BE26B0E9D10005F3CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0FF71C726B0E9D10005F3CF /* MSIM_SwiftTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0FF71C926B0E9D10005F3CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0FF71D226B0E9D10005F3CF /* MSIM_SwiftUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F0FF71C426B0E9D10005F3CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F0FF71AB26B0E9CE0005F3CF /* MSIM-Swift */;
+			targetProxy = F0FF71C326B0E9D10005F3CF /* PBXContainerItemProxy */;
+		};
+		F0FF71CF26B0E9D10005F3CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F0FF71AB26B0E9CE0005F3CF /* MSIM-Swift */;
+			targetProxy = F0FF71CE26B0E9D10005F3CF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F0FF71BA26B0E9D00005F3CF /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F0FF71BB26B0E9D00005F3CF /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F0FF71D426B0E9D10005F3CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F0FF71D526B0E9D10005F3CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F0FF71D726B0E9D10005F3CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 031FF94276E10DFC1390628E /* Pods-MSIM-Swift.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6N3JSL2D62;
+				INFOPLIST_FILE = "MSIM-Swift/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackfire.im.msim.MSIM-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		F0FF71D826B0E9D10005F3CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C79D5707EE87130B6417A80C /* Pods-MSIM-Swift.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6N3JSL2D62;
+				INFOPLIST_FILE = "MSIM-Swift/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackfire.im.msim.MSIM-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		F0FF71DA26B0E9D10005F3CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6N3JSL2D62;
+				INFOPLIST_FILE = "MSIM-SwiftTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackfire.im.msim.MSIM-SwiftTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MSIM-Swift.app/MSIM-Swift";
+			};
+			name = Debug;
+		};
+		F0FF71DB26B0E9D10005F3CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6N3JSL2D62;
+				INFOPLIST_FILE = "MSIM-SwiftTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackfire.im.msim.MSIM-SwiftTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MSIM-Swift.app/MSIM-Swift";
+			};
+			name = Release;
+		};
+		F0FF71DD26B0E9D10005F3CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6N3JSL2D62;
+				INFOPLIST_FILE = "MSIM-SwiftUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackfire.im.msim.MSIM-SwiftUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "MSIM-Swift";
+			};
+			name = Debug;
+		};
+		F0FF71DE26B0E9D10005F3CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6N3JSL2D62;
+				INFOPLIST_FILE = "MSIM-SwiftUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.blackfire.im.msim.MSIM-SwiftUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "MSIM-Swift";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F0FF71A726B0E9CE0005F3CF /* Build configuration list for PBXProject "MSIM-Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0FF71D426B0E9D10005F3CF /* Debug */,
+				F0FF71D526B0E9D10005F3CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0FF71D626B0E9D10005F3CF /* Build configuration list for PBXNativeTarget "MSIM-Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0FF71D726B0E9D10005F3CF /* Debug */,
+				F0FF71D826B0E9D10005F3CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0FF71D926B0E9D10005F3CF /* Build configuration list for PBXNativeTarget "MSIM-SwiftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0FF71DA26B0E9D10005F3CF /* Debug */,
+				F0FF71DB26B0E9D10005F3CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0FF71DC26B0E9D10005F3CF /* Build configuration list for PBXNativeTarget "MSIM-SwiftUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0FF71DD26B0E9D10005F3CF /* Debug */,
+				F0FF71DE26B0E9D10005F3CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F0FF71A426B0E9CE0005F3CF /* Project object */;
+}

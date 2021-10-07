@@ -1,0 +1,27 @@
+
+platform :ios, '13.0'
+
+inhibit_all_warnings!
+
+target 'MSIM-Swift' do
+ 
+  use_frameworks!
+
+  inhibit_all_warnings!
+  
+  pod 'Moya'
+  pod 'lottie-ios'
+  pod 'MJRefresh'
+  pod 'Kingfisher'
+  pod 'HandyJSON'
+  pod 'SnapKit'
+  pod 'SVProgressHUD'
+  pod 'QCloudCOSXML/Transfer'
+  pod 'ZLPhotoBrowser'
+  
+  pod 'MSIMSDK'
+
+  #pod 'AgoraRtcEngine_iOS'  #声网音视频聊天
+
+
+end

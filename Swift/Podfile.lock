@@ -1,0 +1,66 @@
+PODS:
+  - Alamofire (5.4.3)
+  - HandyJSON (5.0.2)
+  - Kingfisher (6.3.0)
+  - lottie-ios (3.2.3)
+  - MJRefresh (3.7.2)
+  - Moya (14.0.0):
+    - Moya/Core (= 14.0.0)
+  - Moya/Core (14.0.0):
+    - Alamofire (~> 5.0)
+  - MSIMSDK (1.1.3)
+  - QCloudCore (5.9.3):
+    - QCloudCore/Default (= 5.9.3)
+  - QCloudCore/Default (5.9.3)
+  - QCloudCOSXML/Transfer (5.9.3):
+    - QCloudCore (= 5.9.3)
+  - SnapKit (5.0.1)
+  - SVProgressHUD (2.2.5)
+  - ZLPhotoBrowser (4.1.8):
+    - ZLPhotoBrowser/Core (= 4.1.8)
+  - ZLPhotoBrowser/Core (4.1.8)
+
+DEPENDENCIES:
+  - HandyJSON
+  - Kingfisher
+  - lottie-ios
+  - MJRefresh
+  - Moya
+  - MSIMSDK
+  - QCloudCOSXML/Transfer
+  - SnapKit
+  - SVProgressHUD
+  - ZLPhotoBrowser
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - HandyJSON
+    - Kingfisher
+    - lottie-ios
+    - MJRefresh
+    - Moya
+    - MSIMSDK
+    - QCloudCore
+    - QCloudCOSXML
+    - SnapKit
+    - SVProgressHUD
+    - ZLPhotoBrowser
+
+SPEC CHECKSUMS:
+  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
+  Kingfisher: 6c3df386db71d82c0817a429d2c9421a77396529
+  lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
+  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
+  MSIMSDK: 6c0aece00d0b78fc6c78f5ec2b941c5f4dfba60a
+  QCloudCore: a256ab496ccf53182217e7ef8c86cd278340fef9
+  QCloudCOSXML: 607ba96b5e2b516202c5ea2c8ec6b4b20ddfaf25
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  ZLPhotoBrowser: dade64326c9a854a68a99ba260c752c2d7839d7e
+
+PODFILE CHECKSUM: b74a8c98b29aa80b8b286821d483066022af67ef
+
+COCOAPODS: 1.10.1

@@ -1,0 +1,68 @@
+PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
+  - Bugly (2.5.90)
+  - lottie-ios (2.5.3)
+  - MJRefresh (3.5.0)
+  - MSIMSDK (1.1.2)
+  - QCloudCore/WithoutMTA (5.9.4)
+  - QCloudCOSXML/Transfer (5.9.4):
+    - QCloudCore/WithoutMTA (= 5.9.4)
+  - SDWebImage (5.9.0):
+    - SDWebImage/Core (= 5.9.0)
+  - SDWebImage/Core (5.9.0)
+  - SVProgressHUD (2.2.5)
+  - TZImagePickerController (3.6.6)
+
+DEPENDENCIES:
+  - AFNetworking
+  - Bugly
+  - lottie-ios (= 2.5.3)
+  - MJRefresh
+  - MSIMSDK
+  - QCloudCOSXML/Transfer
+  - SDWebImage
+  - SVProgressHUD
+  - TZImagePickerController
+
+SPEC REPOS:
+  trunk:
+    - AFNetworking
+    - Bugly
+    - lottie-ios
+    - MJRefresh
+    - MSIMSDK
+    - QCloudCore
+    - QCloudCOSXML
+    - SDWebImage
+    - SVProgressHUD
+    - TZImagePickerController
+
+SPEC CHECKSUMS:
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  Bugly: 88bc32c0acc6fef7b74d610f0319ee7560d6b9fe
+  lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
+  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
+  MSIMSDK: d50ad8fbb6ed00cb3bee9f9aafb764549efeb239
+  QCloudCore: 3da61d1d1369c2c9fa3bf938af5dd38f777459e4
+  QCloudCOSXML: afc6c686f85a89e4a9f0b8adcb6368913828ad50
+  SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  TZImagePickerController: edf61b8e87f26e3e445aa50eb66254bd7f4859db
+
+PODFILE CHECKSUM: 1655919b38b84fcfefd3e9682a180155f5c96a3c
+
+COCOAPODS: 1.10.1
