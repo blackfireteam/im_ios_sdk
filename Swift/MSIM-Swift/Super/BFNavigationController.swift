@@ -11,7 +11,11 @@ class BFNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            navigationBar.standardAppearance = appearance
+            navigationBar.scrollEdgeAppearance = appearance
+        }
         navigationBar.tintColor = UIColor.d_color(light: .darkText, dark: .lightText)
     }
     

@@ -16,7 +16,7 @@
 //会话列表有变更通知
 #define MSUIKitNotification_ConversationUpdate @"MSUIKitNotification_ConversationUpdate"
 
-//会话列表同步ga开始通知
+//会话列表同步开始通知
 #define MSUIKitNotification_ConversationSyncStart @"MSUIKitNotification_ConversationSyncStart"
 //会话列表同步完成通知
 #define MSUIKitNotification_ConversationSyncFinish @"MSUIKitNotification_ConversationSyncFinish"

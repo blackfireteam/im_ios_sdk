@@ -17,6 +17,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (@available(iOS 15.0, *)) {
+        UINavigationBarAppearance *appearance = [UINavigationBarAppearance new];
+        self.navigationBar.standardAppearance = appearance;
+        self.navigationBar.scrollEdgeAppearance = appearance;
+    }
     self.navigationBar.tintColor = [UIColor d_colorWithColorLight:[UIColor darkTextColor] dark:[UIColor lightTextColor]];
 }
 

@@ -14,8 +14,13 @@ class BFTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        UITabBar.appearance().unselectedItemTintColor = .gray
-        UITabBar.appearance().tintColor = .darkGray
+        if #available(iOS 15.0, *) {
+            let appearance = UITabBarAppearance()
+            tabBar.standardAppearance = appearance
+            tabBar.scrollEdgeAppearance = appearance
+        }
+        tabBar.unselectedItemTintColor = .gray
+        tabBar.tintColor = .darkGray
         
         let item = UITabBarItem.appearance()
         item.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], for: .normal)

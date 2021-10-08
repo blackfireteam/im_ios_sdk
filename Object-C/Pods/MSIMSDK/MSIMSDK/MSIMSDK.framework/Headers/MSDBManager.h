@@ -27,6 +27,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) FMDatabaseQueue *commonQueue;
 
 /**
+ *  用户自定义的DB队列
+ */
+@property (nonatomic, strong) FMDatabaseQueue *customQueue;
+
+
+/**
  针对用户切换帐号的情况
  */
 - (void)accountChanged;

@@ -26,10 +26,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    if (@available(iOS 15.0, *)) {
+        UITabBarAppearance *appearance = [UITabBarAppearance new];
+        self.tabBar.standardAppearance = appearance;
+        self.tabBar.scrollEdgeAppearance = appearance;
+    }
+    self.tabBar.unselectedItemTintColor = [UIColor grayColor];
+    self.tabBar.tintColor = [UIColor darkGrayColor];
     UITabBarItem *item = [UITabBarItem appearance];
-    [[UITabBar appearance]setUnselectedItemTintColor:[UIColor grayColor]];
-    [[UITabBar appearance]setTintColor:[UIColor darkGrayColor]];
     [item setTitleTextAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} forState:UIControlStateNormal];
     [item setTitleTextAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} forState:UIControlStateSelected];
 
