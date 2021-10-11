@@ -75,7 +75,7 @@
     NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:text];
 
     //2、通过正则表达式来匹配字符串
-    NSString *regex_emoji = @"\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5]+\\]"; //匹配表情
+    NSString *regex_emoji = @"\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5-_]+\\]"; //匹配表情
 
     NSError *error = nil;
     NSRegularExpression *re = [NSRegularExpression regularExpressionWithPattern:regex_emoji options:NSRegularExpressionCaseInsensitive error:&error];

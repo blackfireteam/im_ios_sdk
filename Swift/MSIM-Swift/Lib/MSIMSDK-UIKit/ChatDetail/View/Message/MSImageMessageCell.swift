@@ -61,7 +61,8 @@ open class MSImageMessageCell: MSMessageCell {
                 thumb.image = image
                 imageData.imageElem.image = image
             }else if imageData.imageElem.url != nil {
-                thumb.kf.setImage(with: URL(string: imageData.imageElem.url!))
+                let thumbUrl = imageData.imageElem.url! + "?imageMogr2/thumbnail/300x/interlace/0"
+                thumb.kf.setImage(with: URL(string: thumbUrl), options: [KingfisherOptionsInfoItem.onFailureImage(UIImage.bf_imageNamed(name: "placeholder_delete"))])
             }
         }
     }

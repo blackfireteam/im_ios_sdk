@@ -58,7 +58,8 @@
         self.thumb.image = image;
         data.imageElem.image = image;
     }else {
-        [self.thumb sd_setImageWithURL:[NSURL URLWithString:data.imageElem.url]];
+        NSString *thumbUrl = [NSString stringWithFormat:@"%@?imageMogr2/thumbnail/300x/interlace/0",data.imageElem.url];
+        [self.thumb sd_setImageWithURL:[NSURL URLWithString:thumbUrl] placeholderImage:[UIImage imageNamed:TUIKitResource(@"placeholder_delete")] options:SDWebImageDelayPlaceholder];
     }
 }
 

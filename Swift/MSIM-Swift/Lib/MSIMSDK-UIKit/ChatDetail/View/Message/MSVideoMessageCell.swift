@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 
 
@@ -78,7 +79,8 @@ open class MSVideoMessageCell: MSMessageCell {
                 thumb.image = image
                 videoData.videoElem.coverImage = image
             }else if videoData.videoElem.coverUrl != nil {
-                thumb.kf.setImage(with: URL(string: videoData.videoElem.coverUrl!))
+                let thumbUrl = videoData.videoElem.coverUrl! + "?imageMogr2/thumbnail/300x/interlace/0"
+                thumb.kf.setImage(with: URL(string: thumbUrl), options: [KingfisherOptionsInfoItem.onFailureImage(UIImage.bf_imageNamed(name: "placeholder_delete"))])
             }
         }
     }

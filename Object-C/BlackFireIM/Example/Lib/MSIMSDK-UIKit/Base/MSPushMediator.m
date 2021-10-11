@@ -76,6 +76,7 @@ static MSPushMediator *_manager;
         [deviceTokenString appendFormat:@"%02x", bytes[i]&0x000000FF];
     }
     MSLog(@"注册APNS成功%@",deviceTokenString);
+    [[UIPasteboard generalPasteboard]setString:deviceTokenString];
     [[NSUserDefaults standardUserDefaults]setObject:deviceTokenString forKey:@"ms_device_token"];
     [[MSIMManager sharedInstance]refreshPushDeviceToken:deviceTokenString];
 }

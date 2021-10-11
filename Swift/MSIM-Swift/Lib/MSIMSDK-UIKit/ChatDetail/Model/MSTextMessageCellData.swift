@@ -63,7 +63,7 @@ open class MSTextMessageCellData: MSBubbleMessageCellData {
             return NSMutableAttributedString(string: "")
         }
         let attributeString = NSMutableAttributedString(string: content)
-        let regex_emoji = "\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5]+\\]" //匹配表情
+        let regex_emoji = "\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5-_]+\\]" //匹配表情
         guard let re = try? NSRegularExpression(pattern: regex_emoji, options: .caseInsensitive) else {
             return attributedString
         }

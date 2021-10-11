@@ -722,17 +722,17 @@
 		<key>face_id</key>
 		<string>141</string>
 	</dict>
-    <dict>
-        <key>face_name</key>
-        <string>[Car]</string>
-        <key>face_id</key>
-        <string>142</string>
-    </dict>
-    <dict>
-        <key>face_name</key>
-        <string>[Ring]</string>
-        <key>face_id</key>
-        <string>143</string>
-    </dict>
+	<dict>
+		<key>face_name</key>
+		<string>[Car]</string>
+		<key>face_id</key>
+		<string>142</string>
+	</dict>
+	<dict>
+		<key>face_name</key>
+		<string>[Ring]</string>
+		<key>face_id</key>
+		<string>143</string>
+	</dict>
 </array>
 </plist>

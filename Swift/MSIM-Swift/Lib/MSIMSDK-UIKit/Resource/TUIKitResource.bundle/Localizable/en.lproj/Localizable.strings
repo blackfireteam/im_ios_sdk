@@ -44,8 +44,8 @@
 "YesterdayDateFormat" = "HH:mma";       // 英文是 HH:mma 不要动
 
 "Read" = "Read";
-"Deliveried" = "Deliveried";
-"NotDeliveried" = "NotDeliveried";
+"Deliveried" = "Delivered";
+"NotDeliveried" = "NotDelivered";
 "Sending" = "Sending...";
 
 "Copy" = "Copy";
