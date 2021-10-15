@@ -1046,8 +1046,8 @@
 		F04CF65E26AFAFE300DB452E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F04CF65F26AFAFE300DB452E /* BFUserListCell.m */,
 				F04CF66026AFAFE300DB452E /* BFUserListCell.h */,
+				F04CF65F26AFAFE300DB452E /* BFUserListCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1626,7 +1626,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.msim;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.msim.normal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1656,7 +1656,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.msim;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.msim.normal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;

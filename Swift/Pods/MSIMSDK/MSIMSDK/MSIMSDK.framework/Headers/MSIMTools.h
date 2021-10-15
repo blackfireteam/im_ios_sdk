@@ -9,12 +9,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger ,MSIMServerType){
-    
-    MSIMServerTypeTest = 0, //测试环境
-    
-    MSIMServerTypeProduct = 1,//正式环境
-};
 
 @interface MSIMTools : NSObject
 

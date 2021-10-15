@@ -29,7 +29,7 @@
         //nameLabel
         _nameLabel = [[UILabel alloc] init];
         _nameLabel.font = [UIFont boldSystemFontOfSize:16];
-        _nameLabel.textColor = [UIColor darkTextColor];
+        _nameLabel.textColor = [UIColor d_colorWithColorLight:TText_Color dark:TText_Color_Dark];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_nameLabel];
         

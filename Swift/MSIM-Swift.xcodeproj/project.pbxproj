@@ -136,6 +136,7 @@
 		C79D5707EE87130B6417A80C /* Pods-MSIM-Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSIM-Swift.release.xcconfig"; path = "Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift.release.xcconfig"; sourceTree = "<group>"; };
 		F02636152702C0C9007E23F6 /* MSCallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSCallModel.swift; sourceTree = "<group>"; };
 		F02636172702C233007E23F6 /* MSVoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceCallView.swift; sourceTree = "<group>"; };
+		F04F4B5A2717DD8900752952 /* MSIM-Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MSIM-Swift.entitlements"; sourceTree = "<group>"; };
 		F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVideoMessageCell.swift; sourceTree = "<group>"; };
 		F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceMessageCell.swift; sourceTree = "<group>"; };
 		F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSSystemMessageCell.swift; sourceTree = "<group>"; };
@@ -422,6 +423,7 @@
 		F0FF71AE26B0E9CE0005F3CF /* MSIM-Swift */ = {
 			isa = PBXGroup;
 			children = (
+				F04F4B5A2717DD8900752952 /* MSIM-Swift.entitlements */,
 				F0FF71DF26B0F1F00005F3CF /* Lib */,
 				F0FEA33F26DF1B2000BCF4B6 /* ChatDetail */,
 				F0FF720B26B29B7A0005F3CF /* Home */,
@@ -1061,6 +1063,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "MSIM-Swift/MSIM-Swift.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6N3JSL2D62;
 				INFOPLIST_FILE = "MSIM-Swift/Info.plist";
@@ -1069,7 +1072,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.blackfire.im.msim.MSIM-Swift";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.msim.normal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1082,6 +1085,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "MSIM-Swift/MSIM-Swift.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6N3JSL2D62;
 				INFOPLIST_FILE = "MSIM-Swift/Info.plist";
@@ -1090,7 +1094,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.blackfire.im.msim.MSIM-Swift";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blackfire.im.msim.normal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
