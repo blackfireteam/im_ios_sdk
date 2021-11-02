@@ -23,6 +23,7 @@ class BFConversationListController: BFBaseViewController {
         addChild(conVC)
         view.addSubview(conVC.view)
         setupNavigation()
+        setupChatRoomBtn()
         
         /// 当前的连接状态
         let status = MSIMManager.sharedInstance().connStatus
@@ -47,6 +48,20 @@ class BFConversationListController: BFBaseViewController {
         titleView.setTitle(title: "MESSAGE")
         navigationItem.titleView = titleView
         updateTitleView(status: MSIMManager.sharedInstance().connStatus)
+    }
+    
+    private func setupChatRoomBtn() {
+        let chatRoomBtn = UIButton(type: .custom)
+        chatRoomBtn.setTitle("Room", for: .normal)
+        chatRoomBtn.setTitleColor(.white, for: .normal)
+        chatRoomBtn.titleLabel?.font = .systemFont(ofSize: 14)
+        chatRoomBtn.backgroundColor = .darkGray
+        chatRoomBtn.layer.cornerRadius = 4
+        chatRoomBtn.layer.masksToBounds = true
+        chatRoomBtn.frame = CGRect(x: UIScreen.width - 20 - 60, y: UIScreen.height - UIScreen.tabBarHeight - UIScreen.safeAreaBottomHeight - 20 - 40, width: 60, height: 40)
+        chatRoomBtn.addTarget(self, action: #selector(chatRoomBtnClick), for: .touchUpInside)
+        view.addSubview(chatRoomBtn)
+        
     }
 
     private func addNotifications() {
@@ -117,6 +132,12 @@ class BFConversationListController: BFBaseViewController {
         DispatchQueue.main.async {
             self.tabBarItem.badgeValue = count > 0 ? "\(count)" : nil
         }
+    }
+    
+    /// 进入聊天室
+    @objc func chatRoomBtnClick() {
+        let vc = BFChatRoomViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

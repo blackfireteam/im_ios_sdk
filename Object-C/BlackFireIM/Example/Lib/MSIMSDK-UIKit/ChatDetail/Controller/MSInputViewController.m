@@ -20,6 +20,10 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 
 @property (nonatomic, assign) InputStatus status;
 
+@property(nonatomic,weak) id<MSInputViewControllerDelegate> delegate;
+
+@property(nonatomic,assign) MSIMAChatType type;
+
 @end
 
 @implementation MSInputViewController
@@ -28,6 +32,15 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 {
     [super viewDidLoad];
     [self setupUI];
+}
+
+- (instancetype)initWithChatType:(MSIMAChatType)type delegate:(id<MSInputViewControllerDelegate>)delegate
+{
+    if (self = [super init]) {
+        _delegate = delegate;
+        _type = type;
+    }
+    return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -307,7 +320,11 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
         videoData.title = TUILocalizableString(TUIKitMoreVideoCall);
         videoData.image = [UIImage bf_imageNamed:@"more_video_call"];
         
-        [_moreView setData:@[cameraData,photoData,voiceData,videoData]];
+        if (self.type == MSIM_CHAT_TYPE_C2C) {
+            [_moreView setData:@[cameraData,photoData,voiceData,videoData]];
+        }else {
+            [_moreView setData:@[cameraData,photoData]];
+        }
     }
     return _moreView;
 }

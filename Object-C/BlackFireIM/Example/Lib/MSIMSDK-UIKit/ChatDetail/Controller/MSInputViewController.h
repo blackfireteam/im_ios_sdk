@@ -10,6 +10,7 @@
 #import "MSChatMoreView.h"
 #import "MSFaceView.h"
 #import "MSMenuView.h"
+#import <MSIMSDK/MSIMSDK.h>
 
 
 @class MSInputViewController;
@@ -71,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) MSChatMoreView *moreView;
 
-@property(nonatomic,weak) id<MSInputViewControllerDelegate> delegate;
+- (instancetype)initWithChatType:(MSIMAChatType)type delegate:(id<MSInputViewControllerDelegate>)delegate;
 
 /**
  *  重置当前输入控制器。

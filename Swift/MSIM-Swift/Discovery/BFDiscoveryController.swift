@@ -32,7 +32,7 @@ class BFDiscoveryController: BFBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "在线用户"
+        navigationItem.title = "Online User"
         view.addSubview(myCollectionView)
     }
     

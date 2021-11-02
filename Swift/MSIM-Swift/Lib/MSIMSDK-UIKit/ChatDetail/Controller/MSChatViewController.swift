@@ -47,7 +47,7 @@ public class MSChatViewController: UIViewController {
     
     public private(set) var messageController: MSMessageController = MSMessageController()
     
-    public private(set) var inputController: MSInputViewController = MSInputViewController()
+    public private(set) var inputController: MSInputViewController!
     
     func sendMessage(message: MSIMElem) {
         MSIMManager.sharedInstance().sendC2CMessage(message, toReciever: self.partner_id) { _ in
@@ -78,7 +78,7 @@ public class MSChatViewController: UIViewController {
         addChild(messageController)
         view.addSubview(messageController.view)
         
-        inputController.delegate = self
+        inputController = MSInputViewController(chatType: .MSIM_CHAT_TYPE_C2C, delegate: self)
         inputController.view.frame = CGRect(x: 0, y: UIScreen.height - MSMcros.TTextView_Height - UIScreen.safeAreaBottomHeight, width: UIScreen.width, height: MSMcros.TTextView_Height + UIScreen.safeAreaBottomHeight)
         inputController.view.autoresizingMask = .flexibleTopMargin
         addChild(inputController)
@@ -229,9 +229,6 @@ extension MSChatViewController: MSMessageControllerDelegate {
     public func didHideMenuInMessageController(controller: MSMessageController) {
         self.inputController.inputBar.inputTextView.overrideNextResponder = nil
     }
-    
-    
-    
 }
 
 

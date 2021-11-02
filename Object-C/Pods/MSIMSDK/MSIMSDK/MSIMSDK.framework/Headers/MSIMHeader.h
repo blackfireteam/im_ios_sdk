@@ -40,4 +40,14 @@
 //用户信息更新通知
 #define MSUIKitNotification_ProfileUpdate @"MSUIKitNotification_ProfileUpdate"
 
+
+//聊天室有新聊天室消息通知
+#define MSUIKitNotification_ChatRoom_MessageListener @"MSUIKitNotification_ChatRoom_MessageListener"
+
+//聊天室消息状态有变更通知
+#define MSUIKitNotification_ChatRoom_MessageSendStatusUpdate @"MSUIKitNotification_ChatRoom_MessageSendStatusUpdate"
+
+//聊天室事件通知
+#define MSUIKitNotification_ChatRoom_Event @"MSUIKitNotification_ChatRoom_Event"
+
 #endif /* MSIMHeader_h */

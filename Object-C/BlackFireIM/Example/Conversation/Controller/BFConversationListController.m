@@ -10,6 +10,8 @@
 #import "BFNaviBarIndicatorView.h"
 #import "MSIMSDK-UIKit.h"
 #import "BFChatViewController.h"
+#import "BFChatRoomViewController.h"
+
 
 @interface BFConversationListController ()<MSUIConversationListControllerDelegate>
 
@@ -18,6 +20,8 @@
 @property(nonatomic,strong) MSUIConversationListController *conVC;
 
 @property(nonatomic,strong) UIView *networkBarView;
+
+@property(nonatomic,strong) UIButton *chatRoomBtn;
 
 @end
 
@@ -29,7 +33,8 @@
     [self addChildViewController:self.conVC];
     [self.view addSubview:self.conVC.view];
     [self setupNavigation];
-
+    [self setupChatRoomBtn];
+    
     /// 当前的连接状态
     MSIMNetStatus status = [MSIMManager sharedInstance].connStatus;
     [self updateTitleViewWith: status];
@@ -64,6 +69,20 @@
     self.navigationItem.titleView = _titleView;
 
     [self updateTitleViewWith:MSIMManager.sharedInstance.connStatus];
+}
+
+- (void)setupChatRoomBtn
+{
+    self.chatRoomBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.chatRoomBtn setTitle:@"Room" forState:UIControlStateNormal];
+    [self.chatRoomBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.chatRoomBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+    self.chatRoomBtn.backgroundColor = [UIColor darkGrayColor];
+    self.chatRoomBtn.layer.cornerRadius = 4;
+    self.chatRoomBtn.layer.masksToBounds = YES;
+    self.chatRoomBtn.frame = CGRectMake(Screen_Width- 20 - 60, Screen_Height - TabBar_Height - 20 - 40, 60, 40);
+    [self.chatRoomBtn addTarget:self action:@selector(chatRoomBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.chatRoomBtn];
 }
 
 - (void)onNetworkChanged:(NSNotification *)notification
@@ -135,6 +154,13 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.tabBarItem.badgeValue = count ? [NSString stringWithFormat:@"%zd",count] : nil;
     });
+}
+
+/// 进入聊天室
+- (void)chatRoomBtnClick
+{
+    BFChatRoomViewController *vc = [[BFChatRoomViewController alloc]init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - MSUIConversationListControllerDelegate

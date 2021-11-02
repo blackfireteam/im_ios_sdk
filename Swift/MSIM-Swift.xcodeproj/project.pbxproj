@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		A5ABB1E519607F699BC02D21 /* Pods_MSIM_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58ECB6D4A404D9E157FA0CF3 /* Pods_MSIM_Swift.framework */; };
+		F01CC21C273104B7002EF5B2 /* MSChatRoomMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01CC21B273104B7002EF5B2 /* MSChatRoomMessageController.swift */; };
+		F01CC21E273110B9002EF5B2 /* MSChatRoomController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01CC21D273110B9002EF5B2 /* MSChatRoomController.swift */; };
+		F01CC2222731148E002EF5B2 /* BFChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01CC2212731148E002EF5B2 /* BFChatRoomViewController.swift */; };
+		F01CC224273119A9002EF5B2 /* BFChatRoomMemberListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01CC223273119A9002EF5B2 /* BFChatRoomMemberListController.swift */; };
 		F02636162702C0C9007E23F6 /* MSCallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02636152702C0C9007E23F6 /* MSCallModel.swift */; };
 		F02636182702C233007E23F6 /* MSVoiceCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02636172702C233007E23F6 /* MSVoiceCallView.swift */; };
 		F08FBA2F26C2064E00613FE0 /* MSVideoMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */; };
@@ -134,6 +138,10 @@
 		031FF94276E10DFC1390628E /* Pods-MSIM-Swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSIM-Swift.debug.xcconfig"; path = "Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift.debug.xcconfig"; sourceTree = "<group>"; };
 		58ECB6D4A404D9E157FA0CF3 /* Pods_MSIM_Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MSIM_Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C79D5707EE87130B6417A80C /* Pods-MSIM-Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSIM-Swift.release.xcconfig"; path = "Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift.release.xcconfig"; sourceTree = "<group>"; };
+		F01CC21B273104B7002EF5B2 /* MSChatRoomMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSChatRoomMessageController.swift; sourceTree = "<group>"; };
+		F01CC21D273110B9002EF5B2 /* MSChatRoomController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSChatRoomController.swift; sourceTree = "<group>"; };
+		F01CC2212731148E002EF5B2 /* BFChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatRoomViewController.swift; sourceTree = "<group>"; };
+		F01CC223273119A9002EF5B2 /* BFChatRoomMemberListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatRoomMemberListController.swift; sourceTree = "<group>"; };
 		F02636152702C0C9007E23F6 /* MSCallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSCallModel.swift; sourceTree = "<group>"; };
 		F02636172702C233007E23F6 /* MSVoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceCallView.swift; sourceTree = "<group>"; };
 		F04F4B5A2717DD8900752952 /* MSIM-Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MSIM-Swift.entitlements"; sourceTree = "<group>"; };
@@ -289,6 +297,37 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		F01CC21A27310483002EF5B2 /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				F01CC21B273104B7002EF5B2 /* MSChatRoomMessageController.swift */,
+				F01CC21D273110B9002EF5B2 /* MSChatRoomController.swift */,
+			);
+			path = ChatRoom;
+			sourceTree = "<group>";
+		};
+		F01CC21F27311458002EF5B2 /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				F01CC2212731148E002EF5B2 /* BFChatRoomViewController.swift */,
+				F01CC223273119A9002EF5B2 /* BFChatRoomMemberListController.swift */,
+			);
+			path = ChatRoom;
+			sourceTree = "<group>";
+		};
+		F01CC22027311462002EF5B2 /* C2C */ = {
+			isa = PBXGroup;
+			children = (
+				F0FEA34026DF1B3300BCF4B6 /* BFChatViewController.swift */,
+				F0E565A526FC4D3D00C3424D /* ImageStickerContainerView.swift */,
+				F0FEA34426DF688400BCF4B6 /* BFWinkMessageCell.swift */,
+				F0FEA34626DF6A5800BCF4B6 /* BFWinkMessageCellData.swift */,
+				F0CED8D427093B1400C31B65 /* BFCallMessageCellData.swift */,
+				F0CED8D627093FAF00C31B65 /* BFCallMessageCell.swift */,
+			);
+			path = C2C;
+			sourceTree = "<group>";
+		};
 		F02636142702C092007E23F6 /* CallKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -388,12 +427,8 @@
 		F0FEA33F26DF1B2000BCF4B6 /* ChatDetail */ = {
 			isa = PBXGroup;
 			children = (
-				F0FEA34026DF1B3300BCF4B6 /* BFChatViewController.swift */,
-				F0E565A526FC4D3D00C3424D /* ImageStickerContainerView.swift */,
-				F0FEA34426DF688400BCF4B6 /* BFWinkMessageCell.swift */,
-				F0FEA34626DF6A5800BCF4B6 /* BFWinkMessageCellData.swift */,
-				F0CED8D427093B1400C31B65 /* BFCallMessageCellData.swift */,
-				F0CED8D627093FAF00C31B65 /* BFCallMessageCell.swift */,
+				F01CC22027311462002EF5B2 /* C2C */,
+				F01CC21F27311458002EF5B2 /* ChatRoom */,
 			);
 			path = ChatDetail;
 			sourceTree = "<group>";
@@ -470,6 +505,7 @@
 		F0FF71E026B0F1F70005F3CF /* MSIMSDK-UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				F01CC21A27310483002EF5B2 /* ChatRoom */,
 				F02636142702C092007E23F6 /* CallKit */,
 				F0FF722E26B8E2020005F3CF /* ChatDetail */,
 				F08FBA3626C2129100613FE0 /* Conversation */,
@@ -813,6 +849,7 @@
 				F08FBA4626C25C5E00613FE0 /* BFNaviBarIndicatorView.swift in Sources */,
 				F0FF71E926B104CB0005F3CF /* MSMcros.swift in Sources */,
 				F0FEA33A26DCC37A00BCF4B6 /* MSInputViewController.swift in Sources */,
+				F01CC21E273110B9002EF5B2 /* MSChatRoomController.swift in Sources */,
 				F0FF724E26BB822A0005F3CF /* MSImageMessageCellData.swift in Sources */,
 				F0E565C026FD783D00C3424D /* LanternZoomSupportedCell.swift in Sources */,
 				F0FF724C26BB6FA80005F3CF /* MSTextMessageCellData.swift in Sources */,
@@ -822,6 +859,7 @@
 				F0FF720F26B29DCE0005F3CF /* BFSparkLoadingView.swift in Sources */,
 				F0FF71B026B0E9CE0005F3CF /* AppDelegate.swift in Sources */,
 				F0FF723426B8E2DB0005F3CF /* MSFaceView.swift in Sources */,
+				F01CC21C273104B7002EF5B2 /* MSChatRoomMessageController.swift in Sources */,
 				F0FF720526B25CC50005F3CF /* BFLoginController.swift in Sources */,
 				F0FF725A26BCD1190005F3CF /* MSTextMessageCell.swift in Sources */,
 				F0FEA34726DF6A5800BCF4B6 /* BFWinkMessageCellData.swift in Sources */,
@@ -841,6 +879,7 @@
 				F0FF71FB26B154390005F3CF /* BFRegisterInfo.swift in Sources */,
 				F0FF723B26B924320005F3CF /* MSInputMoreCell.swift in Sources */,
 				F0FF71ED26B1329E0005F3CF /* UIImage+Ext.swift in Sources */,
+				F01CC2222731148E002EF5B2 /* BFChatRoomViewController.swift in Sources */,
 				F0E565C526FD783D00C3424D /* LanternFadeAnimator.swift in Sources */,
 				F08FBA3526C20FEB00613FE0 /* MSNoticeCountView.swift in Sources */,
 				F0E565BE26FD783D00C3424D /* LanternLog.swift in Sources */,
@@ -860,6 +899,7 @@
 				F0FF724426BA2A380005F3CF /* MSRecordView.swift in Sources */,
 				F0FF720A26B27DF40005F3CF /* BFProfileHeaderView.swift in Sources */,
 				F0FF71F426B151180005F3CF /* BFBaseViewController.swift in Sources */,
+				F01CC224273119A9002EF5B2 /* BFChatRoomMemberListController.swift in Sources */,
 				F08FBA3326C20E9A00613FE0 /* MSSystemMessageCell.swift in Sources */,
 				F0E565BD26FD783D00C3424D /* LanternNumberPageIndicator.swift in Sources */,
 				F0FEA33E26DF0CDC00BCF4B6 /* MSChatViewController.swift in Sources */,

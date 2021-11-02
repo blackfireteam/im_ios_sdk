@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import MSIMSDK
+
 
 public protocol MSInputViewControllerDelegate: NSObjectProtocol {
     
@@ -39,7 +41,9 @@ public class MSInputViewController: UIViewController {
     
     var moreView: MSChatMoreView!
     
-    public weak var delegate: MSInputViewControllerDelegate?
+    private weak var delegate: MSInputViewControllerDelegate?
+    
+    private var type: MSIMAChatType = .MSIM_CHAT_TYPE_C2C
     
     private var status: InputStatus = .input
     
@@ -54,6 +58,16 @@ public class MSInputViewController: UIViewController {
         status = .input
         inputBar.inputTextView.resignFirstResponder()
         delegate?.didChangeHeight(inputController: self, height: inputBar.height + UIScreen.safeAreaBottomHeight)
+    }
+    
+    init(chatType: MSIMAChatType,delegate: MSInputViewControllerDelegate?) {
+        super.init(nibName: nil, bundle: nil)
+        self.type = chatType
+        self.delegate = delegate
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     deinit {

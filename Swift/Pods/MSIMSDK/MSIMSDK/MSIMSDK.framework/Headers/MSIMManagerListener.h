@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSIMElem;
 @class MSProfileInfo;
 @class MSIMMessageReceipt;
+@class MSChatRoomEvent;
 @protocol MSIMSDKListener <NSObject>
 
 @optional
@@ -89,6 +90,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 ///收到消息已读回执（仅单聊有效） 
 - (void)onRecvC2CReadReceipt:(MSIMMessageReceipt *)receipt;
+
+@end
+
+@protocol MSIMChatRoomMessageListener <NSObject>
+
+@required
+
+/// 收到新消息（除了信令消息）
+- (void)onNewChatRoomMessages:(NSArray<MSIMElem *> *)msgs;
+
+
+/**
+ *  消息发送状态变化通知
+ */
+- (void)onChatRoomMessageUpdateSendStatus:(MSIMElem *)elem;
+
+/// 聊天室事件通知
+- (void)onNewChatRoomEvent:(MSChatRoomEvent *)event;
 
 @end
 

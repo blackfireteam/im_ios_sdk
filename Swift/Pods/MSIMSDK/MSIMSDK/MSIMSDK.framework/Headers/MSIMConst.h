@@ -56,6 +56,17 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
     XMChatProtoTypeGetAgoraToken = 24,//请求声网的临时token
     XMChatProtoTypeAgoraTokenResponse = 25,//声网的临时token结果
     
+    XMChatProtoTypeJoinChatRoomRequest = 26,//申请加入聊天室
+    XMChatProtoTypeQuitChatRoomRequest = 27,//申请退出聊天室
+    XMChatProtoTypeJoinChatRoomResult = 28,//申请加入聊天室结果
+    XMChatProtoTypeJoinChatRoomEvent = 29,//聊天室事件
+    
+    XMChatProtoTypeSendChatRoomMsgRequest = 30,//发送聊天室消息请求
+    XMChatProtoTypeSendChatRoomMsgResponse = 31,//发送聊天室消息回复
+    XMChatProtoTypeRecieveChatRoomMsg = 32,//收到聊天室消息
+    XMChatProtoTypeRecieveChatRoomMsgBatch = 33,//收到聊天室批量消息
+    XMChatProtoTypeRecieveChatRoomProfilesRequest = 34,//获取聊天室中用户的profile
+    
     XMChatProtoTypeProfileOnline = 50,//通知客户端用户上线事件
     XMChatProtoTypeProfileOffline = 52,//通知客户端用户下线事件
     XMChatProtoTypeSignup = 53,//注册新用户  for demo
@@ -81,7 +92,7 @@ typedef NS_ENUM(NSInteger ,MSIMAChatType){
     
     MSIM_CHAT_TYPE_C2C = 0, //单聊
     
-    MSIM_CHAT_TYPE_GROUP = 1,//群聊
+    MSIM_CHAT_TYPE_CHATROOM = 1,//聊天室
 };
 
 /** 消息状态*/

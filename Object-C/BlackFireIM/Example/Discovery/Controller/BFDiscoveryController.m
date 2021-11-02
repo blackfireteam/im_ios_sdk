@@ -25,7 +25,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = @"在线用户";
+    self.navigationItem.title = @"Online";
     [self setupUI];
 }
 

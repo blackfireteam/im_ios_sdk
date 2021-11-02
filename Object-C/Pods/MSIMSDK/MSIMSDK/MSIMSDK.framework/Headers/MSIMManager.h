@@ -31,8 +31,11 @@ typedef void (^MSIMConversationListSucc)(NSArray<MSIMConversation *> * convs,NSI
 ///IM连接状态监听器
 @property(nonatomic,weak) id<MSIMSDKListener> connListener;
 
-///收发消息监听器
+///收发c2c消息监听器
 @property(nonatomic,weak) id<MSIMMessageListener> msgListener;
+
+///收到聊天室消息监听器
+@property(nonatomic,weak) id<MSIMChatRoomMessageListener> chatRoomMsgListener;
 
 ///会话列表监听器
 @property(nonatomic,weak) id<MSIMConversationListener> convListener;

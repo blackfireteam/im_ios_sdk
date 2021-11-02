@@ -44,10 +44,9 @@
     [self addChildViewController:self.messageController];
     [self.view addSubview:self.messageController.view];
     
-    self.inputController = [[MSInputViewController alloc]init];
+    self.inputController = [[MSInputViewController alloc]initWithChatType:MSIM_CHAT_TYPE_C2C delegate:self];
     self.inputController.view.frame = CGRectMake(0, Screen_Height-TTextView_Height-Bottom_SafeHeight, Screen_Width, TTextView_Height+Bottom_SafeHeight);
     self.inputController.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    self.inputController.delegate = self;
     [self addChildViewController:self.inputController];
     [self.view addSubview:self.inputController.view];
     

@@ -13,6 +13,8 @@
 #import "MSMessageController.h"
 #import "MSChatViewController.h"
 #import "MSChatViewController+More.h"
+#import "MSChatRoomController.h"
+#import "MSChatRoomController+More.h"
 #import "MSUIConversationListController.h"
 #import "MSMessageCell.h"
 #import "MSBubbleMessageCell.h"

@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSIMElem : NSObject<NSCopying>
 
+/** 聊天类型 单聊 or 群聊*/
+@property(nonatomic,assign) MSIMAChatType chatType;
+
 /** 消息类型*/
 @property(nonatomic,assign) MSIMMessageType type;
 
