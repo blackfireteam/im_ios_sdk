@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 会话列表分页拉取数量,默认：50个*/
 @property(nonatomic,assign) NSInteger chatListPageCount;
 
+/** 指向IM测试服务器 or 正式服务器 .默认为 YES*/
+@property(nonatomic,assign) BOOL isProduct;
+
 /** IM附件服务器存储时长。默认最多存储30天，超过30天的文件会自动清除 默认： 30天。永久存储设置为：-1*/
 @property(nonatomic,assign) NSInteger objectCleanDay;
 

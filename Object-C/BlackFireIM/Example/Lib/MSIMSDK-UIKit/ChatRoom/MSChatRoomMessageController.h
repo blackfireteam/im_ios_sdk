@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSMessageCell;
 @class MSMessageCellData;
 @class MSIMElem;
+@class MSGroupInfo;
 @protocol MSChatRoomMessageControllerDelegate <NSObject>
 
 
@@ -72,11 +73,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,weak) id<MSChatRoomMessageControllerDelegate> delegate;
 
-@property(nonatomic,copy) NSString *room_id;
+@property(nonatomic,strong) MSGroupInfo *roomInfo;
 
 @property (nonatomic, strong,readonly) NSMutableArray<MSMessageCellData *> *uiMsgs;
 
 - (void)scrollToBottom:(BOOL)animate;
+
+- (void)addSystemTips:(NSString *)text;
 
 @end
 

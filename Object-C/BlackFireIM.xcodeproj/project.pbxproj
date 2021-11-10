@@ -14,11 +14,6 @@
 		F011D58F25E736C10061F9D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D58E25E736C10061F9D6 /* main.m */; };
 		F011D59925E736C10061F9D6 /* BlackFireIMTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D59825E736C10061F9D6 /* BlackFireIMTests.m */; };
 		F011D5A425E736C10061F9D6 /* BlackFireIMUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */; };
-		F01CC211273103DF002EF5B2 /* MSChatRoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01CC20B273103DD002EF5B2 /* MSChatRoomController.m */; };
-		F01CC212273103DF002EF5B2 /* MSChatRoomMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01CC20E273103DF002EF5B2 /* MSChatRoomMessageController.m */; };
-		F01CC213273103DF002EF5B2 /* MSChatRoomController+More.m in Sources */ = {isa = PBXBuildFile; fileRef = F01CC20F273103DF002EF5B2 /* MSChatRoomController+More.m */; };
-		F01CC21827310402002EF5B2 /* BFChatRoomMemberListController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01CC21427310400002EF5B2 /* BFChatRoomMemberListController.m */; };
-		F01CC21927310402002EF5B2 /* BFChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01CC21627310401002EF5B2 /* BFChatRoomViewController.m */; };
 		F027973C26CE5A3F003BD664 /* BFCallMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F027973926CE5A3F003BD664 /* BFCallMessageCell.m */; };
 		F027973D26CE5A3F003BD664 /* BFCallMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F027973B26CE5A3F003BD664 /* BFCallMessageCellData.m */; };
 		F027973F26CE5C26003BD664 /* TUIKitResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F027973E26CE5C26003BD664 /* TUIKitResource.bundle */; };
@@ -139,6 +134,14 @@
 		F04CF6EC26AFAFE300DB452E /* BFProfileService.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF67226AFAFE300DB452E /* BFProfileService.m */; };
 		F04CF6ED26AFAFE300DB452E /* BFProfileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F04CF67626AFAFE300DB452E /* BFProfileHeaderView.m */; };
 		F052254026E218450048F588 /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F052253F26E218450048F588 /* TUIKitFace.bundle */; };
+		F068427D273BC45500E0313E /* BFChatRoomEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0684273273BC45500E0313E /* BFChatRoomEditController.m */; };
+		F068427E273BC45500E0313E /* BFChatRoomMemberListController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0684276273BC45500E0313E /* BFChatRoomMemberListController.m */; };
+		F068427F273BC45500E0313E /* BFChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0684278273BC45500E0313E /* BFChatRoomViewController.m */; };
+		F0684280273BC45500E0313E /* BFGroupMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F068427A273BC45500E0313E /* BFGroupMemberCell.m */; };
+		F0684281273BC45500E0313E /* BFEditTodInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = F068427B273BC45500E0313E /* BFEditTodInfoController.m */; };
+		F0684289273BC49A00E0313E /* MSChatRoomMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0684285273BC49A00E0313E /* MSChatRoomMessageController.m */; };
+		F068428A273BC49A00E0313E /* MSChatRoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0684286273BC49A00E0313E /* MSChatRoomController.m */; };
+		F068428B273BC49A00E0313E /* MSChatRoomController+More.m in Sources */ = {isa = PBXBuildFile; fileRef = F0684287273BC49A00E0313E /* MSChatRoomController+More.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -188,16 +191,6 @@
 		F011D59F25E736C10061F9D6 /* BlackFireIMUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackFireIMUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F011D5A325E736C10061F9D6 /* BlackFireIMUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlackFireIMUITests.m; sourceTree = "<group>"; };
 		F011D5A525E736C10061F9D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F01CC20B273103DD002EF5B2 /* MSChatRoomController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSChatRoomController.m; sourceTree = "<group>"; };
-		F01CC20C273103DE002EF5B2 /* MSChatRoomMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSChatRoomMessageController.h; sourceTree = "<group>"; };
-		F01CC20D273103DE002EF5B2 /* MSChatRoomController+More.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSChatRoomController+More.h"; sourceTree = "<group>"; };
-		F01CC20E273103DF002EF5B2 /* MSChatRoomMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSChatRoomMessageController.m; sourceTree = "<group>"; };
-		F01CC20F273103DF002EF5B2 /* MSChatRoomController+More.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSChatRoomController+More.m"; sourceTree = "<group>"; };
-		F01CC210273103DF002EF5B2 /* MSChatRoomController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSChatRoomController.h; sourceTree = "<group>"; };
-		F01CC21427310400002EF5B2 /* BFChatRoomMemberListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFChatRoomMemberListController.m; sourceTree = "<group>"; };
-		F01CC21527310401002EF5B2 /* BFChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFChatRoomViewController.h; sourceTree = "<group>"; };
-		F01CC21627310401002EF5B2 /* BFChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFChatRoomViewController.m; sourceTree = "<group>"; };
-		F01CC21727310402002EF5B2 /* BFChatRoomMemberListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFChatRoomMemberListController.h; sourceTree = "<group>"; };
 		F027973826CE5A3E003BD664 /* BFCallMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFCallMessageCell.h; sourceTree = "<group>"; };
 		F027973926CE5A3F003BD664 /* BFCallMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFCallMessageCell.m; sourceTree = "<group>"; };
 		F027973A26CE5A3F003BD664 /* BFCallMessageCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFCallMessageCellData.h; sourceTree = "<group>"; };
@@ -446,6 +439,22 @@
 		F04CF67526AFAFE300DB452E /* BFProfileHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFProfileHeaderView.h; sourceTree = "<group>"; };
 		F04CF67626AFAFE300DB452E /* BFProfileHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFProfileHeaderView.m; sourceTree = "<group>"; };
 		F052253F26E218450048F588 /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
+		F0684273273BC45500E0313E /* BFChatRoomEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFChatRoomEditController.m; sourceTree = "<group>"; };
+		F0684274273BC45500E0313E /* BFChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFChatRoomViewController.h; sourceTree = "<group>"; };
+		F0684275273BC45500E0313E /* BFGroupMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFGroupMemberCell.h; sourceTree = "<group>"; };
+		F0684276273BC45500E0313E /* BFChatRoomMemberListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFChatRoomMemberListController.m; sourceTree = "<group>"; };
+		F0684277273BC45500E0313E /* BFEditTodInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFEditTodInfoController.h; sourceTree = "<group>"; };
+		F0684278273BC45500E0313E /* BFChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFChatRoomViewController.m; sourceTree = "<group>"; };
+		F0684279273BC45500E0313E /* BFChatRoomEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFChatRoomEditController.h; sourceTree = "<group>"; };
+		F068427A273BC45500E0313E /* BFGroupMemberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFGroupMemberCell.m; sourceTree = "<group>"; };
+		F068427B273BC45500E0313E /* BFEditTodInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFEditTodInfoController.m; sourceTree = "<group>"; };
+		F068427C273BC45500E0313E /* BFChatRoomMemberListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFChatRoomMemberListController.h; sourceTree = "<group>"; };
+		F0684283273BC49A00E0313E /* MSChatRoomController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSChatRoomController.h; sourceTree = "<group>"; };
+		F0684284273BC49A00E0313E /* MSChatRoomController+More.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSChatRoomController+More.h"; sourceTree = "<group>"; };
+		F0684285273BC49A00E0313E /* MSChatRoomMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSChatRoomMessageController.m; sourceTree = "<group>"; };
+		F0684286273BC49A00E0313E /* MSChatRoomController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSChatRoomController.m; sourceTree = "<group>"; };
+		F0684287273BC49A00E0313E /* MSChatRoomController+More.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSChatRoomController+More.m"; sourceTree = "<group>"; };
+		F0684288273BC49A00E0313E /* MSChatRoomMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSChatRoomMessageController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -563,34 +572,10 @@
 			path = C2C;
 			sourceTree = "<group>";
 		};
-		F01CC1FA2730C7C2002EF5B2 /* ChatRoom */ = {
-			isa = PBXGroup;
-			children = (
-				F01CC21527310401002EF5B2 /* BFChatRoomViewController.h */,
-				F01CC21627310401002EF5B2 /* BFChatRoomViewController.m */,
-				F01CC21727310402002EF5B2 /* BFChatRoomMemberListController.h */,
-				F01CC21427310400002EF5B2 /* BFChatRoomMemberListController.m */,
-			);
-			path = ChatRoom;
-			sourceTree = "<group>";
-		};
-		F01CC2012730C9EA002EF5B2 /* ChatRoom */ = {
-			isa = PBXGroup;
-			children = (
-				F01CC210273103DF002EF5B2 /* MSChatRoomController.h */,
-				F01CC20B273103DD002EF5B2 /* MSChatRoomController.m */,
-				F01CC20D273103DE002EF5B2 /* MSChatRoomController+More.h */,
-				F01CC20F273103DF002EF5B2 /* MSChatRoomController+More.m */,
-				F01CC20C273103DE002EF5B2 /* MSChatRoomMessageController.h */,
-				F01CC20E273103DF002EF5B2 /* MSChatRoomMessageController.m */,
-			);
-			path = ChatRoom;
-			sourceTree = "<group>";
-		};
 		F04CF55726AFAFE100DB452E /* ChatDetail */ = {
 			isa = PBXGroup;
 			children = (
-				F01CC1FA2730C7C2002EF5B2 /* ChatRoom */,
+				F0684272273BC45500E0313E /* ChatRoom */,
 				F01CC1F92730C7BB002EF5B2 /* C2C */,
 			);
 			path = ChatDetail;
@@ -610,7 +595,7 @@
 			isa = PBXGroup;
 			children = (
 				F04CF56326AFAFE100DB452E /* MSIMSDK-UIKit.h */,
-				F01CC2012730C9EA002EF5B2 /* ChatRoom */,
+				F0684282273BC49A00E0313E /* ChatRoom */,
 				F04CF56426AFAFE100DB452E /* VoiceKit */,
 				F04CF56F26AFAFE100DB452E /* ChatDetail */,
 				F04CF5AF26AFAFE100DB452E /* Resource */,
@@ -1170,6 +1155,36 @@
 			path = Example;
 			sourceTree = "<group>";
 		};
+		F0684272273BC45500E0313E /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				F0684274273BC45500E0313E /* BFChatRoomViewController.h */,
+				F0684278273BC45500E0313E /* BFChatRoomViewController.m */,
+				F0684279273BC45500E0313E /* BFChatRoomEditController.h */,
+				F0684273273BC45500E0313E /* BFChatRoomEditController.m */,
+				F068427C273BC45500E0313E /* BFChatRoomMemberListController.h */,
+				F0684276273BC45500E0313E /* BFChatRoomMemberListController.m */,
+				F0684277273BC45500E0313E /* BFEditTodInfoController.h */,
+				F068427B273BC45500E0313E /* BFEditTodInfoController.m */,
+				F0684275273BC45500E0313E /* BFGroupMemberCell.h */,
+				F068427A273BC45500E0313E /* BFGroupMemberCell.m */,
+			);
+			path = ChatRoom;
+			sourceTree = "<group>";
+		};
+		F0684282273BC49A00E0313E /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				F0684283273BC49A00E0313E /* MSChatRoomController.h */,
+				F0684286273BC49A00E0313E /* MSChatRoomController.m */,
+				F0684288273BC49A00E0313E /* MSChatRoomMessageController.h */,
+				F0684285273BC49A00E0313E /* MSChatRoomMessageController.m */,
+				F0684284273BC49A00E0313E /* MSChatRoomController+More.h */,
+				F0684287273BC49A00E0313E /* MSChatRoomController+More.m */,
+			);
+			path = ChatRoom;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1386,14 +1401,12 @@
 				F04CF6E826AFAFE300DB452E /* BFSparkCardView.m in Sources */,
 				F04CF6ED26AFAFE300DB452E /* BFProfileHeaderView.m in Sources */,
 				F04CF6C326AFAFE300DB452E /* YBIBInteractionProfile.m in Sources */,
-				F01CC212273103DF002EF5B2 /* MSChatRoomMessageController.m in Sources */,
 				F04CF6B826AFAFE300DB452E /* YYAnimatedImageView.m in Sources */,
 				F04CF6D626AFAFE300DB452E /* YBIBCollectionView.m in Sources */,
 				F04CF69926AFAFE300DB452E /* MSRecordView.m in Sources */,
 				F04CF6C626AFAFE300DB452E /* YBIBImageCell.m in Sources */,
 				F04CF6EC26AFAFE300DB452E /* BFProfileService.m in Sources */,
 				F04CF69B26AFAFE300DB452E /* MSInputBarView.m in Sources */,
-				F01CC213273103DF002EF5B2 /* MSChatRoomController+More.m in Sources */,
 				F04CF67A26AFAFE300DB452E /* BFWinkMessageCellData.m in Sources */,
 				F04CF6DE26AFAFE300DB452E /* BFNavigationController.m in Sources */,
 				F04CF68926AFAFE300DB452E /* MSVoiceMessageCellData.m in Sources */,
@@ -1404,6 +1417,7 @@
 				F04CF6D526AFAFE300DB452E /* YBIBDataMediator.m in Sources */,
 				F04CF69526AFAFE300DB452E /* MSMessageCell.m in Sources */,
 				F027973D26CE5A3F003BD664 /* BFCallMessageCellData.m in Sources */,
+				F068427E273BC45500E0313E /* BFChatRoomMemberListController.m in Sources */,
 				F04CF6E126AFAFE300DB452E /* BFSignInStepTwoController.m in Sources */,
 				F04CF67F26AFAFE300DB452E /* MSCallViewController.m in Sources */,
 				F04CF6BB26AFAFE300DB452E /* YBIBVideoTopBar.m in Sources */,
@@ -1422,7 +1436,6 @@
 				F04CF68626AFAFE300DB452E /* MSTextMessageCellData.m in Sources */,
 				F04CF69126AFAFE300DB452E /* MSSystemMessageCell.m in Sources */,
 				F04CF67C26AFAFE300DB452E /* MSCallModel.m in Sources */,
-				F01CC211273103DF002EF5B2 /* MSChatRoomController.m in Sources */,
 				F04CF6E926AFAFE300DB452E /* BFSparkCardCell.m in Sources */,
 				F04CF6B426AFAFE300DB452E /* YYSpriteSheetImage.m in Sources */,
 				F04CF6AD26AFAFE300DB452E /* MSPushMediator.m in Sources */,
@@ -1439,6 +1452,7 @@
 				F04CF6EA26AFAFE300DB452E /* BFSparkEmptyView.m in Sources */,
 				F04CF6AE26AFAFE300DB452E /* UIButton+positon.m in Sources */,
 				F04CF6A826AFAFE300DB452E /* NSDate+MSKit.m in Sources */,
+				F068428A273BC49A00E0313E /* MSChatRoomController.m in Sources */,
 				F04CF6DD26AFAFE300DB452E /* BFBaseViewController.m in Sources */,
 				F04CF69626AFAFE300DB452E /* MSBubbleMessageCell.m in Sources */,
 				F04CF6C426AFAFE300DB452E /* YBIBImageScrollView.m in Sources */,
@@ -1450,13 +1464,11 @@
 				F04CF6CA26AFAFE300DB452E /* YBIBAuxiliaryViewHandler.m in Sources */,
 				F04CF6AF26AFAFE300DB452E /* MSUploadManager.m in Sources */,
 				F04CF6A526AFAFE300DB452E /* UIView+Frame.m in Sources */,
-				F01CC21827310402002EF5B2 /* BFChatRoomMemberListController.m in Sources */,
 				F04CF6C726AFAFE300DB452E /* YBIBImageData.m in Sources */,
 				F04CF6C826AFAFE300DB452E /* YBIBToastView.m in Sources */,
 				F04CF6DB26AFAFE300DB452E /* BFConversationListController.m in Sources */,
 				F04CF6A626AFAFE300DB452E /* UIImage+BFKit.m in Sources */,
 				F04CF68B26AFAFE300DB452E /* MSMenuView.m in Sources */,
-				F01CC21927310402002EF5B2 /* BFChatRoomViewController.m in Sources */,
 				F04CF6CF26AFAFE300DB452E /* YBIBPhotoAlbumManager.m in Sources */,
 				F04CF6D926AFAFE300DB452E /* NSObject+YBImageBrowser.m in Sources */,
 				F04CF68A26AFAFE300DB452E /* MSVideoMessageCellData.m in Sources */,
@@ -1471,19 +1483,25 @@
 				F04CF6B126AFAFE300DB452E /* MSUIConversationCellData.m in Sources */,
 				F04CF69826AFAFE300DB452E /* MSChatMoreView.m in Sources */,
 				F04CF68F26AFAFE300DB452E /* MSNoticeCountView.m in Sources */,
+				F068428B273BC49A00E0313E /* MSChatRoomController+More.m in Sources */,
+				F0684281273BC45500E0313E /* BFEditTodInfoController.m in Sources */,
 				F04CF69426AFAFE300DB452E /* MSTextMessageCell.m in Sources */,
 				F04CF69726AFAFE300DB452E /* MSInputMoreCell.m in Sources */,
+				F068427D273BC45500E0313E /* BFChatRoomEditController.m in Sources */,
 				F04CF68526AFAFE300DB452E /* MSBubbleMessageCellData.m in Sources */,
 				F04CF6B926AFAFE300DB452E /* YBIBVideoCell.m in Sources */,
 				F04CF6B026AFAFE300DB452E /* MSUIConversationListController.m in Sources */,
 				F04CF6A426AFAFE300DB452E /* UIView+BFExtension.m in Sources */,
 				F011D58F25E736C10061F9D6 /* main.m in Sources */,
+				F0684280273BC45500E0313E /* BFGroupMemberCell.m in Sources */,
 				F04CF6E526AFAFE300DB452E /* BFUserListCell.m in Sources */,
 				F04CF69226AFAFE300DB452E /* MSImageMessageCell.m in Sources */,
 				F027973C26CE5A3F003BD664 /* BFCallMessageCell.m in Sources */,
 				F04CF68C26AFAFE300DB452E /* MSFaceCollectionCell.m in Sources */,
+				F068427F273BC45500E0313E /* BFChatRoomViewController.m in Sources */,
 				F04CF67826AFAFE300DB452E /* BFWinkMessageCell.m in Sources */,
 				F04CF6B626AFAFE300DB452E /* YYImageCoder.m in Sources */,
+				F0684289273BC49A00E0313E /* MSChatRoomMessageController.m in Sources */,
 				F04CF6C126AFAFE300DB452E /* YBIBImageLayout.m in Sources */,
 				F04CF6B526AFAFE300DB452E /* YYImage.m in Sources */,
 				F04CF6C026AFAFE300DB452E /* YBImageBrowser.m in Sources */,

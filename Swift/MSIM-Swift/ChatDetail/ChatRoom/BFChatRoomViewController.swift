@@ -16,14 +16,14 @@ public class BFChatRoomViewController: BFBaseViewController {
 
     public let chatController: MSChatRoomController = MSChatRoomController()
     
-    private var roomInfo: MSChatRoomInfo?
+    private var roomInfo: MSGroupInfo?
     
     
     public override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = UIColor.d_color(light: MSMcros.TController_Background_Color, dark: MSMcros.TController_Background_Color_Dark)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(showChatRoomMembers))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editClick))
         chatController.delegate = self
         addChild(chatController)
         view.addSubview(chatController.view)
@@ -40,9 +40,9 @@ public class BFChatRoomViewController: BFBaseViewController {
     
     /// 申请加入聊天室
     private func enterChatRoom() {
-        MSIMManager.sharedInstance().join(inChatRoom: 2) { info in
+        MSIMManager.sharedInstance().join(inChatRoom: 25) { info in
             self.roomInfo = info
-            self.chatController.room_id = self.roomInfo?.room_id
+            self.chatController.roomInfo = info
             self.navigationItem.title = self.roomInfo?.room_name
             
         } failed: { _, desc in
@@ -50,12 +50,12 @@ public class BFChatRoomViewController: BFBaseViewController {
         }
     }
     
-    /// 展示聊天室成员列表
-    @objc private func showChatRoomMembers() {
+    /// 聊天室设置界面
+    @objc private func editClick() {
         
         if self.roomInfo != nil {
             self.view.endEditing(true)
-            let vc = BFChatRoomMemberListController()
+            let vc = BFChatRoomEditController()
             vc.roomInfo = self.roomInfo
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -64,28 +64,105 @@ public class BFChatRoomViewController: BFBaseViewController {
     /// 接收到聊天室事件通知处理
     @objc func chatRoomEvent(note: Notification) {
         
-        //事件 0：聊天室被销毁（所有用户被迫离开聊天室）1：聊天室信息修改，
-        //2：用户上线， 3：用户下线(自己被踢掉也会收到)
-        //4：全体禁言 5：解除全体禁言
-        if let event = note.object as? MSChatRoomEvent {
-            if event.eventType == 0 {
-                MSHelper.showToastWithText(text: "Chat room is dissolved.")
-                navigationController?.popViewController(animated: true)
-            }else if event.eventType == 1 {
-                
-            }else if event.eventType == 2 {
-                
-            }else if event.eventType == 3 {
-                
-                if event.uid == MSIMTools.sharedInstance().user_id {//自己被踢出了聊天室
-                    MSHelper.showToastWithText(text: "You has been kicked out.")
-                    navigationController?.popViewController(animated: true)
-                }
-            }else if event.eventType == 4 {
-                
-            }else if event.eventType == 5 {
-                
+        //事件类型：
+          //1：聊天室已被解散
+          //2：聊天室属性已修改
+          //3：管理员 %s 将本聊天室设为听众模式
+          //4: 管理员 %s 恢复聊天室发言功能
+          //5：管理员 %s 上线
+          //6：管理员 %s 下线
+          //7: 管理员 %s 将用户 %s 禁言
+          //8: 管理员 %s 将用户 %s、%s 等人禁言
+          //9: %s 成为本聊天室管理员
+          //10: 管理员 %s 指派 %s 为临时管理员
+          //11：管理员 %s 指派 %s、%s 等人为临时管理员
+        guard let event = note.object as? MSGroupEvent,let tips = event.tips,let tipEvent = event.tips?.event else {return}
+        
+        switch tipEvent {
+        case 1:
+            MSHelper.showToastWithText(text: "This chatroom is dismissed.")
+            navigationController?.popViewController(animated: true)
+        case 2:
+            chatController.messageController.addSystemTips(text: "Chatroom info has been changed.")
+        case 3:
+            if let uid = tips.uids.first as? Int,
+               let info = MSProfileProvider.shared().providerProfile(fromLocal: String(uid)) {
+                chatController.messageController.addSystemTips(text: "\(info.nick_name) disabled sending message for this chatroom.")
             }
+        case 4:
+            if let uid = tips.uids.first as? Int,
+               let info = MSProfileProvider.shared().providerProfile(fromLocal: String(uid)) {
+                chatController.messageController.addSystemTips(text: "\(info.nick_name) enabled sending message for this chatroom.")
+            }
+        case 5:
+            if let uid = tips.uids.first as? Int,
+               String(uid) != MSIMTools.sharedInstance().user_id,
+               let info = MSProfileProvider.shared().providerProfile(fromLocal: String(uid)) {
+                chatController.messageController.addSystemTips(text: "Admin: \(info.nick_name) entered this room.")
+            }
+        case 6:
+            if let uid = tips.uids.first as? Int,
+               String(uid) != MSIMTools.sharedInstance().user_id,
+               let info = MSProfileProvider.shared().providerProfile(fromLocal: String(uid)) {
+                chatController.messageController.addSystemTips(text: "Admin: \(info.nick_name) leaved this room.")
+            }
+        case 7:
+            if let uid1 = tips.uids.first as? Int,
+               let uid2 = tips.uids.last as? Int,
+               let info1 = MSProfileProvider.shared().providerProfile(fromLocal: String(uid1)),
+               let info2 = MSProfileProvider.shared().providerProfile(fromLocal: String(uid2)) {
+                chatController.messageController.addSystemTips(text: "\(info1.nick_name) muted \(info2.nick_name). Reason: \(event.reason ?? "nothing").")
+            }
+        case 8:
+            if tips.uids.count <= 2 {return}
+            var managerName: String = ""
+            var membersStr: String = ""
+            for (index,uid) in tips.uids.enumerated() {
+                if index == 0 {
+                    managerName = MSProfileProvider.shared().providerProfile(fromLocal: String(uid as! Int))?.nick_name ?? ""
+                }else {
+                    let name = MSProfileProvider.shared().providerProfile(fromLocal: String(uid as! Int))?.nick_name ?? ""
+                    if membersStr == "" {
+                        membersStr = name
+                    }else {
+                        membersStr = "\(membersStr)、\(name)"
+                    }
+                }
+            }
+            chatController.messageController.addSystemTips(text: "\(managerName) muted \(membersStr). Reason: \(event.reason ?? "nothing").")
+        case 9:
+            if tips.uids.count < 1 {return}
+            if let uid = event.tips?.uids.first as? Int,
+               let name = MSProfileProvider.shared().providerProfile(fromLocal: String(uid))?.nick_name {
+                chatController.messageController.addSystemTips(text: "\(name) becomes the admin of this room.")
+            }
+        case 10:
+            if tips.uids.count < 2 {return}
+            if let adminUid = event.tips?.uids.first as? Int,
+               let userUid = event.tips?.uids.last as? Int,
+               let adminName = MSProfileProvider.shared().providerProfile(fromLocal: String(adminUid))?.nick_name,
+               let userName = MSProfileProvider.shared().providerProfile(fromLocal: String(userUid))?.nick_name {
+                chatController.messageController.addSystemTips(text: "\(adminName) assigned \(userName) as a temporary admin of the room.")
+            }
+        case 11:
+            if tips.uids.count <= 2 {return}
+            var managerName: String = ""
+            var membersStr: String = ""
+            for (index,uid) in tips.uids.enumerated() {
+                if index == 0 {
+                    managerName = MSProfileProvider.shared().providerProfile(fromLocal: String(uid as! Int))?.nick_name ?? ""
+                }else {
+                    let name = MSProfileProvider.shared().providerProfile(fromLocal: String(uid as! Int))?.nick_name ?? ""
+                    if membersStr == "" {
+                        membersStr = name
+                    }else {
+                        membersStr = "\(membersStr)、\(name)"
+                    }
+                }
+            }
+            chatController.messageController.addSystemTips(text: "\(managerName) assigned \(membersStr) as temporary admins of the room.")
+        default:
+            break
         }
     }
     
@@ -95,7 +172,7 @@ public class BFChatRoomViewController: BFBaseViewController {
                 
                 MSHelper.showToastSuccWithText(text: "quit chat room")
             } failed: { _, desc in
-                MSHelper.showToastFailWithText(text: desc ?? "")
+//                MSHelper.showToastFailWithText(text: desc ?? "")
             }
         }
         NotificationCenter.default.removeObserver(self)

@@ -98,6 +98,7 @@
     [BFProfileService requestIMToken:phone success:^(NSDictionary * _Nonnull dic) {
         NSString *userToken = dic[@"token"];
         NSString *im_url = dic[@"url"];
+        MSLog(@"im_token: %@,im_url: %@",userToken,im_url);
         //2.登录
         weakSelf.registerInfo.userToken = userToken;
         weakSelf.registerInfo.imUrl = im_url;

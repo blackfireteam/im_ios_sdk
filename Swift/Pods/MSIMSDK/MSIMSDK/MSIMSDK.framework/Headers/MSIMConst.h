@@ -56,16 +56,20 @@ typedef NS_ENUM(NSInteger, XMChatProtoType) {
     XMChatProtoTypeGetAgoraToken = 24,//请求声网的临时token
     XMChatProtoTypeAgoraTokenResponse = 25,//声网的临时token结果
     
-    XMChatProtoTypeJoinChatRoomRequest = 26,//申请加入聊天室
-    XMChatProtoTypeQuitChatRoomRequest = 27,//申请退出聊天室
-    XMChatProtoTypeJoinChatRoomResult = 28,//申请加入聊天室结果
-    XMChatProtoTypeJoinChatRoomEvent = 29,//聊天室事件
+    XMChatProtoTypeJoinGroupRequest = 26,//申请加入群
+    XMChatProtoTypeQuitGroupRequest = 27,//申请退出群
+    XMChatProtoTypeGroupMemberInfo = 28,//群成员属性
+    XMChatProtoTypeJoinGroupResult = 29,//申请加入群结果
+    XMChatProtoTypeJoinGroupEvent = 30,//群事件
     
-    XMChatProtoTypeSendChatRoomMsgRequest = 30,//发送聊天室消息请求
-    XMChatProtoTypeSendChatRoomMsgResponse = 31,//发送聊天室消息回复
-    XMChatProtoTypeRecieveChatRoomMsg = 32,//收到聊天室消息
-    XMChatProtoTypeRecieveChatRoomMsgBatch = 33,//收到聊天室批量消息
-    XMChatProtoTypeRecieveChatRoomProfilesRequest = 34,//获取聊天室中用户的profile
+    XMChatProtoTypeSendGroupMsgRequest = 31,//发送群消息请求
+    XMChatProtoTypeSendGroupMsgResponse = 32,//发送群消息回复
+    XMChatProtoTypeRecieveGroupMsg = 33,//收到群消息
+    XMChatProtoTypeRecieveGroupMsgBatch = 34,//收到群批量消息
+    XMChatProtoTypeRecieveGroupProfilesRequest = 35,//获取群中用户的profile
+    XMChatProtoTypeRecieveGroupManagerAction = 36,//群的管理操作
+    XMChatProtoTypeGroupMessageRevoke = 37,//群消息撤回
+    XMChatProtoTypeGroupTipEvent = 38,//群类显示的提示性事件小字，如果GroupEvent中，附带reason，在提示小字后面需加上reason
     
     XMChatProtoTypeProfileOnline = 50,//通知客户端用户上线事件
     XMChatProtoTypeProfileOffline = 52,//通知客户端用户下线事件

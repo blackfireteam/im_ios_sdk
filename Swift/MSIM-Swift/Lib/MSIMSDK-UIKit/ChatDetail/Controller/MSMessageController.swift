@@ -103,8 +103,9 @@ public class MSMessageController: UITableViewController {
             self?.recieveRevokeMessage(note: note)
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageReceipt), object: nil, queue: .main) {[weak self] note in
-            self?.profileUpdate(note: note)
+            self?.recieveMessageReceipt(note: note)
         }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
     }

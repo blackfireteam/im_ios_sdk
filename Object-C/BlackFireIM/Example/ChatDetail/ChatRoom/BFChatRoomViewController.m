@@ -9,14 +9,14 @@
 #import "MSIMSDK-UIKit.h"
 #import "YBImageBrowser.h"
 #import "YBIBVideoData.h"
-#import "BFChatRoomMemberListController.h"
+#import "BFChatRoomEditController.h"
 
 
 @interface BFChatRoomViewController ()<MSChatRoomControllerDelegate>
 
 @property(nonatomic,strong) MSChatRoomController *chatController;
 
-@property(nonatomic,strong) MSChatRoomInfo *roomInfo;
+@property(nonatomic,strong) MSGroupInfo *roomInfo;
 
 @end
 
@@ -28,7 +28,7 @@
     
     self.view.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:@selector(showChatRoomMembers)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editClick)];
     
     self.chatController = [[MSChatRoomController alloc]init];
     self.chatController.delegate = self;
@@ -53,7 +53,7 @@
         
         [MSHelper showToastSucc:@"quit chat room"];
     } failed:^(NSInteger code, NSString *desc) {
-        [MSHelper showToastFail:desc];
+//        [MSHelper showToastFail:desc];
     }];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
@@ -61,10 +61,10 @@
 /// 申请加入聊天室
 - (void)enterChatRoom
 {
-    [[MSIMManager sharedInstance] joinInChatRoom:2 succ:^(MSChatRoomInfo * _Nonnull info) {
+    [[MSIMManager sharedInstance] joinInChatRoom:25 succ:^(MSGroupInfo * _Nonnull info) {
         
         self.roomInfo = info;
-        self.chatController.room_id = self.roomInfo.room_id;
+        self.chatController.roomInfo = self.roomInfo;
         self.navigationItem.title = self.roomInfo.room_name;
         
     } failed:^(NSInteger code, NSString *desc) {
@@ -72,12 +72,12 @@
     }];
 }
 
-/// 展示聊天室成员列表
-- (void)showChatRoomMembers
+/// 聊天室设置界面
+- (void)editClick
 {
     if (self.roomInfo) {
         [self.view endEditing:YES];
-        BFChatRoomMemberListController *vc = [[BFChatRoomMemberListController alloc]init];
+        BFChatRoomEditController *vc = [[BFChatRoomEditController alloc]init];
         vc.roomInfo = self.roomInfo;
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -86,32 +86,135 @@
 /// 接收到聊天室事件通知处理
 - (void)chatRoomEvent:(NSNotification *)note
 {
-    MSChatRoomEvent *event = note.object;
-    //事件 0：聊天室被销毁（所有用户被迫离开聊天室）1：聊天室信息修改，
-    //2：用户上线， 3：用户下线(自己被踢掉也会收到)
-    //4：全体禁言 5：解除全体禁言
-    if (event.eventType == 0) {
-        [MSHelper showToastString:@"Chat room is dissolved."];
-        [self.navigationController popViewControllerAnimated:YES];
-    }else if (event.eventType == 1) {
-        
-        
-    }else if (event.eventType == 2) {
-        
-    }else if (event.eventType == 3) {
-        
-        if ([event.uid isEqualToString:[MSIMTools sharedInstance].user_id]) {//自己被踢出了聊天室
-            [MSHelper showToastString:@"You has been kicked out."];
+    MSGroupEvent *event = note.object;
+    //事件类型：
+      //1：聊天室已被解散
+      //2：聊天室属性已修改
+      //3：管理员 %s 将本聊天室设为听众模式
+      //4: 管理员 %s 恢复聊天室发言功能
+      //5：管理员 %s 上线
+      //6：管理员 %s 下线
+      //7: 管理员 %s 将用户 %s 禁言
+      //8: 管理员 %s 将用户 %s、%s 等人禁言
+      //9: %s 成为本聊天室管理员
+      //10: 管理员 %s 指派 %s 为临时管理员
+      //11：管理员 %s 指派 %s、%s 等人为临时管理员
+    switch (event.tips.event) {
+        case 1:
+        {
+            [MSHelper showToastString:@"This chatroom is dismissed."];
             [self.navigationController popViewControllerAnimated:YES];
         }
-    }else if (event.eventType == 4) {
-        
-    }else if (event.eventType == 5) {
-        
+            break;
+        case 2:
+        {
+            [self.chatController.messageController addSystemTips:@"Chatroom info has been changed."];
+        }
+            break;
+        case 3:
+        {
+            NSString *uid = [NSString stringWithFormat:@"%@",event.tips.uids.firstObject];
+            MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:uid];
+            [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@"%@ disabled sending message for this chatroom.", XMNoNilString(info.nick_name)]];
+        }
+            break;
+        case 4:
+        {
+            NSString *uid = [NSString stringWithFormat:@"%@",event.tips.uids.firstObject];
+            MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:uid];
+            [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@"%@ enabled sending message for this chatroom.",XMNoNilString(info.nick_name)]];
+        }
+            break;
+        case 5:
+        {
+            NSString *uid = [NSString stringWithFormat:@"%@",event.tips.uids.firstObject];
+            if (![uid isEqualToString:[MSIMTools sharedInstance].user_id]) {
+                MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:uid];
+                [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@"Admin: %@ entered this room.", XMNoNilString(info.nick_name)]];
+            }
+        }
+            break;
+        case 6:
+        {
+            NSString *uid = [NSString stringWithFormat:@"%@",event.tips.uids.firstObject];
+            if (![uid isEqualToString:[MSIMTools sharedInstance].user_id]) {
+                MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:uid];
+                [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@" Admin: %@ leaved this room.",XMNoNilString(info.nick_name)]];
+            }
+        }
+            break;
+        case 7:
+        {
+            NSString *uid1 = [NSString stringWithFormat:@"%@",event.tips.uids.firstObject];
+            NSString *uid2 = [NSString stringWithFormat:@"%@",event.tips.uids.lastObject];
+            MSProfileInfo *info1 = [[MSProfileProvider provider]providerProfileFromLocal:uid1];
+            MSProfileInfo *info2 = [[MSProfileProvider provider]providerProfileFromLocal:uid2];
+            [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@"%@ muted %@. Reason: %@.",XMNoNilString(info1.nick_name),XMNoNilString(info2.nick_name),XMNoNilString(event.reason)]];
+        }
+            break;
+        case 8:
+        {
+            if (event.tips.uids.count <= 2) return;
+            NSString *managerName;
+            NSString *membersStr;
+            for (NSInteger i = 0; i < event.tips.uids.count; i++) {
+                NSString *uid = [NSString stringWithFormat:@"%@",event.tips.uids[i]];
+                if (i == 0) {
+                    managerName = [[MSProfileProvider provider]providerProfileFromLocal:uid].nick_name;
+                }else {
+                    NSString *name = [[MSProfileProvider provider]providerProfileFromLocal:uid].nick_name;
+                    if (membersStr == nil) {
+                        membersStr = XMNoNilString(name);
+                    }else {
+                        membersStr = [NSString stringWithFormat:@"%@、%@",membersStr,XMNoNilString(name)];
+                    }
+                }
+            }
+            [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@"%@ muted %@. Reason: %@.",XMNoNilString(managerName),XMNoNilString(membersStr),XMNoNilString(event.reason)]];
+        }
+            break;
+        case 9:
+        {
+            if (event.tips.uids.count < 1) return;
+            NSString *name = [[MSProfileProvider provider]providerProfileFromLocal:[NSString stringWithFormat:@"%@",event.tips.uids.firstObject]].nick_name;
+            [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@"%@ becomes the admin of this room.",XMNoNilString(name)]];
+        }
+            break;
+        case 10:
+        {
+            if (event.tips.uids.count < 2) return;
+            NSString *adminName = [[MSProfileProvider provider]providerProfileFromLocal:[NSString stringWithFormat:@"%@",event.tips.uids.firstObject]].nick_name;
+            NSString *userName = [[MSProfileProvider provider]providerProfileFromLocal:[NSString stringWithFormat:@"%@",event.tips.uids.lastObject]].nick_name;
+            [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@"%@ assigned %@ as a temporary admin of the room.",XMNoNilString(adminName),XMNoNilString(userName)]];
+        }
+            break;
+        case 11:
+        {
+            if (event.tips.uids.count <= 2) return;
+            NSString *managerName;
+            NSString *membersStr;
+            for (NSInteger i = 0; i < event.tips.uids.count; i++) {
+                NSString *uid = [NSString stringWithFormat:@"%@",event.tips.uids[i]];
+                if (i == 0) {
+                    managerName = [[MSProfileProvider provider]providerProfileFromLocal:uid].nick_name;
+                }else {
+                    NSString *name = [[MSProfileProvider provider]providerProfileFromLocal:uid].nick_name;
+                    if (membersStr == nil) {
+                        membersStr = XMNoNilString(name);
+                    }else {
+                        membersStr = [NSString stringWithFormat:@"%@、%@",membersStr,XMNoNilString(name)];
+                    }
+                }
+            }
+            [self.chatController.messageController addSystemTips:[NSString stringWithFormat:@"%@ assigned %@ as temporary admins of the room.",XMNoNilString(managerName),XMNoNilString(membersStr)]];
+        }
+            break;
+        default:
+            break;
     }
 }
 
-#pragma mark - MSChatViewControllerDelegate
+#pragma mark - MSChatRoomControllerDelegate
 
 - (void)chatController:(MSChatRoomController *)controller didSendMessage:(MSIMElem *)elem
 {
@@ -140,11 +243,6 @@
 - (void)chatController:(MSChatRoomController *)controller onSelectMessageAvatar:(MSMessageCell *)cell
 {
     NSLog(@"tap avatar...");
-}
-
-///收到对方正在输入消息通知
-- (void)chatController:(MSChatRoomController *)controller onRecieveTextingMessage:(MSIMElem *)elem
-{
 }
 
 ///点击消息内容回调

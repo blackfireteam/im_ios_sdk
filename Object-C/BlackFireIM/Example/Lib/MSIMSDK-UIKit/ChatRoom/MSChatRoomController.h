@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSMessageCellData;
 @class MSMessageCell;
 @class MSInputMoreCell;
+@class MSGroupInfo;
 @protocol MSChatRoomControllerDelegate <NSObject>
 
 ///发送新消息时的回调
@@ -42,14 +43,11 @@ NS_ASSUME_NONNULL_BEGIN
 ///点击消息内容回调
 - (void)chatController:(MSChatRoomController *)controller onSelectMessageContent:(MSMessageCell *)cell;
 
-///收到对方正在输入消息通知
-- (void)chatController:(MSChatRoomController *)controller onRecieveTextingMessage:(MSIMElem *)elem;
-
 @end
 
 @interface MSChatRoomController : UIViewController
 
-@property(nonatomic,copy) NSString *room_id;
+@property(nonatomic,strong) MSGroupInfo *roomInfo;
 
 @property(nonatomic,weak) id<MSChatRoomControllerDelegate> delegate;
 

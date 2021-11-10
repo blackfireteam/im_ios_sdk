@@ -9,10 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class MSChatRoomInfo;
+@class MSGroupInfo;
 @interface BFChatRoomMemberListController : BFBaseViewController
 
-@property(nonatomic,strong) MSChatRoomInfo *roomInfo;
+@property(nonatomic,strong) MSGroupInfo *roomInfo;
 
 @end
 

@@ -11,12 +11,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class Profile;
 @class ChatR;
-@class ChatRoomR;
+@class GroupChatR;
 @class ChatList;
 @class ProfileOnline;
 @class UsrOffline;
 @class ChatItemUpdate;
-@class ChatRoomEvent;
+@class GroupEvent;
 @interface MSIMManager (Parse)
 
 ///收到服务器下发的消息处理
@@ -43,10 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateConvLastMessage:(NSArray *)convs;
 
 /// 收到服务器下发的聊天室消息的处理
-- (void)receiveChatRoomMessageHandler:(NSArray<ChatRoomR *> *)responses;
+- (void)receiveChatRoomMessageHandler:(NSArray<GroupChatR *> *)responses;
 
 /// 收到聊天室事件处理
-- (void)receiveChatRoomEventHandler:(ChatRoomEvent *)event;
+- (void)receiveChatRoomEventHandler:(GroupEvent *)event;
 
 @end
 

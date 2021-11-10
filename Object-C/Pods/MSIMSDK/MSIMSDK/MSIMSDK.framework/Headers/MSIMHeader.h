@@ -37,6 +37,9 @@
 //收到对方消息已读的通知
 #define MSUIKitNotification_MessageReceipt @"MSUIKitNotification_MessageReceipt"
 
+//收到一条消息被删除的通知
+#define MSUIKitNotification_MessageRecieveDelete @"MSUIKitNotification_MessageRecieveDelete"
+
 //用户信息更新通知
 #define MSUIKitNotification_ProfileUpdate @"MSUIKitNotification_ProfileUpdate"
 
@@ -46,6 +49,9 @@
 
 //聊天室消息状态有变更通知
 #define MSUIKitNotification_ChatRoom_MessageSendStatusUpdate @"MSUIKitNotification_ChatRoom_MessageSendStatusUpdate"
+
+//收到聊天室对方撤回消息的通知
+#define MSUIKitNotification_ChatroomMessageRecieveRevoke @"MSUIKitNotification_ChatroomMessageRecieveRevoke"
 
 //聊天室事件通知
 #define MSUIKitNotification_ChatRoom_Event @"MSUIKitNotification_ChatRoom_Event"

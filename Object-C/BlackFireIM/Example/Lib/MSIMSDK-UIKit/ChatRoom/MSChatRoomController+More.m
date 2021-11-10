@@ -90,6 +90,11 @@
     }];
 }
 
+- (void)tz_imagePickerControllerDidCancel:(TZImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)sendImage:(MSIMImageElem *)elem
 {
     MSIMImageElem *imageElem = [[MSIMManager sharedInstance]createImageMessage:elem];

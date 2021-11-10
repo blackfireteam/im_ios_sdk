@@ -14,6 +14,9 @@
 		F01CC224273119A9002EF5B2 /* BFChatRoomMemberListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01CC223273119A9002EF5B2 /* BFChatRoomMemberListController.swift */; };
 		F02636162702C0C9007E23F6 /* MSCallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02636152702C0C9007E23F6 /* MSCallModel.swift */; };
 		F02636182702C233007E23F6 /* MSVoiceCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02636172702C233007E23F6 /* MSVoiceCallView.swift */; };
+		F0684253273A7B5800E0313E /* BFChatRoomEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */; };
+		F0684255273A826700E0313E /* BFEditTodInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684254273A826700E0313E /* BFEditTodInfoController.swift */; };
+		F0684257273A863200E0313E /* BFGroupMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684256273A863200E0313E /* BFGroupMemberCell.swift */; };
 		F08FBA2F26C2064E00613FE0 /* MSVideoMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */; };
 		F08FBA3126C20A3600613FE0 /* MSVoiceMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */; };
 		F08FBA3326C20E9A00613FE0 /* MSSystemMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */; };
@@ -145,6 +148,9 @@
 		F02636152702C0C9007E23F6 /* MSCallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSCallModel.swift; sourceTree = "<group>"; };
 		F02636172702C233007E23F6 /* MSVoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceCallView.swift; sourceTree = "<group>"; };
 		F04F4B5A2717DD8900752952 /* MSIM-Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MSIM-Swift.entitlements"; sourceTree = "<group>"; };
+		F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatRoomEditController.swift; sourceTree = "<group>"; };
+		F0684254273A826700E0313E /* BFEditTodInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFEditTodInfoController.swift; sourceTree = "<group>"; };
+		F0684256273A863200E0313E /* BFGroupMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFGroupMemberCell.swift; sourceTree = "<group>"; };
 		F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVideoMessageCell.swift; sourceTree = "<group>"; };
 		F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceMessageCell.swift; sourceTree = "<group>"; };
 		F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSSystemMessageCell.swift; sourceTree = "<group>"; };
@@ -311,6 +317,9 @@
 			children = (
 				F01CC2212731148E002EF5B2 /* BFChatRoomViewController.swift */,
 				F01CC223273119A9002EF5B2 /* BFChatRoomMemberListController.swift */,
+				F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */,
+				F0684254273A826700E0313E /* BFEditTodInfoController.swift */,
+				F0684256273A863200E0313E /* BFGroupMemberCell.swift */,
 			);
 			path = ChatRoom;
 			sourceTree = "<group>";
@@ -845,6 +854,7 @@
 				F0E565B926FD783D00C3424D /* LanternNoneAnimator.swift in Sources */,
 				F0FF725826BCCCC30005F3CF /* MSBubbleMessageCell.swift in Sources */,
 				F0FF720D26B29C550005F3CF /* BFSparkEmptyView.swift in Sources */,
+				F0684253273A7B5800E0313E /* BFChatRoomEditController.swift in Sources */,
 				F0FF720326B2433A0005F3CF /* String+Ext.swift in Sources */,
 				F08FBA4626C25C5E00613FE0 /* BFNaviBarIndicatorView.swift in Sources */,
 				F0FF71E926B104CB0005F3CF /* MSMcros.swift in Sources */,
@@ -889,8 +899,10 @@
 				F0FF71E726B0FF4C0005F3CF /* UIColor+Ext.swift in Sources */,
 				F0FF725626BCC37F0005F3CF /* MSMessageCell.swift in Sources */,
 				F0E565C126FD783D00C3424D /* LanternZoomAnimator.swift in Sources */,
+				F0684255273A826700E0313E /* BFEditTodInfoController.swift in Sources */,
 				F0E565BC26FD783D00C3424D /* LanternPageIndicator.swift in Sources */,
 				F0FF723626B8EBEC0005F3CF /* MSFaceCollectionCell.swift in Sources */,
+				F0684257273A863200E0313E /* BFGroupMemberCell.swift in Sources */,
 				F0FF71F126B14DD50005F3CF /* UIButton+Ext.swift in Sources */,
 				F0E565B726FD783D00C3424D /* LanternView.swift in Sources */,
 				F0FF720826B27CED0005F3CF /* BFProfileViewController.swift in Sources */,

@@ -66,6 +66,12 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_ChatRoom_MessageSendStatusUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf messageStatusUpdate:note];
     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageRecieveDelete object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf recieveMessageDelete:note];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_ChatroomMessageRecieveRevoke object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf recieveRevokeMessage:note];
+    }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHidden) name:UIKeyboardWillHideNotification object:nil];
     
@@ -106,7 +112,7 @@
 ///重发消息
 - (void)resendMessage:(MSMessageCellData *)data
 {
-    [[MSIMManager sharedInstance] resendChatRoomMessage:data.elem toRoomID:self.room_id successed:^(NSInteger msg_id) {
+    [[MSIMManager sharedInstance] resendChatRoomMessage:data.elem toRoomID:self.roomInfo.room_id successed:^(NSInteger msg_id) {
         data.elem.msg_id = msg_id;
     } failed:^(NSInteger code, NSString *desc) {
         [MSHelper showToastFail:desc];
@@ -196,7 +202,7 @@
     NSMutableArray<MSIMElem *> *tempArr = [NSMutableArray array];
     for (MSIMElem *elem in elems) {
         if (elem.chatType != MSIM_CHAT_TYPE_CHATROOM) continue;
-        if (![elem.toUid isEqualToString:self.room_id]) continue;
+        if (![elem.toUid isEqualToString:self.roomInfo.room_id]) continue;
         BOOL isExsit = NO;
         for (MSMessageCellData *data in self.uiMsgs) {
             if (elem.msg_sign == data.elem.msg_sign) {
@@ -245,7 +251,7 @@
 {
     MSIMElem *elem = note.object;
     if (elem.chatType != MSIM_CHAT_TYPE_CHATROOM) return;
-    if (![elem.toUid isEqualToString:self.room_id]) return;
+    if (![elem.toUid isEqualToString:self.roomInfo.room_id]) return;
     for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
         MSMessageCellData *data = self.uiMsgs[i];
         if (data.elem.msg_sign == elem.msg_sign) {
@@ -256,6 +262,79 @@
     }
 }
 
+///收到一条对方撤回的消息
+- (void)recieveRevokeMessage:(NSNotification *)note
+{
+    MSIMElem *elem = note.object;
+    if (![elem.toUid isEqualToString:self.roomInfo.room_id]) return;
+    MSMessageCellData *revokeData = nil;
+    for (MSMessageCellData *data in self.uiMsgs) {
+        if (data.elem.msg_id == elem.revoke_msg_id) {
+            revokeData = data;
+        }
+    }
+    if (revokeData) {
+        [self revokeMsg:revokeData];
+    }
+}
+
+- (void)revokeMsg:(MSMessageCellData *)msg
+{
+    if (msg == nil) return;
+    NSInteger index = [self.uiMsgs indexOfObject:msg];
+    if (index == NSNotFound) return;
+    [self.uiMsgs removeObject:msg];
+    if (index < self.heightCache.count) {
+        [self.heightCache replaceObjectAtIndex:index withObject:@(0)];
+    }
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    MSSystemMessageCellData *data = [[MSSystemMessageCellData alloc]initWithDirection:MsgDirectionIncoming];
+    if (msg.elem.isSelf) {
+        data.content = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
+    }else {
+        data.content = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
+    }
+    [self.uiMsgs insertObject:data atIndex:index];
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
+}
+
+///收到服务器将消息删除
+- (void)recieveMessageDelete:(NSNotification *)note
+{
+    NSArray *msg_ids = note.object;
+    NSMutableArray *deleteArr = [NSMutableArray array];
+    for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
+        MSMessageCellData *cellData = self.uiMsgs[i];
+        for (NSInteger j = 0; j < msg_ids.count; j++) {
+            NSInteger msg_id = [msg_ids[j] integerValue];
+            if (cellData.elem.msg_id == msg_id) {
+                [self.uiMsgs removeObject:cellData];
+                [deleteArr addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+                if (i < self.heightCache.count) {
+                    [self.heightCache replaceObjectAtIndex:i withObject:@(0)];
+                }
+                MSMessageCellData *preData = i >= 1 ? self.uiMsgs[i-1] : nil;
+                MSMessageCellData *nextData = i < self.uiMsgs.count-1 ? self.uiMsgs[i+1] : nil;
+
+                //时间显示的处理
+                if (([preData isKindOfClass:[MSSystemMessageCellData class]] && [nextData isKindOfClass:[MSSystemMessageCellData class]]) ||([preData isKindOfClass:[MSSystemMessageCellData class]] && nextData == nil)) {
+                    NSInteger preIndex = [self.uiMsgs indexOfObject:preData];
+                    [self.uiMsgs removeObject:preData];
+                    if (preIndex < self.heightCache.count) {
+                        [self.heightCache replaceObjectAtIndex:preIndex withObject:@(0)];
+                    }
+                    [deleteArr addObject:[NSIndexPath indexPathForRow:preIndex inSection:0]];
+                }
+                break;
+            }
+        }
+    }
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:deleteArr withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
+}
 
 - (void)keyboardWillShow
 {
@@ -372,6 +451,9 @@
     if ([data isKindOfClass:[MSTextMessageCellData class]]) {
         [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Copy) action:@selector(onCopyMsg:)]];
     }
+    if (data.elem.isSelf && data.elem.sendStatus == MSIM_MSG_STATUS_SEND_SUCC && data.elem.type != MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
+        [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Revoke) action:@selector(onRevoke:)]];
+    }
     [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Delete) action:@selector(onDelete:)]];
     UIMenuController *vc = [UIMenuController sharedMenuController];
     vc.menuItems = items;
@@ -384,7 +466,8 @@
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    if (action == @selector(onCopyMsg:) ||
+    if (action == @selector(onRevoke:) ||
+        action == @selector(onCopyMsg:) ||
         action == @selector(onDelete:)) {
         return YES;
     }
@@ -459,8 +542,24 @@
     }
 }
 
+- (void)onRevoke:(id)sender
+{
+    [[MSIMManager sharedInstance]chatRoomRevokeMessage:self.menuUIMsg.elem.msg_id fromRoomID:self.roomInfo.room_id successed:^{
+        
+        NSLog(@"撤回成功");
+        
+    } failed:^(NSInteger code, NSString *desc) {
+        
+    }];
+}
+
 - (void)onDelete:(id)sender
 {
+    //删除消息有权限要求，管理员才能删除
+    if (self.roomInfo.action_del_msg == NO && self.menuUIMsg.elem.sendStatus == MSIM_MSG_STATUS_SEND_SUCC) {
+        [MSHelper showToastFail:@"You has no authority!"];
+        return;
+    }
     NSInteger index = [self.uiMsgs indexOfObject:self.menuUIMsg];
     if (index == NSNotFound) return;
     NSMutableArray *deleteArr = [NSMutableArray array];
@@ -485,6 +584,28 @@
     [self.tableView beginUpdates];
     [self.tableView deleteRowsAtIndexPaths:deleteArr withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
+    //通知服务器删除
+    [[MSIMManager sharedInstance]deleteChatroomMsgs:self.roomInfo.room_id msgIDs:@[@(self.menuUIMsg.elem.msg_id)] successed:^{
+        
+    } failed:^(NSInteger code, NSString *desc) {
+        
+    }];
+}
+
+- (void)addSystemTips:(NSString *)text
+{
+    MSSystemMessageCellData *system = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
+    system.content = text;
+    
+    //当前列表是否停留在底部
+    BOOL isAtBottom = (self.tableView.contentOffset.y + self.tableView.height + 20 >= self.tableView.contentSize.height);
+    [self.uiMsgs addObject:system];
+    [self.tableView reloadData];
+    //当列表没有停留在底部时，不自动滚动显示出新消息。会在底部显示未读数，点击滚动到底部。
+    //适当增加些容错
+    if (isAtBottom || self.isShowKeyboard) {
+        [self scrollToBottom:YES];
+    }
 }
 
 #pragma mark - MSNoticeCountViewDelegate

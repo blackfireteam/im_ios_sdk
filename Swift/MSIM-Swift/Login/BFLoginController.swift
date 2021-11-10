@@ -81,6 +81,7 @@ class BFLoginController: BFBaseViewController {
             let dic = result as! [String: Any]
             let userToken = dic["token"] as! String
             let im_url = dic["url"] as! String
+            print("im_token: \(userToken),im_Url: \(im_url)")
             self.registerInfo.userToken = userToken
             self.registerInfo.imUrl = im_url
             MSIMManager.sharedInstance().login(userToken, imUrl: im_url, subAppID: 1) {

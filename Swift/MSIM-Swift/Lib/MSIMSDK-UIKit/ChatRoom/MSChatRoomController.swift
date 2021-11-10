@@ -37,9 +37,9 @@ public protocol MSChatRoomControllerDelegate: NSObjectProtocol {
 public class MSChatRoomController: UIViewController {
 
     
-    public var room_id: String? {
+    public var roomInfo: MSGroupInfo? {
         didSet {
-            self.messageController.room_id = room_id
+            self.messageController.roomInfo = roomInfo
         }
     }
     
@@ -50,11 +50,11 @@ public class MSChatRoomController: UIViewController {
     public private(set) var inputController: MSInputViewController!
     
     func sendMessage(message: MSIMElem) {
-        if self.room_id == nil {
+        if self.roomInfo == nil {
             MSHelper.showToastWithText(text: "room_id is nill")
             return
         }
-        MSIMManager.sharedInstance().sendChatRoomMessage(message, toRoomID: self.room_id!) { _ in
+        MSIMManager.sharedInstance().sendChatRoomMessage(message, toRoomID: self.roomInfo!.room_id) { _ in
             
         } failed: { _, desc in
             MSHelper.showToastFailWithText(text: desc ?? "")
@@ -74,7 +74,7 @@ public class MSChatRoomController: UIViewController {
     
     private func setupUI() {
         messageController.delegate = self
-        messageController.room_id = self.room_id
+        messageController.roomInfo = self.roomInfo
         messageController.view.frame = CGRect(x: 0, y: 0, width: UIScreen.width, height: UIScreen.height - MSMcros.TTextView_Height - UIScreen.safeAreaBottomHeight)
         addChild(messageController)
         view.addSubview(messageController.view)

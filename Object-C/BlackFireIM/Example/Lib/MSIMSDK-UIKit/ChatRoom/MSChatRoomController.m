@@ -33,17 +33,17 @@
     MSLog(@"%@ dealloc",self.class);
 }
 
-- (void)setRoom_id:(NSString *)room_id
+- (void)setRoomInfo:(MSGroupInfo *)roomInfo
 {
-    _room_id = room_id;
-    self.messageController.room_id = room_id;
+    _roomInfo = roomInfo;
+    self.messageController.roomInfo = roomInfo;
 }
 
 - (void)setupViews
 {
     self.messageController = [[MSChatRoomMessageController alloc]init];
     self.messageController.delegate = self;
-    self.messageController.room_id = self.room_id;
+    self.messageController.roomInfo = self.roomInfo;
     self.messageController.view.frame = CGRectMake(0, 0, Screen_Width, Screen_Height-TTextView_Height-Bottom_SafeHeight);
     [self addChildViewController:self.messageController];
     [self.view addSubview:self.messageController.view];
@@ -218,7 +218,7 @@
 
 - (void)sendMessage:(MSIMElem *)message
 {
-    [[MSIMManager sharedInstance] sendChatRoomMessage:message toRoomID:self.room_id successed:^(NSInteger msg_id) {
+    [[MSIMManager sharedInstance] sendChatRoomMessage:message toRoomID:self.roomInfo.room_id successed:^(NSInteger msg_id) {
         
     } failed:^(NSInteger code, NSString *desc) {
         [MSHelper showToastFail:desc];

@@ -66,7 +66,7 @@ open class MSMessageCell: UITableViewCell {
                 if data.elem?.chatType == .MSIM_CHAT_TYPE_C2C {
                     readReceiptLabel.text = data.elem?.readStatus == .MSG_STATUS_UNREAD ? Bundle.bf_localizedString(key: "Deliveried") : Bundle.bf_localizedString(key: "Read")
                 }else {
-                    readReceiptLabel.text = ""
+                    readReceiptLabel.text = Bundle.bf_localizedString(key: "Deliveried")
                 }
             }else if data.elem?.sendStatus == .MSG_STATUS_SENDING {
                 readReceiptLabel.text = Bundle.bf_localizedString(key: "Sending")

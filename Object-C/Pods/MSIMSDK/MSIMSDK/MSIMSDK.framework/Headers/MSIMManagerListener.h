@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSIMElem;
 @class MSProfileInfo;
 @class MSIMMessageReceipt;
-@class MSChatRoomEvent;
+@class MSGroupEvent;
 @protocol MSIMSDKListener <NSObject>
 
 @optional
@@ -77,6 +77,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 收到新消息（除了信令消息）
 - (void)onNewMessages:(NSArray<MSIMElem *> *)msgs;
 
+/// 收到删除的消息
+- (void)onDeleteMessages:(NSArray<NSNumber *> *)msg_ids;
+
 /// 收到信令消息
 - (void)onRecieveSignalMessages:(NSArray<MSIMElem *> *)msgs;
 
@@ -100,6 +103,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 收到新消息（除了信令消息）
 - (void)onNewChatRoomMessages:(NSArray<MSIMElem *> *)msgs;
 
+///收到一条对方撤回的消息
+- (void)onChatroomRevokeMessage:(MSIMElem *)elem;
 
 /**
  *  消息发送状态变化通知
@@ -107,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onChatRoomMessageUpdateSendStatus:(MSIMElem *)elem;
 
 /// 聊天室事件通知
-- (void)onNewChatRoomEvent:(MSChatRoomEvent *)event;
+- (void)onNewChatRoomEvent:(MSGroupEvent *)event;
 
 @end
 

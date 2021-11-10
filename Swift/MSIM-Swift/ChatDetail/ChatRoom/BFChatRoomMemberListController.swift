@@ -7,11 +7,12 @@
 
 import UIKit
 import MSIMSDK
+import SwiftUI
 
 
 public class BFChatRoomMemberListController: BFBaseViewController {
 
-    public var roomInfo: MSChatRoomInfo?
+    public var roomInfo: MSGroupInfo!
     
     lazy var myCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -25,11 +26,11 @@ public class BFChatRoomMemberListController: BFBaseViewController {
         myCollectionView.delegate = self
         myCollectionView.alwaysBounceVertical = true
         myCollectionView.backgroundColor = UIColor.d_color(light: MSMcros.TController_Background_Color, dark: MSMcros.TController_Background_Color_Dark)
-        myCollectionView.register(BFUserListCell.self, forCellWithReuseIdentifier: "userCell")
+        myCollectionView.register(BFGroupMemberCell.self, forCellWithReuseIdentifier: "userCell")
         return myCollectionView
     }()
     
-    var dataArray: [MSProfileInfo] = []
+    var dataArray: [MSGroupMemberItem] = []
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,13 +64,6 @@ public class BFChatRoomMemberListController: BFBaseViewController {
     
     @objc func profileUpdate(note: Notification) {
         
-        guard let uids = self.roomInfo?.uids as? [Int] else {return}
-        guard let profiles = note.object as? [MSProfileInfo] else {return}
-        for info in profiles {
-            if let user_id = Int(info.user_id),uids.contains(user_id) {
-                self.dataArray.append(info)
-            }
-        }
         self.myCollectionView.reloadData()
     }
     
@@ -86,8 +80,75 @@ extension BFChatRoomMemberListController: UICollectionViewDelegate,UICollectionV
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "userCell", for: indexPath) as! BFUserListCell
-        cell.config(info: self.dataArray[indexPath.row])
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "userCell", for: indexPath) as! BFGroupMemberCell
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(userLongPress))
+        cell.addGestureRecognizer(longPress)
+        cell.info = self.dataArray[indexPath.row]
         return cell
+    }
+    
+    @objc private func userLongPress(ges: UILongPressGestureRecognizer) {
+        
+        switch ges.state {
+        case .began:
+            if let cell = ges.view as? BFGroupMemberCell,let item = cell.info {
+                showMoreAction(item: item)
+            }
+        default:
+            break
+        }
+    }
+    
+    private func showMoreAction(item: MSGroupMemberItem) {
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let showTitle1: String = item.role == 0 ? "设置Ta为临时管理员" : "取消Ta的管理员身份"
+        alert.addAction(UIAlertAction(title: showTitle1, style: .default, handler: {[weak self] _ in
+            self?.changeUserRole(item: item)
+        }))
+        let showTitle2: String = item.is_mute == false ? "禁言" : "取消禁言"
+        alert.addAction(UIAlertAction(title: showTitle2, style: .default, handler: {[weak self] _ in
+            self?.changeUserMute(item: item)
+        }))
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func changeUserRole(item: MSGroupMemberItem) {
+        
+        if self.roomInfo.action_assign == false {
+            MSHelper.showToastWithText(text: "exceed your authority")
+            return
+        }
+        //当uid是正值时 是任命， 当为负值时是 取消任命
+        let uid: Int = Int(item.uid)!
+        MSIMManager.sharedInstance().editChatroomManagerAccess(self.roomInfo.room_id, uids: [item.role == 0 ? NSNumber(value: uid) : NSNumber(value: -uid)], duration: 1, reason: "good job!") {[weak self] in
+            
+            MSHelper.showToastSuccWithText(text: "Success")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self?.myCollectionView.reloadData()
+            }
+        } failed: { _, desc in
+            MSHelper.showToastFailWithText(text: desc ?? "")
+        }
+    }
+    
+    private func changeUserMute(item: MSGroupMemberItem) {
+        
+        if self.roomInfo.action_mute == false {
+            MSHelper.showToastWithText(text: "exceed your authority")
+            return
+        }
+        //当uid是正值是禁言，当uid为负值时是取消禁言
+        let uid: Int = Int(item.uid)!
+        MSIMManager.sharedInstance().muteMembers(self.roomInfo.room_id, uids: [item.is_mute ? NSNumber(value: -uid) : NSNumber(value: uid)], duration: 1, reason: "Don`t like a good guy") {[weak self] in
+            
+            MSHelper.showToastSuccWithText(text: "Success")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self?.myCollectionView.reloadData()
+            }
+        } failed: { _, desc in
+            MSHelper.showToastFailWithText(text: desc ?? "")
+        }
     }
 }
