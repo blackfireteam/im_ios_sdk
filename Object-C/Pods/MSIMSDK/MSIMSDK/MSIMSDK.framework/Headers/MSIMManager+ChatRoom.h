@@ -127,6 +127,9 @@ NS_ASSUME_NONNULL_BEGIN
                  successed:(MSIMSucc)success
                     failed:(MSIMFail)failed;
 
+///比对update_time与服务器同步更新用户信息
+- (void)synchronizeProfiles:(NSMutableArray<NSNumber *> *)uids room_id:(NSInteger)room_id;
+
 @end
 
 NS_ASSUME_NONNULL_END

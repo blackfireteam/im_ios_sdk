@@ -467,7 +467,7 @@ extension MSChatRoomMessageController: MSMessageCellDelegate {
         
         //删除消息有权限要求，管理员才能删除
         if self.roomInfo.action_del_msg == false && self.menuUIMsg?.elem?.sendStatus == .MSG_STATUS_SEND_SUCC {
-            MSHelper.showToastFailWithText(text: "You has no authority!")
+            MSHelper.showToastFailWithText(text: "You have no permission to do this!")
             return
         }
         if let index = self.uiMsgs.firstIndex(of: self.menuUIMsg!) {

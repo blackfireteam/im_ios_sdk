@@ -557,7 +557,7 @@
 {
     //删除消息有权限要求，管理员才能删除
     if (self.roomInfo.action_del_msg == NO && self.menuUIMsg.elem.sendStatus == MSIM_MSG_STATUS_SEND_SUCC) {
-        [MSHelper showToastFail:@"You has no authority!"];
+        [MSHelper showToastFail:@"You have no permission to do this!"];
         return;
     }
     NSInteger index = [self.uiMsgs indexOfObject:self.menuUIMsg];

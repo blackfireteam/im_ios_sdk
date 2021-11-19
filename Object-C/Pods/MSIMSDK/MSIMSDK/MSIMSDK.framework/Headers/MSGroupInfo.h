@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong) NSMutableArray<MSGroupMemberItem *> *members;
 
 /** 当前在线人数*/
-@property(nonatomic,assign) NSInteger onlineCount;
+@property(nonatomic,assign,readonly) NSInteger onlineCount;
 
 @end
 
