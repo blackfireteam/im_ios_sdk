@@ -116,7 +116,15 @@ public class MSInputViewController: UIViewController {
         videoData.title = Bundle.bf_localizedString(key: "TUIKitMoreVideoCall")
         videoData.image = UIImage.bf_imageNamed(name: "more_video_call")
         
-        moreView.setData(data: [cameraData,photoData,voiceData,videoData])
+        var locationData = MSInputMoreCellData(type: .location)
+        locationData.title = Bundle.bf_localizedString(key: "TUIKitMoreLocation")
+        locationData.image = UIImage.bf_imageNamed(name: "more_location")
+        
+        if self.type == .MSIM_CHAT_TYPE_C2C {
+            moreView.setData(data: [cameraData,photoData,voiceData,videoData,locationData])
+        }else {
+            moreView.setData(data: [cameraData,photoData])
+        }
         
         faceView = MSFaceView(frame: CGRect(x: 0, y: inputBar.top + inputBar.height, width: view.width, height: 180))
         faceView.delegate = self

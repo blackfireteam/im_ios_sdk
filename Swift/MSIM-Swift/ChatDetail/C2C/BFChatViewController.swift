@@ -92,6 +92,13 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             MSCallManager.shared.callToPartner(partner_id: self.partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: .voice, action: .call, room_id: nil)
         }else if cell.data?.type == .videoCall {//视频通话
             MSCallManager.shared.callToPartner(partner_id: self.partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: .video, action: .call, room_id: nil)
+        }else if cell.data?.type == .location {//地理位置
+            let vc = MSLocationController()
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+            vc.didSendLocation = {[weak self] info in
+                self?.sendLocationMessage(info: info)
+            }
         }
     }
     
@@ -175,6 +182,13 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             guard let customElem = cell.messageData?.elem as? MSIMCustomElem, let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else { return }
             if let typeInt = dic["type"] as? Int,let type = MSIMCustomSubType(rawValue: typeInt) {
                 MSCallManager.shared.callToPartner(partner_id: self.partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: (type == .VideoCall ? .video : .voice), action: .call, room_id: nil)
+            }
+        }else if cell.messageData?.elem?.type == .MSG_TYPE_LOCATION {
+            
+            if let locationData = cell.messageData as? MSLocationMessageCellData {
+                let locationInfo = MSLocationInfo(locationMsg: locationData.locationElem)
+                let vc = MSLocationDetailController(location: locationInfo)
+                self.navigationController?.pushViewController(vc, animated: true)
             }
         }
     }
@@ -347,6 +361,21 @@ extension BFChatViewController {
                 
                 MSHelper.showToastFailWithText(text: errorString)
             })
+        }
+    }
+    
+    private func sendLocationMessage(info: MSLocationInfo) {
+        var elem = MSIMLocationElem()
+        elem.title = info.name
+        elem.detail = info.detail
+        elem.longitude = info.longitude
+        elem.latitude = info.latitude
+        elem.zoom = info.zoom
+        elem = MSIMManager.sharedInstance().createLocationMessage(elem)
+        MSIMManager.sharedInstance().sendC2CMessage(elem, toReciever: self.partner_id) { _ in
+            
+        } failed: { _, _ in
+            
         }
     }
 }

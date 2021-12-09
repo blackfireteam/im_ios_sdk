@@ -17,6 +17,10 @@ pod 'Bugly'
 
 pod 'MSIMSDK'
 
+## 高德地图
+#pod 'AMap3DMap'
+#pod 'AMapSearch'
+
 #pod 'AgoraRtcEngine_iOS'  #声网音视频聊天
 
 end

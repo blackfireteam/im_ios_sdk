@@ -75,7 +75,10 @@ public struct MSMcros {
     static let TVideoMessageCell_Play_Size: CGSize = CGSize(width: 35, height: 35)
     static let TVideoMessageCell_Progress_Color: UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
 
-
+    // location cell
+    static let TLocationMessageCell_ReuseId: String = "TLocationMessageCell"
+    static let TLocationMessageCell_Width = UIScreen.width * 0.65
+    static let TLocationMessageCell_Height = TLocationMessageCell_Width * 0.65
     //voice cell
     static let TVoiceMessageCell_ReuseId: String = "TVoiceMessaageCell"
     static let TVoiceMessageCell_Max_Duration: CGFloat = 60.0
@@ -133,6 +136,8 @@ public struct MSMcros {
     static let Record_Title_Background_Color: UIColor = #colorLiteral(red: 0.7294117647, green: 0.2352941176, blue: 0.2549019608, alpha: 1)
     static let Record_Margin: CGFloat = 8
     
+    static let GaodeAPIKey: String = "28d8663963475a7eb9126c8ebb9c4bc9"
+    static let GaodeAPIWebKey: String = "1db3c63e96dccbe7dd34b6b5150fae90"
 }
 
 /** 自定义消息分类*/

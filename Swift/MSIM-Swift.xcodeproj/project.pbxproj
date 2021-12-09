@@ -17,6 +17,19 @@
 		F0684253273A7B5800E0313E /* BFChatRoomEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */; };
 		F0684255273A826700E0313E /* BFEditTodInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684254273A826700E0313E /* BFEditTodInfoController.swift */; };
 		F0684257273A863200E0313E /* BFGroupMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684256273A863200E0313E /* BFGroupMemberCell.swift */; };
+		F07A61122761A25500C166EA /* MSLocationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A61112761A25500C166EA /* MSLocationInfo.swift */; };
+		F07A61142761A2EC00C166EA /* MSLocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A61132761A2EC00C166EA /* MSLocationListCell.swift */; };
+		F07A61182761A64E00C166EA /* MSLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A61172761A64E00C166EA /* MSLocationController.swift */; };
+		F07A611A2761D9E300C166EA /* MSLocationDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A61192761D9E300C166EA /* MSLocationDetailController.swift */; };
+		F07A611C2761E82900C166EA /* MSLocationMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A611B2761E82900C166EA /* MSLocationMessageCellData.swift */; };
+		F07A611E2761E9E400C166EA /* MSLocationMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A611D2761E9E400C166EA /* MSLocationMessageCell.swift */; };
+		F07A61272761F13500C166EA /* TUIKitResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F07A61202761F13500C166EA /* TUIKitResource.bundle */; };
+		F07A61282761F13500C166EA /* 00.caf in Resources */ = {isa = PBXBuildFile; fileRef = F07A61212761F13500C166EA /* 00.caf */; };
+		F07A61292761F13500C166EA /* 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = F07A61222761F13500C166EA /* 01.caf */; };
+		F07A612A2761F13500C166EA /* wink.json in Resources */ = {isa = PBXBuildFile; fileRef = F07A61232761F13500C166EA /* wink.json */; };
+		F07A612B2761F13500C166EA /* spark_loading.json in Resources */ = {isa = PBXBuildFile; fileRef = F07A61242761F13500C166EA /* spark_loading.json */; };
+		F07A612C2761F13500C166EA /* call.caf in Resources */ = {isa = PBXBuildFile; fileRef = F07A61252761F13500C166EA /* call.caf */; };
+		F07A612D2761F13500C166EA /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F07A61262761F13500C166EA /* TUIKitFace.bundle */; };
 		F08FBA2F26C2064E00613FE0 /* MSVideoMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */; };
 		F08FBA3126C20A3600613FE0 /* MSVoiceMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */; };
 		F08FBA3326C20E9A00613FE0 /* MSSystemMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */; };
@@ -35,13 +48,6 @@
 		F0CED8A52702F38B00C31B65 /* MSCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CED8A42702F38B00C31B65 /* MSCallManager.swift */; };
 		F0CED8D527093B1400C31B65 /* BFCallMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CED8D427093B1400C31B65 /* BFCallMessageCellData.swift */; };
 		F0CED8D727093FAF00C31B65 /* BFCallMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CED8D627093FAF00C31B65 /* BFCallMessageCell.swift */; };
-		F0E5659E26FC29EE00C3424D /* TUIKitResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659726FC29EE00C3424D /* TUIKitResource.bundle */; };
-		F0E5659F26FC29EE00C3424D /* 00.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659826FC29EE00C3424D /* 00.caf */; };
-		F0E565A026FC29EE00C3424D /* 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659926FC29EE00C3424D /* 01.caf */; };
-		F0E565A126FC29EE00C3424D /* wink.json in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659A26FC29EE00C3424D /* wink.json */; };
-		F0E565A226FC29EE00C3424D /* spark_loading.json in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659B26FC29EE00C3424D /* spark_loading.json */; };
-		F0E565A326FC29EE00C3424D /* call.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659C26FC29EE00C3424D /* call.caf */; };
-		F0E565A426FC29EE00C3424D /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0E5659D26FC29EE00C3424D /* TUIKitFace.bundle */; };
 		F0E565A626FC4D3D00C3424D /* ImageStickerContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565A526FC4D3D00C3424D /* ImageStickerContainerView.swift */; };
 		F0E565B726FD783D00C3424D /* LanternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565A826FD783D00C3424D /* LanternView.swift */; };
 		F0E565B826FD783D00C3424D /* LanternAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E565A926FD783D00C3424D /* LanternAnimatedTransitioning.swift */; };
@@ -151,6 +157,19 @@
 		F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatRoomEditController.swift; sourceTree = "<group>"; };
 		F0684254273A826700E0313E /* BFEditTodInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFEditTodInfoController.swift; sourceTree = "<group>"; };
 		F0684256273A863200E0313E /* BFGroupMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFGroupMemberCell.swift; sourceTree = "<group>"; };
+		F07A61112761A25500C166EA /* MSLocationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationInfo.swift; sourceTree = "<group>"; };
+		F07A61132761A2EC00C166EA /* MSLocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationListCell.swift; sourceTree = "<group>"; };
+		F07A61172761A64E00C166EA /* MSLocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationController.swift; sourceTree = "<group>"; };
+		F07A61192761D9E300C166EA /* MSLocationDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationDetailController.swift; sourceTree = "<group>"; };
+		F07A611B2761E82900C166EA /* MSLocationMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationMessageCellData.swift; sourceTree = "<group>"; };
+		F07A611D2761E9E400C166EA /* MSLocationMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationMessageCell.swift; sourceTree = "<group>"; };
+		F07A61202761F13500C166EA /* TUIKitResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitResource.bundle; sourceTree = "<group>"; };
+		F07A61212761F13500C166EA /* 00.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 00.caf; sourceTree = "<group>"; };
+		F07A61222761F13500C166EA /* 01.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 01.caf; sourceTree = "<group>"; };
+		F07A61232761F13500C166EA /* wink.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wink.json; sourceTree = "<group>"; };
+		F07A61242761F13500C166EA /* spark_loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spark_loading.json; sourceTree = "<group>"; };
+		F07A61252761F13500C166EA /* call.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = call.caf; sourceTree = "<group>"; };
+		F07A61262761F13500C166EA /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
 		F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVideoMessageCell.swift; sourceTree = "<group>"; };
 		F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceMessageCell.swift; sourceTree = "<group>"; };
 		F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSSystemMessageCell.swift; sourceTree = "<group>"; };
@@ -169,13 +188,6 @@
 		F0CED8A42702F38B00C31B65 /* MSCallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSCallManager.swift; sourceTree = "<group>"; };
 		F0CED8D427093B1400C31B65 /* BFCallMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFCallMessageCellData.swift; sourceTree = "<group>"; };
 		F0CED8D627093FAF00C31B65 /* BFCallMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFCallMessageCell.swift; sourceTree = "<group>"; };
-		F0E5659726FC29EE00C3424D /* TUIKitResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitResource.bundle; sourceTree = "<group>"; };
-		F0E5659826FC29EE00C3424D /* 00.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 00.caf; sourceTree = "<group>"; };
-		F0E5659926FC29EE00C3424D /* 01.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 01.caf; sourceTree = "<group>"; };
-		F0E5659A26FC29EE00C3424D /* wink.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wink.json; sourceTree = "<group>"; };
-		F0E5659B26FC29EE00C3424D /* spark_loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spark_loading.json; sourceTree = "<group>"; };
-		F0E5659C26FC29EE00C3424D /* call.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = call.caf; sourceTree = "<group>"; };
-		F0E5659D26FC29EE00C3424D /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
 		F0E565A526FC4D3D00C3424D /* ImageStickerContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStickerContainerView.swift; sourceTree = "<group>"; };
 		F0E565A826FD783D00C3424D /* LanternView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternView.swift; sourceTree = "<group>"; };
 		F0E565A926FD783D00C3424D /* LanternAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternAnimatedTransitioning.swift; sourceTree = "<group>"; };
@@ -349,6 +361,31 @@
 			path = CallKit;
 			sourceTree = "<group>";
 		};
+		F07A61102761A0E200C166EA /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				F07A61112761A25500C166EA /* MSLocationInfo.swift */,
+				F07A61132761A2EC00C166EA /* MSLocationListCell.swift */,
+				F07A61172761A64E00C166EA /* MSLocationController.swift */,
+				F07A61192761D9E300C166EA /* MSLocationDetailController.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		F07A611F2761F13500C166EA /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				F07A61202761F13500C166EA /* TUIKitResource.bundle */,
+				F07A61212761F13500C166EA /* 00.caf */,
+				F07A61222761F13500C166EA /* 01.caf */,
+				F07A61232761F13500C166EA /* wink.json */,
+				F07A61242761F13500C166EA /* spark_loading.json */,
+				F07A61252761F13500C166EA /* call.caf */,
+				F07A61262761F13500C166EA /* TUIKitFace.bundle */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		F08FBA3626C2129100613FE0 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
@@ -384,20 +421,6 @@
 				F08FBA4826C2658000613FE0 /* BFUserListCell.swift */,
 			);
 			path = Discovery;
-			sourceTree = "<group>";
-		};
-		F0E5659626FC29EE00C3424D /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				F0E5659726FC29EE00C3424D /* TUIKitResource.bundle */,
-				F0E5659826FC29EE00C3424D /* 00.caf */,
-				F0E5659926FC29EE00C3424D /* 01.caf */,
-				F0E5659A26FC29EE00C3424D /* wink.json */,
-				F0E5659B26FC29EE00C3424D /* spark_loading.json */,
-				F0E5659C26FC29EE00C3424D /* call.caf */,
-				F0E5659D26FC29EE00C3424D /* TUIKitFace.bundle */,
-			);
-			path = Resource;
 			sourceTree = "<group>";
 		};
 		F0E565A726FD783D00C3424D /* Lantern */ = {
@@ -514,12 +537,13 @@
 		F0FF71E026B0F1F70005F3CF /* MSIMSDK-UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				F07A61102761A0E200C166EA /* Location */,
 				F01CC21A27310483002EF5B2 /* ChatRoom */,
 				F02636142702C092007E23F6 /* CallKit */,
 				F0FF722E26B8E2020005F3CF /* ChatDetail */,
 				F08FBA3626C2129100613FE0 /* Conversation */,
 				F0FF71E126B0F2020005F3CF /* Base */,
-				F0E5659626FC29EE00C3424D /* Resource */,
+				F07A611F2761F13500C166EA /* Resource */,
 			);
 			path = "MSIMSDK-UIKit";
 			sourceTree = "<group>";
@@ -650,6 +674,7 @@
 				F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */,
 				F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */,
 				F08FBA3426C20FEB00613FE0 /* MSNoticeCountView.swift */,
+				F07A611D2761E9E400C166EA /* MSLocationMessageCell.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -664,6 +689,7 @@
 				F0FF724F26BB839E0005F3CF /* MSSystemMessageCellData.swift */,
 				F0FF725126BB84DC0005F3CF /* MSVoiceMessageCellData.swift */,
 				F0FF725326BCC2320005F3CF /* MSVideoMessageCellData.swift */,
+				F07A611B2761E82900C166EA /* MSLocationMessageCellData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -773,14 +799,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0E565A026FC29EE00C3424D /* 01.caf in Resources */,
-				F0E565A226FC29EE00C3424D /* spark_loading.json in Resources */,
-				F0E5659E26FC29EE00C3424D /* TUIKitResource.bundle in Resources */,
+				F07A61292761F13500C166EA /* 01.caf in Resources */,
+				F07A612B2761F13500C166EA /* spark_loading.json in Resources */,
+				F07A61272761F13500C166EA /* TUIKitResource.bundle in Resources */,
 				F0FF71BC26B0E9D00005F3CF /* LaunchScreen.storyboard in Resources */,
-				F0E565A326FC29EE00C3424D /* call.caf in Resources */,
-				F0E5659F26FC29EE00C3424D /* 00.caf in Resources */,
-				F0E565A426FC29EE00C3424D /* TUIKitFace.bundle in Resources */,
-				F0E565A126FC29EE00C3424D /* wink.json in Resources */,
+				F07A612C2761F13500C166EA /* call.caf in Resources */,
+				F07A61282761F13500C166EA /* 00.caf in Resources */,
+				F07A612D2761F13500C166EA /* TUIKitFace.bundle in Resources */,
+				F07A612A2761F13500C166EA /* wink.json in Resources */,
 				F0FF71B926B0E9D00005F3CF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -858,12 +884,14 @@
 				F0FF720326B2433A0005F3CF /* String+Ext.swift in Sources */,
 				F08FBA4626C25C5E00613FE0 /* BFNaviBarIndicatorView.swift in Sources */,
 				F0FF71E926B104CB0005F3CF /* MSMcros.swift in Sources */,
+				F07A61182761A64E00C166EA /* MSLocationController.swift in Sources */,
 				F0FEA33A26DCC37A00BCF4B6 /* MSInputViewController.swift in Sources */,
 				F01CC21E273110B9002EF5B2 /* MSChatRoomController.swift in Sources */,
 				F0FF724E26BB822A0005F3CF /* MSImageMessageCellData.swift in Sources */,
 				F0E565C026FD783D00C3424D /* LanternZoomSupportedCell.swift in Sources */,
 				F0FF724C26BB6FA80005F3CF /* MSTextMessageCellData.swift in Sources */,
 				F0FF722D26B8D0510005F3CF /* MSPushMediator.swift in Sources */,
+				F07A61122761A25500C166EA /* MSLocationInfo.swift in Sources */,
 				F0E565BF26FD783D00C3424D /* LanternDefaultPageIndicator.swift in Sources */,
 				F08FBA3F26C222B100613FE0 /* Date+Ext.swift in Sources */,
 				F0FF720F26B29DCE0005F3CF /* BFSparkLoadingView.swift in Sources */,
@@ -872,6 +900,7 @@
 				F01CC21C273104B7002EF5B2 /* MSChatRoomMessageController.swift in Sources */,
 				F0FF720526B25CC50005F3CF /* BFLoginController.swift in Sources */,
 				F0FF725A26BCD1190005F3CF /* MSTextMessageCell.swift in Sources */,
+				F07A611C2761E82900C166EA /* MSLocationMessageCellData.swift in Sources */,
 				F0FEA34726DF6A5800BCF4B6 /* BFWinkMessageCellData.swift in Sources */,
 				F0FF721726B783280005F3CF /* BFHomeController.swift in Sources */,
 				F0CED8D727093FAF00C31B65 /* BFCallMessageCell.swift in Sources */,
@@ -882,6 +911,7 @@
 				F0FF721526B782040005F3CF /* UIDevice+Ext.swift in Sources */,
 				F0FF71FF26B178720005F3CF /* BFSignInStepTwoController.swift in Sources */,
 				F0FF724126BA1E630005F3CF /* MSInputBarView.swift in Sources */,
+				F07A611E2761E9E400C166EA /* MSLocationMessageCell.swift in Sources */,
 				F0CED8A12702E88600C31B65 /* MSVideoCallView.swift in Sources */,
 				F0E565BB26FD783D00C3424D /* LanternCell.swift in Sources */,
 				F0FF725026BB839E0005F3CF /* MSSystemMessageCellData.swift in Sources */,
@@ -903,6 +933,7 @@
 				F0E565BC26FD783D00C3424D /* LanternPageIndicator.swift in Sources */,
 				F0FF723626B8EBEC0005F3CF /* MSFaceCollectionCell.swift in Sources */,
 				F0684257273A863200E0313E /* BFGroupMemberCell.swift in Sources */,
+				F07A611A2761D9E300C166EA /* MSLocationDetailController.swift in Sources */,
 				F0FF71F126B14DD50005F3CF /* UIButton+Ext.swift in Sources */,
 				F0E565B726FD783D00C3424D /* LanternView.swift in Sources */,
 				F0FF720826B27CED0005F3CF /* BFProfileViewController.swift in Sources */,
@@ -925,6 +956,7 @@
 				F0FF723F26BA1DE00005F3CF /* MSResponderTextView.swift in Sources */,
 				F0FF721926B78B410005F3CF /* NSDictionary+Ext.swift in Sources */,
 				F0FF71FD26B154BF0005F3CF /* BFSignInStepOneController.swift in Sources */,
+				F07A61142761A2EC00C166EA /* MSLocationListCell.swift in Sources */,
 				F0E565A626FC4D3D00C3424D /* ImageStickerContainerView.swift in Sources */,
 				F0E565BA26FD783D00C3424D /* Lantern.swift in Sources */,
 				F0FF721326B77ED90005F3CF /* BFSparkCardCell.swift in Sources */,

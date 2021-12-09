@@ -109,6 +109,7 @@
 "TUIKitMessageTypeVoice" = "[语音]";
 "TUIkitMessageTypeVideo" = "[视频]";
 "TUIkitMessageTypeFile" = "[文件]";
+"TUIkitMessageTypeLocation" = "[位置]";
 "TUIkitMessageTypeVoiceCall" = "[语音电话]";
 "TUIkitMessageTypeVideoCall" = "[视频电话]";
 "TUIKitMessageTypeAnimateEmoji" = "[动画表情]";

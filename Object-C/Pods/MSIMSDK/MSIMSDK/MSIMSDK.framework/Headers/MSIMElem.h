@@ -144,6 +144,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+/////////////////////////////////////////////////////////////////////////////////
+//
+//                      地理位置消息 Elem
+//
+/////////////////////////////////////////////////////////////////////////////////
+@interface MSIMLocationElem : MSIMElem
+
+/** 位置名称*/
+@property(nonatomic,copy) NSString *title;
+/** 详细地址*/
+@property(nonatomic,copy,nullable) NSString *detail;
+/** 经度*/
+@property(nonatomic,assign) double longitude;
+/** 纬度*/
+@property(nonatomic,assign) double latitude;
+/** 缩放层级*/
+@property(nonatomic,assign) NSInteger zoom;
+
+@end
 
 /////////////////////////////////////////////////////////////////////////////////
 //

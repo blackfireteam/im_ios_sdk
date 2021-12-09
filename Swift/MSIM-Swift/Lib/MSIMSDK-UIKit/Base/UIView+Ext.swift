@@ -28,6 +28,15 @@ public extension UIView {
         layer.mask = shapeLayer
     }
     
+    func addGradientLayer(startColor: UIColor,endColor: UIColor) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.bounds
+        layer.addSublayer(gradientLayer)
+        gradientLayer.startPoint = .zero
+        gradientLayer.endPoint = CGPoint(x: 0, y: 1)
+        gradientLayer.colors = [startColor.cgColor,endColor.cgColor]
+    }
+    
     var left: CGFloat {
         get {
             frame.origin.x

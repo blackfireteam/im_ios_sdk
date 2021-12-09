@@ -27,16 +27,12 @@
         return;
     }
     AFHTTPSessionManager *manager = [self ms_manager];
-    NSString *secret = @"asfasdasd123";
-    NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
-    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
-    NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
     
     NSString *postUrl = [NSString stringWithFormat:@"%@/user/iminit",[self postUrl]];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:uid forKey:@"uid"];
     [params setValue:@(0) forKey:@"ctype"];
-    [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:postUrl parameters:params headers:[BFProfileService ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         NSNumber *code = dic[@"code"];
         if (code.integerValue == 0) {
@@ -62,17 +58,13 @@
             failed:(void(^)(NSError *error))fail
 {
     AFHTTPSessionManager *manager = [self ms_manager];
-    NSString *secret = @"asfasdasd123";
-    NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
-    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
-    NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
     NSString *postUrl = [NSString stringWithFormat:@"%@/user/reg",[self postUrl]];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:phone forKey:@"uid"];
     [params setValue:nickName forKey:@"nick_name"];
     [params setValue:avatar forKey:@"avatar"];
     [params setValue:@(1) forKey:@"gender"];
-    [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:postUrl parameters:params headers:[BFProfileService ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         NSNumber *code = dic[@"code"];
         if (code.integerValue == 0) {
@@ -100,17 +92,13 @@
         return;
     }
     AFHTTPSessionManager *manager = [self ms_manager];
-    NSString *secret = @"asfasdasd123";
-    NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
-    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
-    NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
     NSString *postUrl = [NSString stringWithFormat:@"%@/user/update",[self postUrl]];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:info.user_id forKey:@"uid"];
     [params setValue:info.nick_name forKey:@"nick_name"];
     [params setValue:info.avatar forKey:@"avatar"];
     [params setValue:@(info.gender) forKey:@"gender"];
-    [manager POST:postUrl parameters:params headers:@{@"nonce":radom,@"timestamp":time,@"sig":sign} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:postUrl parameters:params headers:[BFProfileService ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         if ([dic[@"code"]integerValue] == 0) {
             if (succ) succ(dic);
@@ -135,6 +123,17 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 5;
     return manager;
+}
+
++ (NSDictionary *)ms_header
+{
+    
+    NSString *secret = @"asfasdasd123";
+    NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
+    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
+    NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
+    NSDictionary *header = @{@"nonce":radom,@"timestamp":time,@"sig":sign,@"app_id":@"2"};
+    return header;
 }
 
 + (NSString *)postUrl

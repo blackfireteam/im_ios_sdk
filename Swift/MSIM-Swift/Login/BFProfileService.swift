@@ -89,7 +89,7 @@ extension ProfileService: TargetType {
             let radom = String(format: "%u", arc4random_uniform(1000000));
             let time = String(format: "%zd", MSIMTools.sharedInstance().adjustLocalTimeInterval/1000/1000);
             let sign = String(format: "%@%@%@",secret,radom,time).sha1;
-            return ["nonce":radom,"timestamp":time,"sig":sign!]
+            return ["nonce":radom,"timestamp":time,"sig":sign!,"app_id":"2"]
         }
     }
 }

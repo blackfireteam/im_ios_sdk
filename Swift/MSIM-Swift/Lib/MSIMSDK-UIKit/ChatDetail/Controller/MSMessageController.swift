@@ -125,6 +125,7 @@ public class MSMessageController: UITableViewController {
         tableView.register(MSSystemMessageCell.self, forCellReuseIdentifier: MSMcros.TSystemMessageCell_ReuseId)
         tableView.register(MSVideoMessageCell.self, forCellReuseIdentifier: MSMcros.TVideoMessageCell_ReuseId)
         tableView.register(MSVoiceMessageCell.self, forCellReuseIdentifier: MSMcros.TVoiceMessageCell_ReuseId)
+        tableView.register(MSLocationMessageCell.self, forCellReuseIdentifier: MSMcros.TLocationMessageCell_ReuseId)
         
         let header = MJRefreshNormalHeader {[weak self] in
             self?.loadMessages()
@@ -227,6 +228,11 @@ public class MSMessageController: UITableViewController {
                 voiceMsg.showName = true
                 voiceMsg.elem = elem
                 data = voiceMsg
+            }else if elem.type == .MSG_TYPE_LOCATION {
+                let locationMsg = MSLocationMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                locationMsg.showName = true
+                locationMsg.elem = elem
+                data = locationMsg
             }else {
                 let unknowData = MSSystemMessageCellData(direction: .inComing)
                 unknowData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsUnknowMessage")

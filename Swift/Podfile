@@ -20,7 +20,11 @@ target 'MSIM-Swift' do
   pod 'ZLPhotoBrowser'
   
   pod 'MSIMSDK'
-
+  
+  ## 高德地图
+  #pod 'AMap3DMap'
+  #pod 'AMapSearch'
+  
   #pod 'AgoraRtcEngine_iOS'  #声网音视频聊天
 
 
