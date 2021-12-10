@@ -14,6 +14,12 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - AgoraRtcEngine_iOS (3.6.0)
+  - AMap3DMap (8.1.0):
+    - AMapFoundation (~> 1.6.9)
+  - AMapFoundation (1.6.9)
+  - AMapSearch (8.1.0):
+    - AMapFoundation (~> 1.6.9)
   - Bugly (2.5.90)
   - lottie-ios (2.5.3)
   - MJRefresh (3.5.0)
@@ -29,6 +35,9 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - AgoraRtcEngine_iOS
+  - AMap3DMap
+  - AMapSearch
   - Bugly
   - lottie-ios (= 2.5.3)
   - MJRefresh
@@ -41,6 +50,10 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - AgoraRtcEngine_iOS
+    - AMap3DMap
+    - AMapFoundation
+    - AMapSearch
     - Bugly
     - lottie-ios
     - MJRefresh
@@ -53,6 +66,10 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  AgoraRtcEngine_iOS: fa786b97866b6017722de00500eead7224ac6afd
+  AMap3DMap: 135eaaf64a29aeb2f0bca07670db26fbf3271245
+  AMapFoundation: 8d8ecbb0b2e9ce5487995360d26c885d94642bfd
+  AMapSearch: 5c1cc07429f04b9cc76438fcb2411c66fdbbb178
   Bugly: 88bc32c0acc6fef7b74d610f0319ee7560d6b9fe
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
@@ -63,6 +80,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   TZImagePickerController: edf61b8e87f26e3e445aa50eb66254bd7f4859db
 
-PODFILE CHECKSUM: 7804f64ff56ea03ec61e3a22ebc6b17bac18f192
+PODFILE CHECKSUM: d7bb01ff64a56b61e169b9031e21c7c6dfed8f06
 
 COCOAPODS: 1.11.2

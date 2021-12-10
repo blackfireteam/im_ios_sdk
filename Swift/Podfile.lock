@@ -1,5 +1,11 @@
 PODS:
+  - AgoraRtcEngine_iOS (3.6.0)
   - Alamofire (5.4.3)
+  - AMap3DMap (8.1.0):
+    - AMapFoundation (~> 1.6.9)
+  - AMapFoundation (1.6.9)
+  - AMapSearch (8.1.0):
+    - AMapFoundation (~> 1.6.9)
   - HandyJSON (5.0.2)
   - Kingfisher (6.3.0)
   - lottie-ios (3.2.3)
@@ -21,6 +27,9 @@ PODS:
   - ZLPhotoBrowser/Core (4.1.8)
 
 DEPENDENCIES:
+  - AgoraRtcEngine_iOS
+  - AMap3DMap
+  - AMapSearch
   - HandyJSON
   - Kingfisher
   - lottie-ios
@@ -34,7 +43,11 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AgoraRtcEngine_iOS
     - Alamofire
+    - AMap3DMap
+    - AMapFoundation
+    - AMapSearch
     - HandyJSON
     - Kingfisher
     - lottie-ios
@@ -48,7 +61,11 @@ SPEC REPOS:
     - ZLPhotoBrowser
 
 SPEC CHECKSUMS:
+  AgoraRtcEngine_iOS: fa786b97866b6017722de00500eead7224ac6afd
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  AMap3DMap: 135eaaf64a29aeb2f0bca07670db26fbf3271245
+  AMapFoundation: 8d8ecbb0b2e9ce5487995360d26c885d94642bfd
+  AMapSearch: 5c1cc07429f04b9cc76438fcb2411c66fdbbb178
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   Kingfisher: 6c3df386db71d82c0817a429d2c9421a77396529
   lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
@@ -61,6 +78,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   ZLPhotoBrowser: dade64326c9a854a68a99ba260c752c2d7839d7e
 
-PODFILE CHECKSUM: f9a750d3b54615a9abb830f6d8f3bd6071d2ef2b
+PODFILE CHECKSUM: f88639b0e466804320585a16bd8acc16c2ced112
 
 COCOAPODS: 1.11.2

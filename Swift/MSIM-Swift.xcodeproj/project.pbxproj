@@ -706,6 +706,7 @@
 				F0FF71A926B0E9CE0005F3CF /* Frameworks */,
 				F0FF71AA26B0E9CE0005F3CF /* Resources */,
 				5CF9E16F178ACC08408E71A2 /* [CP] Embed Pods Frameworks */,
+				0FB5BC85A4E1803302050D8D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -828,6 +829,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0FB5BC85A4E1803302050D8D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5CF9E16F178ACC08408E71A2 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
