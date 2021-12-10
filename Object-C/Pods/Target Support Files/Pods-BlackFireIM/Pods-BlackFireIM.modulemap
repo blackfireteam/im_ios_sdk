@@ -1,6 +1,0 @@
-framework module Pods_BlackFireIM {
-  umbrella header "Pods-BlackFireIM-umbrella.h"
-
-  export *
-  module * { export * }
-}

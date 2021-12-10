@@ -1,1 +1,0 @@
-../../../QCloudCore/QCloudCore/Classes/Base/QCloudBase/QualityAssurance/QualityDataUploader.h
