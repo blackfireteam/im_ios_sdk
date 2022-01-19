@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) MSGroupInfo *roomInfo;
 
+@property(nonatomic,copy) void(^editComplete)(void);
 @end
 
 NS_ASSUME_NONNULL_END

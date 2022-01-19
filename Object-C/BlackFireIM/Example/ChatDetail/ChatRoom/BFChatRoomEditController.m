@@ -22,7 +22,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Chat Room Setting";
+    self.navView.navTitleL.text = @"Chat Room Setting";
     [self.view addSubview:self.myTableView];
     
     UIButton *quitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -53,7 +53,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    if (self.roomInfo.action_tod) {
+        return 4;
+    }else {
+        return 3;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -68,6 +72,7 @@
         cell.detailTextLabel.text = self.roomInfo.room_name;
     }else if (indexPath.row == 2) {
         cell.textLabel.text = @"Tips of day";
+        cell.detailTextLabel.text = self.roomInfo.intro;
     }else if (indexPath.row == 3) {
         cell.textLabel.text = self.roomInfo.is_mute ? @"Cancel Mute" : @"Mute";
     }
@@ -84,13 +89,13 @@
     }else if (indexPath.row == 1) {//修改聊天室名称
         [MSHelper showToastString:@"聊天室名称只支持后台修改"];
     }else if (indexPath.row == 2) {//修改公告
-        if (self.roomInfo.action_tod == NO) {
-            [MSHelper showToastString:@"只有管理员才能发布公告"];
-            return;
-        }
+        WS(weakSelf)
         BFEditTodInfoController *vc = [[BFEditTodInfoController alloc]init];
         vc.roomInfo = self.roomInfo;
         [self.navigationController pushViewController:vc animated:YES];
+        vc.editComplete = ^{
+            [weakSelf.myTableView reloadData];
+        };
     }else if (indexPath.row == 3) {
         
         [self editChatRoomMuteStatus];

@@ -10,6 +10,7 @@
 #import "YBImageBrowser.h"
 #import "YBIBVideoData.h"
 #import "BFChatRoomEditController.h"
+#import "BFEditTodInfoController.h"
 
 
 @interface BFChatRoomViewController ()<MSChatRoomControllerDelegate>
@@ -26,54 +27,48 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editClick)];
+    self.view.backgroundColor = [UIColor d_colorWithColorLight:RGB(240, 240, 240) dark:TController_Background_Color_Dark];
+    [self.navView.rightButton setImage:[UIImage d_imageWithImageLight:@"more_icon" dark:@"more_icon_white"] forState:UIControlStateNormal];
     
     self.chatController = [[MSChatRoomController alloc]init];
     self.chatController.delegate = self;
+    self.chatController.roomInfo = self.roomInfo;
     [self addChildViewController:self.chatController];
     [self.view addSubview:self.chatController.view];
     
+    self.navView.navTitleL.text = self.roomInfo.room_name;
     [self addNotifications];
-    [self enterChatRoom];
 }
 
 - (void)addNotifications
 {
     WS(weakSelf)
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_EnterChatroom_success object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf enterChatRoom: note];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_ChatRoomConv_update object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf chatRoomEvent: note];
+    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_ChatRoom_Event object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf chatRoomEvent: note];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"kChatRoomTipsDidTap" object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf chatRoomTipsDidTap];
     }];
 }
 
 - (void)dealloc
 {
-    [[MSIMManager sharedInstance] quitChatRoom:self.roomInfo.room_id.integerValue succ:^{
-        
-        [MSHelper showToastSucc:@"quit chat room"];
-    } failed:^(NSInteger code, NSString *desc) {
-//        [MSHelper showToastFail:desc];
-    }];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
-/// 申请加入聊天室
-- (void)enterChatRoom
+- (MSGroupInfo *)roomInfo
 {
-    [[MSIMManager sharedInstance] joinInChatRoom:25 succ:^(MSGroupInfo * _Nonnull info) {
-        
-        self.roomInfo = info;
-        self.chatController.roomInfo = self.roomInfo;
-        self.navigationItem.title = self.roomInfo.room_name;
-        
-    } failed:^(NSInteger code, NSString *desc) {
-        [MSHelper showToastFail:desc];
-    }];
+    return MSChatRoomManager.sharedInstance.chatroomInfo;
 }
 
 /// 聊天室设置界面
-- (void)editClick
+- (void)nav_rightButtonClick
 {
     if (self.roomInfo) {
         [self.view endEditing:YES];
@@ -81,6 +76,22 @@
         vc.roomInfo = self.roomInfo;
         [self.navigationController pushViewController:vc animated:YES];
     }
+}
+
+- (void)chatRoomTipsDidTap
+{
+    if (self.roomInfo) {
+        BFEditTodInfoController *vc = [[BFEditTodInfoController alloc]init];
+        vc.roomInfo = self.roomInfo;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+/// 加入聊天室成功
+- (void)enterChatRoom:(NSNotification *)note
+{
+    self.chatController.roomInfo = self.roomInfo;
+    self.navView.navTitleL.text = self.roomInfo.room_name;
 }
 
 /// 接收到聊天室事件通知处理
@@ -103,7 +114,7 @@
         case 1:
         {
             [MSHelper showToastString:@"This chatroom is dismissed."];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self.navigationController popToRootViewControllerAnimated:YES];
         }
             break;
         case 2:
@@ -283,6 +294,8 @@
         browser.dataSourceArray = tempArr;
         browser.currentPage = defaultIndex;
         [browser show];
+    }else if (cell.messageData.elem.type == MSIM_MSG_TYPE_LOCATION) {
+        
     }
 }
 

@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     if (@available(iOS 15.0, *)) {
         UITabBarAppearance *appearance = [UITabBarAppearance new];
         self.tabBar.standardAppearance = appearance;

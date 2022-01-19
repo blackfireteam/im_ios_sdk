@@ -14,6 +14,8 @@
 
 @property(nonatomic,strong) UITextView *textView;
 
+@property(nonatomic,strong) UILabel *noticeL;
+
 @end
 
 @implementation BFEditTodInfoController
@@ -21,12 +23,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"发布群公告";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(submit)];
+    self.navView.navTitleL.text = @"编辑群公告";
     
     self.textView.text = self.roomInfo.intro;
     [self.view addSubview:self.textView];
-    [self.textView becomeFirstResponder];
+    
+    self.textView.editable = self.roomInfo.action_tod;
+    if (self.roomInfo.action_tod) {
+        [self.textView becomeFirstResponder];
+        [self.navView.rightButton setTitle:@"提交" forState:UIControlStateNormal];
+    }else {
+        [self.view addSubview:self.noticeL];
+    }
 }
 
 - (UITextView *)textView
@@ -39,7 +47,19 @@
     return _textView;
 }
 
-- (void)submit
+- (UILabel *)noticeL
+{
+    if (!_noticeL) {
+        _noticeL = [[UILabel alloc]initWithFrame:CGRectMake(0, Screen_Height - Bottom_SafeHeight - 100, Screen_Width, 20)];
+        _noticeL.text =  @"----  管理员才能编辑和发布聊天室公告  ----";
+        _noticeL.font = [UIFont systemFontOfSize:14];
+        _noticeL.textColor = [UIColor lightGrayColor];
+        _noticeL.textAlignment = NSTextAlignmentCenter;
+    }
+    return _noticeL;
+}
+
+- (void)nav_rightButtonClick
 {
     if (self.textView.text.length == 0) return;
     [self.view endEditing:YES];
@@ -47,17 +67,19 @@
     [[MSIMManager sharedInstance] editChatRoomTOD:self.textView.text toRoom_id:self.roomInfo.room_id successed:^{
         
         [MSHelper showToastSucc:@"发布公告成功"];
-        ///公告发布成功，模拟发一条公告文本消息
-        MSIMTextElem *textElem = [[MSIMManager sharedInstance]createTextMessage:[NSString stringWithFormat:@"[Tip of Day]\n%@",weakSelf.textView.text]];
-        [[MSIMManager sharedInstance]sendChatRoomMessage:textElem toRoomID:weakSelf.roomInfo.room_id successed:^(NSInteger msg_id) {
-            
-        } failed:^(NSInteger code, NSString *desc) {
-            
-        }];
+        weakSelf.roomInfo.intro = weakSelf.textView.text;
+        if (weakSelf.editComplete) {
+            weakSelf.editComplete();
+        }
         [self.navigationController popViewControllerAnimated:YES];
     } failed:^(NSInteger code, NSString *desc) {
         [MSHelper showToastFail:desc];
     }];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
 }
 
 @end

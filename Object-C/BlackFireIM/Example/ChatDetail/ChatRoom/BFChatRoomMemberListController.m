@@ -22,7 +22,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = @"Member List";
+    self.navView.navTitleL.text = @"Member List";
     [self.view addSubview:self.myCollectionView];
     [self loadData];
     [self addNotifications];
@@ -31,12 +31,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [MSHelper showToastString:@"长按头像更多操作"];
 }
 
 - (void)loadData
@@ -57,6 +51,12 @@
     [[NSNotificationCenter defaultCenter]addObserverForName:MSUIKitNotification_ProfileUpdate object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf profileUpdate: note];
     }];
+    [[NSNotificationCenter defaultCenter]addObserverForName:MSUIKitNotification_ChatRoom_People_enter object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf someOneEnter:note];
+    }];
+    [[NSNotificationCenter defaultCenter]addObserverForName:MSUIKitNotification_ChatRoom_People_leave object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf someOneLeave:note];
+    }];
 }
 
 - (UICollectionView *)myCollectionView
@@ -64,7 +64,7 @@
     if (!_myCollectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
         layout.itemSize = CGSizeMake((Screen_Width-15*3)*0.5, (Screen_Width-15*3)*0.5*1.3);
-        layout.sectionInset = UIEdgeInsetsMake(15, 15, 15, 15);
+        layout.sectionInset = UIEdgeInsetsMake(15 + NavBar_Height + StatusBar_Height, 15, 15 + Bottom_SafeHeight, 15);
         layout.minimumLineSpacing = 15;
         layout.minimumInteritemSpacing = 15;
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -73,6 +73,7 @@
         _myCollectionView.dataSource = self;
         _myCollectionView.alwaysBounceVertical = YES;
         _myCollectionView.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
+        _myCollectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         [_myCollectionView registerClass:[BFGroupMemberCell class] forCellWithReuseIdentifier:@"memnberCell"];
     }
     return _myCollectionView;
@@ -90,6 +91,36 @@
 {
 //    NSArray *profiles = note.object;
     [self.myCollectionView reloadData];
+}
+
+- (void)someOneEnter:(NSNotification *)note
+{
+    MSGroupMemberItem *memeber = note.object;
+    BOOL isExsit = NO;
+    for (NSInteger i = 0; i < self.users.count; i++) {
+        MSGroupMemberItem *item = self.users[i];
+        if ([item.uid isEqualToString:memeber.uid]) {
+            isExsit = YES;
+            break;
+        }
+    }
+    if (!isExsit) {
+        [self.users addObject:memeber];
+        [self.myCollectionView reloadData];
+    }
+}
+
+- (void)someOneLeave:(NSNotification *)note
+{
+    NSString *uid = note.object;
+    for (NSInteger i = 0; i < self.users.count; i++) {
+        MSGroupMemberItem *item = self.users[i];
+        if ([item.uid isEqualToString:uid]) {
+            [self.users removeObject:item];
+            [self.myCollectionView reloadData];
+            break;
+        }
+    }
 }
 
 #pragma mark - UICollection view data source
@@ -131,26 +162,28 @@
 
 - (void)showMoreAction:(MSGroupMemberItem *)item
 {
+    if ([item.uid isEqualToString:[MSIMTools sharedInstance].user_id]) return;
+    if (self.roomInfo.action_assign == NO && self.roomInfo.action_mute == NO) return;
     WS(weakSelf)
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    NSString *showTitle1 = item.role == 0 ? @"设置Ta为临时管理员" : @"取消Ta的管理员身份";
-    [alert addAction:[UIAlertAction actionWithTitle:showTitle1 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf changeUserRole: item];
-    }]];
-    NSString *showTitle2 = item.is_mute == NO ? @"禁言" : @"取消禁言";
-    [alert addAction:[UIAlertAction actionWithTitle:showTitle2 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf changeUserMute: item];
-    }]];
+    if (self.roomInfo.action_assign) {
+        NSString *showTitle1 = item.role == 0 ? @"设置Ta为临时管理员" : @"取消Ta的管理员身份";
+        [alert addAction:[UIAlertAction actionWithTitle:showTitle1 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf changeUserRole: item];
+        }]];
+    }
+    if (self.roomInfo.action_mute) {
+        NSString *showTitle2 = item.is_mute == NO ? @"禁言" : @"取消禁言";
+        [alert addAction:[UIAlertAction actionWithTitle:showTitle2 style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf changeUserMute: item];
+        }]];
+    }
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)changeUserRole:(MSGroupMemberItem *)item
 {
-    if (self.roomInfo.action_assign == NO) {
-        [MSHelper showToastString:@"exceed your authority"];
-        return;
-    }
     //当uid是正值时 是任命， 当为负值时是 取消任命
     WS(weakSelf)
     [[MSIMManager sharedInstance] editChatroomManagerAccess:self.roomInfo.room_id uids:@[item.role == 0 ? @(item.uid.integerValue) : @(-item.uid.integerValue)] duration:1 reason:@"good job!" successed:^{
@@ -167,10 +200,6 @@
 
 - (void)changeUserMute:(MSGroupMemberItem *)item
 {
-    if (self.roomInfo.action_mute == NO) {
-        [MSHelper showToastString:@"exceed your authority"];
-        return;
-    }
     //当uid是正值是禁言，当uid为负值时是取消禁言
     WS(weakSelf)
     [[MSIMManager sharedInstance] muteMembers:self.roomInfo.room_id uids:@[item.is_mute ? @(-item.uid.integerValue) : @(item.uid.integerValue)] duration:1 reason:@"Don`t like a good guy" successed:^{

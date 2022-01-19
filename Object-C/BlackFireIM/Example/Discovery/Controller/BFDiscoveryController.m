@@ -25,7 +25,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = @"Online";
+    self.navView.navTitleL.text = @"Online";
+    self.navView.leftButton.hidden = YES;
     [self setupUI];
 }
 
@@ -79,15 +80,16 @@
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
     layout.itemSize = CGSizeMake((Screen_Width-15*3)*0.5, (Screen_Width-15*3)*0.5*1.3);
-    layout.sectionInset = UIEdgeInsetsMake(15, 15, 15, 15);
     layout.minimumLineSpacing = 15;
     layout.minimumInteritemSpacing = 15;
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    layout.sectionInset = UIEdgeInsetsMake(StatusBar_Height + NavBar_Height + 15, 15, TabBar_Height + 15, 15);
     self.myCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height) collectionViewLayout:layout];
     self.myCollectionView.delegate = self;
     self.myCollectionView.dataSource = self;
     self.myCollectionView.alwaysBounceVertical = YES;
-    self.myCollectionView.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
+    self.myCollectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    self.myCollectionView.backgroundColor = [UIColor d_colorWithColorLight:[UIColor whiteColor] dark:TController_Background_Color_Dark];
     [self.myCollectionView registerClass:[BFUserListCell class] forCellWithReuseIdentifier:@"userCell"];
     [self.view addSubview:self.myCollectionView];
 }

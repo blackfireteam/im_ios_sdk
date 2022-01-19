@@ -13,8 +13,6 @@
 
 @interface BFSparkCardCell()
 
-@property(nonatomic,strong) CAGradientLayer *gradientLayer;
-
 @property(nonatomic,strong) MSProfileInfo *user;
 
 @end
@@ -30,16 +28,31 @@
         self.imageView.userInteractionEnabled = YES;
         [self addSubview:self.imageView];
         
-        self.gradientLayer = [CAGradientLayer layer];
-        self.gradientLayer.colors = @[(id)RGBA(0, 0, 0, 0.0).CGColor,(id)RGBA(0, 0, 0, 0.8).CGColor];
-        self.gradientLayer.startPoint = CGPointMake(0, 0);
-        self.gradientLayer.endPoint = CGPointMake(0, 1);
-        [self.imageView.layer addSublayer:self.gradientLayer];
-        
         self.title = [[UILabel alloc]init];
         self.title.textColor = [UIColor whiteColor];
-        self.title.font = [UIFont boldSystemFontOfSize:18.0f];
+        self.title.font = [UIFont boldSystemFontOfSize:25.0f];
         [self.imageView addSubview:self.title];
+        
+        self.genderIcon = [[UIImageView alloc]init];
+        [self.imageView addSubview:self.genderIcon];
+        
+        self.departmentL = [[UILabel alloc]init];
+        self.departmentL.textColor = TText_Color;
+        self.departmentL.font = [UIFont systemFontOfSize:12];
+        self.departmentL.backgroundColor = [TCell_separatorColor colorWithAlphaComponent:0.5];
+        self.departmentL.textAlignment = NSTextAlignmentCenter;
+        self.departmentL.layer.cornerRadius = 4;
+        self.departmentL.clipsToBounds = YES;
+        [self.imageView addSubview:self.departmentL];
+        
+        self.workplaceL = [[UILabel alloc]init];
+        self.workplaceL.textColor = TText_Color;
+        self.workplaceL.font = [UIFont systemFontOfSize:12];
+        self.workplaceL.backgroundColor = [TCell_separatorColor colorWithAlphaComponent:0.5];
+        self.workplaceL.textAlignment = NSTextAlignmentCenter;
+        self.workplaceL.layer.cornerRadius = 4;
+        self.workplaceL.clipsToBounds = YES;
+        [self.imageView addSubview:self.workplaceL];
         
         self.dislike = [[UIImageView alloc]init];
         self.dislike.image = [UIImage imageNamed:@"finder_dislike_btn"];
@@ -74,8 +87,15 @@
 - (void)configItem:(MSProfileInfo *)info
 {
     _user = info;
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:info.pic] placeholderImage:nil options:SDWebImageRetryFailed | SDWebImageAllowInvalidSSLCertificates];
+    NSDictionary *dic = [info.custom el_convertToDictionary];
+    NSString *depart = dic[@"department"];
+    NSString *pic = dic[@"pic"];
+    NSString *place = dic[@"workplace"];
     self.title.text = info.nick_name;
+    self.genderIcon.image = info.gender == 1 ? [UIImage bf_imageNamed:@"male"] : [UIImage bf_imageNamed:@"female"];
+    self.departmentL.text = [NSString stringWithFormat:@"部门：%@",depart];
+    self.workplaceL.text = [NSString stringWithFormat:@"所在地：%@",place];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:XMNoNilString(pic)] placeholderImage:[UIImage imageNamed:@"loadinghead"]];
     self.winkBtn.selected = NO;
 }
 
@@ -99,12 +119,19 @@
 {
     [super layoutSubviews];
     self.imageView.frame = self.bounds;
-    self.gradientLayer.frame = CGRectMake(0, self.imageView.height-250, self.imageView.width, 250);
-    self.title.frame = CGRectMake(20,self.height-120, 200, 30);
     self.like.frame = CGRectMake(16, 16, 75, 75);
-    self.dislike.frame = CGRectMake(self.frame.size.width-21-75, 16, 75, 75);
-    self.winkBtn.frame = CGRectMake(20, self.title.maxY+15, 50, 50);
+    self.dislike.frame = CGRectMake(self.frame.size.width - 21 - 75, 16, 75, 75);
+    self.winkBtn.frame = CGRectMake(20, self.imageView.height - 50 - 30, 50, 50);
     self.chatBtn.frame = CGRectMake(self.winkBtn.maxX+15, self.winkBtn.y, self.winkBtn.width, self.winkBtn.height);
+    CGSize placeSize = [self.workplaceL.text textSizeIn:CGSizeMake(200, 20) font:self.workplaceL.font];
+    self.workplaceL.frame = CGRectMake(self.winkBtn.x, self.winkBtn.y - 15 - 25, placeSize.width + 20, 25);
+   
+    CGSize departSize = [self.departmentL.text textSizeIn:CGSizeMake(200, 20) font:self.departmentL.font];
+    self.departmentL.frame =  CGRectMake(self.workplaceL.x, self.workplaceL.y - self.workplaceL.height - 10, departSize.width + 20, self.workplaceL.height);
+    
+    CGSize titleSize = [self.title.text textSizeIn:CGSizeMake(Screen_Width - 80, 30) font:self.title.font];
+    self.title.frame = CGRectMake(self.winkBtn.x,self.departmentL.y - 15 - 30, titleSize.width, 30);
+    self.genderIcon.frame = CGRectMake(self.title.maxX + 10, self.title.centerY - 10, 20, 20);
 }
 
 @end

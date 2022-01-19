@@ -24,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) UIImageView *imageView;
 
+@property(nonatomic,strong) UILabel *workplaceL;
+
+@property(nonatomic,strong) UILabel *departmentL;
+
+@property(nonatomic,strong) UIImageView *genderIcon;
+
 // dislike
 @property (nonatomic,strong) UIImageView *dislike;
 // like

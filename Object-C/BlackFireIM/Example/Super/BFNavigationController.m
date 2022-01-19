@@ -7,6 +7,7 @@
 
 #import "BFNavigationController.h"
 #import "UIColor+BFDarkMode.h"
+#import "BFBaseViewController.h"
 
 @interface BFNavigationController ()
 
@@ -27,9 +28,8 @@
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    if (self.viewControllers.count != 0) {
+    if (self.viewControllers.count > 0) {
         viewController.hidesBottomBarWhenPushed = YES;
-        self.tabBarController.tabBar.hidden = YES;
     }
     [super pushViewController:viewController animated:animated];
 }

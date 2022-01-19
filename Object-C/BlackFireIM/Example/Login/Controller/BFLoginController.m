@@ -33,11 +33,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.title = TUILocalizableString(WelcomeBack);
+    self.navView.navTitleL.text = TUILocalizableString(WelcomeBack);
     
     self.phoneTF = [[UITextField alloc]initWithFrame:CGRectMake(35, StatusBar_Height+NavBar_Height + 80, Screen_Width-70, 50)];
     self.phoneTF.placeholder = TUILocalizableString(You-phone-number);
-    self.phoneTF.font = [UIFont systemFontOfSize:16];
+    self.phoneTF.font = [UIFont systemFontOfSize:15];
     self.phoneTF.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
     self.phoneTF.keyboardType = UIKeyboardTypeNumberPad;
     self.phoneTF.clearButtonMode = UITextFieldViewModeAlways;
@@ -65,7 +65,7 @@
     [self.view addSubview:self.serverSwitch];
 
     self.serverL = [[UILabel alloc]init];
-    self.serverL.font = [UIFont systemFontOfSize:16];
+    self.serverL.font = [UIFont systemFontOfSize:15];
     self.serverL.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
     self.serverL.frame = CGRectMake(self.serverSwitch.maxX+10, self.serverSwitch.y, self.loginBtn.width, self.serverSwitch.height);
     [self.view addSubview:self.serverL];
@@ -87,7 +87,7 @@
     [self.view endEditing:YES];
     NSString *phone = [self.phoneTF.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (phone.length <= 0) {
-        [MSHelper showToastFail:@"输入内容不能为空"];
+        [MSHelper showToastFail:@"请输入正确的手机号"];
         return;
     }
     self.registerInfo.phone = phone;
@@ -97,10 +97,14 @@
     [BFProfileService requestIMToken:phone success:^(NSDictionary * _Nonnull dic) {
         NSString *userToken = dic[@"token"];
         NSString *im_url = dic[@"url"];
-        MSLog(@"im_token: %@,im_url: %@",userToken,im_url);
+        MSLog(@"im token: %@,im_url: %@",userToken,im_url);
         //2.登录
         weakSelf.registerInfo.userToken = userToken;
         weakSelf.registerInfo.imUrl = im_url;
+        
+        // 配置聊天室
+        [MSChatRoomManager.sharedInstance loginChatRoom:kChatRoomID];
+        
         //子应用id = 1,用于demo测试，使用方根据需要设置自己的子应用id
         [[MSIMManager sharedInstance] login:userToken imUrl:im_url subAppID:1 succ:^{
                     
@@ -112,7 +116,7 @@
         }];
     } fail:^(NSError * _Nonnull error) {
         [MSHelper dismissToast];
-        if (error.code == 9) {//未注册，起注册流程
+        if (error.code == ERR_USER_NOT_REGISTER) {//未注册，起注册流程
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"手机号未注册，现在注册吗?" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [weakSelf needToSignIn];

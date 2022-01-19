@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class MSProfileInfo;
+@class BFRegisterInfo;
 @interface BFProfileService : NSObject
 
 + (NSString *)postUrl;
@@ -21,9 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
                   fail:(void(^)(NSError *error))fail;
 
 ///模拟用户注册
-+ (void)userSignUp:(NSString *)phone
-          nickName:(NSString *)nickName
-            avatar:(NSString *)avatar
++ (void)userSignUp:(BFRegisterInfo *)info
               succ:(void(^)(void))succ
             failed:(void(^)(NSError *error))fail;
 

@@ -9,8 +9,6 @@
 #import "MSIMSDK-UIKit.h"
 #import "YBImageBrowser.h"
 #import "YBIBVideoData.h"
-#import "BFWinkMessageCell.h"
-#import "BFWinkMessageCellData.h"
 #import "BFCallMessageCell.h"
 #import "BFCallMessageCellData.h"
 
@@ -25,7 +23,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
+    self.view.backgroundColor = [UIColor d_colorWithColorLight:RGB(240, 240, 240) dark:TController_Background_Color_Dark];
     
     self.chatController = [[MSChatViewController alloc]init];
     self.chatController.delegate = self;
@@ -34,9 +32,15 @@
     [self.view addSubview:self.chatController.view];
     
     [[MSProfileProvider provider] providerProfile:self.partner_id complete:^(MSProfileInfo * _Nonnull profile) {
-            self.navigationItem.title = profile.nick_name;
+            self.navView.navTitleL.text = profile.nick_name;
+    }];
+    
+    WS(weakSelf)
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_ProfileUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf profileUpdate:note];
     }];
 }
+
 
 #pragma mark - MSChatViewControllerDelegate
 
@@ -52,12 +56,7 @@
         MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
         NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
         if (customElem.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL) {
-            if ([dic[@"type"]integerValue] == MSIMCustomSubTypeLike) {
-                BFWinkMessageCellData *winkData = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
-                winkData.showName = YES;
-                winkData.elem = customElem;
-                return winkData;
-            }
+            
         }else if(customElem.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
             MSIMCustomSubType subType = [dic[@"type"]integerValue];
             if (subType == MSIMCustomSubTypeVoiceCall || subType == MSIMCustomSubTypeVideoCall) {
@@ -76,9 +75,7 @@
 - (Class)chatController:(MSChatViewController *)controller onShowMessageData:(MSMessageCellData *)cellData
 {
     //你可以自定义消息气泡的UI,对基本消息类型你可以直接返回nil，采用默认样式
-    if ([cellData isKindOfClass:[BFWinkMessageCellData class]]) {
-        return [BFWinkMessageCell class];
-    }else if ([cellData isKindOfClass:[BFCallMessageCellData class]]) {
+    if ([cellData isKindOfClass:[BFCallMessageCellData class]]) {
         return [BFCallMessageCell class];
     }
     return nil;
@@ -106,10 +103,10 @@
 ///收到对方正在输入消息通知
 - (void)chatController:(MSChatViewController *)controller onRecieveTextingMessage:(MSIMElem *)elem
 {
-    self.navigationItem.title = TUILocalizableString(TUIkitMessageTipsTextingMessage);
+    self.navView.navTitleL.text = TUILocalizableString(TUIkitMessageTipsTextingMessage);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[MSProfileProvider provider] providerProfile:self.partner_id complete:^(MSProfileInfo * _Nonnull profile) {
-                self.navigationItem.title = profile.nick_name;
+                self.navView.navTitleL.text = profile.nick_name;
         }];
     });
 }
@@ -160,5 +157,18 @@
     }
 }
 
+///用户个人信息更新通知
+- (void)profileUpdate:(NSNotification *)note
+{
+    NSArray<MSProfileInfo *> *profiles = note.object;
+    for (MSProfileInfo *info in profiles) {
+        if ([info.user_id isEqualToString:self.partner_id] || [info.user_id isEqualToString:[MSIMTools sharedInstance].user_id]) {
+            [self.chatController.messageController.tableView reloadData];
+        }
+        if ([info.user_id isEqualToString:self.partner_id]) {
+            self.navView.navTitleL.text = info.nick_name;
+        }
+    }
+}
 
 @end

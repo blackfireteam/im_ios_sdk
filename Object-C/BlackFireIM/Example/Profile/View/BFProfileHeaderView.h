@@ -13,8 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) UIImageView *avatarIcon;
 
-@property(nonatomic,strong) UILabel *nickNameL;
-
 @property(nonatomic,strong) UIImageView *editIcon;
 
 @end
