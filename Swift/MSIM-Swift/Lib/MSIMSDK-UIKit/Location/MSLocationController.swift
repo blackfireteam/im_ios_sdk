@@ -132,7 +132,7 @@ extension MSLocationController: UITableViewDataSource,UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         self.selectInfo?.isSelect = false
-        var info = self.listArr[indexPath.row]
+        let info = self.listArr[indexPath.row]
         info.isSelect = true
         self.selectInfo = info
         self.myTableView.reloadData()
@@ -209,6 +209,7 @@ extension MSLocationController {
             self.mapVeiw.removeAnnotation(self.annotation!)
         }
         self.annotation = MAPointAnnotation()
+        self.annotation?.title = "pointReuseIndentifier"
         self.annotation?.coordinate = CLLocationCoordinate2DMake(latitude, longitude)
         self.mapVeiw.addAnnotation(self.annotation!)
     }
@@ -238,7 +239,7 @@ extension MSLocationController: MAMapViewDelegate {
     }
     
     func mapView(_ mapView: MAMapView!, viewFor annotation: MAAnnotation!) -> MAAnnotationView? {
-        if annotation.isKind(of: MAPinAnnotationView.self) {
+        if annotation.title == "pointReuseIndentifier" {
             let pointReuseIndentifier = "pointReuseIndentifier"
             if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: pointReuseIndentifier) as? MAPinAnnotationView {
                 annotationView.pinColor = .red

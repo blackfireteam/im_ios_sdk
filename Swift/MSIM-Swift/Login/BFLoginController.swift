@@ -58,12 +58,11 @@ class BFLoginController: BFBaseViewController {
         serverL = UILabel()
         serverL.font = .systemFont(ofSize: 16)
         serverL.textColor = UIColor.d_color(light: .black, dark: .white)
-        serverL.text = "正式环境"
-        serverL.frame = CGRect(x: serverSwitch.right + 10, y: serverSwitch.top, width: 100, height: serverSwitch.height)
+        serverL.frame = CGRect(x: serverSwitch.right + 10, y: serverSwitch.top, width: loginBtn.width, height: serverSwitch.height)
         view.addSubview(serverL)
         
         serverSwitch.isOn = !UserDefaults.standard.bool(forKey: "ms_Test")
-        serverL.text = serverSwitch.isOn ? "正式环境" : "测试环境"
+        serverL.text = API.test.baseURL.absoluteString
     }
     
     @objc func loginBtnDidClick() {
@@ -76,8 +75,7 @@ class BFLoginController: BFBaseViewController {
         }
         registerInfo.phone = phone
         MSHelper.showToast()
-        ProfileService.iMTokenAPI(uid: phone!) { result in
-            
+        NetWorkManager.netWorkRequest(.getIMToken(uid: phone!)) { result in
             let dic = result as! [String: Any]
             let userToken = dic["token"] as! String
             let im_url = dic["url"] as! String
@@ -108,9 +106,10 @@ class BFLoginController: BFBaseViewController {
     }
 
     @objc func serverSwitchChanged(sw: UISwitch) {
-        
-        serverL.text = sw.isOn ? "正式环境" : "测试环境"
+
         UserDefaults.standard.setValue(!sw.isOn, forKey: "ms_Test")
+        
+        serverL.text = API.test.baseURL.absoluteString
         MSDBManager.sharedInstance().accountChanged()
     }
     
@@ -121,3 +120,4 @@ class BFLoginController: BFBaseViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
 }
+

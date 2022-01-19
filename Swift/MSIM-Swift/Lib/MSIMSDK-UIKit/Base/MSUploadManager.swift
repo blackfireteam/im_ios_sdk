@@ -109,9 +109,7 @@ open class MSUploadManager:NSObject, MSUploadMediator {
     
     private func ms_cosDownload(fromUrl url: String, toSavePath savePath: String, progress: @escaping normalProgress, succ: @escaping normalSucc, fail: @escaping normalFail) {
         
-        ProfileService.download(sourceUrl: url, savePath: savePath) { progressResponse in
-            progress(CGFloat(progressResponse.progress))
-        } success: { _ in
+        NetWorkManager.netWorkRequest(.download(url: url, destination: savePath)) { result in
             succ(savePath)
         } fail: { error in
             try? FileManager.default.removeItem(atPath: savePath)

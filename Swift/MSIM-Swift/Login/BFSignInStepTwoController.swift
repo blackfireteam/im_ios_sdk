@@ -113,10 +113,9 @@ class BFSignInStepTwoController: BFBaseViewController {
     }
     
     private func requestToSignUp() {
-        ProfileService.userRegistAPI(phone: info.phone!, nickName: info.nickName!, avatar: info.avatarUrl!) { _ in
-            
-            ProfileService.iMTokenAPI(uid: self.info.phone!) { result in
-                
+        
+        NetWorkManager.netWorkRequest(.register(phone: info.phone!, nickName: info.nickName!, avatar: info.avatarUrl!)) { result in
+            NetWorkManager.netWorkRequest(.getIMToken(uid: self.info.phone!)) { result in
                 let dic = result as! [String: Any]
                 let userToken = dic["token"] as! String
                 let im_Url = dic["url"] as! String

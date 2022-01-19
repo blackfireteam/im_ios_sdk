@@ -67,12 +67,11 @@
     self.serverL = [[UILabel alloc]init];
     self.serverL.font = [UIFont systemFontOfSize:16];
     self.serverL.textColor = [UIColor d_colorWithColorLight:[UIColor blackColor] dark:[UIColor whiteColor]];
-    self.serverL.text = @"正式环境";
-    self.serverL.frame = CGRectMake(self.serverSwitch.maxX+10, self.serverSwitch.y, 100, self.serverSwitch.height);
+    self.serverL.frame = CGRectMake(self.serverSwitch.maxX+10, self.serverSwitch.y, self.loginBtn.width, self.serverSwitch.height);
     [self.view addSubview:self.serverL];
 
     self.serverSwitch.on = ![[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
-    self.serverL.text = self.serverSwitch.isOn ? @"正式环境" : @"测试环境";
+    self.serverL.text = [BFProfileService postUrl];
 }
 
 - (BFRegisterInfo *)registerInfo
@@ -135,9 +134,9 @@
 
 - (void)serverSwitchChanged:(UISwitch *)sw
 {
-    NSLog(@"switch: %d",sw.isOn);
-    self.serverL.text = sw.isOn ? @"正式环境" : @"测试环境";
     [[NSUserDefaults standardUserDefaults]setBool:!sw.isOn forKey:@"ms_Test"];
+    
+    self.serverL.text = [BFProfileService postUrl];
     [[MSDBManager sharedInstance] accountChanged];
 }
 

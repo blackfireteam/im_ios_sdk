@@ -14,6 +14,9 @@
 		F01CC224273119A9002EF5B2 /* BFChatRoomMemberListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01CC223273119A9002EF5B2 /* BFChatRoomMemberListController.swift */; };
 		F02636162702C0C9007E23F6 /* MSCallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02636152702C0C9007E23F6 /* MSCallModel.swift */; };
 		F02636182702C233007E23F6 /* MSVoiceCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02636172702C233007E23F6 /* MSVoiceCallView.swift */; };
+		F0404C48277164C400021C71 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0404C47277164C400021C71 /* API.swift */; };
+		F0404C4A277168C900021C71 /* NetWorkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0404C49277168C900021C71 /* NetWorkManager.swift */; };
+		F0404C4C2771761700021C71 /* BFEditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0404C4B2771761700021C71 /* BFEditProfileController.swift */; };
 		F0684253273A7B5800E0313E /* BFChatRoomEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */; };
 		F0684255273A826700E0313E /* BFEditTodInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684254273A826700E0313E /* BFEditTodInfoController.swift */; };
 		F0684257273A863200E0313E /* BFGroupMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684256273A863200E0313E /* BFGroupMemberCell.swift */; };
@@ -90,7 +93,6 @@
 		F0FF71FB26B154390005F3CF /* BFRegisterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71FA26B154390005F3CF /* BFRegisterInfo.swift */; };
 		F0FF71FD26B154BF0005F3CF /* BFSignInStepOneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71FC26B154BF0005F3CF /* BFSignInStepOneController.swift */; };
 		F0FF71FF26B178720005F3CF /* BFSignInStepTwoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF71FE26B178720005F3CF /* BFSignInStepTwoController.swift */; };
-		F0FF720126B1825E0005F3CF /* BFProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720026B1825E0005F3CF /* BFProfileService.swift */; };
 		F0FF720326B2433A0005F3CF /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720226B2433A0005F3CF /* String+Ext.swift */; };
 		F0FF720526B25CC50005F3CF /* BFLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720426B25CC50005F3CF /* BFLoginController.swift */; };
 		F0FF720826B27CED0005F3CF /* BFProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FF720726B27CED0005F3CF /* BFProfileViewController.swift */; };
@@ -153,6 +155,9 @@
 		F01CC223273119A9002EF5B2 /* BFChatRoomMemberListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatRoomMemberListController.swift; sourceTree = "<group>"; };
 		F02636152702C0C9007E23F6 /* MSCallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSCallModel.swift; sourceTree = "<group>"; };
 		F02636172702C233007E23F6 /* MSVoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceCallView.swift; sourceTree = "<group>"; };
+		F0404C47277164C400021C71 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		F0404C49277168C900021C71 /* NetWorkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorkManager.swift; sourceTree = "<group>"; };
+		F0404C4B2771761700021C71 /* BFEditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFEditProfileController.swift; sourceTree = "<group>"; };
 		F04F4B5A2717DD8900752952 /* MSIM-Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MSIM-Swift.entitlements"; sourceTree = "<group>"; };
 		F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatRoomEditController.swift; sourceTree = "<group>"; };
 		F0684254273A826700E0313E /* BFEditTodInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFEditTodInfoController.swift; sourceTree = "<group>"; };
@@ -236,7 +241,6 @@
 		F0FF71FA26B154390005F3CF /* BFRegisterInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFRegisterInfo.swift; sourceTree = "<group>"; };
 		F0FF71FC26B154BF0005F3CF /* BFSignInStepOneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSignInStepOneController.swift; sourceTree = "<group>"; };
 		F0FF71FE26B178720005F3CF /* BFSignInStepTwoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFSignInStepTwoController.swift; sourceTree = "<group>"; };
-		F0FF720026B1825E0005F3CF /* BFProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFProfileService.swift; sourceTree = "<group>"; };
 		F0FF720226B2433A0005F3CF /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		F0FF720426B25CC50005F3CF /* BFLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFLoginController.swift; sourceTree = "<group>"; };
 		F0FF720726B27CED0005F3CF /* BFProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFProfileViewController.swift; sourceTree = "<group>"; };
@@ -359,6 +363,15 @@
 				F0CED8A42702F38B00C31B65 /* MSCallManager.swift */,
 			);
 			path = CallKit;
+			sourceTree = "<group>";
+		};
+		F0404C46277164AB00021C71 /* NetWork */ = {
+			isa = PBXGroup;
+			children = (
+				F0404C47277164C400021C71 /* API.swift */,
+				F0404C49277168C900021C71 /* NetWorkManager.swift */,
+			);
+			path = NetWork;
 			sourceTree = "<group>";
 		};
 		F07A61102761A0E200C166EA /* Location */ = {
@@ -575,6 +588,7 @@
 				F0FF71F326B151180005F3CF /* BFBaseViewController.swift */,
 				F0FF71F526B151E60005F3CF /* BFNavigationController.swift */,
 				F0FF71F726B1526F0005F3CF /* BFTabBarController.swift */,
+				F0404C46277164AB00021C71 /* NetWork */,
 			);
 			path = Super;
 			sourceTree = "<group>";
@@ -585,7 +599,6 @@
 				F0FF720426B25CC50005F3CF /* BFLoginController.swift */,
 				F0FF71FC26B154BF0005F3CF /* BFSignInStepOneController.swift */,
 				F0FF71FE26B178720005F3CF /* BFSignInStepTwoController.swift */,
-				F0FF720026B1825E0005F3CF /* BFProfileService.swift */,
 				F0FF71FA26B154390005F3CF /* BFRegisterInfo.swift */,
 			);
 			path = Login;
@@ -596,6 +609,7 @@
 			children = (
 				F0FF720726B27CED0005F3CF /* BFProfileViewController.swift */,
 				F0FF720926B27DF40005F3CF /* BFProfileHeaderView.swift */,
+				F0404C4B2771761700021C71 /* BFEditProfileController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -705,8 +719,8 @@
 				F0FF71A826B0E9CE0005F3CF /* Sources */,
 				F0FF71A926B0E9CE0005F3CF /* Frameworks */,
 				F0FF71AA26B0E9CE0005F3CF /* Resources */,
-				5CF9E16F178ACC08408E71A2 /* [CP] Embed Pods Frameworks */,
-				0FB5BC85A4E1803302050D8D /* [CP] Copy Pods Resources */,
+				AD1F3504BBC97288365FD2E7 /* [CP] Embed Pods Frameworks */,
+				DAF4206811448D3656F24EF6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -829,40 +843,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0FB5BC85A4E1803302050D8D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5CF9E16F178ACC08408E71A2 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		88D4061319BA3B5A23292582 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -883,6 +863,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AD1F3504BBC97288365FD2E7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DAF4206811448D3656F24EF6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -938,10 +952,10 @@
 				F0FF723B26B924320005F3CF /* MSInputMoreCell.swift in Sources */,
 				F0FF71ED26B1329E0005F3CF /* UIImage+Ext.swift in Sources */,
 				F01CC2222731148E002EF5B2 /* BFChatRoomViewController.swift in Sources */,
+				F0404C4C2771761700021C71 /* BFEditProfileController.swift in Sources */,
 				F0E565C526FD783D00C3424D /* LanternFadeAnimator.swift in Sources */,
 				F08FBA3526C20FEB00613FE0 /* MSNoticeCountView.swift in Sources */,
 				F0E565BE26FD783D00C3424D /* LanternLog.swift in Sources */,
-				F0FF720126B1825E0005F3CF /* BFProfileService.swift in Sources */,
 				F0E565C726FD788C00C3424D /* VideoZoomCell.swift in Sources */,
 				F0CED8D527093B1400C31B65 /* BFCallMessageCellData.swift in Sources */,
 				F0FF71E726B0FF4C0005F3CF /* UIColor+Ext.swift in Sources */,
@@ -963,6 +977,7 @@
 				F01CC224273119A9002EF5B2 /* BFChatRoomMemberListController.swift in Sources */,
 				F08FBA3326C20E9A00613FE0 /* MSSystemMessageCell.swift in Sources */,
 				F0E565BD26FD783D00C3424D /* LanternNumberPageIndicator.swift in Sources */,
+				F0404C48277164C400021C71 /* API.swift in Sources */,
 				F0FEA33E26DF0CDC00BCF4B6 /* MSChatViewController.swift in Sources */,
 				F0FF71EB26B121780005F3CF /* Bundle+Ext.swift in Sources */,
 				F0FF724A26BA8B490005F3CF /* MSBubbleMessageCellData.swift in Sources */,
@@ -991,6 +1006,7 @@
 				F08FBA3126C20A3600613FE0 /* MSVoiceMessageCell.swift in Sources */,
 				F0FF71E526B0FA870005F3CF /* UIScreen+Ext.swift in Sources */,
 				F0FF723826B91F3C0005F3CF /* MSMenuView.swift in Sources */,
+				F0404C4A277168C900021C71 /* NetWorkManager.swift in Sources */,
 				F0FF723226B8E23D0005F3CF /* MSFaceUtil.swift in Sources */,
 				F08FBA4926C2658000613FE0 /* BFUserListCell.swift in Sources */,
 				F0E565C426FD783D00C3424D /* LanternImageView.swift in Sources */,

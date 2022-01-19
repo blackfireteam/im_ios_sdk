@@ -1,0 +1,148 @@
+/*
+  Localizable.strings
+  BlackFireIM
+
+  Created by benny wang on 2021/3/4.
+  
+*/
+"TUIKitTipsMostSelectTextFormat" = "Select %ld at most";
+
+"Home_tab" = "Spark";
+"Discovery_tab" = "Online";
+"Message_tab" = "Message";
+"Profile_tab" = "Me";
+
+"WelcomeBack" = "WELCOME BACK";
+"LOGIN" = "LOG IN";
+"You-phone-number" = "you phone number is...";
+"You-nickname" = "you nickname is...";
+"You-englishname" = "you english name is...";
+"You-location" = "you office location is...";
+"You-invite-code" = "you invite code is...";
+"Next-button" = "CONTINUE";
+"You-depart" = "You department...";
+
+"Confirm" = "OK";
+"Cancel" = "Cancel";
+"Send" = "Send";
+"Save" = "Save";
+"You" = "You";
+"you" = "You";
+"Male" = "Male";
+"Female" = "Female";
+"File" = "Files";
+"Download" = "Download";
+"Unsetted" = "Not set";
+
+"Monday" = "Mon";
+"Tuesday" = "Tue";
+"Wednesday" = "Wed";
+"Thursday" = "Thur";
+"Friday" = "Fri";
+"Saturday" = "Sat";
+"Sunday" = "Sun";
+"Yesterday" = "Yesterday";
+"am" = "AM";
+"pm" = "PM";
+"YesterdayDateFormat" = "HH:mma";       // 英文是 HH:mma 不要动
+
+"Read" = "Read";
+"Deliveried" = "Delivered";
+"NotDeliveried" = "NotDelivered";
+"Sending" = "Sending...";
+
+"Copy" = "Copy";
+"Delete" = "Delete";
+"Revoke" = "Recall";
+"Retry" = "Retry";
+"Re-send" = "Resend";
+"Make-a-call" = "Start Call";
+"Done" = "OK";
+"All" = "All";
+"Living" = "In Progress";
+"Live-finished" = "Ended";
+"Agreed" = "Agreed";
+"Disclined" = "Declined";
+"Agree" = "Agree";
+"Have-been-sent" = "Sent";
+"View-the-original" = "View Full Image";
+
+"TUIKitMicCamerAuthTips" = "Enable mic and camera permissions";
+"TUIKitMicAuth" = "Enable mic permission";
+"TUIKitTipsConfirmResendMessage" = "Resend this message? ";
+
+"TUIKitInputHoldToTalk" = "Hold to Talk";
+"TUIKitInputReleaseToSend" = "Release to End";
+"TUIKitInputReleaseToCancel" = "Release to Cancel";
+"TUIKitInputNoMicTitle" = "Failed to access mic";
+"TUIKitInputNoMicTips"  = "Enable mic permission to send voice messages";
+"TUIKitInputNoMicOperateLater" = "Later";
+"TUIKitInputNoMicOperateEnable" = "Enable";
+"TUIKitInputBlankMessageTitle" = "Unable to send blank message";
+"TUIKitInputWillFinishRecordInSeconds" = "Recording will end in %ld seconds.";
+"TUIKitInputRecordSlideToCancel" = "Slide up to cancel";
+"TUIKitInputRecordReleaseToCancel" = "Release to Cancel";
+"TUIKitInputRecordTimeshort" = "Message too short";
+"TUIKitInputRecordTimeLong" = "Message too long";
+
+"TUIKitMessageTipsYouRecallMessage" = "You recalled a message.";
+"TUIKitMessageTipsRecallMessageFormat" = "\"%@\" recalled a message.";
+"TUIkitMessageTipsOthersRecallMessage" = "The other user recalled a message.";
+"TUIkitMessageTipsUnknowMessage" = "Unsupport message,please update SDK";
+"TUIkitMessageTipsTextingMessage" = "Other is texting...";
+
+"TUIKitSignalingFinishGroupChat" = "End Group Chat";
+"TUIKitSignalingVoiceCallEnd" = "call Duration: %02zd:%02zd";
+"TUIKitSignalingVideoCallEnd" = "call Duration: %02zd:%02zd";
+"TUIKitSignalingNewCall" = "Start Call";
+"TUIKitSignalingNewGroupCallFormat" = "\"%@\" initiated a group call.";
+"TUIkitSignalingCancelCall" = "Call cancelled";
+"TUIkitSignalingCancelCallOther" = "Call cancelled by caller";
+"TUIkitSignalingCancelGroupCallFormat" = "\"%@\" canceled the group call.";
+"TUIkitSignalingHangonCall" = "Answered";
+"TUIKitSignalingHangonCallFormat" = "\"%@\" answered.";
+"TUIKitSignalingBusyFormat" = "\"%@\" is busy.";
+"TUIKitSignalingCallBusy" = "Line is busy";
+"TUIKitSignalingCallBusyOther" = "Line is busy";
+"TUIkitSignalingDecline" = "Call declined";
+"TUIkitSignalingDeclineOther" = "Call declined by user";
+"TUIKitSignalingNoResponse" = "No answer";
+"TUIKitSignalingNoResponseOther" = "No answer";
+"TUIkitSignalingUnrecognlize" = "Unrecognized call instruction";
+
+"TUIkitMessageTypeImage" = "[Image]";
+"TUIKitMessageTypeVoice" = "[Voice]";
+"TUIkitMessageTypeVideo" = "[Video]";
+"TUIkitMessageTypeLocation" = "[Location]";
+"TUIkitMessageTypeEmotion" = "[Emotion]";
+"TUIkitMessageTypeVoiceCall" = "[Voice call]";
+"TUIkitMessageTypeVideoCall" = "[Video call]";
+"TUIkitMessageTypeFile" = "[File]";
+"TUIKitMessageTypeAnimateEmoji" = "[Animated Sticker]";
+"TUIKitMessageTipsUnsupportCustomMessage" = "[Customized message]";
+"TUIKitMessageTypeDraft" = "[Draft]";
+
+"TUIKitMoreCamera" = "Take Photo";
+"TUIKitMorePhoto" = "Photo";
+"TUIKitMoreVideo" = "Video";
+"TUIKitMoreLocation" = "Location";
+"TUIKitMoreFile" = "Files";
+"TUIKitMoreVideoCall" = "Video Call";
+"TUIKitMoreVoiceCall" = "Voice Call";
+"TUIKitMoreGroupLive" = "Group Live";
+"TUIKitMoreSnapchat" = "Snap Chat";
+
+"TUIKitCallInviteYouVoiceCall" = "invites you to voice call...";
+"TUIKitCallInviteYouVideoCall" = "invites you to video call...";
+"TUIKitCallWaitingForAccept" = "waiting for accept the call...";
+"TUIKitCallTurningOnMute" = "Mic is on";
+"TUIKitCallTurningOffMute" = "Mic is off";
+"TUIKitCallUsingSpeaker" = "Speaker is on";
+"TUIKitCallUsingHeadphone" = "Speaker is off";
+"TUIKitCallCameraSwitch" = "camera switch";
+"TUIKitCallReject" = "Decline";
+"TUIKitCallAccept" = "Accept";
+"TUIKitCallCancel" = "Hang Up";
+
+"TUIKitNoMoreData" = "no more data ~";
+"TUIKitRefresh" = "click to retry";

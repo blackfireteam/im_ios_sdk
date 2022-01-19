@@ -52,13 +52,8 @@ class BFConversationListController: BFBaseViewController {
     
     private func setupChatRoomBtn() {
         let chatRoomBtn = UIButton(type: .custom)
-        chatRoomBtn.setTitle("Room", for: .normal)
-        chatRoomBtn.setTitleColor(.white, for: .normal)
-        chatRoomBtn.titleLabel?.font = .systemFont(ofSize: 14)
-        chatRoomBtn.backgroundColor = .darkGray
-        chatRoomBtn.layer.cornerRadius = 4
-        chatRoomBtn.layer.masksToBounds = true
-        chatRoomBtn.frame = CGRect(x: UIScreen.width - 20 - 60, y: UIScreen.height - UIScreen.tabBarHeight - UIScreen.safeAreaBottomHeight - 20 - 40, width: 60, height: 40)
+        chatRoomBtn.setImage(UIImage(named: "chat_btn"), for: .normal)
+        chatRoomBtn.frame = CGRect(x: UIScreen.width - 10 - 100, y: UIScreen.height - UIScreen.tabBarHeight - UIScreen.safeAreaBottomHeight - 10 - 100, width: 100, height: 100)
         chatRoomBtn.addTarget(self, action: #selector(chatRoomBtnClick), for: .touchUpInside)
         view.addSubview(chatRoomBtn)
         

@@ -14,24 +14,24 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - AgoraRtcEngine_iOS (3.6.0)
+  - AgoraRtcEngine_iOS (3.6.0.1)
   - AMap3DMap (8.1.0):
     - AMapFoundation (~> 1.6.9)
   - AMapFoundation (1.6.9)
   - AMapSearch (8.1.0):
     - AMapFoundation (~> 1.6.9)
-  - Bugly (2.5.90)
+  - Bugly (2.5.91)
   - lottie-ios (2.5.3)
-  - MJRefresh (3.5.0)
-  - MSIMSDK (1.2.3)
-  - QCloudCore/WithoutMTA (5.9.4)
-  - QCloudCOSXML/Transfer (5.9.4):
-    - QCloudCore/WithoutMTA (= 5.9.4)
-  - SDWebImage (5.9.0):
-    - SDWebImage/Core (= 5.9.0)
-  - SDWebImage/Core (5.9.0)
+  - MJRefresh (3.7.5)
+  - MSIMSDK (1.2.4)
+  - QCloudCore/WithoutMTA (6.0.1)
+  - QCloudCOSXML/Transfer (6.0.1):
+    - QCloudCore/WithoutMTA (= 6.0.1)
+  - SDWebImage (5.12.1):
+    - SDWebImage/Core (= 5.12.1)
+  - SDWebImage/Core (5.12.1)
   - SVProgressHUD (2.2.5)
-  - TZImagePickerController (3.6.6)
+  - TZImagePickerController (3.6.8)
 
 DEPENDENCIES:
   - AFNetworking
@@ -66,19 +66,19 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  AgoraRtcEngine_iOS: fa786b97866b6017722de00500eead7224ac6afd
+  AgoraRtcEngine_iOS: bcefa5cab2343080df7ccaf0b9d0e2158413300a
   AMap3DMap: 135eaaf64a29aeb2f0bca07670db26fbf3271245
   AMapFoundation: 8d8ecbb0b2e9ce5487995360d26c885d94642bfd
   AMapSearch: 5c1cc07429f04b9cc76438fcb2411c66fdbbb178
-  Bugly: 88bc32c0acc6fef7b74d610f0319ee7560d6b9fe
+  Bugly: afe841bba2ea6de6d432a3c125240a5e75949c55
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
-  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
-  MSIMSDK: 60aa314d9557677960599a742c75b837523205be
-  QCloudCore: 3da61d1d1369c2c9fa3bf938af5dd38f777459e4
-  QCloudCOSXML: afc6c686f85a89e4a9f0b8adcb6368913828ad50
-  SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
+  MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
+  MSIMSDK: 9ca385cbbee66ac4948334e2e5fd659d50a52ecb
+  QCloudCore: 032304013ef6d8deddfa0b88345442024a225aa8
+  QCloudCOSXML: 26f0f5d44a5ce88fa53f3443c04613be03710265
+  SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  TZImagePickerController: edf61b8e87f26e3e445aa50eb66254bd7f4859db
+  TZImagePickerController: 9c249613a73ee88fa352d3f9e77a84e1d820993f
 
 PODFILE CHECKSUM: d7bb01ff64a56b61e169b9031e21c7c6dfed8f06
 
