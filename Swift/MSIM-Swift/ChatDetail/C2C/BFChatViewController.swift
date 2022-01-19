@@ -187,6 +187,9 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             
             if let locationData = cell.messageData as? MSLocationMessageCellData {
                 let locationInfo = MSLocationInfo(locationMsg: locationData.locationElem)
+                let n_coor = MSLocationManager.shared.gPSCoordinateConvertToAMap(coordinate: CLLocationCoordinate2D(latitude: locationInfo.latitude, longitude: locationInfo.longitude))
+                locationInfo.latitude = n_coor.latitude
+                locationInfo.longitude = n_coor.longitude
                 let vc = MSLocationDetailController(location: locationInfo)
                 self.navigationController?.pushViewController(vc, animated: true)
             }
@@ -365,11 +368,13 @@ extension BFChatViewController {
     }
     
     private func sendLocationMessage(info: MSLocationInfo) {
+        // 为了兼容，先将高德地图坐标转换成gps坐标
+        let n_coor = MSLocationManager.shared.AMapCoordinateConvertToGPS(coordinate: CLLocationCoordinate2D(latitude: info.latitude, longitude: info.longitude))
         var elem = MSIMLocationElem()
         elem.title = info.name
         elem.detail = info.detail
-        elem.longitude = info.longitude
-        elem.latitude = info.latitude
+        elem.longitude = n_coor.longitude
+        elem.latitude = n_coor.latitude
         elem.zoom = info.zoom
         elem = MSIMManager.sharedInstance().createLocationMessage(elem)
         MSIMManager.sharedInstance().sendC2CMessage(elem, toReciever: self.partner_id) { _ in

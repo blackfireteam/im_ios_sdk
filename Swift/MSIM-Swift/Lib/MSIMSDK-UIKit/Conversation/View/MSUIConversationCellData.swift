@@ -76,6 +76,7 @@ open class MSUIConversationCellData: NSObject {
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTypeVideo")
             case .MSG_TYPE_LOCATION:
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTypeLocation")
+            case .msg_type
             case .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL,
                  .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL,
                  .MSG_TYPE_CUSTOM_IGNORE_UNREADCOUNT_RECALL:

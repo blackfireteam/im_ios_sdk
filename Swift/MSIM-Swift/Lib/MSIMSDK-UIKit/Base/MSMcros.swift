@@ -65,6 +65,15 @@ public struct MSMcros {
     static let TFileMessageCell_Margin: CGFloat = 10
     static let TFileMessageCell_Progress_Color: UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
 
+    //location cell
+    static let TLocationMessageCell_ReuseId: String = "TLocationMessageCell"
+    static let TLocationMessageCell_Width: CGFloat = (UIScreen.width * 0.65)
+    static let TLocationMessageCell_Height TLocationMessageCell_Width * 0.65
+    
+    //emotion cell
+    static let TEmotionMessageCell_ReuseId: String = "TEmotionMessageCell"
+    static let TEmotionMessageCell_Container_Size: CGSize = CGSize(width: 120, height: 120)
+    
     //video cell
     static let TVideoMessageCell_ReuseId: String = "TVideoMessageCell"
     static let TVideoMessageCell_Image_Width_Max: CGFloat = UIScreen.width * 0.4
@@ -138,6 +147,8 @@ public struct MSMcros {
     
     static let GaodeAPIKey: String = "28d8663963475a7eb9126c8ebb9c4bc9"
     static let GaodeAPIWebKey: String = "1db3c63e96dccbe7dd34b6b5150fae90"
+    static let kChatRoomID: Int = 1641525634
+    static let kAppInviteCode: String = "MSYYDS"
 }
 
 /** 自定义消息分类*/

@@ -47,6 +47,7 @@ public class MSChatRoomMessageController: UITableViewController {
     public func addSystemTips(text: String) {
         let system = MSSystemMessageCellData(direction: .inComing)
         system.content = text
+        system.sType = .SYS_OTHER
         let isAtBottom = (tableView.contentOffset.y + tableView.height + 20 >= tableView.contentSize.height)
         self.uiMsgs.append(system)
         tableView.reloadData()
@@ -128,7 +129,7 @@ public class MSChatRoomMessageController: UITableViewController {
     }
     
     private func transUIMsgFromIMMsg(elems: [MSIMElem]) -> [MSMessageCellData] {
-        
+    
         var uiMsgs: [MSMessageCellData] = []
         for k in (0..<elems.count).reversed() {
             let elem = elems[k]
@@ -150,6 +151,7 @@ public class MSChatRoomMessageController: UITableViewController {
                 }else {
                     revoke.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
                 }
+                revoke.sType = .SYS_REVOKE
                 revoke.elem = elem
                 data = revoke
             }else if elem.type == .MSG_TYPE_TEXT {
@@ -178,6 +180,7 @@ public class MSChatRoomMessageController: UITableViewController {
                 let unknowData = MSSystemMessageCellData(direction: .inComing)
                 unknowData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsUnknowMessage")
                 unknowData.elem = elem
+                unknowData.sType = .SYS_UNKNOWN
                 data = unknowData
             }
             if dateMsg != nil {
@@ -194,6 +197,7 @@ public class MSChatRoomMessageController: UITableViewController {
         if self.msgForDate == nil || labs(date - self.msgForDate!.msg_sign) / 1000 / 1000 > MAX_MESSAGE_SEP_DLAY {
             let system = MSSystemMessageCellData(direction: .inComing)
             system.content = Date(timeIntervalSince1970: TimeInterval(date / 1000 / 1000)).ms_messageString()
+            system.sType = .SYS_TIME
             return system
         }
         return nil
@@ -311,6 +315,7 @@ private extension MSChatRoomMessageController {
             }else {
                 data.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
             }
+            data.sType = .SYS_REVOKE
             self.uiMsgs.insert(data, at: index)
             tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .fade)
             tableView.endUpdates()
@@ -482,7 +487,7 @@ extension MSChatRoomMessageController: MSMessageCellDelegate {
                 self.heightCache[index] = 0
             }
             //时间显示的处理
-            if (preData?.isKind(of: MSSystemMessageCellData.self) == true && nextData?.isKind(of: MSSystemMessageCellData.self) == true) || (preData?.isKind(of: MSSystemMessageCellData.self) == true && nextData == nil) {
+            if (preData?.isKind(of: MSSystemMessageCellData.self) == true && (preData as! MSSystemMessageCellData).sType == .SYS_TIME && nextData?.isKind(of: MSSystemMessageCellData.self) == true && (nextData as! MSSystemMessageCellData).sType == .SYS_TIME) || (preData?.isKind(of: MSSystemMessageCellData.self) == true && (preData as! MSSystemMessageCellData).sType == .SYS_TIME && nextData == nil) {
                 if let preIndex = self.uiMsgs.firstIndex(of: preData!) {
                     self.uiMsgs.remove(at: preIndex)
                     if preIndex < self.heightCache.count {

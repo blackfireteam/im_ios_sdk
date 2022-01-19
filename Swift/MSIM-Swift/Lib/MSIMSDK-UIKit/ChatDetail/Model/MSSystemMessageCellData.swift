@@ -8,7 +8,12 @@
 import UIKit
 import MSIMSDK
 
-
+public enum MSSystemMessageType: Int {
+    case SYS_UNKNOWN = 0 //未指定
+    case SYS_TIME  //显示时间
+    case SYS_REVOKE //撤回提示
+    case SYS_OTHER
+}
 open class MSSystemMessageCellData: MSMessageCellData {
 
     public var content: String?
@@ -16,6 +21,8 @@ open class MSSystemMessageCellData: MSMessageCellData {
     public var contentFont: UIFont!
     
     public var contentColor: UIColor!
+    
+    public var sType: MSSystemMessageType = .SYS_UNKNOWN
     
     public override init(direction: TMsgDirection) {
         super.init(direction: direction)

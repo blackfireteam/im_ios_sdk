@@ -668,15 +668,15 @@
 		F021EC45279506B400EC2EC5 /* Location */ = {
 			isa = PBXGroup;
 			children = (
-				F021EC46279506B400EC2EC5 /* MSLocationManager.m */,
-				F021EC47279506B400EC2EC5 /* MSLocationController.m */,
-				F021EC48279506B400EC2EC5 /* MSLocationListCell.m */,
-				F021EC49279506B400EC2EC5 /* MSLocationInfo.m */,
-				F021EC4A279506B400EC2EC5 /* MSLocationDetailController.h */,
 				F021EC4B279506B400EC2EC5 /* MSLocationManager.h */,
-				F021EC4C279506B400EC2EC5 /* MSLocationController.h */,
+				F021EC46279506B400EC2EC5 /* MSLocationManager.m */,
 				F021EC4D279506B400EC2EC5 /* MSLocationListCell.h */,
+				F021EC48279506B400EC2EC5 /* MSLocationListCell.m */,
 				F021EC4E279506B400EC2EC5 /* MSLocationInfo.h */,
+				F021EC49279506B400EC2EC5 /* MSLocationInfo.m */,
+				F021EC4C279506B400EC2EC5 /* MSLocationController.h */,
+				F021EC47279506B400EC2EC5 /* MSLocationController.m */,
+				F021EC4A279506B400EC2EC5 /* MSLocationDetailController.h */,
 				F021EC4F279506B400EC2EC5 /* MSLocationDetailController.m */,
 			);
 			path = Location;
@@ -685,16 +685,16 @@
 		F021EC51279506B400EC2EC5 /* VoiceKit */ = {
 			isa = PBXGroup;
 			children = (
-				F021EC52279506B400EC2EC5 /* MSVoiceCallView.m */,
-				F021EC53279506B400EC2EC5 /* MSCallModel.m */,
-				F021EC54279506B400EC2EC5 /* MSVideoCallView.m */,
-				F021EC55279506B400EC2EC5 /* MSCallViewController.h */,
-				F021EC56279506B400EC2EC5 /* MSCallManager.m */,
-				F021EC57279506B400EC2EC5 /* MSVideoCallView.h */,
-				F021EC58279506B400EC2EC5 /* MSCallModel.h */,
-				F021EC59279506B400EC2EC5 /* MSVoiceCallView.h */,
-				F021EC5A279506B400EC2EC5 /* MSCallViewController.m */,
 				F021EC5B279506B400EC2EC5 /* MSCallManager.h */,
+				F021EC56279506B400EC2EC5 /* MSCallManager.m */,
+				F021EC55279506B400EC2EC5 /* MSCallViewController.h */,
+				F021EC5A279506B400EC2EC5 /* MSCallViewController.m */,
+				F021EC57279506B400EC2EC5 /* MSVideoCallView.h */,
+				F021EC54279506B400EC2EC5 /* MSVideoCallView.m */,
+				F021EC59279506B400EC2EC5 /* MSVoiceCallView.h */,
+				F021EC52279506B400EC2EC5 /* MSVoiceCallView.m */,
+				F021EC58279506B400EC2EC5 /* MSCallModel.h */,
+				F021EC53279506B400EC2EC5 /* MSCallModel.m */,
 			);
 			path = VoiceKit;
 			sourceTree = "<group>";
@@ -909,11 +909,11 @@
 		F021ECDB279506B400EC2EC5 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
-				F021ECDC279506B400EC2EC5 /* MSUIConversationCellData.h */,
+				F021ECE4279506B400EC2EC5 /* MSUIConversationListController.h */,
 				F021ECDD279506B400EC2EC5 /* MSUIConversationListController.m */,
+				F021ECDC279506B400EC2EC5 /* MSUIConversationCellData.h */,
 				F021ECDE279506B400EC2EC5 /* MSUIConversationCellData.m */,
 				F021ECDF279506B400EC2EC5 /* View */,
-				F021ECE4279506B400EC2EC5 /* MSUIConversationListController.h */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -921,10 +921,10 @@
 		F021ECDF279506B400EC2EC5 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F021ECE0279506B400EC2EC5 /* MSUnreadView.m */,
 				F021ECE1279506B400EC2EC5 /* MSUIConversationCell.h */,
-				F021ECE2279506B400EC2EC5 /* MSUnreadView.h */,
 				F021ECE3279506B400EC2EC5 /* MSUIConversationCell.m */,
+				F021ECE2279506B400EC2EC5 /* MSUnreadView.h */,
+				F021ECE0279506B400EC2EC5 /* MSUnreadView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";

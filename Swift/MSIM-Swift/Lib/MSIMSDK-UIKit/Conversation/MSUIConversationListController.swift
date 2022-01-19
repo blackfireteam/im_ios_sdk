@@ -50,13 +50,14 @@ private extension MSUIConversationListController {
     func setupViews() {
         view.backgroundColor = UIColor.d_color(light: MSMcros.TController_Background_Color, dark: MSMcros.TController_Background_Color_Dark)
         tableView.tableFooterView = UIView()
-        tableView.backgroundColor = view.backgroundColor
         tableView.register(MSUIConversationCell.self, forCellReuseIdentifier: "TConversationCell")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 103
         tableView.frame = view.bounds
         tableView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        tableView.contentInset = UIEdgeInsets(top: UIScreen.status_navi_height, left: 0, bottom: UIScreen.tabBarHeight, right: 0)
+        tableView.contentInsetAdjustmentBehavior = .never
         tableView.separatorColor = UIColor.d_color(light: MSMcros.TCell_separatorColor, dark: MSMcros.TCell_separatorColor_Dark)
         tableView.mj_footer = MJRefreshAutoNormalFooter(refreshingBlock: {[weak self] in
             self?.loadConversation()
