@@ -54,6 +54,6 @@ open class MSMessageCellData: NSObject {
         self.direction = direction
         super.init()
         
-        defaultAvatar = UIImage.bf_imageNamed(name: "default_c2c_head")
+        defaultAvatar = UIImage.bf_imageNamed(name: "holder_avatar")
     }
 }

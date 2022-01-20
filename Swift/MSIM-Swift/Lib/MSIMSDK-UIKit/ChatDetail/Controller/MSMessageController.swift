@@ -199,7 +199,7 @@ public class MSMessageController: UITableViewController {
             }
             if elem.type == .MSG_TYPE_REVOKE {//撤回的消息
                 let revoke = MSSystemMessageCellData(direction: .inComing)
-                if elem.isSelf() {
+                if elem.isSelf {
                     revoke.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
                 }else {
                     revoke.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
@@ -208,28 +208,28 @@ public class MSMessageController: UITableViewController {
                 data = revoke
             }else if elem.type == .MSG_TYPE_TEXT {
                 let textElem = elem as! MSIMTextElem
-                let textMsg = MSTextMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let textMsg = MSTextMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 textMsg.showName = true
                 textMsg.content = textElem.text
                 textMsg.elem = textElem
                 data = textMsg
             }else if elem.type == .MSG_TYPE_IMAGE {
-                let imageMsg = MSImageMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let imageMsg = MSImageMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 imageMsg.showName = true
                 imageMsg.elem = elem
                 data = imageMsg
             }else if elem.type == .MSG_TYPE_VIDEO {
-                let videoMsg = MSVideoMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let videoMsg = MSVideoMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 videoMsg.showName = true
                 videoMsg.elem = elem
                 data = videoMsg
             }else if elem.type == .MSG_TYPE_VOICE {
-                let voiceMsg = MSVoiceMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let voiceMsg = MSVoiceMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 voiceMsg.showName = true
                 voiceMsg.elem = elem
                 data = voiceMsg
             }else if elem.type == .MSG_TYPE_LOCATION {
-                let locationMsg = MSLocationMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let locationMsg = MSLocationMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 locationMsg.showName = true
                 locationMsg.elem = elem
                 data = locationMsg
@@ -297,7 +297,7 @@ private extension MSMessageController {
         
         var tempArr: [MSIMElem] = []
         for elem in elems {
-            if elem.partner_id() != self.partner_id {return []}
+            if elem.partner_id != self.partner_id {return []}
             var isExsit: Bool = false
             for data in self.uiMsgs {
                 if elem.msg_sign == data.elem?.msg_sign {
@@ -328,7 +328,7 @@ private extension MSMessageController {
     //收到一条对方撤回的消息
     func recieveRevokeMessage(note: Notification) {
         if let elem = note.object as? MSIMElem {
-            if elem.partner_id() != self.partner_id {return}
+            if elem.partner_id != self.partner_id {return}
             var revokeData: MSMessageCellData?
             for data in self.uiMsgs {
                 if data.elem?.msg_id == elem.revoke_msg_id {
@@ -350,7 +350,7 @@ private extension MSMessageController {
             tableView.beginUpdates()
             tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
             let data = MSSystemMessageCellData(direction: .inComing)
-            if msg.elem?.isSelf() == true {
+            if msg.elem?.isSelf == true {
                 data.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
             }else {
                 data.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
@@ -380,7 +380,7 @@ private extension MSMessageController {
     //消息状态发生变化通知
     func messageStatusUpdate(note: Notification) {
         if let elem = note.object as? MSIMElem {
-            if elem.partner_id() != self.partner_id {return}
+            if elem.partner_id != self.partner_id {return}
             for (index,data) in self.uiMsgs.enumerated() {
                 if data.elem?.msg_sign == elem.msg_sign {
                     data.elem = elem
@@ -515,7 +515,7 @@ extension MSMessageController: MSMessageCellDelegate {
             if data.isKind(of: MSTextMessageCellData.self) {
                 items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Copy"), action: #selector(onCopyMsg)))
             }
-            if data.elem?.isSelf() == true && data.elem?.sendStatus == .MSG_STATUS_SEND_SUCC && data.elem?.type != .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
+            if data.elem?.isSelf == true && data.elem?.sendStatus == .MSG_STATUS_SEND_SUCC && data.elem?.type != .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
                 items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Revoke"), action: #selector(onRevoke)))
             }
             items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Delete"), action: #selector(onDelete)))

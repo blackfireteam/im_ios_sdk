@@ -87,7 +87,7 @@ class BFSparkCardCell: BFCardViewCell {
     func configItem(item: MSProfileInfo) {
         
         self.profile = item
-        imageView.kf.setImage(with: URL(string: item.pic))
+        imageView.kf.setImage(with: URL(string: item.avatar))
         titleL.text = item.nick_name
         winkBtn.isSelected = false
     }

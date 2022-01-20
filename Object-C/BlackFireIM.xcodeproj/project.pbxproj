@@ -1175,16 +1175,16 @@
 		F0E60CEC2797DDEC0072DD68 /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60CED2797DDEC0072DD68 /* BFChatRoomEditController.m */,
 				F0E60CEE2797DDEC0072DD68 /* BFChatRoomViewController.h */,
-				F0E60CEF2797DDEC0072DD68 /* BFGroupMemberCell.h */,
-				F0E60CF02797DDEC0072DD68 /* BFChatRoomMemberListController.m */,
-				F0E60CF12797DDEC0072DD68 /* BFEditTodInfoController.h */,
 				F0E60CF22797DDEC0072DD68 /* BFChatRoomViewController.m */,
-				F0E60CF32797DDEC0072DD68 /* BFChatRoomEditController.h */,
-				F0E60CF42797DDEC0072DD68 /* BFGroupMemberCell.m */,
+				F0E60CF12797DDEC0072DD68 /* BFEditTodInfoController.h */,
 				F0E60CF52797DDEC0072DD68 /* BFEditTodInfoController.m */,
+				F0E60CF32797DDEC0072DD68 /* BFChatRoomEditController.h */,
+				F0E60CED2797DDEC0072DD68 /* BFChatRoomEditController.m */,
+				F0E60CEF2797DDEC0072DD68 /* BFGroupMemberCell.h */,
+				F0E60CF42797DDEC0072DD68 /* BFGroupMemberCell.m */,
 				F0E60CF62797DDEC0072DD68 /* BFChatRoomMemberListController.h */,
+				F0E60CF02797DDEC0072DD68 /* BFChatRoomMemberListController.m */,
 			);
 			path = ChatRoom;
 			sourceTree = "<group>";
@@ -1264,8 +1264,8 @@
 		F0E60D0D2797DDEC0072DD68 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60D0E2797DDEC0072DD68 /* BFConversationListController.m */,
 				F0E60D0F2797DDEC0072DD68 /* BFConversationListController.h */,
+				F0E60D0E2797DDEC0072DD68 /* BFConversationListController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";

@@ -135,14 +135,14 @@
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
     NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSDictionary *header = @{@"nonce":radom,@"timestamp":time,@"sig":sign,@"appid":@"100"};
+    NSDictionary *header = @{@"nonce":radom,@"timestamp":time,@"sig":sign,@"appid":@"2"};
     return header;
 }
 
 + (NSString *)postUrl
 {
     BOOL serverType = [[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
-    NSString *host = serverType ? @"https://192.168.123.225:18789" : @"https://im.ekfree.com:18789";
+    NSString *host = serverType ? @"https://im.ekfree.com:18789" : @"https://msim1.ekfree.com:18789";
     return host;
 }
 

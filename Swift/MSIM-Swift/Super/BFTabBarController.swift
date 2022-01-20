@@ -47,7 +47,7 @@ class BFTabBarController: UITabBarController {
         let convNav = BFNavigationController(rootViewController: convVC)
         addChild(convNav)
         
-        let profileVC = BFProfileViewController()
+        let profileVC = BFEditProfileController()
         profileVC.tabBarItem.title = Bundle.bf_localizedString(key: "Profile_tab")
         profileVC.tabBarItem.image = UIImage(named: "myself_normal")?.withRenderingMode(.alwaysOriginal)
         profileVC.tabBarItem.selectedImage = UIImage(named: "myself_selected")?.withRenderingMode(.alwaysOriginal)
@@ -102,7 +102,7 @@ class BFTabBarController: UITabBarController {
         if let typeInt = dic["type"] as? Int,let type = MSIMCustomSubType(rawValue: typeInt) {
             if type == .VoiceCall || type == .VideoCall {
                 if let event = dic["event"] as? Int,let eventType = CallAction(rawValue: event),let room_id = dic["room_id"] as? String {
-                    MSCallManager.shared.recieveCall(from: customElem.partner_id(), creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (type == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
+                    MSCallManager.shared.recieveCall(from: customElem.partner_id, creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (type == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
                 }
             }
         }
@@ -117,7 +117,7 @@ class BFTabBarController: UITabBarController {
             guard let event = dic["event"] as? Int, let eventType = CallAction(rawValue: event) else {continue}
             guard let room_id = dic["room_id"] as? String else {continue}
             if customElem.fromUid != MSIMTools.sharedInstance().user_id {
-                MSCallManager.shared.recieveCall(from: customElem.partner_id(), creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (callType == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
+                MSCallManager.shared.recieveCall(from: customElem.partner_id, creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (callType == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
             }
         }
     }

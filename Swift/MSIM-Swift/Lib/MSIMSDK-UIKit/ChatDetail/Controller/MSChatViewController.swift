@@ -148,7 +148,7 @@ extension MSChatViewController: MSInputViewControllerDelegate {
             return
         }
         let diff = MSIMTools.sharedInstance().adjustLocalTimeInterval - lastData.elem!.msg_sign
-        if _textingFlag == false && lastData.elem!.isSelf() == false && diff <= 10 * 1000 * 1000 {
+        if _textingFlag == false && lastData.elem!.isSelf == false && diff <= 10 * 1000 * 1000 {
             let extDic: NSDictionary = ["type": MSIMCustomSubType.Texting.rawValue,"desc": "我正在输入..."] as NSDictionary
             let customElem = MSIMManager.sharedInstance().createCustomMessage(extDic.el_convertJsonString(), option: .IMCUSTOM_SIGNAL, pushExt: nil)
             MSIMManager.sharedInstance().sendC2CMessage(customElem, toReciever: self.partner_id) { _ in

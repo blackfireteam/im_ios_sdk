@@ -74,6 +74,7 @@ public class MSChatRoomMessageController: UITableViewController {
         super.viewDidLoad()
         addNotifications()
         setupUI()
+        loadMessages()
     }
 
     public override func viewDidLayoutSubviews() {
@@ -105,6 +106,14 @@ public class MSChatRoomMessageController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func loadMessages() {
+        if let msgs = MSChatRoomManager.sharedInstance().messages as? [MSIMElem] {
+            let uiMsgs = self.transUIMsgFromIMMsg(elems: msgs)
+            self.uiMsgs.append(contentsOf: uiMsgs)
+            self.tableView.reloadData()
+        }
     }
     
     private func setupUI() {
@@ -146,7 +155,7 @@ public class MSChatRoomMessageController: UITableViewController {
             }
             if elem.type == .MSG_TYPE_REVOKE {//撤回的消息
                 let revoke = MSSystemMessageCellData(direction: .inComing)
-                if elem.isSelf() {
+                if elem.isSelf {
                     revoke.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
                 }else {
                     revoke.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
@@ -156,23 +165,23 @@ public class MSChatRoomMessageController: UITableViewController {
                 data = revoke
             }else if elem.type == .MSG_TYPE_TEXT {
                 let textElem = elem as! MSIMTextElem
-                let textMsg = MSTextMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let textMsg = MSTextMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 textMsg.showName = true
                 textMsg.content = textElem.text
                 textMsg.elem = textElem
                 data = textMsg
             }else if elem.type == .MSG_TYPE_IMAGE {
-                let imageMsg = MSImageMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let imageMsg = MSImageMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 imageMsg.showName = true
                 imageMsg.elem = elem
                 data = imageMsg
             }else if elem.type == .MSG_TYPE_VIDEO {
-                let videoMsg = MSVideoMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let videoMsg = MSVideoMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 videoMsg.showName = true
                 videoMsg.elem = elem
                 data = videoMsg
             }else if elem.type == .MSG_TYPE_VOICE {
-                let voiceMsg = MSVoiceMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                let voiceMsg = MSVoiceMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                 voiceMsg.showName = true
                 voiceMsg.elem = elem
                 data = voiceMsg
@@ -310,7 +319,7 @@ private extension MSChatRoomMessageController {
             tableView.beginUpdates()
             tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
             let data = MSSystemMessageCellData(direction: .inComing)
-            if msg.elem?.isSelf() == true {
+            if msg.elem?.isSelf == true {
                 data.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
             }else {
                 data.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
@@ -426,7 +435,7 @@ extension MSChatRoomMessageController: MSMessageCellDelegate {
             if data.isKind(of: MSTextMessageCellData.self) {
                 items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Copy"), action: #selector(onCopyMsg)))
             }
-            if data.elem?.isSelf() == true && data.elem?.sendStatus == .MSG_STATUS_SEND_SUCC && data.elem?.type != .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
+            if data.elem?.isSelf == true && data.elem?.sendStatus == .MSG_STATUS_SEND_SUCC && data.elem?.type != .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
                 items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Revoke"), action: #selector(onRevoke)))
             }
             items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Delete"), action: #selector(onDelete)))

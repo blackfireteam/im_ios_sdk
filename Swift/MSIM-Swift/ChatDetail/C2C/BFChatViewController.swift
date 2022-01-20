@@ -51,7 +51,7 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             guard let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else {return nil}
             if customElem.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL {
                 if let type = dic["type"] as? Int,type == MSIMCustomSubType.Like.rawValue {
-                    let winkData = BFWinkMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                    let winkData = BFWinkMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                     winkData.showName = true
                     winkData.elem = customElem
                     return winkData
@@ -59,9 +59,9 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             }else if customElem.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
                 if let type = dic["type"] as? Int,let subType = MSIMCustomSubType(rawValue: type) {
                     if subType == .VoiceCall || subType == .VideoCall {
-                        let callData = BFCallMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                        let callData = BFCallMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                         callData.callType = (subType == .VideoCall ? .video : .voice)
-                        callData.notice = MSCallManager.parseToMessageShow(customParams: dic, callType: (subType == .VoiceCall ? .voice : .video), isSelf: customElem.isSelf()) ?? ""
+                        callData.notice = MSCallManager.parseToMessageShow(customParams: dic, callType: (subType == .VoiceCall ? .voice : .video), isSelf: customElem.isSelf) ?? ""
                         callData.showName = true
                         callData.elem = customElem
                         return callData
@@ -216,8 +216,9 @@ extension BFChatViewController {
         config.maxSelectCount = 1
         config.allowEditImage = isPhoto
         config.allowEditVideo = !isPhoto
-        config.imageStickerContainerView = ImageStickerContainerView()
-        
+        let editConfig = ZLEditImageConfiguration()
+        editConfig.imageStickerContainerView = ImageStickerContainerView()
+        config.editImageConfiguration = editConfig
         config.canSelectAsset = { (asset) -> Bool in
             return true
         }

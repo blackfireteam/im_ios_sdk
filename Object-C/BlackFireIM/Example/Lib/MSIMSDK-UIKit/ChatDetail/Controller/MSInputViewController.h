@@ -65,6 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)inputControllerDidSelectSnapchatImage:(MSInputViewController *)inputController;
 
 /// 点击发送自定义表情
+@optional
 - (void)inputController:(MSInputViewController *)inputController didSendEmotion:(BFFaceCellData *)data;
 
 @end

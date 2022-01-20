@@ -47,7 +47,10 @@ public class BFChatRoomEditController: BFBaseViewController {
 extension BFChatRoomEditController: UITableViewDataSource,UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        if self.roomInfo.action_tod {
+            return 4
+        }
+        return 3
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -77,13 +80,13 @@ extension BFChatRoomEditController: UITableViewDataSource,UITableViewDelegate {
         }else if indexPath.row == 1 {//修改聊天室名称
             MSHelper.showToastWithText(text: "聊天室名称只支持后台修改")
         }else if indexPath.row == 2 {//修改公告
-            if self.roomInfo.action_tod == false {
-                MSHelper.showToastWithText(text: "只有管理员才能发布公告")
-                return
-            }
+
             let vc = BFEditTodInfoController()
             vc.roomInfo = self.roomInfo
             self.navigationController?.pushViewController(vc, animated: true)
+            vc.editComplete = {[weak self] in
+                self?.myTableView.reloadData()
+            }
         }else if indexPath.row == 3 {
             editChatRoomMuteStatus()
         }

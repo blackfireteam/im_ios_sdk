@@ -16,8 +16,9 @@ public class BFChatRoomViewController: BFBaseViewController {
 
     public let chatController: MSChatRoomController = MSChatRoomController()
     
-    private var roomInfo: MSGroupInfo?
-    
+    private var roomInfo: MSGroupInfo? {
+        return MSChatRoomManager.sharedInstance().chatroomInfo
+    }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,29 +26,27 @@ public class BFChatRoomViewController: BFBaseViewController {
         view.backgroundColor = UIColor.d_color(light: MSMcros.TController_Background_Color, dark: MSMcros.TController_Background_Color_Dark)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editClick))
         chatController.delegate = self
+        chatController.roomInfo = self.roomInfo
         addChild(chatController)
         view.addSubview(chatController.view)
         
+        self.title = self.roomInfo?.room_name
         addNotifications()
-        enterChatRoom()
     }
 
     private func addNotifications() {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_EnterChatroom_success), object: nil, queue: OperationQueue.main) {[weak self] note in
+            self?.enterChatRoom()
+        }
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_ChatRoom_Event), object: nil, queue: OperationQueue.main) {[weak self] note in
             self?.chatRoomEvent(note: note)
         }
     }
     
-    /// 申请加入聊天室
+    /// 加入聊天室成功
     private func enterChatRoom() {
-        MSIMManager.sharedInstance().join(inChatRoom: 25) { info in
-            self.roomInfo = info
-            self.chatController.roomInfo = info
-            self.navigationItem.title = self.roomInfo?.room_name
-            
-        } failed: { _, desc in
-            MSHelper.showToastFailWithText(text: desc ?? "")
-        }
+        self.chatController.roomInfo = self.roomInfo
+        self.title = self.roomInfo?.room_name
     }
     
     /// 聊天室设置界面
@@ -167,14 +166,6 @@ public class BFChatRoomViewController: BFBaseViewController {
     }
     
     deinit {
-        if let room_idStr = self.roomInfo?.room_id,let room_id = Int(room_idStr) {
-            MSIMManager.sharedInstance().quitChatRoom(room_id) {
-                
-                MSHelper.showToastSuccWithText(text: "quit chat room")
-            } failed: { _, desc in
-//                MSHelper.showToastFailWithText(text: desc ?? "")
-            }
-        }
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -289,7 +280,9 @@ extension BFChatRoomViewController {
         config.maxSelectCount = 1
         config.allowEditImage = isPhoto
         config.allowEditVideo = !isPhoto
-        config.imageStickerContainerView = ImageStickerContainerView()
+        let editConfig = ZLEditImageConfiguration()
+        editConfig.imageStickerContainerView = ImageStickerContainerView()
+        config.editImageConfiguration = editConfig
         
         config.canSelectAsset = { (asset) -> Bool in
             return true

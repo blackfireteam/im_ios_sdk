@@ -11,6 +11,8 @@ import MSIMSDK
 
 public class BFEditTodInfoController: BFBaseViewController {
 
+    public var editComplete: (() -> Void)?
+    
     public var roomInfo: MSGroupInfo!
     
     private lazy var textView: UITextView = {
@@ -21,14 +23,29 @@ public class BFEditTodInfoController: BFBaseViewController {
         return textView
     }()
     
+    private lazy var noticeL: UILabel = {
+        let noticeL = UILabel(frame: CGRect(x: 0, y: UIScreen.height - UIScreen.safeAreaBottomHeight - 100, width: UIScreen.width, height: 20))
+        noticeL.text = "----  管理员才能编辑和发布聊天室公告  ----"
+        noticeL.font = .systemFont(ofSize: 14)
+        noticeL.textColor = .lightGray
+        noticeL.textAlignment = .center
+        return noticeL
+    }()
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "发布群公告"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(submit))
+        self.title = "编辑群公告"
         
         view.addSubview(self.textView)
-        self.textView.becomeFirstResponder()
+        self.textView.text = self.roomInfo.intro
+        self.textView.isEditable = self.roomInfo.action_tod
+        if self.roomInfo.action_tod {
+            self.textView.becomeFirstResponder()
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(submit))
+        }else {
+            view.addSubview(self.noticeL)
+        }
     }
     
 
@@ -38,19 +55,18 @@ public class BFEditTodInfoController: BFBaseViewController {
         
         MSIMManager.sharedInstance().editChatRoomTOD(self.textView.text!, toRoom_id: self.roomInfo.room_id) {[weak self] in
             
-            MSHelper.showToastSuccWithText(text: "Success")
-            ///公告发布成功，模拟发一条公告文本消息
-            let textElem = MSIMManager.sharedInstance().createTextMessage("[Tip of Day]\n\(self?.textView.text ?? "")")
-            MSIMManager.sharedInstance().sendChatRoomMessage(textElem, toRoomID: self?.roomInfo.room_id ?? "") { _ in
-                
-            } failed: { _, _ in
-                
-            }
+            MSHelper.showToastSuccWithText(text: "发布公告成功")
+            self?.roomInfo.intro = self?.textView.text
+            self?.editComplete?()
             
             self?.navigationController?.popViewController(animated: true)
             
         } failed: { _, desc in
             MSHelper.showToastFailWithText(text: desc ?? "")
         }
+    }
+    
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
 }

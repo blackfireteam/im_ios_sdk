@@ -60,7 +60,9 @@ class BFSignInStepTwoController: BFBaseViewController {
         config.maxSelectCount = 1
         config.allowEditImage = true
         config.allowEditVideo = false
-        config.imageStickerContainerView = ImageStickerContainerView()
+        let editConfig = ZLEditImageConfiguration()
+        editConfig.imageStickerContainerView = ImageStickerContainerView()
+        config.editImageConfiguration = editConfig
         
         config.canSelectAsset = { (asset) -> Bool in
             return true
@@ -121,6 +123,8 @@ class BFSignInStepTwoController: BFBaseViewController {
                 let im_Url = dic["url"] as! String
                 self.info.userToken = userToken
                 self.info.imUrl = im_Url
+                MSChatRoomManager.sharedInstance().loginChatRoom(MSMcros.kChatRoomID)
+                
                 MSIMManager.sharedInstance().login(userToken, imUrl: im_Url, subAppID: 1) {
                     
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate

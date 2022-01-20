@@ -24,9 +24,18 @@ class BFEditProfileController: BFBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "编辑资料"
-        
         setupUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     private func setupUI() {
@@ -74,8 +83,9 @@ class BFEditProfileController: BFBaseViewController {
         config.maxSelectCount = 1
         config.allowEditImage = true
         config.allowEditVideo = false
-        config.imageStickerContainerView = ImageStickerContainerView()
-        
+        let editConfig = ZLEditImageConfiguration()
+        editConfig.imageStickerContainerView = ImageStickerContainerView()
+        config.editImageConfiguration = editConfig
         config.canSelectAsset = { (asset) -> Bool in
             return true
         }

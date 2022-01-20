@@ -44,9 +44,9 @@ open class MSUIConversationCellData: NSObject {
     public var avatarImage: UIImage {
         
         if conv.chat_type == .MSIM_CHAT_TYPE_C2C {
-            return UIImage.bf_imageNamed(name: "default_c2c_head")!
+            return UIImage.bf_imageNamed(name: "holder_avatar")!
         }else {
-            return UIImage.bf_imageNamed(name: "default_group_head")!
+            return UIImage.bf_imageNamed(name: "holder_avatar")!
         }
     }
     
@@ -59,7 +59,7 @@ open class MSUIConversationCellData: NSObject {
         
         var str: String = ""
         if elem.type == .MSG_TYPE_REVOKE {
-            if elem.isSelf() {
+            if elem.isSelf {
                 str = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
             }else {
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
@@ -76,7 +76,8 @@ open class MSUIConversationCellData: NSObject {
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTypeVideo")
             case .MSG_TYPE_LOCATION:
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTypeLocation")
-            case .msg_type
+            case .MSG_TYPE_EMOTION:
+                str = Bundle.bf_localizedString(key: "TUIKitMessageTypeAnimateEmoji")
             case .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL,
                  .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL,
                  .MSG_TYPE_CUSTOM_IGNORE_UNREADCOUNT_RECALL:
@@ -95,9 +96,9 @@ open class MSUIConversationCellData: NSObject {
             if type == MSIMCustomSubType.Like.rawValue {
                 return "[Like]"
             }else if type == MSIMCustomSubType.VoiceCall.rawValue {
-                return MSCallManager.parseToConversationShow(customParams: dic, callType: .voice, isSelf: customElem.isSelf())!
+                return MSCallManager.parseToConversationShow(customParams: dic, callType: .voice, isSelf: customElem.isSelf)!
             }else if type == MSIMCustomSubType.VideoCall.rawValue {
-                return MSCallManager.parseToConversationShow(customParams: dic, callType: .video, isSelf: customElem.isSelf())!
+                return MSCallManager.parseToConversationShow(customParams: dic, callType: .video, isSelf: customElem.isSelf)!
             }
         }
         return Bundle.bf_localizedString(key: "TUIKitMessageTipsUnsupportCustomMessage")

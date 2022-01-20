@@ -69,7 +69,7 @@ open class MSVideoMessageCell: MSMessageCell {
             self.durationL.text = String(format: "%02zd:%02zd", videoData.videoElem.duration / 60, videoData.videoElem.duration % 60)
             self.durationL.sizeToFit()
             let progress = videoData.videoElem.progress * 100
-            self.progressL.text = "\(progress)%"
+            self.progressL.text = String.init(format: "%.1f%%", videoData.videoElem.progress * 100)
             self.progressL.isHidden = !(progress > 0 && progress < 100)
             thumb.image = nil
             if videoData.videoElem.coverImage != nil {

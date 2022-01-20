@@ -60,11 +60,45 @@ public class BFChatRoomMemberListController: BFBaseViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(rawValue: MSUIKitNotification_ProfileUpdate), object: nil, queue: OperationQueue.main) {[weak self] note in
             self?.profileUpdate(note: note)
         }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(rawValue: MSUIKitNotification_ChatRoom_People_enter), object: nil, queue: OperationQueue.main) {[weak self] note in
+            self?.someOneEnter(note: note)
+        }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(rawValue: MSUIKitNotification_ChatRoom_People_leave), object: nil, queue: OperationQueue.main) {[weak self] note in
+            self?.someOneLeave(note: note)
+        }
     }
     
     @objc func profileUpdate(note: Notification) {
         
         self.myCollectionView.reloadData()
+    }
+    
+    @objc func someOneEnter(note: Notification) {
+        if let member = note.object as? MSGroupMemberItem {
+            var isExist = false
+            for item in self.dataArray {
+                if item.uid == member.uid {
+                    isExist = true
+                    break
+                }
+            }
+            if !isExist {
+                self.dataArray.append(member)
+                self.myCollectionView.reloadData()
+            }
+        }
+    }
+    
+    @objc func someOneLeave(note: Notification) {
+        if let uid = note.object as? String {
+            for (index,item) in self.dataArray.enumerated() {
+                if item.uid == uid {
+                    self.dataArray.remove(at: index)
+                    self.myCollectionView.reloadData()
+                    break
+                }
+            }
+        }
     }
     
     deinit {
