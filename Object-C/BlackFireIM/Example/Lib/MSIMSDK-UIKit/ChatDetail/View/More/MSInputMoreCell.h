@@ -20,8 +20,6 @@ typedef NS_ENUM(NSInteger ,MSIMMoreType){
     MSIM_MORE_VOICE_CALL = 3, //语音通话
     
     MSIM_MORE_VIDEO_CALL = 4, //视频通话
-    
-    MSIM_MORE_SNAP_CHAT = 5, //阅后即焚
 };
 
 @interface MSInputMoreCellData: NSObject

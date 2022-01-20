@@ -21,16 +21,4 @@
     return nil;
 }
 
-- (void)setGradientLayer:(UIColor*)startColor endColor:(UIColor*)endColor {
-
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.frame = self.bounds;
-    [self.layer addSublayer:gradientLayer];
-    gradientLayer.startPoint = CGPointMake(0, 0);
-    gradientLayer.endPoint = CGPointMake(0, 1);
-    
-    gradientLayer.colors = @[(__bridge id)startColor.CGColor,
-                             (__bridge id)endColor.CGColor];
-}
-
 @end

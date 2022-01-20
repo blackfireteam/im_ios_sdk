@@ -10,8 +10,6 @@
 #import <MSIMSDK/MSIMSDK.h>
 #import <AFNetworking.h>
 #import "MSIMSDK-UIKit.h"
-#import "BFRegisterInfo.h"
-
 
 @interface BFProfileService()
 
@@ -34,7 +32,7 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:uid forKey:@"uid"];
     [params setValue:@(0) forKey:@"ctype"];
-    [manager POST:postUrl parameters:params headers:[BFProfileService ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:postUrl parameters:params headers:[self ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         NSNumber *code = dic[@"code"];
         if (code.integerValue == 0) {
@@ -53,20 +51,27 @@
 }
 
 ///模拟用户注册
-+ (void)userSignUp:(BFRegisterInfo *)info
++ (void)userSignUp:(NSString *)phone
+          nickName:(NSString *)nickName
+            avatar:(NSString *)avatar
               succ:(void(^)(void))succ
             failed:(void(^)(NSError *error))fail
 {
     AFHTTPSessionManager *manager = [self ms_manager];
     NSString *postUrl = [NSString stringWithFormat:@"%@/user/reg",[self postUrl]];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setValue:info.phone forKey:@"uid"];
-    [params setValue:info.nickName forKey:@"nick_name"];
-    [params setValue:info.avatarUrl forKey:@"avatar"];
-    [params setValue:@(info.gender) forKey:@"gender"];
-    NSDictionary *custom = @{@"department": info.department,@"pic": info.avatarUrl,@"workplace": info.workPlace};
-    [params setValue:[custom el_convertJsonString] forKey:@"custom"];
-    [manager POST:postUrl parameters:params headers:[BFProfileService ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [params setValue:phone forKey:@"uid"];
+    [params setValue:nickName forKey:@"nick_name"];
+    [params setValue:avatar forKey:@"avatar"];
+    [params setValue:@(1) forKey:@"gender"];
+    [params setValue:@(YES) forKey:@"gold"];
+    [params setValue:@(YES) forKey:@"approved"];
+    [params setValue:@(NO) forKey:@"disabled"];
+    [params setValue:@(NO) forKey:@"blocked"];
+    [params setValue:@(NO) forKey:@"hold"];
+    [params setValue:@(NO) forKey:@"deleted"];
+    [params setValue:@(YES) forKey:@"verified"];
+    [manager POST:postUrl parameters:params headers:[self ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         NSNumber *code = dic[@"code"];
         if (code.integerValue == 0) {
@@ -94,16 +99,16 @@
         return;
     }
     AFHTTPSessionManager *manager = [self ms_manager];
+    
     NSString *postUrl = [NSString stringWithFormat:@"%@/user/update",[self postUrl]];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:info.user_id forKey:@"uid"];
     [params setValue:info.nick_name forKey:@"nick_name"];
     [params setValue:info.avatar forKey:@"avatar"];
     [params setValue:@(info.gender) forKey:@"gender"];
-    if (info.custom) {
-        [params setValue:info.custom forKey:@"custom"];
-    }
-    [manager POST:postUrl parameters:params headers:[BFProfileService ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [params setValue:@(info.gold) forKey:@"gold"];
+    [params setValue:@(info.verified) forKey:@"verified"];
+    [manager POST:postUrl parameters:params headers:[self ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil];
         if ([dic[@"code"]integerValue] == 0) {
             if (succ) succ(dic);
@@ -115,6 +120,15 @@
             if (fail) fail(error);
             MSLog(@"%@",error);
     }];
+}
+
++ (NSDictionary *)ms_header
+{
+    NSString *secret = @"asfasdasd123";
+    NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
+    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
+    NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
+    return @{@"nonce":radom,@"timestamp":time,@"sig":sign,@"appid":@"1"};
 }
 
 + (AFHTTPSessionManager *)ms_manager
@@ -129,24 +143,13 @@
     return manager;
 }
 
-+ (NSDictionary *)ms_header
-{
-    NSString *secret = @"asfasdasd123";
-    NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
-    NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
-    NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSDictionary *header = @{@"nonce":radom,@"timestamp":time,@"sig":sign,@"appid":@"2"};
-    return header;
-}
-
 + (NSString *)postUrl
 {
     BOOL serverType = [[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
-    NSString *host = serverType ? @"https://im.ekfree.com:18789" : @"https://msim1.ekfree.com:18789";
+    NSString *host = serverType ? @"https://im.ekfree.com:18788" : @"https://msim1.ekfree.com:18788";
     return host;
 }
 
-//@"https://192.168.123.225:18789"
-//@"https://im.ekfree.com:18789"
-//@"https://msim1.ekfree.com:18789"
+//@"https://im.ekfree.com:18788"
+//@"https://192.168.123.225:18788"
 @end

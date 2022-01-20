@@ -85,7 +85,7 @@
     }
     NSArray *resultArray = [re matchesInString:text options:0 range:NSMakeRange(0, text.length)];
 
-    MSFaceGroup *group = [MSFaceUtil config].defaultEmojiGroup;
+    BFFaceGroup *group = [MSFaceUtil defaultConfig].defaultFace.firstObject;
 
     //3、获取所有的表情以及位置
     //用来存放字典，字典中存储的是图片和图片对应的位置
@@ -98,13 +98,13 @@
         NSString *subStr = [text substringWithRange:range];
 
         for (BFFaceCellData *face in group.faces) {
-            NSString *faceName = face.name;
+            NSString *faceName = [face.name substringFromIndex:@"emoji/".length];
             if ([faceName isEqualToString:subStr]) {
                 //face[i][@"png"]就是我们要加载的图片
                 //新建文字附件来存放我们的图片,iOS7才新加的对象
                 NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
                 //给附件添加图片
-                textAttachment.image = [UIImage imageNamed:face.facePath];
+                textAttachment.image = [UIImage imageNamed:TUIKitFace(face.name)];
                 CGSize imageSize = textAttachment.image.size;
                 textAttachment.bounds = CGRectMake(0, 0, imageSize.width, imageSize.height);
                 //把附件转换成可变字符串，用于替换掉源字符串中的表情文字

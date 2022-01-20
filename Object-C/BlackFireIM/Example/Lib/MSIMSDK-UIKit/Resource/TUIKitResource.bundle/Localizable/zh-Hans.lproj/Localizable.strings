@@ -9,19 +9,15 @@
 "TUIKitTipsMostSelectTextFormat" = "最多选择%ld个";
 
 "Home_tab" = "首页";
-"Discovery_tab" = "在线";
+"Discovery_tab" = "探索";
 "Message_tab" = "消息";
 "Profile_tab" = "我的";
 
 "WelcomeBack" = "登录";
 "LOGIN" = "登录";
-"You-phone-number" = "你的电话号码是...";
-"You-nickname" = "你的昵称是...";
-"You-englishname" = "你的英文名是...";
-"You-location" = "你的办公所在地是...";
-"You-invite-code" = "你的邀请码是...";
+"You-phone-number" = "你的电话号码...";
+"You-nickname" = "你的昵称";
 "Next-button" = "下一步";
-"You-depart" = "你的所属部门是...";
 
 "Confirm" = "确定";
 "Cancel" = "取消";
@@ -113,7 +109,6 @@
 "TUIKitMessageTypeVoice" = "[语音]";
 "TUIkitMessageTypeVideo" = "[视频]";
 "TUIkitMessageTypeFile" = "[文件]";
-"TUIkitMessageTypeLocation" = "[位置]";
 "TUIkitMessageTypeVoiceCall" = "[语音电话]";
 "TUIkitMessageTypeVideoCall" = "[视频电话]";
 "TUIKitMessageTypeAnimateEmoji" = "[动画表情]";
@@ -128,8 +123,6 @@
 "TUIKitMoreVideoCall" = "视频通话";
 "TUIKitMoreVoiceCall" = "语音通话";
 "TUIKitMoreGroupLive" = "群直播";
-"TUIKitMoreSnapchat" = "阅后即焚";
-
 
 "TUIKitCallInviteYouVoiceCall" = "邀请你语音通话...";
 "TUIKitCallInviteYouVideoCall" = "邀请你视频通话...";

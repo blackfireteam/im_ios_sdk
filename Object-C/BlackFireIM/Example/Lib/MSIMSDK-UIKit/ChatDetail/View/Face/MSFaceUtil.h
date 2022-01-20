@@ -9,14 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class MSFaceGroup;
 @interface MSFaceUtil : NSObject
 
-@property(nonatomic,strong) NSArray<MSFaceGroup *> *faceGroups;
+@property(nonatomic,strong) NSMutableArray *defaultFace;
 
-+ (MSFaceUtil *)config;
-
-- (nullable MSFaceGroup *)defaultEmojiGroup;
++ (MSFaceUtil *)defaultConfig;
 
 @end
 

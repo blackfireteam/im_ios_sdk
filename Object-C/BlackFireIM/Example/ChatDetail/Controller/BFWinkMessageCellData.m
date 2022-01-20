@@ -1,24 +1,31 @@
 //
-//  MSMessageCellData.m
+//  BFCustomMessageCellData.m
 //  BlackFireIM
 //
-//  Created by benny wang on 2021/3/5.
+//  Created by benny wang on 2021/4/13.
 //
 
-#import "MSMessageCellData.h"
-#import "MSIMSDK-UIKit.h"
+#import "BFWinkMessageCellData.h"
 
 
-@implementation MSMessageCellData
+@implementation BFWinkMessageCellData
 
-- (instancetype)initWithDirection:(TMsgDirection)direction
+- (instancetype)init
 {
     self = [super init];
     if (self) {
-        _direction = direction;
-        _defaultAvatar = [UIImage imageNamed:TUIKitResource(@"default_c2c_head")];
     }
     return self;
+}
+
+- (MSBusinessElem *)businessElem
+{
+    return (MSBusinessElem *)self.elem;
+}
+
+- (CGSize)contentSize
+{
+   return CGSizeMake(150, 150);
 }
 
 - (CGFloat)heightOfWidth:(CGFloat)width
@@ -32,18 +39,13 @@
     if (self.direction == MsgDirectionOutgoing) {
         height += 20;
     }
-    height += 15;
+    height += 5 + 5;
     return height;
-}
-
-- (CGSize)contentSize
-{
-    return CGSizeZero;
 }
 
 - (NSString *)reuseId
 {
-    return @"MSMessageCell";
+    return @"TWinkMessageCell";
 }
 
 @end

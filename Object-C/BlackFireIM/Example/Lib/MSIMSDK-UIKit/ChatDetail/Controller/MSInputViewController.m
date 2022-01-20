@@ -9,7 +9,6 @@
 #import "MSIMSDK-UIKit.h"
 #import "MSFaceUtil.h"
 
-
 typedef NS_ENUM(NSUInteger, InputStatus) {
     Input_Status_Input,
     Input_Status_Input_Face,
@@ -21,10 +20,6 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 
 @property (nonatomic, assign) InputStatus status;
 
-@property(nonatomic,weak) id<MSInputViewControllerDelegate> delegate;
-
-@property(nonatomic,assign) MSIMAChatType type;
-
 @end
 
 @implementation MSInputViewController
@@ -33,15 +28,6 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 {
     [super viewDidLoad];
     [self setupUI];
-}
-
-- (instancetype)initWithChatType:(MSIMAChatType)type delegate:(id<MSInputViewControllerDelegate>)delegate
-{
-    if (self = [super init]) {
-        _delegate = delegate;
-        _type = type;
-    }
-    return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -282,20 +268,6 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     }
 }
 
-#pragma mark --阅后即焚
-- (void)inputBarDidTouchSnapImage:(MSInputBarView *_Nonnull)textView
-{
-    [_inputBar.inputTextView resignFirstResponder];
-    if (_delegate && [_delegate respondsToSelector:@selector(inputControllerDidSelectSnapchatImage:)]) {
-        [_delegate inputControllerDidSelectSnapchatImage:self];
-    }
-}
-
-- (void)inputBarDidTouchExitSnap:(MSInputBarView *_Nonnull)textView
-{
-    [self.inputBar quitSnapChat];
-}
-
 - (void)reset
 {
     if(_status == Input_Status_Input){
@@ -324,30 +296,18 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
         cameraData.image = [UIImage bf_imageNamed:@"more_picture"];
         
         MSInputMoreCellData *photoData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VIDEO];
-        photoData.title = TUILocalizableString(TUIKitMoreVideo);
+        photoData.title = TUILocalizableString(TUIKitMoreCamera);
         photoData.image = [UIImage bf_imageNamed:@"more_camera"];
         
-        MSInputMoreCellData *voiceData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VOICE_CALL];
-        voiceData.title = TUILocalizableString(TUIKitMoreVoiceCall);
-        voiceData.image = [UIImage bf_imageNamed:@"more_voice_call"];
-        
-        MSInputMoreCellData *videoData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VIDEO_CALL];
-        videoData.title = TUILocalizableString(TUIKitMoreVideoCall);
-        videoData.image = [UIImage bf_imageNamed:@"more_video_call"];
-        
-        MSInputMoreCellData *locationData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_LOCATION];
-        locationData.title = TUILocalizableString(TUIKitMoreLocation);
-        locationData.image = [UIImage bf_imageNamed:@"more_location"];
-        
-        MSInputMoreCellData *snapData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_SNAP_CHAT];
-        snapData.title = TUILocalizableString(TUIKitMoreSnapchat);
-        snapData.image = [UIImage bf_imageNamed:@"more_snapchat"];
-        
-        if (self.type == MSIM_CHAT_TYPE_C2C) {
-            [_moreView setData:@[cameraData,photoData,voiceData,videoData,locationData,snapData]];
-        }else {
-            [_moreView setData:@[cameraData,photoData]];
-        }
+//        MSInputMoreCellData *voiceData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VOICE_CALL];
+//        voiceData.title = TUILocalizableString(TUIKitMoreVoiceCall);
+//        voiceData.image = [UIImage bf_imageNamed:@"more_voice_call"];
+//
+//        MSInputMoreCellData *videoData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VIDEO_CALL];
+//        videoData.title = TUILocalizableString(TUIKitMoreVideoCall);
+//        videoData.image = [UIImage bf_imageNamed:@"more_video_call"];
+//
+        [_moreView setData:@[cameraData,photoData]];
     }
     return _moreView;
 }
@@ -357,7 +317,7 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     if(!_faceView){
         _faceView = [[MSFaceView alloc] initWithFrame:CGRectMake(0, _inputBar.frame.origin.y + _inputBar.frame.size.height, self.view.frame.size.width, 180)];
         _faceView.delegate = self;
-        [_faceView setData:[MSFaceUtil config].faceGroups];
+        [_faceView setData:[MSFaceUtil defaultConfig].defaultFace];
     }
     return _faceView;
 }
@@ -367,17 +327,6 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     if(!_menuView){
         _menuView = [[MSMenuView alloc] initWithFrame:CGRectMake(0, self.faceView.frame.origin.y + self.faceView.frame.size.height, self.view.frame.size.width, 40)];
         _menuView.delegate = self;
-        MSFaceUtil *config = [MSFaceUtil config];
-        NSMutableArray *menus = [NSMutableArray array];
-        for (NSInteger i = 0; i < config.faceGroups.count; i++) {
-            MSFaceGroup *group = config.faceGroups[i];
-            MSMenuCellData *data = [[MSMenuCellData alloc]init];
-            data.normalPath = group.menuNormalPath;
-            data.selectPath = group.menuSelectPath;
-            data.isSelected = i == 0;
-            [menus addObject:data];
-        }
-        [_menuView setData:menus];
     }
     return _menuView;
 }
@@ -394,7 +343,7 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 
 - (void)faceView:(MSFaceView *)faceView scrollToFaceGroupIndex:(NSInteger)index
 {
-    [self.menuView scrollToMenuIndex:faceView.faceGroups[index] atIndex:index];
+//    [self.menuView scrollToMenuIndex:index];
 }
 
 - (void)faceViewDidBackDelete:(MSFaceView *)faceView
@@ -404,15 +353,14 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
 
 - (void)faceView:(MSFaceView *)faceView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    MSFaceGroup *group = [MSFaceUtil config].faceGroups[indexPath.section];
+    BFFaceGroup *group = [MSFaceUtil defaultConfig].defaultFace[indexPath.section];
     BFFaceCellData *face = group.faces[indexPath.row];
     if(indexPath.section == 0){
-        [_inputBar addEmoji:face.name];
+        NSString *faceName = [face.name substringFromIndex:@"emoji/".length];
+        [_inputBar addEmoji:faceName];
     }else{
         //直接发送
-        if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendEmotion:)]){
-            [_delegate inputController:self didSendEmotion:face];
-        }
+        // to do
     }
 }
 
@@ -428,11 +376,6 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendTextMessage:)]){
         [_delegate inputController:self didSendTextMessage:text];
     }
-}
-
-- (void)menuView:(MSMenuView *)menuView didSelectItemAtIndex:(NSInteger)index
-{
-    [self.faceView scrollToFaceGroupIndex:index];
 }
 
 @end

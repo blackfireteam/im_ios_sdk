@@ -19,8 +19,6 @@
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) NSTimer *recordTimer;
 
-@property(nonatomic,assign) BOOL isNapChat;
-
 @end
 @implementation MSInputBarView
 
@@ -169,44 +167,21 @@
 
 - (void)clickFaceBtn:(UIButton *)sender
 {
-    if (self.isNapChat) {
-        _micButton.hidden = NO;
-        _faceButton.hidden = NO;
-        _keyboardButton.hidden = YES;
-        _recordButton.hidden = YES;
-        _inputTextView.hidden = NO;
-        _keyboardButton.frame = _faceButton.frame;
-        if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchSnapImage:)]){
-            [_delegate inputBarDidTouchSnapImage:self];
-        }
-    }else {
-        _micButton.hidden = NO;
-        _faceButton.hidden = YES;
-        _keyboardButton.hidden = NO;
-        _recordButton.hidden = YES;
-        _inputTextView.hidden = NO;
-        _keyboardButton.frame = _faceButton.frame;
-        if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchFace:)]){
-            [_delegate inputBarDidTouchFace:self];
-        }
+    _micButton.hidden = NO;
+    _faceButton.hidden = YES;
+    _keyboardButton.hidden = NO;
+    _recordButton.hidden = YES;
+    _inputTextView.hidden = NO;
+    if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchFace:)]){
+        [_delegate inputBarDidTouchFace:self];
     }
+    _keyboardButton.frame = _faceButton.frame;
 }
 
 - (void)clickMoreBtn:(UIButton *)sender
 {
-    _micButton.hidden = NO;
-    _faceButton.hidden = NO;
-    _keyboardButton.hidden = YES;
-    _recordButton.hidden = YES;
-    _inputTextView.hidden = NO;
-    if (self.isNapChat) {
-        if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchExitSnap:)]){
-            [_delegate inputBarDidTouchExitSnap:self];
-        }
-    }else {
-        if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchMore:)]){
-            [_delegate inputBarDidTouchMore:self];
-        }
+    if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchMore:)]){
+        [_delegate inputBarDidTouchMore:self];
     }
 }
 
@@ -519,40 +494,6 @@
     if([[NSFileManager defaultManager] fileExistsAtPath:path]){
         [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
     }
-}
-
-/// 切换到阅后即焚模式
-- (void)changeToSnapChatMode
-{
-    self.isNapChat = YES;
-    [self.micButton setImage:[UIImage bf_imageNamed:@"ToolViewInputVoice_snap"] forState:UIControlStateNormal];
-    [self.micButton setImage:[UIImage bf_imageNamed:@"ToolViewInputVoiceHL_snap"] forState:UIControlStateHighlighted];
-    [self.faceButton setImage:[UIImage bf_imageNamed:@"ToolViewImage_snap"] forState:UIControlStateNormal];
-    [self.faceButton setImage:[UIImage bf_imageNamed:@"ToolViewImage_snapHL"] forState:UIControlStateHighlighted];
-    [self.moreButton setImage:[UIImage bf_imageNamed:@"ToolViewCancel_snap"] forState:UIControlStateNormal];
-    [self.moreButton setImage:[UIImage bf_imageNamed:@"ToolViewCancel_snapHL"] forState:UIControlStateHighlighted];
-    [self.keyboardButton setImage:[UIImage bf_imageNamed:@"ToolViewJianpan_snap"] forState:UIControlStateNormal];
-    [self.keyboardButton setImage:[UIImage bf_imageNamed:@"ToolViewJianpan_snapHL"] forState:UIControlStateHighlighted];
-    
-    [_recordButton.layer setBorderColor:[UIColor redColor].CGColor];
-    [_recordButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-}
-
-/// 退出阅后即焚模式
-- (void)quitSnapChat
-{
-    self.isNapChat = NO;
-    [self.micButton setImage:[UIImage bf_imageNamed:@"ToolViewInputVoice"] forState:UIControlStateNormal];
-    [self.micButton setImage:[UIImage bf_imageNamed:@"ToolViewInputVoiceHL"] forState:UIControlStateHighlighted];
-    [self.faceButton setImage:[UIImage bf_imageNamed:@"ToolViewEmotion"] forState:UIControlStateNormal];
-    [self.faceButton setImage:[UIImage bf_imageNamed:@"ToolViewEmotionHL"] forState:UIControlStateHighlighted];
-    [self.moreButton setImage:[UIImage bf_imageNamed:@"TypeSelectorBtn_Black"] forState:UIControlStateNormal];
-    [self.moreButton setImage:[UIImage bf_imageNamed:@"TypeSelectorBtnHL_Black"] forState:UIControlStateHighlighted];
-    [self.keyboardButton setImage:[UIImage bf_imageNamed:@"ToolViewKeyboard"] forState:UIControlStateNormal];
-    [self.keyboardButton setImage:[UIImage bf_imageNamed:@"ToolViewKeyboardHL"] forState:UIControlStateHighlighted];
-    
-    [_recordButton.layer setBorderColor:[UIColor d_colorWithColorLight:TLine_Color dark:TLine_Color_Dark].CGColor];
-    [_recordButton setTitleColor:[UIColor d_colorWithColorLight:TText_Color dark:TText_Color_Dark] forState:UIControlStateNormal];
 }
 
 @end

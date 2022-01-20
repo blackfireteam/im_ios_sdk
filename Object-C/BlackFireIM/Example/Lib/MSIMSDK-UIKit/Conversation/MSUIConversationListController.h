@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)conversationListController:(MSUIConversationListController *)conversationController didSelectConversation:(MSUIConversationCell *)conversationCell;
 
 /** 会话列表未读数变化时的回调，您显示在tabbar上的未读数小红点需要更新*/
-- (void)conversationListUnreadCountChanged;
+- (void)conversationListUnreadCountChanged:(NSInteger)count;
 
 @end
 

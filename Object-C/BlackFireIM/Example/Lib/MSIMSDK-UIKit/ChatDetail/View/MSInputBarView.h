@@ -46,21 +46,6 @@
 - (void)inputBarDidTouchVoice:(MSInputBarView *_Nonnull)textView;
 
 /**
- *  点击阅后即焚模式下的图片
- *  您可以通过该回调实现：显示出相册选择
- *
- *  @param textView 委托者，当前与用户交互的 InputBar。
- */
-- (void)inputBarDidTouchSnapImage:(MSInputBarView *_Nonnull)textView;
-
-/**
- *  点击退出阅后即焚模式
- *
- *  @param textView 委托者，当前与用户交互的 InputBar。
- */
-- (void)inputBarDidTouchExitSnap:(MSInputBarView *_Nonnull)textView;
-
-/**
  *  输入条高度更改时的回调委托
  *  当您点击语音按钮、表情按钮、“+”按钮或者呼出/收回键盘时，InputBar 高度会发生改变时，执行该回调
  *  您可以通过该回调实现：通过该回调函数进行 InputBar 高度改变时的 UI 布局调整。
@@ -214,12 +199,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  更新 textView 坐标
  */
 - (void)updateTextViewFrame;
-
-/// 切换到阅后即焚模式
-- (void)changeToSnapChatMode;
-
-/// 退出阅后即焚模式
-- (void)quitSnapChat;
 
 @end
 

@@ -49,8 +49,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic,strong) UILabel *timeLabel;
 
-/** 性别图标*/
-@property(nonatomic,strong) UIImageView *genderIcon;
+/** 标识gold用户*/
+@property(nonatomic,strong) UIImageView *goldIcon;
+
+/** 标识互相匹配*/
+@property(nonatomic,strong) UIImageView *matchIcon;
+
+/** 标识认证用户*/
+@property(nonatomic,strong) UIImageView *verifyIcon;
 
 /**
  *  未读视图

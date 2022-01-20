@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface MSFaceGroup : NSObject
+@interface BFFaceGroup : NSObject
 
 /**
  *  表情组索引号，从0开始。
@@ -77,14 +77,14 @@ NS_ASSUME_NONNULL_BEGIN
  *  对于需要“删除”按钮的表情组，该位为 YES，否则为 NO。
  *  当该位为 YES 时，FaceView 会在表情视图右下角中显示一个“删除”图标，使您无需呼出键盘即可进行表情的删除操作。
  */
-@property(nonatomic,assign) BOOL needBackDelete;
+@property (nonatomic, assign) BOOL needBackDelete;
 
-@property(nonatomic,assign) BOOL needSendBtn;
-
-@property(nonatomic,copy) NSString *menuNormalPath;
-
-@property(nonatomic,copy) NSString *menuSelectPath;
-
+/**
+ *  表情menu路径
+ *  用于存储表情菜单在系统中存放的路径。
+ *  表情菜单即在表情视图最下方显示表情组缩略图与“发送按钮”的菜单视图。
+ */
+@property (nonatomic, strong) NSString *menuPath;
 @end
 
 @interface MSFaceView : UIView
@@ -119,8 +119,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, weak) id<MSFaceViewDelegate> delegate;
 
-@property (nonatomic, strong,readonly) NSArray *faceGroups;
-
 /**
  *  滑动到指定表情分组。
  *  根据用户点击的表情分组的下标，切换到对应的表情分组下。
@@ -133,9 +131,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  设置数据。
  *  用来进行 TUIFaceView 的初始化或在需要时更新 faceView 中的数据。
  *
- *  @param data 需要设置的数据（MSFaceGroup）。在此 NSArray 中存放的对象为 MSFaceGroup，即表情组。
+ *  @param data 需要设置的数据（BFFaceGroup）。在此 NSMutableArray 中存放的对象为 BFFaceGroup，即表情组。
  */
-- (void)setData:(NSArray * _Nullable)data;
+- (void)setData:(NSMutableArray * _Nullable)data;
 
 @end
 

@@ -14,7 +14,7 @@
 
 @interface BFDiscoveryController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
-@property(nonatomic,strong) NSMutableArray<NSNumber *> *dataArray;
+@property(nonatomic,strong) NSMutableArray<MSProfileInfo *> *dataArray;
 
 @property(nonatomic,strong) UICollectionView *myCollectionView;
 
@@ -25,8 +25,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navView.navTitleL.text = @"Online";
-    self.navView.leftButton.hidden = YES;
+    self.navigationItem.title = @"在线用户";
     [self setupUI];
 }
 
@@ -44,7 +43,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (NSMutableArray<NSNumber *> *)dataArray
+- (NSMutableArray<MSProfileInfo *> *)dataArray
 {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
@@ -54,10 +53,17 @@
 
 - (void)userOnline:(NSNotification *)note
 {
-    NSArray *uids = note.object;
-    for (NSNumber *uid in uids) {
-        if (![self.dataArray containsObject:uid]) {
-            [self.dataArray addObject:uid];
+    NSArray *users = note.object;
+    for (MSProfileInfo *user in users) {
+        BOOL isExsit = NO;
+        for (MSProfileInfo *info in self.dataArray) {
+            if ([info.user_id isEqualToString:user.user_id]) {
+                isExsit = YES;
+                break;
+            }
+        }
+        if (isExsit == NO) {
+            [self.dataArray addObject:user];
         }
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -69,7 +75,12 @@
 {
     NSArray *uids = note.object;
     for (NSNumber *uid in uids) {
-        [self.dataArray removeObject:uid];
+        for (NSInteger i = 0; i < self.dataArray.count; i++) {
+            MSProfileInfo *info = self.dataArray[i];
+            if (info.user_id.integerValue == uid.integerValue) {
+                [self.dataArray removeObject:info];
+            }
+        }
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.myCollectionView reloadData];
@@ -80,16 +91,15 @@
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
     layout.itemSize = CGSizeMake((Screen_Width-15*3)*0.5, (Screen_Width-15*3)*0.5*1.3);
+    layout.sectionInset = UIEdgeInsetsMake(15, 15, TabBar_Height + 15, 15);
     layout.minimumLineSpacing = 15;
     layout.minimumInteritemSpacing = 15;
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    layout.sectionInset = UIEdgeInsetsMake(StatusBar_Height + NavBar_Height + 15, 15, TabBar_Height + 15, 15);
     self.myCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height) collectionViewLayout:layout];
     self.myCollectionView.delegate = self;
     self.myCollectionView.dataSource = self;
     self.myCollectionView.alwaysBounceVertical = YES;
-    self.myCollectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    self.myCollectionView.backgroundColor = [UIColor d_colorWithColorLight:[UIColor whiteColor] dark:TController_Background_Color_Dark];
+    self.myCollectionView.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
     [self.myCollectionView registerClass:[BFUserListCell class] forCellWithReuseIdentifier:@"userCell"];
     [self.view addSubview:self.myCollectionView];
 }
@@ -104,7 +114,7 @@
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     BFUserListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"userCell" forIndexPath:indexPath];
-    MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[NSString stringWithFormat:@"%@",self.dataArray[indexPath.row]]];
+    MSProfileInfo *info = self.dataArray[indexPath.row];
     [cell configWithInfo:info];
     return cell;
 }
@@ -112,7 +122,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     BFChatViewController *vc = [[BFChatViewController alloc]init];
-    vc.partner_id = [NSString stringWithFormat:@"%@",self.dataArray[indexPath.row]];
+    vc.partner_id = self.dataArray[indexPath.row].user_id;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

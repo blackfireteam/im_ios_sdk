@@ -8,12 +8,12 @@
 #import "MSFaceView.h"
 #import "MSIMSDK-UIKit.h"
 
-@implementation MSFaceGroup
+@implementation BFFaceGroup
 @end
 
 
 @interface MSFaceView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
-@property (nonatomic, strong) NSArray *faceGroups;
+@property (nonatomic, strong) NSMutableArray *faceGroups;
 @property (nonatomic, strong) NSMutableArray *sectionIndexInGroup;
 @property (nonatomic, strong) NSMutableArray *pageCountInGroup;
 @property (nonatomic, strong) NSMutableArray *groupIndexInSection;
@@ -36,7 +36,7 @@
 
 - (void)setupViews
 {
-    self.backgroundColor = [UIColor d_colorWithColorLight:[UIColor whiteColor] dark:TInput_Background_Color_Dark];
+    self.backgroundColor = [UIColor d_colorWithColorLight:TInput_Background_Color dark:TInput_Background_Color_Dark];
 
     _faceFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     _faceFlowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -74,7 +74,7 @@
 }
 
 
-- (void)setData:(NSArray * _Nullable)data
+- (void)setData:(NSMutableArray * _Nullable)data
 {
     _faceGroups = data;
     [self defaultLayout];
@@ -87,7 +87,7 @@
 
     NSInteger sectionIndex = 0;
     for (NSInteger groupIndex = 0; groupIndex < _faceGroups.count; ++groupIndex) {
-        MSFaceGroup *group = _faceGroups[groupIndex];
+        BFFaceGroup *group = _faceGroups[groupIndex];
         [_sectionIndexInGroup addObject:@(sectionIndex)];
         int itemCount = group.rowCount * group.itemCountPerRow;
         int sectionCount = ceil(group.faces.count * 1.0 / (itemCount  - (group.needBackDelete ? 1 : 0)));
@@ -103,7 +103,7 @@
     for (NSInteger curSection = 0; curSection < _sectionCount; ++curSection) {
         NSNumber *groupIndex = _groupIndexInSection[curSection];
         NSNumber *groupSectionIndex = _sectionIndexInGroup[groupIndex.integerValue];
-        MSFaceGroup *face = _faceGroups[groupIndex.integerValue];
+        BFFaceGroup *face = _faceGroups[groupIndex.integerValue];
         NSInteger itemCount = face.rowCount * face.itemCountPerRow - face.needBackDelete;
         NSInteger groupSection = curSection - groupSectionIndex.integerValue;
         for (NSInteger itemIndex = 0; itemIndex < itemCount; ++itemIndex) {
@@ -130,7 +130,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     int groupIndex = [_groupIndexInSection[section] intValue];
-    MSFaceGroup *group = _faceGroups[groupIndex];
+    BFFaceGroup *group = _faceGroups[groupIndex];
     return group.rowCount * group.itemCountPerRow;
 }
 
@@ -138,18 +138,20 @@
 {
     MSFaceCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MSFaceCollectionCell" forIndexPath:indexPath];
     int groupIndex = [_groupIndexInSection[indexPath.section] intValue];
-    MSFaceGroup *group = _faceGroups[groupIndex];
+    BFFaceGroup *group = _faceGroups[groupIndex];
     int itemCount = group.rowCount * group.itemCountPerRow;
     if(indexPath.row == itemCount - 1 && group.needBackDelete){
         BFFaceCellData *data = [[BFFaceCellData alloc] init];
         data.name = @"del_normal";
         [cell setData:data];
-    }else{
+    }
+    else{
         NSNumber *index = [_itemIndexs objectForKey:indexPath];
         if(index.integerValue < group.faces.count){
             BFFaceCellData *data = group.faces[index.integerValue];
             [cell setData:data];
-        }else{
+        }
+        else{
             [cell setData:nil];
         }
     }
@@ -159,13 +161,14 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     int groupIndex = [_groupIndexInSection[indexPath.section] intValue];
-    MSFaceGroup *faces = _faceGroups[groupIndex];
+    BFFaceGroup *faces = _faceGroups[groupIndex];
     int itemCount = faces.rowCount * faces.itemCountPerRow;
     if(indexPath.row == itemCount - 1 && faces.needBackDelete){
         if(_delegate && [_delegate respondsToSelector:@selector(faceViewDidBackDelete:)]){
             [_delegate faceViewDidBackDelete:self];
         }
-    }else{
+    }
+    else{
         NSNumber *index = [_itemIndexs objectForKey:indexPath];
         if(index.integerValue < faces.faces.count){
             if(_delegate && [_delegate respondsToSelector:@selector(faceView:didSelectItemAtIndexPath:)]){
@@ -173,13 +176,16 @@
                 [_delegate faceView:self didSelectItemAtIndexPath:indexPath];
             }
         }
+        else{
+
+        }
     }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     int groupIndex = [_groupIndexInSection[indexPath.section] intValue];
-    MSFaceGroup *group = _faceGroups[groupIndex];
+    BFFaceGroup *group = _faceGroups[groupIndex];
     CGFloat width = (self.frame.size.width - 20 * 2 - 8 * (group.itemCountPerRow - 1)) / group.itemCountPerRow;
     CGFloat height = (collectionView.frame.size.height -  8 * (group.rowCount - 1)) / group.rowCount;
     return CGSizeMake(width, height);
@@ -217,5 +223,4 @@
     [_faceCollectionView scrollRectToVisible:rect animated:NO];
     [self scrollViewDidScroll:_faceCollectionView];
 }
-
 @end

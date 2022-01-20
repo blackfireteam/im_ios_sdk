@@ -98,11 +98,7 @@
     if (self.messageData.direction == MsgDirectionOutgoing) {
         self.readReceiptLabel.hidden = NO;
         if (self.messageData.elem.sendStatus == MSIM_MSG_STATUS_SEND_SUCC) {
-            if (self.messageData.elem.chatType == MSIM_CHAT_TYPE_CHATROOM) {
-                self.readReceiptLabel.text = TUILocalizableString(Deliveried);
-            }else {
-                self.readReceiptLabel.text = self.messageData.elem.readStatus == MSIM_MSG_STATUS_UNREAD ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
-            }
+            self.readReceiptLabel.text = self.messageData.elem.readStatus == MSIM_MSG_STATUS_UNREAD ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
         }else if (self.messageData.elem.sendStatus == MSIM_MSG_STATUS_SENDING) {
             self.readReceiptLabel.text = TUILocalizableString(Sending);
         }else {

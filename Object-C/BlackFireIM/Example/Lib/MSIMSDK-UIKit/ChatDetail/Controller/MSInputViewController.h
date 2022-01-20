@@ -10,11 +10,9 @@
 #import "MSChatMoreView.h"
 #import "MSFaceView.h"
 #import "MSMenuView.h"
-#import <MSIMSDK/MSIMSDK.h>
 
 
 @class MSInputViewController;
-
 NS_ASSUME_NONNULL_BEGIN
 /**
  *  控制器的回调委托。
@@ -61,13 +59,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 点击拍照，照片等更多功能
 - (void)inputController:(MSInputViewController *)inputController didSelectMoreCell:(MSInputMoreCell *)cell;
 
-/// 点击阅后即焚模式下的图片
-- (void)inputControllerDidSelectSnapchatImage:(MSInputViewController *)inputController;
-
-/// 点击发送自定义表情
-@optional
-- (void)inputController:(MSInputViewController *)inputController didSendEmotion:(BFFaceCellData *)data;
-
 @end
 
 @interface MSInputViewController : UIViewController
@@ -80,8 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) MSChatMoreView *moreView;
 
-
-- (instancetype)initWithChatType:(MSIMAChatType)type delegate:(id<MSInputViewControllerDelegate>)delegate;
+@property(nonatomic,weak) id<MSInputViewControllerDelegate> delegate;
 
 /**
  *  重置当前输入控制器。

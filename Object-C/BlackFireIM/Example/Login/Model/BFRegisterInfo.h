@@ -15,18 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy) NSString *imUrl;
 
-// 0 male 1 female
-@property(nonatomic,assign) NSInteger gender;
-
 @property(nonatomic,copy) NSString *phone;
 
 @property(nonatomic,copy) NSString *nickName;
-
-@property(nonatomic,copy) NSString *department;
-
-@property(nonatomic,copy) NSString *workPlace;
-
-@property(nonatomic,copy) NSString *inviteCode;
 
 @property(nonatomic,strong) UIImage *avatarImage;
 

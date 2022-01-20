@@ -9,15 +9,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 用户在线状态*/
 typedef NS_ENUM(NSUInteger, MSSystemMessageType) {
-    SYS_UNKNOWN = 0,  //未指定
-    SYS_TIME,    //显示时间
-    SYS_REVOKE,  //撤回提示
-    SYS_OTHER
+    SYS_UNKNOWN = 0,   //未知提示
+    SYS_TIME,         //显示时间
+    SYS_REVOKE,  //显示消息撤回提示
+    SYS_OTHER,    //其它显示
 };
-
 @interface MSSystemMessageCellData : MSMessageCellData
-
 
 @property(nonatomic,assign) MSSystemMessageType type;
 

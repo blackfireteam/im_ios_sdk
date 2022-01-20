@@ -11,8 +11,6 @@
 
 @interface MSUIConversationListController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property(nonatomic,assign) NSInteger lastConvSign;//分页摘取会话列表游标
-
 @end
 
 @implementation MSUIConversationListController
@@ -21,7 +19,7 @@
 {
     [super viewDidLoad];
     [self setupViews];
-    [self loadConversation];
+    [self loadConversation: NO];
 }
 
 - (instancetype)init
@@ -34,18 +32,18 @@
 
 - (void)setupViews
 {
+    self.view.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
     self.tableView = [[UITableView alloc]initWithFrame:self.view.bounds];
     self.tableView.tableFooterView = [UIView new];
+    self.tableView.backgroundColor = self.view.backgroundColor;
     [self.tableView registerClass:[MSUIConversationCell class] forCellReuseIdentifier:@"TConversationCell"];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = 103;
-    self.tableView.contentInset = UIEdgeInsetsMake(StatusBar_Height + NavBar_Height, 0,TabBar_Height, 0);
-    self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.tableView.separatorColor = [UIColor d_colorWithColorLight:TCell_separatorColor dark:TCell_separatorColor_Dark];
     WS(weakSelf)
     self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [weakSelf loadConversation];
+        [weakSelf loadConversation: YES];
     }];
     self.tableView.mj_footer.hidden = YES;
     [self.view addSubview:self.tableView];
@@ -55,12 +53,10 @@
 {
     WS(weakSelf)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewConvUpdate:) name:MSUIKitNotification_ConversationUpdate object:nil];
-    [[NSNotificationCenter defaultCenter]addObserverForName:MSUIKitNotification_ProfileUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        [weakSelf profileUpdate:note];
-    }];
     [[NSNotificationCenter defaultCenter]addObserverForName:MSUIKitNotification_ConversationDelete object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf onConversationDelete:note];
     }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTabbarUnreadCount:) name:MSUIKitNotification_ConversationUnreadCountChange object:nil];
 }
 
 - (void)dealloc
@@ -76,25 +72,19 @@
     return _dataList;
 }
 
-- (void)profileUpdate:(NSNotification *)note
+- (void)loadConversation:(BOOL)isNext
 {
-    [self.tableView reloadData];
-}
-
-- (void)loadConversation
-{
-    WS(weakSelf)
-    [[MSIMManager sharedInstance] getConversationList:self.lastConvSign succ:^(NSArray<MSIMConversation *> * _Nonnull convs, NSInteger nexSeq, BOOL isFinished) {
-        weakSelf.lastConvSign = nexSeq;
-        [weakSelf updateConversation: convs];
-        if (isFinished) {
-            [weakSelf.tableView.mj_footer endRefreshingWithNoMoreData];
-        }else {
-            [weakSelf.tableView.mj_footer endRefreshing];
-        }
-        } fail:^(NSInteger code, NSString * _Nonnull desc) {
-            [weakSelf.tableView.mj_footer endRefreshing];
-    }];
+   WS(weakSelf)
+   [[MSIMManager sharedInstance] getConversationList:isNext succ:^(NSArray<MSIMConversation *> * _Nonnull convs, BOOL isFinished) {
+       [weakSelf updateConversation: convs];
+       if (isFinished) {
+           [weakSelf.tableView.mj_footer endRefreshingWithNoMoreData];
+       }else {
+           [weakSelf.tableView.mj_footer endRefreshing];
+       }
+   } fail:^(NSInteger code, NSString *desc) {
+       [weakSelf.tableView.mj_footer endRefreshing];
+   }];
 }
 
 - (void)updateConversation:(NSArray *)convList
@@ -131,6 +121,13 @@
     [dataList sortUsingComparator:^NSComparisonResult(MSUIConversationCellData *obj1, MSUIConversationCellData *obj2) {
         return [obj2.time compare:obj1.time];
     }];
+    // 将不该显示的cell剔除
+    for (NSInteger i = 0; i < dataList.count; i++) {
+        MSUIConversationCellData *data = dataList[i];
+        if (data.conv.isHidden) {
+            [dataList removeObject:data];
+        }
+    }
 }
 
 - (void)onConversationDelete:(NSNotification *)note
@@ -152,20 +149,19 @@
     [self.dataList removeObject:data];
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
-    [self updateTabbarUnreadCount];
 }
 
 - (void)onNewConvUpdate:(NSNotification *)note
 {
     NSArray<MSIMConversation *> *list = note.object;
     [self updateConversation:list];
-    [self updateTabbarUnreadCount];
 }
 
-- (void)updateTabbarUnreadCount
+- (void)updateTabbarUnreadCount:(NSNotification *)note
 {
-    if ([self.delegate respondsToSelector:@selector(conversationListUnreadCountChanged)]) {
-        [self.delegate conversationListUnreadCountChanged];
+    NSNumber *countN = note.object;
+    if ([self.delegate respondsToSelector:@selector(conversationListUnreadCountChanged:)]) {
+        [self.delegate conversationListUnreadCountChanged: countN.integerValue];
     }
 }
 

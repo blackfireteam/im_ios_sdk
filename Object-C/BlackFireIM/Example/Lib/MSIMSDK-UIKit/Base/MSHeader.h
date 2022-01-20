@@ -82,20 +82,11 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TFaceMessageCell_Image_Height_Max TFaceMessageCell_Image_Width_Max
 #define TFaceMessageCell_Margin 16
 
-//location cell
-#define TLocationMessageCell_ReuseId @"TLocationMessageCell"
-#define TLocationMessageCell_Width (Screen_Width * 0.65)
-#define TLocationMessageCell_Height TLocationMessageCell_Width * 0.65
-
 //file cell
 #define TFileMessageCell_ReuseId @"TFileMessageCell"
 #define TFileMessageCell_Container_Size CGSizeMake((Screen_Width * 0.5), (Screen_Width * 0.15))
 #define TFileMessageCell_Margin 10
 #define TFileMessageCell_Progress_Color  RGBA(0, 0, 0, 0.5)
-
-//emotion cell
-#define TEmotionMessageCell_ReuseId @"TEmotionMessageCell"
-#define TEmotionMessageCell_Container_Size CGSizeMake(120, 120)
 
 //video cell
 #define TVideoMessageCell_ReuseId @"TVideoMessageCell"
@@ -116,15 +107,6 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TVoiceMessageCell_Back_Width_Max (Screen_Width * 0.4)
 #define TVoiceMessageCell_Back_Width_Min 60
 #define TVoiceMessageCell_Duration_Size CGSizeMake(33, 33)
-
-//menu item cell
-#define TMenuCell_ReuseId @"TMenuCell"
-#define TMenuCell_Margin 6
-#define TMenuCell_Line_ReuseId @"TMenuLineCell"
-#define TMenuCell_Background_Color  RGBA(246, 246, 246, 1.0)
-#define TMenuCell_Background_Color_Dark  RGBA(30, 30, 30, 1.0)
-#define TMenuCell_Selected_Background_Color  RGBA(255, 255, 255, 1.0)
-#define TMenuCell_Selected_Background_Color_Dark  RGBA(41, 41, 41, 1.0)
 
 //group_live
 #define TGroupLiveMessageCell_ReuseId @"TGroupLiveMessageCell"
@@ -153,7 +135,7 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TText_Color_Dark RGB(217, 217, 217)
 #define TText_OutMessage_Color_Dark RGB(0, 15, 0)
 
-#define TController_Background_Color RGBA(247, 247, 247, 1.0)
+#define TController_Background_Color RGBA(237, 237, 237, 1.0)
 #define TController_Background_Color_Dark RGBA(25, 25, 25, 1.0)
 
 // bottom line
@@ -175,16 +157,9 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define Record_Margin 8
 
 
-#define GaodeAPIKey @"28d8663963475a7eb9126c8ebb9c4bc9"
-#define GaodeAPIWebKey @"1db3c63e96dccbe7dd34b6b5150fae90"
-#define kChatRoomID 25
-//1641525634
-#define kAppInviteCode @"MSYYDS"
-
 /** 自定义消息分类*/
 typedef NS_ENUM(NSUInteger, MSIMCustomSubType) {
     
-    MSIMCustomSubTypeLike = 1,              //like
     MSIMCustomSubTypeTexting = 100,         //正在输入
     MSIMCustomSubTypeVoiceCall = 200,       //语音聊天
     MSIMCustomSubTypeVideoCall = 300,       //视频聊天

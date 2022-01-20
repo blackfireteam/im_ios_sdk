@@ -42,7 +42,6 @@
 
 - (void)configWithInfo:(MSProfileInfo *)info
 {
-    if (info == nil) return;
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:info.avatar]];
     self.nameLabel.text = info.nick_name;
 }

@@ -9,7 +9,8 @@
 #import "MSIMSDK-UIKit.h"
 #import <TZImagePickerController.h>
 #import <MSIMSDK/MSIMSDK.h>
-#import "MSLocationManager.h"
+
+
 
 @interface MSChatViewController()<TZImagePickerControllerDelegate>
 
@@ -32,35 +33,6 @@
     picker.allowPickingImage = NO;
     picker.autoDismiss = NO;
     [self presentViewController:picker animated:YES completion:nil];
-}
-
-- (void)selectLocationForSend
-{
-    MSLocationController *vc  = [[MSLocationController alloc]init];
-    vc.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:vc animated:YES completion:nil];
-    WS(weakSelf)
-    vc.selectLocation = ^(MSLocationInfo * _Nonnull info) {
-        [weakSelf sendLocationMessage: info];
-    };
-}
-
-- (void)sendLocationMessage:(MSLocationInfo *)info
-{
-    // 为了兼容，先将高德地图坐标转换成gps坐标
-    CLLocationCoordinate2D n_coor = [[MSLocationManager shareInstance]AMapCoordinateConvertToGPS:CLLocationCoordinate2DMake(info.latitude, info.longitude)];
-    MSIMLocationElem *elem = [[MSIMLocationElem alloc]init];
-    elem.title = info.name;
-    elem.detail = info.detail;
-    elem.longitude = n_coor.longitude;
-    elem.latitude = n_coor.latitude;
-    elem.zoom = info.zoom;
-    elem = [[MSIMManager sharedInstance]createLocationMessage:elem];
-    [[MSIMManager sharedInstance]sendC2CMessage:elem toReciever:self.partner_id successed:^(NSInteger msg_id) {
-        
-    } failed:^(NSInteger code, NSString *desc) {
-        
-    }];
 }
 
 #pragma mark - TZImagePickerControllerDelegate
@@ -119,11 +91,6 @@
     }];
 }
 
-- (void)tz_imagePickerControllerDidCancel:(TZImagePickerController *)picker
-{
-    [picker dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)sendImage:(MSIMImageElem *)elem
 {
     MSIMImageElem *imageElem = [[MSIMManager sharedInstance]createImageMessage:elem];
@@ -134,31 +101,6 @@
 {
     MSIMVideoElem *videoElem = [[MSIMManager sharedInstance]createVideoMessage:elem];
     [self sendMessage:videoElem];
-}
-
-- (void)sendEnotionMessage:(BFFaceCellData *)data
-{
-    MSIMEmotionElem *emotionElem = [[MSIMEmotionElem alloc]init];
-    emotionElem.emotionID = data.e_id;
-    emotionElem.emotionName = data.name;
-    emotionElem = [[MSIMManager sharedInstance]createEmotionMessage:emotionElem];
-    [self sendMessage:emotionElem];
-}
-
-///切换阅后即焚模式
-- (void)selectSnapchatMode
-{
-    [self.inputController reset];
-    [self.inputController.inputBar changeToSnapChatMode];
-}
-
-/// 在阅后即焚模式下选择图片
-- (void)selectImageInSnapchatMode
-{
-    TZImagePickerController *picker = [[TZImagePickerController alloc]initWithMaxImagesCount:1 delegate:self];
-    picker.allowPickingVideo = NO;
-    picker.allowPickingImage = YES;
-    [self presentViewController:picker animated:YES completion:nil];
 }
 
 @end

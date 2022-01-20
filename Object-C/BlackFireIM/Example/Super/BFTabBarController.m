@@ -65,14 +65,7 @@
     profileVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"myself_selected"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     BFNavigationController *profileNav = [[BFNavigationController alloc]initWithRootViewController:profileVC];
     [self addChildViewController:profileNav];
-    
-    WS(weakSelf)
-    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_SignalMessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-       [weakSelf onSignalMessage:note];
-    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-       [weakSelf onNewMessage:note];
-    }];
+
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onUserLogStatusChanged:) name:MSUIKitNotification_UserStatusListener object:nil];
 }
 
@@ -111,41 +104,6 @@
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
-}
-
-///收到新消息
-- (void)onSignalMessage:(NSNotification *)note
-{
-    NSArray *elems = note.object;
-    MSIMElem *elem = elems.lastObject;
-    if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
-    MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
-    NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-    MSIMCustomSubType type = [dic[@"type"] integerValue];
-    if (type == MSIMCustomSubTypeVoiceCall || type == MSIMCustomSubTypeVideoCall) {
-        NSInteger event = [dic[@"event"] integerValue];
-        NSString *room_id = dic[@"room_id"];
-        [[MSCallManager shareInstance] recieveCall:customElem.partner_id creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
-    }
-}
-
-- (void)onNewMessage:(NSNotification *)note
-{
-    NSArray *elems = note.object;
-    for (MSIMElem *elem in elems) {
-        if ([elem isKindOfClass:[MSIMCustomElem class]]) {
-            MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
-            NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-            MSIMCustomSubType type = [dic[@"type"] integerValue];
-            if (type == MSIMCustomSubTypeVoiceCall || type == MSIMCustomSubTypeVideoCall) {
-                NSInteger event = [dic[@"event"] integerValue];
-                NSString *room_id = dic[@"room_id"];
-                if (![customElem.fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
-                    [[MSCallManager shareInstance] recieveCall:customElem.partner_id creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
-                }
-            }
-        }
-    }
 }
 
 @end

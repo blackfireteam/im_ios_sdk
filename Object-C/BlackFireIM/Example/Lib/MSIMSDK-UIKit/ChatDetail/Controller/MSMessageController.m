@@ -9,7 +9,7 @@
 #import "MSIMSDK-UIKit.h"
 #import <MSIMSDK/MSIMSDK.h>
 #import <MJRefresh.h>
-#import "MSLocationManager.h"
+
 
 #define MAX_MESSAGE_SEP_DLAY (5 * 60)
 @interface MSMessageController ()<MSMessageCellDelegate,MSNoticeCountViewDelegate>
@@ -74,11 +74,17 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageSendStatusUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf messageStatusUpdate:note];
     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_ProfileUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf profileUpdate:note];
+    }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageRecieveRevoke object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf recieveRevokeMessage:note];
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageReceipt object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf recieveMessageReceipt:note];
+    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageRecieveDelete object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf recieveMessageDelete:note];
     }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
@@ -91,18 +97,14 @@
     self.tableView.estimatedRowHeight = 0;
     self.tableView.estimatedSectionFooterHeight = 0;
     self.tableView.estimatedSectionHeaderHeight = 0;
-    self.tableView.contentInset = UIEdgeInsetsMake(StatusBar_Height + NavBar_Height, 0, 0, 0);
-    self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.backgroundColor = [UIColor d_colorWithColorLight:TController_Background_Color dark:TController_Background_Color_Dark];
     [self.tableView registerClass:[MSTextMessageCell class] forCellReuseIdentifier:TTextMessageCell_ReuseId];
     [self.tableView registerClass:[MSImageMessageCell class] forCellReuseIdentifier:TImageMessageCell_ReuseId];
     [self.tableView registerClass:[MSSystemMessageCell class] forCellReuseIdentifier:TSystemMessageCell_ReuseId];
     [self.tableView registerClass:[MSVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
     [self.tableView registerClass:[MSVoiceMessageCell class] forCellReuseIdentifier:TVoiceMessageCell_ReuseId];
-    [self.tableView registerClass:[MSLocationMessageCell class] forCellReuseIdentifier:TLocationMessageCell_ReuseId];
-    [self.tableView registerClass:[MSEmotionMessageCell class] forCellReuseIdentifier:TEmotionMessageCell_ReuseId];
-    
+ 
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf loadMessages];
     }];
@@ -131,7 +133,7 @@
 - (void)readedReport:(NSArray<MSMessageCellData *> *)datas
 {
     [[MSIMManager sharedInstance] markC2CMessageAsRead:self.partner_id succ:^{
-            
+
         } failed:^(NSInteger code, NSString * _Nonnull desc) {
 
     }];
@@ -160,14 +162,16 @@
         [[MSIMManager sharedInstance] getC2CHistoryMessageList:self.partner_id count:msgCount lastMsg:self.last_msg_sign succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
             
             STRONG_SELF(strongSelf)
-            NSArray<MSIMElem *> *tempElems = [strongSelf deduplicateMessage:msgs];
-            [strongSelf.tableView.mj_header endRefreshing];
-            strongSelf.last_msg_sign = msgs.lastObject.msg_sign;
-            
             if (isFinished) {
                 strongSelf.noMoreMsg = YES;
                 strongSelf.tableView.mj_header.hidden = YES;
             }
+            NSArray<MSIMElem *> *tempElems = [strongSelf deduplicateMessage:msgs];
+            [strongSelf.tableView.mj_header endRefreshing];
+            if (msgs.count > 0) {
+                strongSelf.last_msg_sign = msgs.lastObject.msg_sign;
+            }
+            
             NSMutableArray *uiMsgs = [strongSelf transUIMsgFromIMMsg:tempElems];
             if (uiMsgs.count != 0) {
                 NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, uiMsgs.count)];
@@ -255,16 +259,6 @@
             voiceMsg.showName = YES;
             voiceMsg.elem = elem;
             data = voiceMsg;
-        }else if (elem.type == MSIM_MSG_TYPE_LOCATION) {
-            MSLocationMessageCellData *locationMsg = [[MSLocationMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
-            locationMsg.showName = YES;
-            locationMsg.elem = elem;
-            data = locationMsg;
-        }else if (elem.type == MSIM_MSG_TYPE_EMOTION) {
-            MSEmotionMessageCellData *emotionMSG = [[MSEmotionMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
-            emotionMSG.showName = YES;
-            emotionMSG.elem = elem;
-            data = emotionMSG;
         }else {
             MSSystemMessageCellData *unknowData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);
@@ -381,6 +375,42 @@
     [self.tableView reloadData];
 }
 
+///收到服务器将消息删除
+- (void)recieveMessageDelete:(NSNotification *)note
+{
+    NSArray *msg_ids = note.object;
+    NSMutableArray *deleteArr = [NSMutableArray array];
+    for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
+        MSMessageCellData *cellData = self.uiMsgs[i];
+        for (NSInteger j = 0; j < msg_ids.count; j++) {
+            NSInteger msg_id = [msg_ids[j] integerValue];
+            if (cellData.elem.msg_id == msg_id) {
+                [self.uiMsgs removeObject:cellData];
+                [deleteArr addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+                if (i < self.heightCache.count) {
+                    [self.heightCache replaceObjectAtIndex:i withObject:@(0)];
+                }
+                MSMessageCellData *preData = i >= 1 ? self.uiMsgs[i-1] : nil;
+                MSMessageCellData *nextData = i < self.uiMsgs.count-1 ? self.uiMsgs[i+1] : nil;
+
+                //时间显示的处理
+                if (([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME && [nextData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)nextData).type == SYS_TIME) ||([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME && nextData == nil)) {
+                    NSInteger preIndex = [self.uiMsgs indexOfObject:preData];
+                    [self.uiMsgs removeObject:preData];
+                    if (preIndex < self.heightCache.count) {
+                        [self.heightCache replaceObjectAtIndex:preIndex withObject:@(0)];
+                    }
+                    [deleteArr addObject:[NSIndexPath indexPathForRow:preIndex inSection:0]];
+                }
+                break;
+            }
+        }
+    }
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:deleteArr withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
+}
+
 ///消息状态发生变化通知
 - (void)messageStatusUpdate:(NSNotification *)note
 {
@@ -392,6 +422,20 @@
             data.elem = elem;
             MSMessageCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             [cell fillWithData:data];
+        }
+    }
+}
+
+///用户个人信息更新通知
+- (void)profileUpdate:(NSNotification *)note
+{
+    NSArray<MSProfileInfo *> *profiles = note.object;
+    for (MSProfileInfo *info in profiles) {
+        if ([info.user_id isEqualToString:self.partner_id] || [info.user_id isEqualToString:[MSIMTools sharedInstance].user_id]) {
+            [self.tableView reloadData];
+        }
+        if ([info.user_id isEqualToString:self.partner_id]) {
+            self.navigationItem.title = info.nick_name;
         }
     }
 }
@@ -578,21 +622,6 @@
         }
         return;
     }
-    if (cell.messageData.elem.type == MSIM_MSG_TYPE_LOCATION) {
-        MSLocationMessageCellData *locationData = (MSLocationMessageCellData *)cell.messageData;
-        //将gps坐标转换成高德坐标
-        CLLocationCoordinate2D n_coor = [[MSLocationManager shareInstance]gPSCoordinateConvertToAMap:CLLocationCoordinate2DMake(locationData.locationElem.latitude, locationData.locationElem.longitude)];
-        MSLocationDetailController *vc = [[MSLocationDetailController alloc]init];
-        MSLocationInfo *info = [[MSLocationInfo alloc]init];
-        info.name = locationData.locationElem.title;
-        info.detail = locationData.locationElem.detail;
-        info.latitude = n_coor.latitude;
-        info.longitude = n_coor.longitude;
-        info.zoom = locationData.locationElem.zoom;
-        vc.locationInfo = info;
-        [self.navigationController pushViewController:vc animated:YES];
-        return;
-    }
     if ([self.delegate respondsToSelector:@selector(messageController:onSelectMessageContent:)]) {
         [self.delegate messageController:self onSelectMessageContent:cell];
     }
@@ -650,7 +679,7 @@
             [self.heightCache replaceObjectAtIndex:index withObject:@(0)];
         }
         //时间显示的处理
-        if (([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME && [nextData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)nextData).type == SYS_TIME) ||([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME && nextData == nil)) {
+        if (([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME  && [nextData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)nextData).type == SYS_TIME) ||([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME && nextData == nil)) {
             NSInteger preIndex = [self.uiMsgs indexOfObject:preData];
             [self.uiMsgs removeObject:preData];
             if (preIndex < self.heightCache.count) {

@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  最新消息时间
  *  记录会话中最新消息的接收/发送时间。
  */
-@property (nonatomic, strong,readonly,nullable) NSDate *time;
+@property (nonatomic, strong,readonly) NSDate *time;
 
 @end
 

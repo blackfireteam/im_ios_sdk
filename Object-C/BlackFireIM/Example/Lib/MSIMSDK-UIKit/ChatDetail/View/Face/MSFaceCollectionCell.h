@@ -11,11 +11,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BFFaceCellData : NSObject
 
-@property(nonatomic,copy) NSString *e_id;
-
+/**
+ *  表情名称。
+ */
 @property(nonatomic,copy) NSString *name;
 
-@property(nonatomic,copy) NSString *facePath;
 @end
 
 @interface MSFaceCollectionCell : UICollectionViewCell

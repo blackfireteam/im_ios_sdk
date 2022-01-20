@@ -13,8 +13,6 @@
 #import "BFChatViewController.h"
 #import "BFSparkLoadingView.h"
 #import "BFSparkEmptyView.h"
-#import "BFAnimationView.h"
-
 
 @interface BFHomeController()<BFSparkCardViewDelegate,BFSparkCardViewDataSource,BFSparkCardCellDelegate>
 
@@ -64,7 +62,6 @@
 
 - (void)setupUI
 {
-    self.navView.hidden = YES;
 //    self.likeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
 //    [self.likeBtn setImage:[UIImage imageNamed:@"card_like"] forState:UIControlStateNormal];
 //    [self.likeBtn addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -202,14 +199,13 @@
 - (void)winkBtnDidClick:(BFSparkCardCell *)cell
 {
     if (cell.user.user_id && cell.winkBtn.isSelected == NO) {
-        MSIMEmotionElem *elem = [[MSIMEmotionElem alloc]init];
-        elem.emotionID = @"001";
-        elem.emotionName = @"emotion_01";
-        elem = [[MSIMManager sharedInstance]createEmotionMessage:elem];
-        [[MSIMManager sharedInstance]sendC2CMessage:elem toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
-                    
+        MSBusinessElem *likeElem = [[MSBusinessElem alloc] init];
+        likeElem.type = 11;
+        likeElem.title = @"Like";
+        likeElem = [[MSIMManager sharedInstance] createBusinessMessage:likeElem];
+        [[MSIMManager sharedInstance]sendC2CMessage:likeElem toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
+                 
              cell.winkBtn.selected = YES;
-            [BFAnimationView showAnimation:@"spark_like" size:CGSizeMake(200, 200) isLoop:NO];
             
             } failed:^(NSInteger code, NSString * _Nonnull desc) {
                 [MSHelper showToastFail:desc];

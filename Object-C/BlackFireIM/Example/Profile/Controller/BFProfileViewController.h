@@ -5,11 +5,11 @@
 //  Created by benny wang on 2021/3/18.
 //
 
-#import "BFBaseViewController.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BFProfileViewController : BFBaseViewController
+@interface BFProfileViewController : UIViewController
 
 @end
 

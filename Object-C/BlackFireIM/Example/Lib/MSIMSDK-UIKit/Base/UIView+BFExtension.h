@@ -13,8 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIViewController *)bf_viewController;
 
-- (void)setGradientLayer:(UIColor*)startColor endColor:(UIColor*)endColor;
-
 @end
 
 NS_ASSUME_NONNULL_END

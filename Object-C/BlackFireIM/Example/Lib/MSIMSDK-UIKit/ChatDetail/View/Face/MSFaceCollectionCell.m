@@ -38,7 +38,7 @@
 
 - (void)setData:(BFFaceCellData * _Nullable)data
 {
-    self.face.image = [UIImage imageNamed:data.facePath];
+    self.face.image = [UIImage imageNamed:TUIKitFace(data.name)];
     [self defaultLayout];
 }
 

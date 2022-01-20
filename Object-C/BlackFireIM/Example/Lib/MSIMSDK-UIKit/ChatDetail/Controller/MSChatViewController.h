@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMElem *)elem;
 
 ///展示自定义个性化消息
-///您可以通过重载 onShowMessageData() 改变消息气泡的默认展示逻辑，只需要返回一个自定义的 TUIMessageCell 对象即可。
+///您可以通过重载 onShowMessageData() 改变消息气泡的默认展示逻辑，只需要返回一个自定义的 MSMessageCell 对象即可。
 - (Class)chatController:(MSChatViewController *)controller onShowMessageData:(MSMessageCellData *)cellData;
 
 ///点击某一“更多”单元的回调委托

@@ -13,11 +13,7 @@
 #import "MSMessageController.h"
 #import "MSChatViewController.h"
 #import "MSChatViewController+More.h"
-#import "MSChatRoomController.h"
-#import "MSChatRoomController+More.h"
 #import "MSUIConversationListController.h"
-#import "MSLocationDetailController.h"
-#import "MSLocationController.h"
 #import "MSMessageCell.h"
 #import "MSBubbleMessageCell.h"
 #import "MSTextMessageCell.h"
@@ -25,10 +21,8 @@
 #import "MSVoiceMessageCell.h"
 #import "MSVideoMessageCell.h"
 #import "MSSystemMessageCell.h"
-#import "MSLocationMessageCell.h"
-#import "MSEmotionMessageCell.h"
 #import "MSNoticeCountView.h"
 #import "MSChatMoreView.h"
-#import "MSCallManager.h"
+
 
 #endif /* MSIMSDK_UIKit_h */

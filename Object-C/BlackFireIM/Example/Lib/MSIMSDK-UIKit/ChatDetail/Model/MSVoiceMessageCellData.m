@@ -15,8 +15,6 @@
 
 @property(nonatomic,strong) AVAudioPlayer *audioPlayer;
 
-@property(nonatomic,copy) NSString *wavPath;
-
 @end
 @implementation MSVoiceMessageCellData
 
@@ -124,7 +122,6 @@
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag;
 {
     self.isPlaying = NO;
-    [[NSFileManager defaultManager] removeItemAtPath:self.wavPath error:nil];
 }
 
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError * __nullable)error

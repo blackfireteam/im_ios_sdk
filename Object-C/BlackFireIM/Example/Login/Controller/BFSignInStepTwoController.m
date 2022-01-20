@@ -74,16 +74,15 @@
 - (void)reqeustToSignUp
 {
     WS(weakSelf)
-    [BFProfileService userSignUp:self.info succ:^{
+    [BFProfileService userSignUp:self.info.phone nickName:self.info.nickName avatar:self.info.avatarUrl succ:^() {
+        
         [BFProfileService requestIMToken:weakSelf.info.phone success:^(NSDictionary * _Nonnull dic) {
             
             NSString *userToken = dic[@"token"];
             NSString *im_url = dic[@"url"];
             weakSelf.info.userToken = userToken;
             weakSelf.info.imUrl = im_url;
-            // 配置聊天室
-            [MSChatRoomManager.sharedInstance loginChatRoom:kChatRoomID];
-            [[MSIMManager sharedInstance] login:weakSelf.info.userToken imUrl:weakSelf.info.imUrl subAppID:1 succ:^{
+            [[MSIMManager sharedInstance] login:weakSelf.info.userToken imUrl:weakSelf.info.imUrl subAppID: 1 succ:^{
                             
                 STRONG_SELF(strongSelf)
                             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -97,6 +96,7 @@
         } fail:^(NSError * _Nonnull error) {
             [MSHelper showToastFail:error.localizedDescription];
         }];
+        
     } failed:^(NSError * _Nonnull error) {
         [MSHelper showToastFail:error.localizedDescription];
     }];
@@ -113,9 +113,6 @@
 
         MSProfileInfo *info = [[MSProfileProvider provider]providerProfileFromLocal:[MSIMTools sharedInstance].user_id];
         info.avatar = url;
-        NSMutableDictionary *dic = [info.custom el_convertToDictionary].mutableCopy;
-        dic[@"pic"] = url;
-        info.custom = [dic el_convertJsonString];
         [BFProfileService requestToEditProfile:info success:^(NSDictionary * _Nonnull dic) {
             
             [[MSProfileProvider provider]updateProfiles:@[info]];

@@ -17,18 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 ///视频
 - (void)selectVideoForSend;
 
-///位置
-- (void)selectLocationForSend;
-
-- (void)sendEnotionMessage:(BFFaceCellData *)data;
-
-///切换阅后即焚模式
-- (void)selectSnapchatMode;
-
-/// 在阅后即焚模式下选择图片
-- (void)selectImageInSnapchatMode;
-
-
 @end
 
 NS_ASSUME_NONNULL_END

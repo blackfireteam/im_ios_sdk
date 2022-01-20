@@ -38,9 +38,7 @@
     }else {
         self.window.rootViewController = [[BFNavigationController alloc]initWithRootViewController:[BFLoginController new]];
     }
-    BuglyConfig *config = [[BuglyConfig alloc]init];
-    [Bugly startWithAppId:@"f8db8c69b8" config:config];
-    
+
     //推送相关配置
     [[MSPushMediator sharedInstance] applicationDidFinishLaunchingWithOptions:launchOptions];
     [MSPushMediator sharedInstance].delegate = self;
