@@ -59,11 +59,13 @@ open class MSUIConversationCellData: NSObject {
         
         var str: String = ""
         if elem.type == .MSG_TYPE_REVOKE {
-            if elem.isSelf {
+            if elem.isSelf() {
                 str = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
             }else {
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
             }
+        }else if (elem.type >= 11 && elem.type < 64) {
+            str = businessElemContent(elem: MSIMElem);
         }else {
             switch elem.type {
             case .MSG_TYPE_TEXT:
@@ -74,10 +76,6 @@ open class MSUIConversationCellData: NSObject {
                 str = Bundle.bf_localizedString(key: "TUIKitMessageTypeVoice")
             case .MSG_TYPE_VIDEO:
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTypeVideo")
-            case .MSG_TYPE_LOCATION:
-                str = Bundle.bf_localizedString(key: "TUIkitMessageTypeLocation")
-            case .MSG_TYPE_EMOTION:
-                str = Bundle.bf_localizedString(key: "TUIKitMessageTypeAnimateEmoji")
             case .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL,
                  .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL,
                  .MSG_TYPE_CUSTOM_IGNORE_UNREADCOUNT_RECALL:
@@ -89,18 +87,18 @@ open class MSUIConversationCellData: NSObject {
         return str
     }
     
-    private func getCustomElemContent(elem: MSIMElem) -> String {
-        
-        let customElem = elem as! MSIMCustomElem
-        if let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any],let type = dic["type"] as? Int {
-            if type == MSIMCustomSubType.Like.rawValue {
+    private func businessElemContent(elem: MSIMElem) -> String {
+        if let bussinessElem = elem as? MSBusinessElem {
+            if bussinessElem.type.rawValue == 11 {
                 return "[Like]"
-            }else if type == MSIMCustomSubType.VoiceCall.rawValue {
-                return MSCallManager.parseToConversationShow(customParams: dic, callType: .voice, isSelf: customElem.isSelf)!
-            }else if type == MSIMCustomSubType.VideoCall.rawValue {
-                return MSCallManager.parseToConversationShow(customParams: dic, callType: .video, isSelf: customElem.isSelf)!
+            }else {
+                return Bundle.bf_localizedString(key: "TUIKitMessageTipsUnsupportCustomMessage")
             }
         }
+    }
+    
+    private func getCustomElemContent(elem: MSIMElem) -> String {
+        
         return Bundle.bf_localizedString(key: "TUIKitMessageTipsUnsupportCustomMessage")
     }
 }

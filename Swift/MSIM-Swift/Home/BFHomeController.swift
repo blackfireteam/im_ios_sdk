@@ -146,11 +146,12 @@ extension BFHomeController: BFSparkCardViewDelegate,BFSparkCardViewDataSource {
     
     func winkBtnDidClick(cell: BFSparkCardCell) {
         if cell.profile?.user_id != nil && cell.winkBtn.isSelected == false {
-            let extDic = ["type": MSIMCustomSubType.Like.rawValue,"desc": "like"] as Dictionary
-            let push = MSIMPushInfo()
-            push.body = "[Like]"
-            let customElem = MSIMManager.sharedInstance().createCustomMessage(extDic.bf_convertJsonString(), option: .IMCUSTOM_UNREADCOUNT_RECALL, pushExt: push)
-            MSIMManager.sharedInstance().sendC2CMessage(customElem, toReciever: cell.profile!.user_id) { msg_id in
+            
+            var likeElem = MSBusinessElem()
+            likeElem.type = MSIMMessageType(rawValue: 11)!
+            likeElem.title = "Like"
+            likeElem = MSIMManager.sharedInstance().createBusinessMessage(likeElem)!
+            MSIMManager.sharedInstance().sendC2CMessage(likeElem, toReciever: cell.profile!.user_id) { msg_id in
                 
                 cell.winkBtn.isSelected = true
             } failed: { code, desc in

@@ -172,7 +172,6 @@ class BFEditProfileController: BFBaseViewController {
         
         if let info = MSProfileProvider.shared().providerProfile(fromLocal: MSIMTools.sharedInstance().user_id!) {
             info.gold = sw.isOn
-            info.gold_exp = MSIMTools.sharedInstance().adjustLocalTimeInterval / 1000 / 1000 + 7 * 24 * 60 * 60
             NetWorkManager.netWorkRequest(.profileEdit(info: info)) { result in
                 MSProfileProvider.shared().updateProfiles([info])
                 MSHelper.showToastSuccWithText(text: "修改成功")

@@ -32,7 +32,7 @@ public class BFChatViewController: BFBaseViewController {
         MSProfileProvider.shared().providerProfile(self.partner_id) { profile in
             self.navigationItem.title = profile?.nick_name
         }
-        if let conv = MSConversationProvider.shared().providerConversation(self.partner_id),conv.ext.i_block_u > 0 {
+        if let conv = MSConversationProvider.shared().providerConversation(self.partner_id),conv.ext.i_block_u == true {
             MSHelper.showToastWithText(text: "对方被我Block")
         }
     }
@@ -51,21 +51,10 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             guard let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else {return nil}
             if customElem.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL {
                 if let type = dic["type"] as? Int,type == MSIMCustomSubType.Like.rawValue {
-                    let winkData = BFWinkMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+                    let winkData = BFWinkMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
                     winkData.showName = true
                     winkData.elem = customElem
                     return winkData
-                }
-            }else if customElem.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
-                if let type = dic["type"] as? Int,let subType = MSIMCustomSubType(rawValue: type) {
-                    if subType == .VoiceCall || subType == .VideoCall {
-                        let callData = BFCallMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
-                        callData.callType = (subType == .VideoCall ? .video : .voice)
-                        callData.notice = MSCallManager.parseToMessageShow(customParams: dic, callType: (subType == .VoiceCall ? .voice : .video), isSelf: customElem.isSelf) ?? ""
-                        callData.showName = true
-                        callData.elem = customElem
-                        return callData
-                    }
                 }
             }
         }
@@ -76,8 +65,6 @@ extension BFChatViewController: MSChatViewControllerDelegate {
         
         if cellData is BFWinkMessageCellData {
             return BFWinkMessageCell.self
-        }else if cellData is BFCallMessageCellData {
-            return BFCallMessageCell.self
         }
         return nil
     }
@@ -88,17 +75,6 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             
         }else if cell.data?.type == MSIMMoreType.video {
             selectAsset(isPhoto: false)
-        }else if cell.data?.type == .voiceCall {//语音通话
-            MSCallManager.shared.callToPartner(partner_id: self.partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: .voice, action: .call, room_id: nil)
-        }else if cell.data?.type == .videoCall {//视频通话
-            MSCallManager.shared.callToPartner(partner_id: self.partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: .video, action: .call, room_id: nil)
-        }else if cell.data?.type == .location {//地理位置
-            let vc = MSLocationController()
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true, completion: nil)
-            vc.didSendLocation = {[weak self] info in
-                self?.sendLocationMessage(info: info)
-            }
         }
     }
     
@@ -178,21 +154,6 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             })
             lantern.pageIndex = defaultIndex ?? 0
             lantern.show()
-        }else if cell is BFCallMessageCell {
-            guard let customElem = cell.messageData?.elem as? MSIMCustomElem, let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else { return }
-            if let typeInt = dic["type"] as? Int,let type = MSIMCustomSubType(rawValue: typeInt) {
-                MSCallManager.shared.callToPartner(partner_id: self.partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: (type == .VideoCall ? .video : .voice), action: .call, room_id: nil)
-            }
-        }else if cell.messageData?.elem?.type == .MSG_TYPE_LOCATION {
-            
-            if let locationData = cell.messageData as? MSLocationMessageCellData {
-                let locationInfo = MSLocationInfo(locationMsg: locationData.locationElem)
-                let n_coor = MSLocationManager.shared.gPSCoordinateConvertToAMap(coordinate: CLLocationCoordinate2D(latitude: locationInfo.latitude, longitude: locationInfo.longitude))
-                locationInfo.latitude = n_coor.latitude
-                locationInfo.longitude = n_coor.longitude
-                let vc = MSLocationDetailController(location: locationInfo)
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
         }
     }
     
@@ -365,23 +326,6 @@ extension BFChatViewController {
                 
                 MSHelper.showToastFailWithText(text: errorString)
             })
-        }
-    }
-    
-    private func sendLocationMessage(info: MSLocationInfo) {
-        // 为了兼容，先将高德地图坐标转换成gps坐标
-        let n_coor = MSLocationManager.shared.AMapCoordinateConvertToGPS(coordinate: CLLocationCoordinate2D(latitude: info.latitude, longitude: info.longitude))
-        var elem = MSIMLocationElem()
-        elem.title = info.name
-        elem.detail = info.detail
-        elem.longitude = n_coor.longitude
-        elem.latitude = n_coor.latitude
-        elem.zoom = info.zoom
-        elem = MSIMManager.sharedInstance().createLocationMessage(elem)
-        MSIMManager.sharedInstance().sendC2CMessage(elem, toReciever: self.partner_id) { _ in
-            
-        } failed: { _, _ in
-            
         }
     }
 }

@@ -19,7 +19,7 @@ target 'MSIM-Swift' do
   pod 'QCloudCOSXML/Transfer'
   pod 'ZLPhotoBrowser'
 
-  pod 'MSIMSDK'
+  pod 'MSIMSDK_DE4'
   
   ## 高德地图
   pod 'AMap3DMap'

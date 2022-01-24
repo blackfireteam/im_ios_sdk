@@ -123,7 +123,6 @@ class BFSignInStepTwoController: BFBaseViewController {
                 let im_Url = dic["url"] as! String
                 self.info.userToken = userToken
                 self.info.imUrl = im_Url
-                MSChatRoomManager.sharedInstance().loginChatRoom(MSMcros.kChatRoomID)
                 
                 MSIMManager.sharedInstance().login(userToken, imUrl: im_Url, subAppID: 1) {
                     

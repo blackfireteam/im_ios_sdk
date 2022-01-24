@@ -83,9 +83,6 @@ class BFLoginController: BFBaseViewController {
             self.registerInfo.userToken = userToken
             self.registerInfo.imUrl = im_url
             
-            // 配置聊天室
-            MSChatRoomManager.sharedInstance().loginChatRoom(MSMcros.kChatRoomID)
-            
             MSIMManager.sharedInstance().login(userToken, imUrl: im_url, subAppID: 1) {
                 
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate

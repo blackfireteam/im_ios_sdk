@@ -113,9 +113,9 @@
 - (UIImage *)avatarImage
 {
     if (self.conv.chat_type == MSIM_CHAT_TYPE_C2C) {
-        return [UIImage bf_imageNamed:@"default_c2c_head"];
+        return [UIImage bf_imageNamed:@"holder_avatar"];
     }else {
-        return [UIImage bf_imageNamed:@"default_group_head"];
+        return [UIImage bf_imageNamed:@"holder_avatar"];
     }
 }
 

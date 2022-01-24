@@ -125,7 +125,6 @@ public class MSMessageController: UITableViewController {
         tableView.register(MSSystemMessageCell.self, forCellReuseIdentifier: MSMcros.TSystemMessageCell_ReuseId)
         tableView.register(MSVideoMessageCell.self, forCellReuseIdentifier: MSMcros.TVideoMessageCell_ReuseId)
         tableView.register(MSVoiceMessageCell.self, forCellReuseIdentifier: MSMcros.TVoiceMessageCell_ReuseId)
-        tableView.register(MSLocationMessageCell.self, forCellReuseIdentifier: MSMcros.TLocationMessageCell_ReuseId)
         
         let header = MJRefreshNormalHeader {[weak self] in
             self?.loadMessages()
@@ -199,7 +198,7 @@ public class MSMessageController: UITableViewController {
             }
             if elem.type == .MSG_TYPE_REVOKE {//撤回的消息
                 let revoke = MSSystemMessageCellData(direction: .inComing)
-                if elem.isSelf {
+                if elem.isSelf() {
                     revoke.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
                 }else {
                     revoke.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
