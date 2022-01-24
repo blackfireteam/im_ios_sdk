@@ -34,6 +34,7 @@
 {
     [super viewDidLoad];
     self.navView.navTitleL.text = TUILocalizableString(WelcomeBack);
+    self.navView.leftButton.hidden = YES;
     
     self.phoneTF = [[UITextField alloc]initWithFrame:CGRectMake(35, StatusBar_Height+NavBar_Height + 80, Screen_Width-70, 50)];
     self.phoneTF.placeholder = TUILocalizableString(You-phone-number);
