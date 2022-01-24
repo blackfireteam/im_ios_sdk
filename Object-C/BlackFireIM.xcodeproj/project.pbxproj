@@ -1060,8 +1060,8 @@
 		F0E60EF327994D2F0072DD68 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60EF427994D2F0072DD68 /* BFConversationListController.m */,
 				F0E60EF527994D2F0072DD68 /* BFConversationListController.h */,
+				F0E60EF427994D2F0072DD68 /* BFConversationListController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";

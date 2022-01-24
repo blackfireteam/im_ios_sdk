@@ -28,7 +28,7 @@ open class MSUIConversationListController: UIViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        loadConversation()
+        loadConversation(next: false)
         
     }
 
@@ -60,7 +60,7 @@ private extension MSUIConversationListController {
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.separatorColor = UIColor.d_color(light: MSMcros.TCell_separatorColor, dark: MSMcros.TCell_separatorColor_Dark)
         tableView.mj_footer = MJRefreshAutoNormalFooter(refreshingBlock: {[weak self] in
-            self?.loadConversation()
+            self?.loadConversation(next: true)
         })
         tableView.mj_footer?.isHidden = true
         view.addSubview(tableView)
@@ -77,10 +77,9 @@ private extension MSUIConversationListController {
         }
     }
     
-    func loadConversation() {
-        MSIMManager.sharedInstance().getConversationList(lastConvSign) { convs, nexSeq, isFinished in
-            
-            self.lastConvSign = nexSeq
+    func loadConversation(next: Bool) {
+        MSIMManager.sharedInstance().getConversationList(next) { convs, isFinished in
+    
             self.updateConversation(convs: convs)
             if isFinished {
                 self.tableView.mj_footer?.endRefreshingWithNoMoreData()

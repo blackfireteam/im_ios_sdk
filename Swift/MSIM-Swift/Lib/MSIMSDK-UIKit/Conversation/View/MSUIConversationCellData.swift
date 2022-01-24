@@ -59,13 +59,13 @@ open class MSUIConversationCellData: NSObject {
         
         var str: String = ""
         if elem.type == .MSG_TYPE_REVOKE {
-            if elem.isSelf() {
+            if elem.isSelf {
                 str = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
             }else {
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
             }
-        }else if (elem.type >= 11 && elem.type < 64) {
-            str = businessElemContent(elem: MSIMElem);
+        }else if (elem.type.rawValue >= 11 && elem.type.rawValue < 64) {
+            str = businessElemContent(elem: elem);
         }else {
             switch elem.type {
             case .MSG_TYPE_TEXT:
@@ -95,6 +95,7 @@ open class MSUIConversationCellData: NSObject {
                 return Bundle.bf_localizedString(key: "TUIKitMessageTipsUnsupportCustomMessage")
             }
         }
+        return ""
     }
     
     private func getCustomElemContent(elem: MSIMElem) -> String {

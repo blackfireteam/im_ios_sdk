@@ -121,7 +121,7 @@ public class MSInputViewController: UIViewController {
         locationData.image = UIImage.bf_imageNamed(name: "more_location")
         
         if self.type == .MSIM_CHAT_TYPE_C2C {
-            moreView.setData(data: [cameraData,photoData,voiceData,videoData,locationData])
+            moreView.setData(data: [cameraData,photoData])
         }else {
             moreView.setData(data: [cameraData,photoData])
         }

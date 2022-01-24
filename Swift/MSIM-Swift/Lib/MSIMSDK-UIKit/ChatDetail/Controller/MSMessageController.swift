@@ -198,7 +198,7 @@ public class MSMessageController: UITableViewController {
             }
             if elem.type == .MSG_TYPE_REVOKE {//撤回的消息
                 let revoke = MSSystemMessageCellData(direction: .inComing)
-                if elem.isSelf() {
+                if elem.isSelf {
                     revoke.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
                 }else {
                     revoke.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
@@ -227,11 +227,6 @@ public class MSMessageController: UITableViewController {
                 voiceMsg.showName = true
                 voiceMsg.elem = elem
                 data = voiceMsg
-            }else if elem.type == .MSG_TYPE_LOCATION {
-                let locationMsg = MSLocationMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
-                locationMsg.showName = true
-                locationMsg.elem = elem
-                data = locationMsg
             }else {
                 let unknowData = MSSystemMessageCellData(direction: .inComing)
                 unknowData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsUnknowMessage")

@@ -25,7 +25,7 @@ extension API: TargetType {
             return URL(string: url)!
         default:
             let serverType = UserDefaults.standard.bool(forKey: "ms_Test")
-            let serverUrl = serverType ? "https://im.ekfree.com:18789" : "https://msim1.ekfree.com:18789"
+            let serverUrl = serverType ? "https://im.ekfree.com:18788" : "https://msim1.ekfree.com:18788"
             return URL(string: serverUrl)!
         }
     }
@@ -83,7 +83,7 @@ extension API: TargetType {
             let radom = String(format: "%u", arc4random_uniform(1000000));
             let time = String(format: "%zd", MSIMTools.sharedInstance().adjustLocalTimeInterval/1000/1000);
             let sign = String(format: "%@%@%@",secret,radom,time).sha1;
-            return ["nonce":radom,"timestamp":time,"sig":sign!,"appid":"2"]
+            return ["nonce":radom,"timestamp":time,"sig":sign!,"appid":"1"]
         }
     }
     

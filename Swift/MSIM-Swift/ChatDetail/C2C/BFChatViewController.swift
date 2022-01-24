@@ -51,7 +51,7 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             guard let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else {return nil}
             if customElem.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL {
                 if let type = dic["type"] as? Int,type == MSIMCustomSubType.Like.rawValue {
-                    let winkData = BFWinkMessageCellData(direction: elem.isSelf() ? .outGoing : .inComing)
+                    let winkData = BFWinkMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
                     winkData.showName = true
                     winkData.elem = customElem
                     return winkData
