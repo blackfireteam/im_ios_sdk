@@ -105,6 +105,9 @@ public class MSMessageController: UITableViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageReceipt), object: nil, queue: .main) {[weak self] note in
             self?.recieveMessageReceipt(note: note)
         }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_flashImageRead), object: nil, queue: .main) {[weak self] note in
+            self?.recieveFlashImageRead(note: note)
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -125,6 +128,7 @@ public class MSMessageController: UITableViewController {
         tableView.register(MSSystemMessageCell.self, forCellReuseIdentifier: MSMcros.TSystemMessageCell_ReuseId)
         tableView.register(MSVideoMessageCell.self, forCellReuseIdentifier: MSMcros.TVideoMessageCell_ReuseId)
         tableView.register(MSVoiceMessageCell.self, forCellReuseIdentifier: MSMcros.TVoiceMessageCell_ReuseId)
+        tableView.register(MSFlashImageMessageCell.self, forCellReuseIdentifier: MSMcros.TFlashImageMessageCell_ReuseId)
         
         let header = MJRefreshNormalHeader {[weak self] in
             self?.loadMessages()
@@ -227,6 +231,11 @@ public class MSMessageController: UITableViewController {
                 voiceMsg.showName = true
                 voiceMsg.elem = elem
                 data = voiceMsg
+            }else if elem.type == .MSG_TYPE_FLASH_IMAGE {
+                let flashMsg = MSFlashImageMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+                flashMsg.showName = true
+                flashMsg.elem = elem
+                data = flashMsg
             }else {
                 let unknowData = MSSystemMessageCellData(direction: .inComing)
                 unknowData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsUnknowMessage")
@@ -394,6 +403,25 @@ private extension MSMessageController {
                 }
                 if info.user_id == self.partner_id {
                     navigationItem.title = info.nick_name
+                }
+            }
+        }
+    }
+    
+    /// 收到闪照已读的指令消息
+    func recieveFlashImageRead(note: Notification) {
+        if let elem = note.object as? MSIMElem {
+            if elem.partner_id != self.partner_id {return}
+            for (index,data) in self.uiMsgs.enumerated() {
+                if data.elem?.msg_id == elem.revoke_msg_id {
+                    let flashData = data as! MSFlashImageMessageCellData
+                    if flashData.flashElem.fromUid == elem.fromUid {
+                        flashData.flashElem.from_see = true
+                    }else if flashData.flashElem.toUid == elem.fromUid {
+                        flashData.flashElem.to_see = true
+                    }
+                    let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MSMessageCell
+                    cell?.fillWithData(data: data)
                 }
             }
         }

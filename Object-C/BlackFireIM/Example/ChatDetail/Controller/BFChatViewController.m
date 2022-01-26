@@ -138,6 +138,24 @@
         browser.dataSourceArray = tempArr;
         browser.currentPage = defaultIndex;
         [browser show];
+    } else if (cell.messageData.elem.type == MSIM_MSG_TYPE_FLASH_IMAGE) {// 点击闪图，表示自己已读
+        [[MSIMManager sharedInstance] flashImageRead:cell.messageData.elem.msg_id toReciever:self.partner_id.integerValue successed:^{
+            
+        } failed:^(NSInteger code, NSString *desc) {
+            
+        }];
+        MSIMFlashElem *flashElem = (MSIMFlashElem *)cell.messageData.elem;
+        YBIBImageData *imageData = [YBIBImageData new];
+        if ([[NSFileManager defaultManager]fileExistsAtPath:flashElem.path]) {
+            imageData.imagePath = flashElem.path;
+        }else {
+            imageData.imageURL = [NSURL URLWithString:flashElem.url];
+        }
+        imageData.projectiveView = cell.container.subviews.firstObject;
+        YBImageBrowser *browser = [YBImageBrowser new];
+        browser.dataSourceArray = @[imageData];
+        browser.currentPage = 0;
+        [browser show];
     }
 }
 

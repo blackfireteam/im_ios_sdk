@@ -62,6 +62,11 @@
                 str = TUILocalizableString(TUIkitMessageTypeVideo);
             }
                 break;
+            case MSIM_MSG_TYPE_FLASH_IMAGE:
+            {
+                str = TUILocalizableString(TUIkitMessageTypeFlashImage);
+            }
+                break;
             case MSIM_MSG_TYPE_CUSTOM_IGNORE_UNREADCOUNT_RECALL:
             case MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL:
             case MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL:

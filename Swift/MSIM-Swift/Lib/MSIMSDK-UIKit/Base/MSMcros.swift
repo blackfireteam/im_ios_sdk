@@ -53,6 +53,9 @@ public struct MSMcros {
     static let TImageMessageCell_Margin_1: CGFloat = 16
     static let TImageMessageCell_Progress_Color: UIColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
 
+    //flash imge cell
+    static let TFlashImageMessageCell_ReuseId: String = "TFlashImageMessageCell"
+    
     //face cell
     static let TFaceMessageCell_ReuseId: String = "TFaceMessageCell"
     static let TFaceMessageCell_Image_Width_Max: CGFloat = UIScreen.width * 0.25
@@ -143,13 +146,12 @@ public struct MSMcros {
     static let GaodeAPIKey: String = "28d8663963475a7eb9126c8ebb9c4bc9"
     static let GaodeAPIWebKey: String = "1db3c63e96dccbe7dd34b6b5150fae90"
     static let kChatRoomID: Int = 25
-    static let kAppInviteCode: String = "MSYYDS"
-//    1641525634
+
 }
 
 /** 自定义消息分类*/
 enum MSIMCustomSubType: Int {
-    case Like = 1 //like
+ 
     case Texting = 100  //正在输入
     case VoiceCall = 200  //语音聊天
     case VideoCall = 300   //视频聊天

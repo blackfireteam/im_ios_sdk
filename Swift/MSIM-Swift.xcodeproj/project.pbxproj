@@ -51,6 +51,8 @@
 		F0E60D84279802B50072DD68 /* spark_loading.json in Resources */ = {isa = PBXBuildFile; fileRef = F0E60D7A279802B50072DD68 /* spark_loading.json */; };
 		F0E60D85279802B50072DD68 /* call.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0E60D7B279802B50072DD68 /* call.caf */; };
 		F0E60D86279802B50072DD68 /* TUIKitFace.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0E60D7C279802B50072DD68 /* TUIKitFace.bundle */; };
+		F0E60F1D27A0E36C0072DD68 /* MSFlashImageMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E60F1C27A0E36C0072DD68 /* MSFlashImageMessageCellData.swift */; };
+		F0E60F1F27A0E40A0072DD68 /* MSFlashImageMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E60F1E27A0E40A0072DD68 /* MSFlashImageMessageCell.swift */; };
 		F0FEA33A26DCC37A00BCF4B6 /* MSInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA33926DCC37A00BCF4B6 /* MSInputViewController.swift */; };
 		F0FEA33C26DDAF3900BCF4B6 /* MSMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA33B26DDAF3900BCF4B6 /* MSMessageController.swift */; };
 		F0FEA33E26DF0CDC00BCF4B6 /* MSChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEA33D26DF0CDC00BCF4B6 /* MSChatViewController.swift */; };
@@ -176,6 +178,8 @@
 		F0E60D7A279802B50072DD68 /* spark_loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = spark_loading.json; sourceTree = "<group>"; };
 		F0E60D7B279802B50072DD68 /* call.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = call.caf; sourceTree = "<group>"; };
 		F0E60D7C279802B50072DD68 /* TUIKitFace.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUIKitFace.bundle; sourceTree = "<group>"; };
+		F0E60F1C27A0E36C0072DD68 /* MSFlashImageMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSFlashImageMessageCellData.swift; sourceTree = "<group>"; };
+		F0E60F1E27A0E40A0072DD68 /* MSFlashImageMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSFlashImageMessageCell.swift; sourceTree = "<group>"; };
 		F0FEA33926DCC37A00BCF4B6 /* MSInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSInputViewController.swift; sourceTree = "<group>"; };
 		F0FEA33B26DDAF3900BCF4B6 /* MSMessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMessageController.swift; sourceTree = "<group>"; };
 		F0FEA33D26DF0CDC00BCF4B6 /* MSChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSChatViewController.swift; sourceTree = "<group>"; };
@@ -607,6 +611,7 @@
 				F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */,
 				F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */,
 				F08FBA3426C20FEB00613FE0 /* MSNoticeCountView.swift */,
+				F0E60F1E27A0E40A0072DD68 /* MSFlashImageMessageCell.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -621,6 +626,7 @@
 				F0FF724F26BB839E0005F3CF /* MSSystemMessageCellData.swift */,
 				F0FF725126BB84DC0005F3CF /* MSVoiceMessageCellData.swift */,
 				F0FF725326BCC2320005F3CF /* MSVideoMessageCellData.swift */,
+				F0E60F1C27A0E36C0072DD68 /* MSFlashImageMessageCellData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -854,6 +860,7 @@
 				F08FBA4426C25C4000613FE0 /* BFConversationListController.swift in Sources */,
 				F0FF71F626B151E60005F3CF /* BFNavigationController.swift in Sources */,
 				F0FF721526B782040005F3CF /* UIDevice+Ext.swift in Sources */,
+				F0E60F1D27A0E36C0072DD68 /* MSFlashImageMessageCellData.swift in Sources */,
 				F0FF71FF26B178720005F3CF /* BFSignInStepTwoController.swift in Sources */,
 				F0FF724126BA1E630005F3CF /* MSInputBarView.swift in Sources */,
 				F0E565BB26FD783D00C3424D /* LanternCell.swift in Sources */,
@@ -895,6 +902,7 @@
 				F0E565A626FC4D3D00C3424D /* ImageStickerContainerView.swift in Sources */,
 				F0E565BA26FD783D00C3424D /* Lantern.swift in Sources */,
 				F0FF721326B77ED90005F3CF /* BFSparkCardCell.swift in Sources */,
+				F0E60F1F27A0E40A0072DD68 /* MSFlashImageMessageCell.swift in Sources */,
 				F0FF724826BA88050005F3CF /* MSMessageCellData.swift in Sources */,
 				F08FBA3D26C2205000613FE0 /* MSUIConversationCell.swift in Sources */,
 				F0E565C326FD783D00C3424D /* LanternSmoothZoomAnimator.swift in Sources */,

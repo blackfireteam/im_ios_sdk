@@ -86,6 +86,9 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageRecieveDelete object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf recieveMessageDelete:note];
     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_flashImageRead object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf recieveFlashImageRead:note];
+    }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHidden) name:UIKeyboardWillHideNotification object:nil];
@@ -104,6 +107,7 @@
     [self.tableView registerClass:[MSSystemMessageCell class] forCellReuseIdentifier:TSystemMessageCell_ReuseId];
     [self.tableView registerClass:[MSVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
     [self.tableView registerClass:[MSVoiceMessageCell class] forCellReuseIdentifier:TVoiceMessageCell_ReuseId];
+    [self.tableView registerClass:[MSFlashImageMessageCell class] forCellReuseIdentifier:TFlashImageMessageCell_ReuseId];
  
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf loadMessages];
@@ -259,6 +263,11 @@
             voiceMsg.showName = YES;
             voiceMsg.elem = elem;
             data = voiceMsg;
+        }else if (elem.type == MSIM_MSG_TYPE_FLASH_IMAGE) {
+            MSFlashImageMessageCellData *flashMsg = [[MSFlashImageMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+            flashMsg.showName = YES;
+            flashMsg.elem = elem;
+            data = flashMsg;
         }else {
             MSSystemMessageCellData *unknowData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);
@@ -420,6 +429,26 @@
         MSMessageCellData *data = self.uiMsgs[i];
         if (data.elem.msg_sign == elem.msg_sign) {
             data.elem = elem;
+            MSMessageCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            [cell fillWithData:data];
+        }
+    }
+}
+
+/// 收到闪照已读的指令消息
+- (void)recieveFlashImageRead:(NSNotification *)note
+{
+    MSIMElem *elem = note.object;
+    if (![elem.partner_id isEqualToString:self.partner_id]) return;
+    for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
+        MSMessageCellData *data = self.uiMsgs[i];
+        if (data.elem.msg_id == elem.revoke_msg_id) {
+            MSFlashImageMessageCellData *flashData = (MSFlashImageMessageCellData *)data;
+            if ([flashData.flashElem.fromUid isEqualToString:elem.fromUid]) {
+                flashData.flashElem.from_see = YES;
+            }else if ([flashData.flashElem.toUid isEqualToString:elem.fromUid]) {
+                flashData.flashElem.to_see = YES;
+            }
             MSMessageCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             [cell fillWithData:data];
         }

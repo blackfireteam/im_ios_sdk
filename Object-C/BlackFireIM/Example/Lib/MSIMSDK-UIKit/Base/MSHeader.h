@@ -82,6 +82,10 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TFaceMessageCell_Image_Height_Max TFaceMessageCell_Image_Width_Max
 #define TFaceMessageCell_Margin 16
 
+//flash imge cell
+#define TFlashImageMessageCell_ReuseId @"TFlashImageMessageCell"
+
+
 //file cell
 #define TFileMessageCell_ReuseId @"TFileMessageCell"
 #define TFileMessageCell_Container_Size CGSizeMake((Screen_Width * 0.5), (Screen_Width * 0.15))

@@ -47,15 +47,12 @@ extension BFChatViewController: MSChatViewControllerDelegate {
     //将要展示在列表中的每和条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
     public func prepareForMessage(controller: MSChatViewController, elem: MSIMElem) -> MSMessageCellData? {
         
-        if let customElem = elem as? MSIMCustomElem {
-            guard let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else {return nil}
-            if customElem.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL {
-                if let type = dic["type"] as? Int,type == MSIMCustomSubType.Like.rawValue {
-                    let winkData = BFWinkMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
-                    winkData.showName = true
-                    winkData.elem = customElem
-                    return winkData
-                }
+        if let bussinessElem = elem as? MSBusinessElem {
+            if bussinessElem.type.rawValue == 11 {
+                let winkData = BFWinkMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+                winkData.showName = true
+                winkData.elem = bussinessElem
+                return winkData
             }
         }
         return nil
@@ -153,6 +150,36 @@ extension BFChatViewController: MSChatViewControllerDelegate {
                 return nil
             })
             lantern.pageIndex = defaultIndex ?? 0
+            lantern.show()
+        }else if cell.messageData?.elem?.type == .MSG_TYPE_FLASH_IMAGE {// 点击闪图，表示自己已读
+            guard let flashElem = cell.messageData?.elem as? MSIMFlashElem else {return}
+            MSIMManager.sharedInstance().flashImageRead(flashElem.msg_id, toReciever: Int(self.partner_id)!) {
+                
+            } failed: { _, _ in
+                
+            }
+            let lantern = Lantern()
+            lantern.numberOfItems = {
+                1
+            }
+            lantern.cellClassAtIndex = { index in
+                return LanternImageCell.self
+            }
+            lantern.reloadCellAtIndex = { context in
+                if let imageCell = context.cell as? LanternImageCell {
+                    
+                    if let path = flashElem.path, FileManager.default.fileExists(atPath: path) {
+                        imageCell.imageView.kf.setImage(with: URL(fileURLWithPath: path))
+                    }else {
+                        imageCell.imageView.kf.setImage(with: URL(string: flashElem.url ?? ""))
+                    }
+                }
+            }
+            lantern.transitionAnimator = LanternZoomAnimator(previousView: { index -> UIView? in
+   
+                return cell.container.subviews.first
+            })
+            lantern.pageIndex = 0
             lantern.show()
         }
     }

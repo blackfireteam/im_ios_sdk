@@ -118,6 +118,7 @@
 "TUIkitMessageTypeVoiceCall" = "[Voice call]";
 "TUIkitMessageTypeVideoCall" = "[Video call]";
 "TUIkitMessageTypeFile" = "[File]";
+"TUIkitMessageTypeFlashImage" = "[Flash Image]";
 "TUIKitMessageTypeAnimateEmoji" = "[Animated Sticker]";
 "TUIKitMessageTipsUnsupportCustomMessage" = "[Customized message]";
 "TUIKitMessageTypeDraft" = "[Draft]";

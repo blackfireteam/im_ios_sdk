@@ -127,6 +127,8 @@
 		F0E60F0927994D2F0072DD68 /* BFNaviBarIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E60EF727994D2F0072DD68 /* BFNaviBarIndicatorView.m */; };
 		F0E60F0A27994D2F0072DD68 /* BFDiscoveryController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E60EFC27994D2F0072DD68 /* BFDiscoveryController.m */; };
 		F0E60F0B27994D2F0072DD68 /* BFUserListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E60EFE27994D2F0072DD68 /* BFUserListCell.m */; };
+		F0E60F1827A0E09A0072DD68 /* MSFlashImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E60F1727A0E09A0072DD68 /* MSFlashImageMessageCell.m */; };
+		F0E60F1B27A0E0AD0072DD68 /* MSFlashImageMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E60F1927A0E0AD0072DD68 /* MSFlashImageMessageCellData.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -410,6 +412,10 @@
 		F0E60EFC27994D2F0072DD68 /* BFDiscoveryController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFDiscoveryController.m; sourceTree = "<group>"; };
 		F0E60EFE27994D2F0072DD68 /* BFUserListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFUserListCell.m; sourceTree = "<group>"; };
 		F0E60EFF27994D2F0072DD68 /* BFUserListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFUserListCell.h; sourceTree = "<group>"; };
+		F0E60F1627A0E0990072DD68 /* MSFlashImageMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSFlashImageMessageCell.h; sourceTree = "<group>"; };
+		F0E60F1727A0E09A0072DD68 /* MSFlashImageMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSFlashImageMessageCell.m; sourceTree = "<group>"; };
+		F0E60F1927A0E0AD0072DD68 /* MSFlashImageMessageCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSFlashImageMessageCellData.m; sourceTree = "<group>"; };
+		F0E60F1A27A0E0AD0072DD68 /* MSFlashImageMessageCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSFlashImageMessageCellData.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -729,14 +735,14 @@
 		F0E60DEE27994CD10072DD68 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60DEF27994CD10072DD68 /* MSChatViewController+More.m */,
-				F0E60DF027994CD10072DD68 /* MSMessageController.h */,
 				F0E60DF127994CD10072DD68 /* MSInputViewController.h */,
+				F0E60DF527994CD10072DD68 /* MSInputViewController.m */,
+				F0E60DF027994CD10072DD68 /* MSMessageController.h */,
+				F0E60DF627994CD10072DD68 /* MSMessageController.m */,
+				F0E60DF427994CD10072DD68 /* MSChatViewController.h */,
 				F0E60DF227994CD10072DD68 /* MSChatViewController.m */,
 				F0E60DF327994CD10072DD68 /* MSChatViewController+More.h */,
-				F0E60DF427994CD10072DD68 /* MSChatViewController.h */,
-				F0E60DF527994CD10072DD68 /* MSInputViewController.m */,
-				F0E60DF627994CD10072DD68 /* MSMessageController.m */,
+				F0E60DEF27994CD10072DD68 /* MSChatViewController+More.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -744,20 +750,22 @@
 		F0E60DF727994CD10072DD68 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60DF827994CD10072DD68 /* MSSystemMessageCellData.m */,
-				F0E60DF927994CD10072DD68 /* MSBubbleMessageCellData.m */,
-				F0E60DFA27994CD10072DD68 /* MSTextMessageCellData.m */,
-				F0E60DFB27994CD10072DD68 /* MSVideoMessageCellData.h */,
-				F0E60DFC27994CD10072DD68 /* MSVoiceMessageCellData.h */,
-				F0E60DFD27994CD10072DD68 /* MSMessageCellData.m */,
-				F0E60DFE27994CD10072DD68 /* MSImageMessageCellData.h */,
-				F0E60DFF27994CD10072DD68 /* MSSystemMessageCellData.h */,
-				F0E60E0027994CD10072DD68 /* MSBubbleMessageCellData.h */,
-				F0E60E0127994CD10072DD68 /* MSTextMessageCellData.h */,
-				F0E60E0227994CD10072DD68 /* MSImageMessageCellData.m */,
 				F0E60E0327994CD10072DD68 /* MSMessageCellData.h */,
+				F0E60DFD27994CD10072DD68 /* MSMessageCellData.m */,
+				F0E60E0127994CD10072DD68 /* MSTextMessageCellData.h */,
+				F0E60DFA27994CD10072DD68 /* MSTextMessageCellData.m */,
+				F0E60DFE27994CD10072DD68 /* MSImageMessageCellData.h */,
+				F0E60E0227994CD10072DD68 /* MSImageMessageCellData.m */,
+				F0E60DFC27994CD10072DD68 /* MSVoiceMessageCellData.h */,
 				F0E60E0427994CD10072DD68 /* MSVoiceMessageCellData.m */,
+				F0E60DFB27994CD10072DD68 /* MSVideoMessageCellData.h */,
 				F0E60E0527994CD10072DD68 /* MSVideoMessageCellData.m */,
+				F0E60DFF27994CD10072DD68 /* MSSystemMessageCellData.h */,
+				F0E60DF827994CD10072DD68 /* MSSystemMessageCellData.m */,
+				F0E60E0027994CD10072DD68 /* MSBubbleMessageCellData.h */,
+				F0E60DF927994CD10072DD68 /* MSBubbleMessageCellData.m */,
+				F0E60F1A27A0E0AD0072DD68 /* MSFlashImageMessageCellData.h */,
+				F0E60F1927A0E0AD0072DD68 /* MSFlashImageMessageCellData.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -765,14 +773,14 @@
 		F0E60E0627994CD10072DD68 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60E0727994CD10072DD68 /* MSResponderTextView.h */,
-				F0E60E0827994CD10072DD68 /* Face */,
 				F0E60E1127994CD10072DD68 /* MSInputBarView.h */,
+				F0E60E2C27994CD10072DD68 /* MSInputBarView.m */,
+				F0E60E0727994CD10072DD68 /* MSResponderTextView.h */,
+				F0E60E2B27994CD10072DD68 /* MSResponderTextView.m */,
+				F0E60E0827994CD10072DD68 /* Face */,
 				F0E60E1227994CD10072DD68 /* Message */,
 				F0E60E2327994CD10072DD68 /* More */,
 				F0E60E2827994CD10072DD68 /* Voice */,
-				F0E60E2B27994CD10072DD68 /* MSResponderTextView.m */,
-				F0E60E2C27994CD10072DD68 /* MSInputBarView.m */,
 				F0E60E2D27994CD10072DD68 /* snapchat */,
 			);
 			path = View;
@@ -781,14 +789,14 @@
 		F0E60E0827994CD10072DD68 /* Face */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60E0927994CD10072DD68 /* MSMenuView.m */,
-				F0E60E0A27994CD10072DD68 /* MSFaceCollectionCell.m */,
-				F0E60E0B27994CD10072DD68 /* MSFaceUtil.m */,
 				F0E60E0C27994CD10072DD68 /* MSFaceView.h */,
-				F0E60E0D27994CD10072DD68 /* MSFaceUtil.h */,
-				F0E60E0E27994CD10072DD68 /* MSFaceCollectionCell.h */,
-				F0E60E0F27994CD10072DD68 /* MSMenuView.h */,
 				F0E60E1027994CD10072DD68 /* MSFaceView.m */,
+				F0E60E0D27994CD10072DD68 /* MSFaceUtil.h */,
+				F0E60E0B27994CD10072DD68 /* MSFaceUtil.m */,
+				F0E60E0E27994CD10072DD68 /* MSFaceCollectionCell.h */,
+				F0E60E0A27994CD10072DD68 /* MSFaceCollectionCell.m */,
+				F0E60E0F27994CD10072DD68 /* MSMenuView.h */,
+				F0E60E0927994CD10072DD68 /* MSMenuView.m */,
 			);
 			path = Face;
 			sourceTree = "<group>";
@@ -796,22 +804,24 @@
 		F0E60E1227994CD10072DD68 /* Message */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60E1327994CD10072DD68 /* MSTextMessageCell.h */,
-				F0E60E1427994CD10072DD68 /* MSNoticeCountView.m */,
-				F0E60E1527994CD10072DD68 /* MSVoiceMessageCell.h */,
-				F0E60E1627994CD10072DD68 /* MSVideoMessageCell.m */,
 				F0E60E1727994CD10072DD68 /* MSMessageCell.h */,
-				F0E60E1827994CD10072DD68 /* MSSystemMessageCell.m */,
-				F0E60E1927994CD10072DD68 /* MSImageMessageCell.m */,
-				F0E60E1A27994CD10072DD68 /* MSBubbleMessageCell.h */,
-				F0E60E1B27994CD10072DD68 /* MSVideoMessageCell.h */,
-				F0E60E1C27994CD10072DD68 /* MSVoiceMessageCell.m */,
-				F0E60E1D27994CD10072DD68 /* MSNoticeCountView.h */,
-				F0E60E1E27994CD10072DD68 /* MSTextMessageCell.m */,
 				F0E60E1F27994CD10072DD68 /* MSMessageCell.m */,
+				F0E60E1327994CD10072DD68 /* MSTextMessageCell.h */,
+				F0E60E1E27994CD10072DD68 /* MSTextMessageCell.m */,
 				F0E60E2027994CD10072DD68 /* MSImageMessageCell.h */,
-				F0E60E2127994CD10072DD68 /* MSSystemMessageCell.h */,
+				F0E60E1927994CD10072DD68 /* MSImageMessageCell.m */,
+				F0E60E1527994CD10072DD68 /* MSVoiceMessageCell.h */,
+				F0E60E1C27994CD10072DD68 /* MSVoiceMessageCell.m */,
+				F0E60E1B27994CD10072DD68 /* MSVideoMessageCell.h */,
+				F0E60E1627994CD10072DD68 /* MSVideoMessageCell.m */,
+				F0E60E1D27994CD10072DD68 /* MSNoticeCountView.h */,
+				F0E60E1427994CD10072DD68 /* MSNoticeCountView.m */,
+				F0E60E1A27994CD10072DD68 /* MSBubbleMessageCell.h */,
 				F0E60E2227994CD10072DD68 /* MSBubbleMessageCell.m */,
+				F0E60F1627A0E0990072DD68 /* MSFlashImageMessageCell.h */,
+				F0E60F1727A0E09A0072DD68 /* MSFlashImageMessageCell.m */,
+				F0E60E2127994CD10072DD68 /* MSSystemMessageCell.h */,
+				F0E60E1827994CD10072DD68 /* MSSystemMessageCell.m */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -819,10 +829,10 @@
 		F0E60E2327994CD10072DD68 /* More */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60E2427994CD10072DD68 /* MSInputMoreCell.m */,
+				F0E60E2727994CD10072DD68 /* MSChatMoreView.h */,
 				F0E60E2527994CD10072DD68 /* MSChatMoreView.m */,
 				F0E60E2627994CD10072DD68 /* MSInputMoreCell.h */,
-				F0E60E2727994CD10072DD68 /* MSChatMoreView.h */,
+				F0E60E2427994CD10072DD68 /* MSInputMoreCell.m */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -830,8 +840,8 @@
 		F0E60E2827994CD10072DD68 /* Voice */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60E2927994CD10072DD68 /* MSRecordView.m */,
 				F0E60E2A27994CD10072DD68 /* MSRecordView.h */,
+				F0E60E2927994CD10072DD68 /* MSRecordView.m */,
 			);
 			path = Voice;
 			sourceTree = "<group>";
@@ -846,13 +856,13 @@
 		F0E60E2E27994CD10072DD68 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				F0E60E3527994CD10072DD68 /* TUIKitFace.bundle */,
 				F0E60E2F27994CD10072DD68 /* TUIKitResource.bundle */,
 				F0E60E3027994CD10072DD68 /* 00.caf */,
 				F0E60E3127994CD10072DD68 /* 01.caf */,
 				F0E60E3227994CD10072DD68 /* wink.json */,
 				F0E60E3327994CD10072DD68 /* spark_loading.json */,
 				F0E60E3427994CD10072DD68 /* call.caf */,
-				F0E60E3527994CD10072DD68 /* TUIKitFace.bundle */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -860,33 +870,33 @@
 		F0E60E3627994CD10072DD68 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60E3727994CD10072DD68 /* UIColor+BFDarkMode.h */,
-				F0E60E3827994CD10072DD68 /* NSDate+MSKit.h */,
-				F0E60E3927994CD10072DD68 /* MSHelper.m */,
-				F0E60E3A27994CD10072DD68 /* UIView+BFExtension.m */,
-				F0E60E3B27994CD10072DD68 /* UIView+Frame.m */,
-				F0E60E3C27994CD10072DD68 /* MSPushMediator.h */,
-				F0E60E3D27994CD10072DD68 /* UIImage+BFKit.m */,
-				F0E60E3E27994CD10072DD68 /* NSBundle+BFKit.h */,
-				F0E60E3F27994CD10072DD68 /* UIImage+BFDarkMode.m */,
-				F0E60E4027994CD10072DD68 /* UIDevice+Ext.h */,
-				F0E60E4127994CD10072DD68 /* NSString+Encry.h */,
-				F0E60E4227994CD10072DD68 /* MSUploadManager.h */,
-				F0E60E4327994CD10072DD68 /* UIButton+positon.h */,
-				F0E60E4427994CD10072DD68 /* MSHelper.h */,
-				F0E60E4527994CD10072DD68 /* NSDate+MSKit.m */,
-				F0E60E4627994CD10072DD68 /* UIColor+BFDarkMode.m */,
 				F0E60E4727994CD10072DD68 /* MSHeader.h */,
-				F0E60E4827994CD10072DD68 /* UIView+BFExtension.h */,
-				F0E60E4927994CD10072DD68 /* NSString+Encry.m */,
-				F0E60E4A27994CD10072DD68 /* UIDevice+Ext.m */,
-				F0E60E4B27994CD10072DD68 /* NSBundle+BFKit.m */,
-				F0E60E4C27994CD10072DD68 /* UIImage+BFDarkMode.h */,
-				F0E60E4D27994CD10072DD68 /* UIImage+BFKit.h */,
+				F0E60E4427994CD10072DD68 /* MSHelper.h */,
+				F0E60E3927994CD10072DD68 /* MSHelper.m */,
 				F0E60E4E27994CD10072DD68 /* UIView+Frame.h */,
+				F0E60E3B27994CD10072DD68 /* UIView+Frame.m */,
+				F0E60E3827994CD10072DD68 /* NSDate+MSKit.h */,
+				F0E60E4527994CD10072DD68 /* NSDate+MSKit.m */,
+				F0E60E4827994CD10072DD68 /* UIView+BFExtension.h */,
+				F0E60E3A27994CD10072DD68 /* UIView+BFExtension.m */,
+				F0E60E4C27994CD10072DD68 /* UIImage+BFDarkMode.h */,
+				F0E60E3F27994CD10072DD68 /* UIImage+BFDarkMode.m */,
+				F0E60E4D27994CD10072DD68 /* UIImage+BFKit.h */,
+				F0E60E3D27994CD10072DD68 /* UIImage+BFKit.m */,
+				F0E60E3C27994CD10072DD68 /* MSPushMediator.h */,
 				F0E60E4F27994CD10072DD68 /* MSPushMediator.m */,
+				F0E60E3E27994CD10072DD68 /* NSBundle+BFKit.h */,
+				F0E60E4B27994CD10072DD68 /* NSBundle+BFKit.m */,
+				F0E60E4327994CD10072DD68 /* UIButton+positon.h */,
 				F0E60E5027994CD10072DD68 /* UIButton+positon.m */,
+				F0E60E3727994CD10072DD68 /* UIColor+BFDarkMode.h */,
+				F0E60E4627994CD10072DD68 /* UIColor+BFDarkMode.m */,
+				F0E60E4027994CD10072DD68 /* UIDevice+Ext.h */,
+				F0E60E4A27994CD10072DD68 /* UIDevice+Ext.m */,
+				F0E60E4227994CD10072DD68 /* MSUploadManager.h */,
 				F0E60E5127994CD10072DD68 /* MSUploadManager.m */,
+				F0E60E4127994CD10072DD68 /* NSString+Encry.h */,
+				F0E60E4927994CD10072DD68 /* NSString+Encry.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -894,11 +904,11 @@
 		F0E60E5227994CD10072DD68 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60E5327994CD10072DD68 /* MSUIConversationCellData.h */,
+				F0E60E5B27994CD10072DD68 /* MSUIConversationListController.h */,
 				F0E60E5427994CD10072DD68 /* MSUIConversationListController.m */,
+				F0E60E5327994CD10072DD68 /* MSUIConversationCellData.h */,
 				F0E60E5527994CD10072DD68 /* MSUIConversationCellData.m */,
 				F0E60E5627994CD10072DD68 /* View */,
-				F0E60E5B27994CD10072DD68 /* MSUIConversationListController.h */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -906,10 +916,10 @@
 		F0E60E5627994CD10072DD68 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60E5727994CD10072DD68 /* MSUnreadView.m */,
 				F0E60E5827994CD10072DD68 /* MSUIConversationCell.h */,
-				F0E60E5927994CD10072DD68 /* MSUnreadView.h */,
 				F0E60E5A27994CD10072DD68 /* MSUIConversationCell.m */,
+				F0E60E5927994CD10072DD68 /* MSUnreadView.h */,
+				F0E60E5727994CD10072DD68 /* MSUnreadView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -926,12 +936,12 @@
 		F0E60EB827994D1E0072DD68 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60EB927994D1E0072DD68 /* BFSignInStepTwoController.h */,
 				F0E60EBA27994D1E0072DD68 /* BFLoginController.h */,
-				F0E60EBB27994D1E0072DD68 /* BFSignInStepOneController.h */,
 				F0E60EBC27994D1E0072DD68 /* BFLoginController.m */,
-				F0E60EBD27994D1E0072DD68 /* BFSignInStepTwoController.m */,
+				F0E60EBB27994D1E0072DD68 /* BFSignInStepOneController.h */,
 				F0E60EBE27994D1E0072DD68 /* BFSignInStepOneController.m */,
+				F0E60EB927994D1E0072DD68 /* BFSignInStepTwoController.h */,
+				F0E60EBD27994D1E0072DD68 /* BFSignInStepTwoController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -939,8 +949,8 @@
 		F0E60EBF27994D1E0072DD68 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60EC027994D1E0072DD68 /* BFRegisterInfo.m */,
 				F0E60EC127994D1E0072DD68 /* BFRegisterInfo.h */,
+				F0E60EC027994D1E0072DD68 /* BFRegisterInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -984,11 +994,11 @@
 		F0E60ECC27994D1E0072DD68 /* Super */ = {
 			isa = PBXGroup;
 			children = (
+				F0E60ED127994D1E0072DD68 /* BFBaseViewController.h */,
 				F0E60ECD27994D1E0072DD68 /* BFBaseViewController.m */,
+				F0E60ED027994D1E0072DD68 /* BFNavigationController.h */,
 				F0E60ECE27994D1E0072DD68 /* BFNavigationController.m */,
 				F0E60ECF27994D1E0072DD68 /* BFTabBarController.h */,
-				F0E60ED027994D1E0072DD68 /* BFNavigationController.h */,
-				F0E60ED127994D1E0072DD68 /* BFBaseViewController.h */,
 				F0E60ED227994D1E0072DD68 /* BFTabBarController.m */,
 			);
 			path = Super;
@@ -1036,14 +1046,14 @@
 		F0E60EE927994D2F0072DD68 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60EEA27994D2F0072DD68 /* BFSparkLoadingView.m */,
-				F0E60EEB27994D2F0072DD68 /* BFSparkCardView.h */,
 				F0E60EEC27994D2F0072DD68 /* BFSparkCardCell.h */,
+				F0E60EF027994D2F0072DD68 /* BFSparkCardCell.m */,
 				F0E60EED27994D2F0072DD68 /* BFSparkEmptyView.h */,
+				F0E60EF127994D2F0072DD68 /* BFSparkEmptyView.m */,
+				F0E60EEB27994D2F0072DD68 /* BFSparkCardView.h */,
 				F0E60EEE27994D2F0072DD68 /* BFSparkCardView.m */,
 				F0E60EEF27994D2F0072DD68 /* BFSparkLoadingView.h */,
-				F0E60EF027994D2F0072DD68 /* BFSparkCardCell.m */,
-				F0E60EF127994D2F0072DD68 /* BFSparkEmptyView.m */,
+				F0E60EEA27994D2F0072DD68 /* BFSparkLoadingView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1069,8 +1079,8 @@
 		F0E60EF627994D2F0072DD68 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60EF727994D2F0072DD68 /* BFNaviBarIndicatorView.m */,
 				F0E60EF827994D2F0072DD68 /* BFNaviBarIndicatorView.h */,
+				F0E60EF727994D2F0072DD68 /* BFNaviBarIndicatorView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1096,8 +1106,8 @@
 		F0E60EFD27994D2F0072DD68 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60EFE27994D2F0072DD68 /* BFUserListCell.m */,
 				F0E60EFF27994D2F0072DD68 /* BFUserListCell.h */,
+				F0E60EFE27994D2F0072DD68 /* BFUserListCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1334,6 +1344,7 @@
 				F0E60E9727994CD10072DD68 /* MSTextMessageCell.m in Sources */,
 				F0E60E6727994CD10072DD68 /* YBIBImageScrollView.m in Sources */,
 				F0E60EDB27994D1E0072DD68 /* BFNavigationController.m in Sources */,
+				F0E60F1827A0E09A0072DD68 /* MSFlashImageMessageCell.m in Sources */,
 				F0E60E6F27994CD10072DD68 /* YBIBSentinel.m in Sources */,
 				F0E60EAC27994CD20072DD68 /* UIColor+BFDarkMode.m in Sources */,
 				F0E60E8F27994CD10072DD68 /* MSFaceCollectionCell.m in Sources */,
@@ -1420,6 +1431,7 @@
 				F0E60ED327994D1E0072DD68 /* BFLoginController.m in Sources */,
 				F0E60E8227994CD10072DD68 /* YYAnimatedImageView.m in Sources */,
 				F0E60E8B27994CD10072DD68 /* MSImageMessageCellData.m in Sources */,
+				F0E60F1B27A0E0AD0072DD68 /* MSFlashImageMessageCellData.m in Sources */,
 				F0E60E9A27994CD10072DD68 /* MSInputMoreCell.m in Sources */,
 				F0E60E8327994CD10072DD68 /* MSChatViewController+More.m in Sources */,
 				F0E60E6927994CD10072DD68 /* YBIBImageCell.m in Sources */,
