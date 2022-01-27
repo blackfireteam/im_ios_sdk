@@ -309,10 +309,6 @@ private extension MSMessageController {
                     tableView.reloadData()
                     break
                 }
-                if elem.msg_id > 0 && elem.msg_id == data.elem?.msg_id {
-                    isExsit = true
-                    break
-                }
             }
             if isExsit == false {
                 tempArr.append(elem)

@@ -309,10 +309,6 @@
                 [self.tableView reloadData];
                 break;
             }
-            if (elem.msg_id > 0 && elem.msg_id == data.elem.msg_id) {
-                isExsit = YES;
-                break;
-            }
         }
         if (isExsit == NO) {
             [tempArr addObject:elem];
