@@ -132,6 +132,13 @@
     }
 }
 
+/// 点击发送自定义表情
+- (void)inputController:(MSInputViewController *)inputController didSendEmotion:(BFFaceCellData *)data
+{
+    [self sendEnotionMessage:data];
+}
+
+
 #pragma mark - <MSMessageControllerDelegate>
 
 /**

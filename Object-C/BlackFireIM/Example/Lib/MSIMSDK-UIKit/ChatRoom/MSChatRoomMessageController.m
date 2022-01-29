@@ -105,7 +105,8 @@
     [self.tableView registerClass:[MSVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
     [self.tableView registerClass:[MSVoiceMessageCell class] forCellReuseIdentifier:TVoiceMessageCell_ReuseId];
     [self.tableView registerClass:[MSLocationMessageCell class] forCellReuseIdentifier:TLocationMessageCell_ReuseId];
-    
+    [self.tableView registerClass:[MSEmotionMessageCell class] forCellReuseIdentifier:TEmotionMessageCell_ReuseId];
+
     _countTipView = [[MSNoticeCountView alloc]init];
     [_countTipView setHidden:YES];
     _countTipView.delegate = self;
@@ -200,6 +201,11 @@
             locationMsg.showName = YES;
             locationMsg.elem = elem;
             data = locationMsg;
+        }else if (elem.type == MSIM_MSG_TYPE_EMOTION) {
+            MSEmotionMessageCellData *emotionnMsg = [[MSEmotionMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+            emotionnMsg.showName = YES;
+            emotionnMsg.elem = elem;
+            data = emotionnMsg;
         }else {
             MSSystemMessageCellData *unknowData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);

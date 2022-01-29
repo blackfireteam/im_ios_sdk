@@ -100,7 +100,7 @@
     [params setValue:info.nick_name forKey:@"nick_name"];
     [params setValue:info.avatar forKey:@"avatar"];
     [params setValue:@(info.gender) forKey:@"gender"];
-    if (info.custom) {
+    if (info.custom.length) {
         [params setValue:info.custom forKey:@"custom"];
     }
     [manager POST:postUrl parameters:params headers:[BFProfileService ms_header] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

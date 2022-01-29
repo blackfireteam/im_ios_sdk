@@ -136,4 +136,14 @@
     [self sendMessage:videoElem];
 }
 
+- (void)sendEnotionMessage:(BFFaceCellData *)data
+{
+    MSIMEmotionElem *emotionElem = [[MSIMEmotionElem alloc]init];
+    emotionElem.emotionID = data.e_id;
+    emotionElem.emotionName = data.name;
+    emotionElem = [[MSIMManager sharedInstance]createEmotionMessage:emotionElem];
+    [self sendMessage:emotionElem];
+}
+
+
 @end

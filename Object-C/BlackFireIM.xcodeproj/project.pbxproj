@@ -1273,10 +1273,10 @@
 		F0E60D102797DDEC0072DD68 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60D112797DDEC0072DD68 /* BFConversationHeaderView.m */,
+				F0E60D142797DDEC0072DD68 /* BFNaviBarIndicatorView.h */,
 				F0E60D122797DDEC0072DD68 /* BFNaviBarIndicatorView.m */,
 				F0E60D132797DDEC0072DD68 /* BFConversationHeaderView.h */,
-				F0E60D142797DDEC0072DD68 /* BFNaviBarIndicatorView.h */,
+				F0E60D112797DDEC0072DD68 /* BFConversationHeaderView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";

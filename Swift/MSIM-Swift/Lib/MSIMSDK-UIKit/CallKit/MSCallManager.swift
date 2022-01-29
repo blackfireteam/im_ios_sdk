@@ -41,18 +41,17 @@ class MSCallManager: NSObject {
                        action: CallAction,
                        room_id: String?) {
         if partner_id.count == 0 || creator.count == 0 {return}
-        var channel_id: String?
         if room_id != nil {
-            channel_id = room_id
+            self.room_id = room_id!
         }else {
             let currentT = MSIMTools.sharedInstance().adjustLocalTimeInterval / 1000 / 1000
-            channel_id = String(format: "c2c_%@_%zd", MSIMTools.sharedInstance().user_id!,currentT)
+            self.room_id = String(format: "c2c_%@_%zd", MSIMTools.sharedInstance().user_id!,currentT)
         }
         switch action {
         case .call:
             self.isOnCallingWithUid = partner_id
             self.callType = callType
-            self.callVC = MSCallViewController(callType: self.callType, sponsor: creator, invitee: partner_id, room_id: channel_id!)
+            self.callVC = MSCallViewController(callType: self.callType, sponsor: creator, invitee: partner_id, room_id: self.room_id)
             self.callVC?.modalPresentationStyle = .fullScreen
             let appdelegate = UIApplication.shared.delegate as? AppDelegate
             appdelegate?.window?.rootViewController?.present(self.callVC!, animated: true, completion: nil)
@@ -60,14 +59,15 @@ class MSCallManager: NSObject {
             self.timerCount = 0
             self.timer?.invalidate()
             self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: {[weak self] timer in
-                self?.inviteTimerAction(room_id: channel_id!,toReciever: partner_id)
+                guard let strongSelf = self else{return}
+                self?.inviteTimerAction(room_id: strongSelf.room_id,toReciever: partner_id)
             })
             RunLoop.main.add(self.timer!, forMode: .common)
         case .cancel:
             
             if creator == MSIMTools.sharedInstance().user_id {
                 /// 作为邀请方，取消通话，会补发一条取消通话的普通消息
-                self.sendMessage(action: .cancel,option: .IMCUSTOM_UNREADCOUNT_NO_RECALL,room_id: channel_id!,toReciever: partner_id)
+                self.sendMessage(action: .cancel,option: .IMCUSTOM_UNREADCOUNT_NO_RECALL,room_id: self.room_id,toReciever: partner_id)
                 self.timer?.invalidate()
                 self.timer = nil
                 self.timerCount = 0
@@ -77,26 +77,26 @@ class MSCallManager: NSObject {
             
             if creator != MSIMTools.sharedInstance().user_id {
                 /// 作为被邀请方，点击拒绝，结束通话。补一条拒绝的指令消息
-                self.sendMessage(action: .reject,option: .IMCUSTOM_SIGNAL,room_id: channel_id!,toReciever: partner_id)
+                self.sendMessage(action: .reject,option: .IMCUSTOM_SIGNAL,room_id: self.room_id,toReciever: partner_id)
                 self.destroyCallVC()
             }
         case .end:
             
             if creator == MSIMTools.sharedInstance().user_id {
                 /// 自己是邀请方主动挂断，结束通话同时补发一条结束的普通消息
-                self.sendMessage(action: .end,option: .IMCUSTOM_UNREADCOUNT_NO_RECALL,room_id: channel_id!,toReciever: partner_id)
+                self.sendMessage(action: .end,option: .IMCUSTOM_UNREADCOUNT_NO_RECALL,room_id: self.room_id,toReciever: partner_id)
                 self.destroyCallVC()
             }else {
                 ///自己是被邀请方主动挂断，结束通话同时补发一条结束的指令消息
-                self.sendMessage(action: .end,option: .IMCUSTOM_SIGNAL,room_id: channel_id!,toReciever: partner_id)
+                self.sendMessage(action: .end,option: .IMCUSTOM_SIGNAL,room_id: self.room_id,toReciever: partner_id)
                 self.destroyCallVC()
             }
         case .accept:
             
             if creator != MSIMTools.sharedInstance().user_id {
                 /// 作为被邀请方，点击接受，补一条接受的指令消息
-                self.callVC?.recieveAccept(callType: callType, room_id: channel_id!)
-                self.sendMessage(action: .accept,option: .IMCUSTOM_SIGNAL,room_id: channel_id!,toReciever: partner_id)
+                self.callVC?.recieveAccept(callType: callType, room_id: self.room_id)
+                self.sendMessage(action: .accept,option: .IMCUSTOM_SIGNAL,room_id: self.room_id,toReciever: partner_id)
             }
         default:
             break
@@ -110,29 +110,25 @@ class MSCallManager: NSObject {
                      room_id: String?) {
         
         if from.count == 0 || from == MSIMTools.sharedInstance().user_id || creator.count == 0 {return}
-        var channel_id: String?
-        if room_id != nil {
-            channel_id = room_id
-        }else {
-            let currentT = MSIMTools.sharedInstance().adjustLocalTimeInterval / 1000 / 1000
-            channel_id = String(format: "c2c_%@_%zd", from,currentT)
-        }
+
         switch action {
         case .call:
             
             if self.isOnCallingWithUid != nil {
                 if self.isOnCallingWithUid != from {
                     /// 如果正与某人聊天，收到另一邀请指令，会给对方回一条正忙的指令消息
-                    self.sendMessage(action: .linebusy, option: .IMCUSTOM_SIGNAL, room_id: channel_id!, toReciever: from)
+                    self.sendMessage(action: .linebusy, option: .IMCUSTOM_SIGNAL, room_id: room_id!, toReciever: from)
                 }
                 return
             }
-            self.isOnCallingWithUid = from
-            self.callType = callType
-            self.callVC = MSCallViewController(callType: self.callType, sponsor: from, invitee: MSIMTools.sharedInstance().user_id!, room_id: channel_id!)
-            self.callVC?.modalPresentationStyle = .fullScreen
-            let appdelegate = UIApplication.shared.delegate as? AppDelegate
-            appdelegate?.window?.rootViewController?.present(self.callVC!, animated: true, completion: nil)
+            if self.room_id != room_id {
+                self.isOnCallingWithUid = from
+                self.callType = callType
+                self.callVC = MSCallViewController(callType: self.callType, sponsor: from, invitee: MSIMTools.sharedInstance().user_id!, room_id: room_id!)
+                self.callVC?.modalPresentationStyle = .fullScreen
+                let appdelegate = UIApplication.shared.delegate as? AppDelegate
+                appdelegate?.window?.rootViewController?.present(self.callVC!, animated: true, completion: nil)
+            }
             
         case .cancel:
             
@@ -147,10 +143,9 @@ class MSCallManager: NSObject {
                 self.timer?.invalidate()
                 self.timer = nil
                 self.timerCount = 0
-                self.destroyCallVC()
-                self.sendMessage(action: .reject, option: .IMCUSTOM_UNREADCOUNT_NO_RECALL, room_id: channel_id!, toReciever: from)
+                self.sendMessage(action: .reject, option: .IMCUSTOM_UNREADCOUNT_NO_RECALL, room_id: room_id!, toReciever: from)
             }
-            
+            self.destroyCallVC()
         case .timeout:
             
             if creator != MSIMTools.sharedInstance().user_id {
@@ -161,11 +156,11 @@ class MSCallManager: NSObject {
             
             if creator == MSIMTools.sharedInstance().user_id {
                 /// 作为邀请方，收到对方挂断指令，会结束通话。同时发一条结束的普通消息
-                self.sendMessage(action: .end, option: .IMCUSTOM_UNREADCOUNT_NO_RECALL, room_id: channel_id!, toReciever: from)
+                self.sendMessage(action: .end, option: .IMCUSTOM_UNREADCOUNT_NO_RECALL, room_id: room_id!, toReciever: from)
                 self.destroyCallVC()
             }else {
                 /// 作为被邀请方，收到对方挂断的消息，会结束通话
-                self.callVC?.recieveHangup(callType: callType, room_id: channel_id!)
+                self.callVC?.recieveHangup(callType: callType, room_id: room_id!)
                 self.destroyCallVC()
             }
         case .linebusy:
@@ -176,7 +171,7 @@ class MSCallManager: NSObject {
                 self.timer = nil
                 self.timerCount = 0
                 self.destroyCallVC()
-                self.sendMessage(action: .linebusy, option: .IMCUSTOM_UNREADCOUNT_NO_RECALL, room_id: channel_id!, toReciever: from)
+                self.sendMessage(action: .linebusy, option: .IMCUSTOM_UNREADCOUNT_NO_RECALL, room_id: room_id!, toReciever: from)
             }
         case .accept:
             
@@ -185,7 +180,7 @@ class MSCallManager: NSObject {
                 self.timer?.invalidate()
                 self.timer = nil
                 self.timerCount = 0
-                self.callVC?.recieveAccept(callType: callType, room_id: channel_id!)
+                self.callVC?.recieveAccept(callType: callType, room_id: room_id!)
             }
         default:
             break
@@ -256,6 +251,8 @@ class MSCallManager: NSObject {
     private var timer: Timer?
     
     private var timerCount: Int = 0
+    
+    private var room_id: String = ""
     
     private func inviteTimerAction(room_id: String, toReciever: String) {
         
