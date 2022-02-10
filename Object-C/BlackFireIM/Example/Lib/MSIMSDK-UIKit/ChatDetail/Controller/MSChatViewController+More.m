@@ -83,4 +83,9 @@
     }];
 }
 
+- (void)tz_imagePickerControllerDidCancel:(TZImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end
