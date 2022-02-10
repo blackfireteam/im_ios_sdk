@@ -40,18 +40,18 @@ public class BFChatViewController: BFBaseViewController {
 
 // MARK: - MSChatViewControllerDelegate
 extension BFChatViewController: MSChatViewControllerDelegate {
-    public func didSendMessage(controller: MSChatViewController, elem: MSIMElem) {
+    public func didSendMessage(controller: MSChatViewController, message: MSIMMessage) {
         //主动发送的每一条消息都会进入这个回调，你可以在此做一些统计埋点等工作。。。
     }
     
     //将要展示在列表中的每和条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
-    public func prepareForMessage(controller: MSChatViewController, elem: MSIMElem) -> MSMessageCellData? {
+    public func prepareForMessage(controller: MSChatViewController, message: MSIMMessage) -> MSMessageCellData? {
         
-        if let bussinessElem = elem as? MSBusinessElem {
-            if bussinessElem.type.rawValue == 11 {
-                let winkData = BFWinkMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+        if let bussinessElem = message.businessElem {
+            if bussinessElem.businessType == 11 {
+                let winkData = BFWinkMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 winkData.showName = true
-                winkData.elem = bussinessElem
+                winkData.message = message
                 return winkData
             }
         }
@@ -82,9 +82,9 @@ extension BFChatViewController: MSChatViewControllerDelegate {
     
     public func onSelectMessageContent(controller: MSChatViewController, cell: MSMessageCell) {
         
-        if cell.messageData?.elem?.type == .MSG_TYPE_IMAGE || cell.messageData?.elem?.type == .MSG_TYPE_VIDEO {
+        if cell.messageData?.message.type == .MSG_TYPE_IMAGE || cell.messageData?.message.type == .MSG_TYPE_VIDEO {
             //将消息列表中的图片和视频都筛出来
-            let tempArr = controller.messageController.uiMsgs.filter { $0.elem?.type == .MSG_TYPE_IMAGE || $0.elem?.type == .MSG_TYPE_VIDEO}
+            let tempArr = controller.messageController.uiMsgs.filter { $0.message.type == .MSG_TYPE_IMAGE || $0.message.type == .MSG_TYPE_VIDEO}
             let defaultIndex = tempArr.firstIndex(of: cell.messageData!)
             let lantern = Lantern()
             lantern.pageIndicator = LanternNumberPageIndicator()
@@ -93,11 +93,11 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             }
             lantern.cellClassAtIndex = { index in
                 let data =  tempArr[index]
-                return data.elem?.type ==  .MSG_TYPE_VIDEO ? VideoZoomCell.self : LanternImageCell.self
+                return data.message.type ==  .MSG_TYPE_VIDEO ? VideoZoomCell.self : LanternImageCell.self
             }
             lantern.reloadCellAtIndex = { context in
                 let data =  tempArr[context.index]
-                if let imageCell = context.cell as? LanternImageCell,let imageElem = data.elem as? MSIMImageElem {
+                if let imageCell = context.cell as? LanternImageCell,let imageElem = data.message.imageElem {
                     
                     if let path = imageElem.path, FileManager.default.fileExists(atPath: path) {
                         imageCell.imageView.kf.setImage(with: URL(fileURLWithPath: path))
@@ -108,7 +108,7 @@ extension BFChatViewController: MSChatViewControllerDelegate {
                     imageCell.longPressedAction = {[weak self] (cell, _) in
                         self?.longPress(elem: imageElem,lantern: cell.lantern)
                     }
-                } else if let videoCell = context.cell as? VideoZoomCell,let videoElem = data.elem as? MSIMVideoElem {
+                } else if let videoCell = context.cell as? VideoZoomCell,let videoElem = data.message.videoElem {
                     
                     if videoElem.coverImage != nil {
                         videoCell.imageView.image = videoElem.coverImage
@@ -151,9 +151,9 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             })
             lantern.pageIndex = defaultIndex ?? 0
             lantern.show()
-        }else if cell.messageData?.elem?.type == .MSG_TYPE_FLASH_IMAGE {// 点击闪图，表示自己已读
-            guard let flashElem = cell.messageData?.elem as? MSIMFlashElem else {return}
-            MSIMManager.sharedInstance().flashImageRead(flashElem.msg_id, toReciever: Int(self.partner_id)!) {
+        }else if cell.messageData?.message.type == .MSG_TYPE_FLASH_IMAGE {// 点击闪图，表示自己已读
+            guard let flashElem = cell.messageData?.message.flashElem else {return}
+            MSIMManager.sharedInstance().flashImageRead(cell.messageData!.message.msgID, toReciever: self.partner_id) {
                 
             } failed: { _, _ in
                 
@@ -184,7 +184,7 @@ extension BFChatViewController: MSChatViewControllerDelegate {
         }
     }
     
-    public func onRecieveTextingMessage(controller: MSChatViewController, elem: MSIMElem) {
+    public func onRecieveTextingMessage(controller: MSChatViewController, message: MSIMMessage) {
         
         self.navigationItem.title = Bundle.bf_localizedString(key: "TUIkitMessageTipsTextingMessage")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
@@ -238,14 +238,11 @@ extension BFChatViewController {
     private func didPickerAsset(images: [UIImage],assets: [PHAsset],isPhoto: Bool) {
         if isPhoto {
             for (index,image) in images.enumerated() {
-                var imageElem = MSIMImageElem()
-                imageElem.type = .MSG_TYPE_IMAGE
-                imageElem.image = image
-                imageElem.width = Int(image.size.width)
-                imageElem.height = Int(image.size.height)
-                imageElem.uuid = assets[index].localIdentifier
-                imageElem = MSIMManager.sharedInstance().createImageMessage(imageElem)
-                self.chatController.sendMessage(message: imageElem)
+                let imagePath = FileManager.pathForIMImage() + NSString.uuid() + ".jpg"
+                let imageData = image.pngData()
+                try? imageData?.write(to: URL(fileURLWithPath: imagePath))
+                let message = MSIMManager.sharedInstance().createImageMessage(imagePath, identifierID: assets[index].localIdentifier)
+                self.chatController.sendMessage(message: message)
             }
         }else {
             MSHelper.showToast()
@@ -262,15 +259,12 @@ extension BFChatViewController {
                         switch exportSession?.status {
                         case .completed:
                             count += 1
-                            var videoElem = MSIMVideoElem()
-                            videoElem.type = .MSG_TYPE_VIDEO
-                            videoElem.coverImage = images[index]
-                            videoElem.width = video.pixelWidth
-                            videoElem.height = video.pixelHeight
-                            videoElem.videoPath = localPath
-                            videoElem.duration = Int(video.duration)
-                            videoElem = MSIMManager.sharedInstance().createVideoMessage(videoElem)
-                            self.chatController.sendMessage(message: videoElem)
+    
+                            let coverPath = FileManager.pathForIMVideo() + NSString.uuid() + ".jpg"
+                            let coverData = images[index].pngData()
+                            try? coverData?.write(to: URL(fileURLWithPath: coverPath))
+                            let message = MSIMManager.sharedInstance().createVideoMessage(localPath, type: "mp4", duration: Int(video.duration), snapshotPath: coverPath, identifierID: nil)
+                            self.chatController.sendMessage(message: message)
                             
                         case .failed, .cancelled:
                             count += 1

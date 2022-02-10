@@ -18,10 +18,6 @@
     return self;
 }
 
-- (MSBusinessElem *)businessElem
-{
-    return (MSBusinessElem *)self.elem;
-}
 
 - (CGSize)contentSize
 {

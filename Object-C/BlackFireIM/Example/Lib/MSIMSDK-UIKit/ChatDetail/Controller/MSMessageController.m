@@ -22,7 +22,7 @@
 @property (nonatomic, assign) BOOL firstLoad;
 @property (nonatomic, assign) BOOL isLoadingMsg;
 @property (nonatomic, assign) BOOL noMoreMsg;
-@property(nonatomic,strong) MSIMElem *msgForDate;
+@property(nonatomic,strong) MSIMMessage *msgForDate;
 
 @property(nonatomic,strong) MSMessageCellData *menuUIMsg;
 
@@ -71,14 +71,11 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_SignalMessageListener object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
        [weakSelf onSignalMessage:note];
     }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageSendStatusUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        [weakSelf messageStatusUpdate:note];
+    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [weakSelf messageUpdate:note];
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_ProfileUpdate object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf profileUpdate:note];
-    }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageRecieveRevoke object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        [weakSelf recieveRevokeMessage:note];
     }];
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageReceipt object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf recieveMessageReceipt:note];
@@ -86,10 +83,6 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_MessageRecieveDelete object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [weakSelf recieveMessageDelete:note];
     }];
-    [[NSNotificationCenter defaultCenter] addObserverForName:MSUIKitNotification_flashImageRead object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        [weakSelf recieveFlashImageRead:note];
-    }];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHidden) name:UIKeyboardWillHideNotification object:nil];
     
@@ -108,7 +101,8 @@
     [self.tableView registerClass:[MSVideoMessageCell class] forCellReuseIdentifier:TVideoMessageCell_ReuseId];
     [self.tableView registerClass:[MSVoiceMessageCell class] forCellReuseIdentifier:TVoiceMessageCell_ReuseId];
     [self.tableView registerClass:[MSFlashImageMessageCell class] forCellReuseIdentifier:TFlashImageMessageCell_ReuseId];
- 
+    
+    
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf loadMessages];
     }];
@@ -146,8 +140,8 @@
 ///重发消息
 - (void)resendMessage:(MSMessageCellData *)data
 {
-    [[MSIMManager sharedInstance] resendC2CMessage:data.elem toReciever:data.elem.toUid successed:^(NSInteger msg_id) {
-        data.elem.msg_id = msg_id;
+    [[MSIMManager sharedInstance] resendC2CMessage:data.message toReciever:data.message.toUid successed:^(NSInteger msg_id) {
+        data.message.msgID = msg_id;
     } failed:^(NSInteger code, NSString * _Nonnull desc) {
         [MSHelper showToastFail:desc];
     }];
@@ -163,17 +157,17 @@
     
     WS(weakSelf)
     if (self.partner_id > 0) {
-        [[MSIMManager sharedInstance] getC2CHistoryMessageList:self.partner_id count:msgCount lastMsg:self.last_msg_sign succ:^(NSArray<MSIMElem *> * _Nonnull msgs, BOOL isFinished) {
+        [[MSIMManager sharedInstance] getC2CHistoryMessageList:self.partner_id count:msgCount lastMsg:self.last_msg_sign succ:^(NSArray<MSIMMessage *> * _Nonnull msgs, BOOL isFinished) {
             
             STRONG_SELF(strongSelf)
             if (isFinished) {
                 strongSelf.noMoreMsg = YES;
                 strongSelf.tableView.mj_header.hidden = YES;
             }
-            NSArray<MSIMElem *> *tempElems = [strongSelf deduplicateMessage:msgs];
+            NSArray<MSIMMessage *> *tempElems = [strongSelf deduplicateMessage:msgs];
             [strongSelf.tableView.mj_header endRefreshing];
             if (msgs.count > 0) {
-                strongSelf.last_msg_sign = msgs.lastObject.msg_sign;
+                strongSelf.last_msg_sign = msgs.lastObject.msgSign;
             }
             
             NSMutableArray *uiMsgs = [strongSelf transUIMsgFromIMMsg:tempElems];
@@ -210,13 +204,13 @@
     }
 }
 
-- (NSMutableArray *)transUIMsgFromIMMsg:(NSArray<MSIMElem *> *)elems
+- (NSMutableArray *)transUIMsgFromIMMsg:(NSArray<MSIMMessage *> *)elems
 {
     NSMutableArray *uiMsgs = [NSMutableArray array];
     for (NSInteger k = elems.count-1; k >= 0; --k) {
-        MSIMElem *elem = elems[k];
+        MSIMMessage *elem = elems[k];
         // 时间信息
-        MSSystemMessageCellData *dateMsg = [self transSystemMsgFromDate: elem.msg_sign];
+        MSSystemMessageCellData *dateMsg = [self transSystemMsgFromDate: elem.msgSign];
         
         MSMessageCellData *data;
         if ([self.delegate respondsToSelector:@selector(messageController:prepareForMessage:)]) {
@@ -239,39 +233,38 @@
                 revoke.content = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
             }
             revoke.type = SYS_REVOKE;
-            revoke.elem = elem;
+            revoke.message = elem;
             data = revoke;
         }else if (elem.type == MSIM_MSG_TYPE_TEXT) {
-            MSIMTextElem *textElem = (MSIMTextElem *)elem;
             MSTextMessageCellData *textMsg = [[MSTextMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             textMsg.showName = YES;
-            textMsg.content = textElem.text;
-            textMsg.elem = textElem;
+            textMsg.content = elem.textElem.text;
+            textMsg.message = elem;
             data = textMsg;
         }else if (elem.type == MSIM_MSG_TYPE_IMAGE) {
             MSImageMessageCellData *imageMsg = [[MSImageMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             imageMsg.showName = YES;
-            imageMsg.elem = elem;
+            imageMsg.message = elem;
             data = imageMsg;
         }else if (elem.type == MSIM_MSG_TYPE_VIDEO) {
             MSVideoMessageCellData *videoMsg = [[MSVideoMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             videoMsg.showName = YES;
-            videoMsg.elem = elem;
+            videoMsg.message = elem;
             data = videoMsg;
         }else if (elem.type == MSIM_MSG_TYPE_VOICE) {
             MSVoiceMessageCellData *voiceMsg = [[MSVoiceMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             voiceMsg.showName = YES;
-            voiceMsg.elem = elem;
+            voiceMsg.message = elem;
             data = voiceMsg;
         }else if (elem.type == MSIM_MSG_TYPE_FLASH_IMAGE) {
             MSFlashImageMessageCellData *flashMsg = [[MSFlashImageMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             flashMsg.showName = YES;
-            flashMsg.elem = elem;
+            flashMsg.message = elem;
             data = flashMsg;
         }else {
             MSSystemMessageCellData *unknowData = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
             unknowData.content = TUILocalizableString(TUIkitMessageTipsUnknowMessage);
-            unknowData.elem = elem;
+            unknowData.message = elem;
             unknowData.type = SYS_UNKNOWN;
             data = unknowData;
         }
@@ -286,7 +279,7 @@
 
 - (MSSystemMessageCellData *)transSystemMsgFromDate:(NSInteger)date
 {
-    if(self.msgForDate == nil || labs(date - self.msgForDate.msg_sign)/1000/1000 > MAX_MESSAGE_SEP_DLAY){
+    if(self.msgForDate == nil || labs(date - self.msgForDate.msgSign)/1000/1000 > MAX_MESSAGE_SEP_DLAY){
         MSSystemMessageCellData *system = [[MSSystemMessageCellData alloc] initWithDirection:MsgDirectionIncoming];
         system.content = [[NSDate dateWithTimeIntervalSince1970:date/1000/1000] ms_messageString];
         system.type = SYS_TIME;
@@ -296,16 +289,16 @@
 }
 
 //消息去重
-- (NSArray<MSIMElem *> *)deduplicateMessage:(NSArray *)elems
+- (NSArray<MSIMMessage *> *)deduplicateMessage:(NSArray *)elems
 {
-    NSMutableArray<MSIMElem *> *tempArr = [NSMutableArray array];
-    for (MSIMElem *elem in elems) {
-        if (![elem.partner_id isEqualToString:self.partner_id]) return nil;
+    NSMutableArray<MSIMMessage *> *tempArr = [NSMutableArray array];
+    for (MSIMMessage *elem in elems) {
+        if (![elem.partnerID isEqualToString:self.partner_id]) return nil;
         BOOL isExsit = NO;
         for (MSMessageCellData *data in self.uiMsgs) {
-            if (elem.msg_sign == data.elem.msg_sign) {
+            if (elem.msgSign == data.message.msgSign) {
                 isExsit = YES;
-                data.elem = elem;
+                data.message = elem;
                 [self.tableView reloadData];
                 break;
             }
@@ -349,32 +342,16 @@
     }
 }
 
-///收到一条对方撤回的消息
-- (void)recieveRevokeMessage:(NSNotification *)note
-{
-    MSIMElem *elem = note.object;
-    if (![elem.partner_id isEqualToString:self.partner_id]) return;
-    MSMessageCellData *revokeData = nil;
-    for (MSMessageCellData *data in self.uiMsgs) {
-        if (data.elem.msg_id == elem.revoke_msg_id) {
-            revokeData = data;
-        }
-    }
-    if (revokeData) {
-        [self revokeMsg:revokeData];
-    }
-}
-
 ///收到对方发出的消息已读回执
 - (void)recieveMessageReceipt:(NSNotification *)note
 {
     MSIMMessageReceipt *receipt = note.object;
     if (![receipt.user_id isEqualToString:self.partner_id]) return;
     for (MSMessageCellData *data in self.uiMsgs) {
-        if (data.elem.msg_id <= receipt.msg_id) {
-            data.elem.readStatus = MSIM_MSG_STATUS_READ;
+        if (data.message.msgID <= receipt.msg_id) {
+            data.message.readStatus = MSIM_MSG_STATUS_READ;
         }else {
-            data.elem.readStatus = MSIM_MSG_STATUS_UNREAD;
+            data.message.readStatus = MSIM_MSG_STATUS_UNREAD;
         }
     }
     [self.tableView reloadData];
@@ -389,7 +366,7 @@
         MSMessageCellData *cellData = self.uiMsgs[i];
         for (NSInteger j = 0; j < msg_ids.count; j++) {
             NSInteger msg_id = [msg_ids[j] integerValue];
-            if (cellData.elem.msg_id == msg_id) {
+            if (cellData.message.msgID == msg_id) {
                 [self.uiMsgs removeObject:cellData];
                 [deleteArr addObject:[NSIndexPath indexPathForRow:i inSection:0]];
                 if (i < self.heightCache.count) {
@@ -416,35 +393,42 @@
     [self.tableView endUpdates];
 }
 
-///消息状态发生变化通知
-- (void)messageStatusUpdate:(NSNotification *)note
-{
-    MSIMElem *elem = note.object;
-    if (![elem.partner_id isEqualToString:self.partner_id]) return;
-    for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
-        MSMessageCellData *data = self.uiMsgs[i];
-        if (data.elem.msg_sign == elem.msg_sign) {
-            data.elem = elem;
-            MSMessageCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            [cell fillWithData:data];
-        }
-    }
-}
 
-/// 收到闪照已读的指令消息
-- (void)recieveFlashImageRead:(NSNotification *)note
+///消息状态发生变化通知
+- (void)messageUpdate:(NSNotification *)note
 {
-    MSIMElem *elem = note.object;
-    if (![elem.partner_id isEqualToString:self.partner_id]) return;
+    MSIMMessage *message = note.object;
+    if (![message.partnerID isEqualToString:self.partner_id]) return;
+    if (message.type == MSIM_MSG_TYPE_REVOKE) {//撤回消息导致cell高度发生变化，需要更新缓存的高度
+        for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
+            MSMessageCellData *data = self.uiMsgs[i];
+            if (data.message.msgID == message.msgID) {
+                [self.uiMsgs removeObject:data];
+                if (i < self.heightCache.count) {
+                    [self.heightCache replaceObjectAtIndex:i withObject:@(0)];
+                }
+                [self.tableView beginUpdates];
+                [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                MSSystemMessageCellData *data = [[MSSystemMessageCellData alloc]initWithDirection:MsgDirectionIncoming];
+                if (message.isSelf) {
+                    data.content = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
+                }else {
+                    data.content = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
+                }
+                data.type = SYS_REVOKE;
+                [self.uiMsgs insertObject:data atIndex:i];
+                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView endUpdates];
+                break;
+            }
+        }
+        
+        return;
+    }
     for (NSInteger i = 0; i < self.uiMsgs.count; i++) {
         MSMessageCellData *data = self.uiMsgs[i];
-        if (data.elem.msg_id == elem.revoke_msg_id) {
-            MSFlashImageMessageCellData *flashData = (MSFlashImageMessageCellData *)data;
-            if ([flashData.flashElem.fromUid isEqualToString:elem.fromUid]) {
-                flashData.flashElem.from_see = YES;
-            }else if ([flashData.flashElem.toUid isEqualToString:elem.fromUid]) {
-                flashData.flashElem.to_see = YES;
-            }
+        if (data.message.msgSign == message.msgSign) {
+            data.message = message;
             MSMessageCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             [cell fillWithData:data];
         }
@@ -489,17 +473,21 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat height = 0;
     if(_heightCache.count > indexPath.row){
-        height = [_heightCache[indexPath.row] floatValue];
-    }
-    if (height) {
+        CGFloat height = [_heightCache[indexPath.row] floatValue];
+        if (height > 0) {
+            return height;
+        }
+        MSMessageCellData *data = self.uiMsgs[indexPath.row];
+        height = [data heightOfWidth:Screen_Width];
+        [_heightCache replaceObjectAtIndex:indexPath.row withObject:@(height)];
+        return height;
+    }else {
+        MSMessageCellData *data = self.uiMsgs[indexPath.row];
+        CGFloat height = [data heightOfWidth:Screen_Width];
+        [_heightCache insertObject:@(height) atIndex:indexPath.row];
         return height;
     }
-    MSMessageCellData *data = self.uiMsgs[indexPath.row];
-    height = [data heightOfWidth:Screen_Width];
-    [_heightCache insertObject:@(height) atIndex:indexPath.row];
-    return height;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -585,7 +573,7 @@
     if ([data isKindOfClass:[MSTextMessageCellData class]]) {
         [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Copy) action:@selector(onCopyMsg:)]];
     }
-    if (data.elem.isSelf && data.elem.sendStatus == MSIM_MSG_STATUS_SEND_SUCC && data.elem.type != MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
+    if (data.message.isSelf && data.message.sendStatus == MSIM_MSG_STATUS_SEND_SUCC && data.message.type != MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
         [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Revoke) action:@selector(onRevoke:)]];
     }
     [items addObject:[[UIMenuItem alloc]initWithTitle:TUILocalizableString(Delete) action:@selector(onDelete:)]];
@@ -678,7 +666,7 @@
 
 - (void)onRevoke:(id)sender
 {
-    [[MSIMManager sharedInstance] revokeMessage:self.menuUIMsg.elem.msg_id toReciever:self.partner_id.integerValue successed:^{
+    [[MSIMManager sharedInstance] revokeMessage:self.menuUIMsg.message.msgID toReciever:self.partner_id successed:^{
         
         NSLog(@"撤回成功");
         
@@ -689,7 +677,7 @@
 
 - (void)onDelete:(id)sender
 {
-    BOOL isOK = [[MSIMManager sharedInstance]deleteMessage:self.menuUIMsg.elem.msg_sign user_id:self.partner_id];
+    BOOL isOK = [[MSIMManager sharedInstance]deleteMessage:self.menuUIMsg.message.msgSign user_id:self.partner_id];
     if (isOK) {
         NSInteger index = [self.uiMsgs indexOfObject:self.menuUIMsg];
         if (index == NSNotFound) return;
@@ -716,29 +704,6 @@
         [self.tableView deleteRowsAtIndexPaths:deleteArr withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView endUpdates];
     }
-}
-
-- (void)revokeMsg:(MSMessageCellData *)msg
-{
-    if (msg == nil) return;
-    NSInteger index = [self.uiMsgs indexOfObject:msg];
-    if (index == NSNotFound) return;
-    [self.uiMsgs removeObject:msg];
-    if (index < self.heightCache.count) {
-        [self.heightCache replaceObjectAtIndex:index withObject:@(0)];
-    }
-    [self.tableView beginUpdates];
-    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    MSSystemMessageCellData *data = [[MSSystemMessageCellData alloc]initWithDirection:MsgDirectionIncoming];
-    if (msg.elem.isSelf) {
-        data.content = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
-    }else {
-        data.content = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
-    }
-    data.type = SYS_REVOKE;
-    [self.uiMsgs insertObject:data atIndex:index];
-    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
 }
 
 #pragma mark - MSNoticeCountViewDelegate

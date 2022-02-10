@@ -29,22 +29,22 @@
     return attr;
 }
 
-- (NSString *)getDisplayString:(MSIMElem *)elem
+- (NSString *)getDisplayString:(MSIMMessage *)message
 {
     NSString *str;
-    if (elem.type == MSIM_MSG_TYPE_REVOKE) {
-        if (elem.isSelf) {
+    if (message.type == MSIM_MSG_TYPE_REVOKE) {
+        if (message.isSelf) {
             str = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
         }else {
             str = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
         }
-    }else if (elem.type >= 11 && elem.type < 64) {
-        str = [self getBusinessElemContent: elem];
+    }else if (message.type >= 11 && message.type < 64) {
+        str = [self getBusinessElemContent: message];
     }else {
-        switch (elem.type) {
+        switch (message.type) {
             case MSIM_MSG_TYPE_TEXT:
             {
-                str = ((MSIMTextElem *)elem).text;
+                str = message.textElem.text;
             }
                 break;
             case MSIM_MSG_TYPE_IMAGE:
@@ -71,7 +71,7 @@
             case MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL:
             case MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL:
             {
-                str = [self getCustomElemContent:elem];
+                str = [self getCustomElemContent:message];
             }
                 break;
             default:
@@ -85,10 +85,9 @@
 }
 
 ///配置业务消息在会话中展示的内容
-- (NSString *)getBusinessElemContent:(MSIMElem *)elem
+- (NSString *)getBusinessElemContent:(MSIMMessage *)message
 {
-    MSBusinessElem *businessElem = (MSBusinessElem *)elem;
-    if (businessElem.type == 11) { // Like
+    if (message.type == 11) { // Like
         return @"[Like]";
     }else {
         return TUILocalizableString(TUIKitMessageTipsUnsupportCustomMessage);
@@ -96,7 +95,7 @@
 }
 
 ///配置自定义消息在会话中展示的内容
-- (NSString *)getCustomElemContent:(MSIMElem *)elem
+- (NSString *)getCustomElemContent:(MSIMMessage *)message
 {
 //    MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
 //    NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
@@ -118,9 +117,9 @@
 - (UIImage *)avatarImage
 {
     if (self.conv.chat_type == MSIM_CHAT_TYPE_C2C) {
-        return [UIImage bf_imageNamed:@"holder_avatar"];
+        return [UIImage bf_imageNamed:@"default_c2c_head"];
     }else {
-        return [UIImage bf_imageNamed:@"holder_avatar"];
+        return [UIImage bf_imageNamed:@"default_group_head"];
     }
 }
 

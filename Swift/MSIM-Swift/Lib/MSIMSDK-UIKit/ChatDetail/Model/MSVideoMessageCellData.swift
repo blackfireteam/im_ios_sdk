@@ -11,13 +11,10 @@ import MSIMSDK
 
 open class MSVideoMessageCellData: MSMessageCellData {
 
-    public var videoElem: MSIMVideoElem {
-        return self.elem! as! MSIMVideoElem
-    }
     
     public override func contentSize() -> CGSize {
         var size: CGSize = .zero
-        size = CGSize(width: videoElem.width, height: videoElem.height)
+        size = CGSize(width: message.videoElem!.width, height: message.videoElem!.height)
         if size == .zero {
             return CGSize(width: 200, height: 200)
         }

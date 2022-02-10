@@ -52,11 +52,11 @@ open class MSFlashImageMessageCell: MSMessageCell {
         super.fillWithData(data: data)
         if let flashData = data as? MSFlashImageMessageCellData {
             self.flashImageData = flashData
-            let progress = flashData.flashElem.progress * 100
+            let progress = flashData.message.flashElem!.progress * 100
             self.progressL.text = "\(progress)%"
             self.progressL.isHidden = !(progress > 0 && progress < 100)
             
-            let isRead = flashData.flashElem.isSelf ? flashData.flashElem.from_see : flashData.flashElem.to_see
+            let isRead = flashData.message.isSelf ? flashData.message.flashElem!.from_see : flashData.message.flashElem!.to_see
             self.maskCoverView.image = isRead ? UIImage.bf_imageNamed(name: "flashImg_sel") : UIImage.bf_imageNamed(name: "flashImg_nor")
             self.fireIcon.image = isRead ? UIImage.bf_imageNamed(name: "flashFire_sel") : UIImage.bf_imageNamed(name: "flashFire_nor")
         }

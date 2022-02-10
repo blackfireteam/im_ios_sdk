@@ -76,15 +76,14 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TImageMessageCell_Margin_1 16
 #define TImageMessageCell_Progress_Color  RGBA(0, 0, 0, 0.5)
 
+//flash imge cell
+#define TFlashImageMessageCell_ReuseId @"TFlashImageMessageCell"
+
 //face cell
 #define TFaceMessageCell_ReuseId @"TFaceMessageCell"
 #define TFaceMessageCell_Image_Width_Max (Screen_Width * 0.25)
 #define TFaceMessageCell_Image_Height_Max TFaceMessageCell_Image_Width_Max
 #define TFaceMessageCell_Margin 16
-
-//flash imge cell
-#define TFlashImageMessageCell_ReuseId @"TFlashImageMessageCell"
-
 
 //file cell
 #define TFileMessageCell_ReuseId @"TFileMessageCell"

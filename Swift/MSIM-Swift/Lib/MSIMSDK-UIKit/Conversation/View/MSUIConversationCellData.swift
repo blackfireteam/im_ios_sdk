@@ -20,7 +20,7 @@ open class MSUIConversationCellData: NSObject {
     
     public var subTitle: NSAttributedString? {
         
-        let lastMsgStr = getDisplayString(elem: conv.show_msg)
+        let lastMsgStr = getDisplayString(message: conv.show_msg)
         if lastMsgStr.count == 0 && conv.draftText.count == 0 {
             return nil
         }
@@ -55,21 +55,21 @@ open class MSUIConversationCellData: NSObject {
         return Date(timeIntervalSince1970: TimeInterval(conv.time / 1000 / 1000))
     }
     
-    private func getDisplayString(elem: MSIMElem) -> String {
+    private func getDisplayString(message: MSIMMessage) -> String {
         
         var str: String = ""
-        if elem.type == .MSG_TYPE_REVOKE {
-            if elem.isSelf {
+        if message.type == .MSG_TYPE_REVOKE {
+            if message.isSelf {
                 str = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
             }else {
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
             }
-        }else if (elem.type.rawValue >= 11 && elem.type.rawValue < 64) {
-            str = businessElemContent(elem: elem);
+        }else if (message.type.rawValue >= 11 && message.type.rawValue < 64) {
+            str = businessElemContent(message: message);
         }else {
-            switch elem.type {
+            switch message.type {
             case .MSG_TYPE_TEXT:
-                str = (elem as! MSIMTextElem).text
+                str = message.textElem!.text
             case .MSG_TYPE_IMAGE:
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTypeImage")
             case .MSG_TYPE_VOICE:
@@ -81,7 +81,7 @@ open class MSUIConversationCellData: NSObject {
             case .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL,
                  .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL,
                  .MSG_TYPE_CUSTOM_IGNORE_UNREADCOUNT_RECALL:
-                str = getCustomElemContent(elem: elem)
+                str = getCustomElemContent(message: message)
             default:
                 str = Bundle.bf_localizedString(key: "TUIkitMessageTipsUnknowMessage")
             }
@@ -89,9 +89,9 @@ open class MSUIConversationCellData: NSObject {
         return str
     }
     
-    private func businessElemContent(elem: MSIMElem) -> String {
-        if let bussinessElem = elem as? MSBusinessElem {
-            if bussinessElem.type.rawValue == 11 {
+    private func businessElemContent(message: MSIMMessage) -> String {
+        if let bussinessElem = message.businessElem {
+            if bussinessElem.businessType == 11 {
                 return "[Like]"
             }else {
                 return Bundle.bf_localizedString(key: "TUIKitMessageTipsUnsupportCustomMessage")
@@ -100,7 +100,7 @@ open class MSUIConversationCellData: NSObject {
         return ""
     }
     
-    private func getCustomElemContent(elem: MSIMElem) -> String {
+    private func getCustomElemContent(message: MSIMMessage) -> String {
         
         return Bundle.bf_localizedString(key: "TUIKitMessageTipsUnsupportCustomMessage")
     }

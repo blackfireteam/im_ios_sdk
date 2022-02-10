@@ -10,10 +10,6 @@ import MSIMSDK
 
 
 open class MSFlashImageMessageCellData: MSMessageCellData {
-
-    public var flashElem: MSIMFlashElem {
-        return self.elem! as! MSIMFlashElem
-    }
     
     public override func contentSize() -> CGSize {
         

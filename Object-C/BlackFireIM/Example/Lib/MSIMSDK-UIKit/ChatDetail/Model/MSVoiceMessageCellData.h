@@ -11,8 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSVoiceMessageCellData : MSBubbleMessageCellData
 
-@property(nonatomic,strong,readonly) MSIMVoiceElem *voiceElem;
-
 @property (nonatomic, assign) BOOL isPlaying;
 
 @property (nonatomic, assign) BOOL isDownloading;

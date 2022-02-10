@@ -26,7 +26,7 @@ open class MSMessageCellData: NSObject {
     
     public var showName: Bool = false
     
-    public var elem: MSIMElem?
+    public var message: MSIMMessage!
     
     public var reUseId: String {
         return "MSMessageCell"

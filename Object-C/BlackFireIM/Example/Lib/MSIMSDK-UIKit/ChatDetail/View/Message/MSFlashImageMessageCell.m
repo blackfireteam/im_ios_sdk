@@ -49,10 +49,10 @@
 - (void)fillWithData:(MSFlashImageMessageCellData *)data
 {
     [super fillWithData:data];
-    NSInteger progress = data.flashElem.progress*100;
+    NSInteger progress = data.message.flashElem.progress*100;
     self.progressL.text = [NSString stringWithFormat:@"%zd%%",progress];
     [self.progressL setHidden:!(progress > 0 && progress < 100)];
-    BOOL isRead = data.flashElem.isSelf ? data.flashElem.from_see : data.flashElem.to_see;
+    BOOL isRead = data.message.isSelf ? data.message.flashElem.from_see : data.message.flashElem.to_see;
     self.maskView.image = isRead ? [UIImage imageNamed:TUIKitResource(@"flashImg_sel")] : [UIImage imageNamed:TUIKitResource(@"flashImg_nor")];
     self.fireIcon.image = isRead ? [UIImage imageNamed:TUIKitResource(@"flashFire_sel")] : [UIImage imageNamed:TUIKitResource(@"flashFire_nor")];
 }

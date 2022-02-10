@@ -44,13 +44,11 @@
             PHAsset *asset = assets[i];
             [[TZImageManager manager] getOriginalPhotoWithAsset:asset newCompletion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
                 if (!isDegraded) {
-                    MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
-                    imageElem.type = MSIM_MSG_TYPE_IMAGE;
-                    imageElem.image = photo;
-                    imageElem.width = photo.size.width;
-                    imageElem.height = photo.size.height;
-                    imageElem.uuid = asset.localIdentifier;
-                    [self sendImage:imageElem];
+                    NSString *imagePath = [NSString stringWithFormat:@"%@%@.jpg",[NSFileManager pathForIMImage],[NSString uuidString]];
+                    NSData *imageData = UIImagePNGRepresentation(photo);
+                    [imageData writeToFile:imagePath atomically:YES];
+                    MSIMMessage *message = [[MSIMManager sharedInstance]createImageMessage:imagePath identifierID:asset.localIdentifier];
+                    [self sendMessage:message];
                 }
             }];
         }
@@ -58,49 +56,31 @@
         for (NSInteger i = 0; i < photos.count; i++) {
             UIImage *image = photos[i];
             PHAsset *asset = assets[i];
-            MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
-            imageElem.type = MSIM_MSG_TYPE_IMAGE;
-            imageElem.image = image;
-            imageElem.width = image.size.width;
-            imageElem.height = image.size.height;
-            imageElem.uuid = asset.localIdentifier;
-            [self sendImage:imageElem];
+            NSString *imagePath = [NSString stringWithFormat:@"%@%@.jpg",[NSFileManager pathForIMImage],[NSString uuidString]];
+            NSData *imageData = UIImagePNGRepresentation(image);
+            [imageData writeToFile:imagePath atomically:YES];
+            MSIMMessage *message = [[MSIMManager sharedInstance]createImageMessage:imagePath identifierID:asset.localIdentifier];
+            [self sendMessage:message];
         }
     }
-    
 }
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingVideo:(UIImage *)coverImage sourceAssets:(PHAsset *)asset
 {
     [MSHelper showToast];
     [[TZImageManager manager] getVideoOutputPathWithAsset:asset success:^(NSString *outputPath) {
-        MSIMVideoElem *videoElem = [[MSIMVideoElem alloc]init];
-        videoElem.type = MSIM_MSG_TYPE_VIDEO;
-        videoElem.coverImage = coverImage;
-        videoElem.width = ABS(asset.pixelWidth);
-        videoElem.height = ABS(asset.pixelHeight);
-        videoElem.videoPath = outputPath;
-        videoElem.duration = asset.duration;
-        videoElem.uuid = asset.localIdentifier;
-        [self sendVideo:videoElem];
+        
+        NSString *coverPath = [NSString stringWithFormat:@"%@%@.jpg",[NSFileManager pathForIMVideo],[NSString uuidString]];
+        NSData *coverData = UIImagePNGRepresentation(coverImage);
+        [coverData writeToFile:coverPath atomically:YES];
+        MSIMMessage *message = [[MSIMManager sharedInstance]createVideoMessage:outputPath type:@"mp4" duration:asset.duration snapshotPath:coverPath identifierID:asset.localIdentifier];
+        [self sendMessage:message];
         [MSHelper dismissToast];
         [picker dismissViewControllerAnimated:YES completion:nil];
     } failure:^(NSString *errorMessage, NSError *error) {
         MSLog(@"%@",error);
         [MSHelper showToastFail:error.localizedDescription];
     }];
-}
-
-- (void)sendImage:(MSIMImageElem *)elem
-{
-    MSIMImageElem *imageElem = [[MSIMManager sharedInstance]createImageMessage:elem];
-    [self sendMessage:imageElem];
-}
-
-- (void)sendVideo:(MSIMVideoElem *)elem
-{
-    MSIMVideoElem *videoElem = [[MSIMManager sharedInstance]createVideoMessage:elem];
-    [self sendMessage:videoElem];
 }
 
 @end

@@ -19,11 +19,6 @@
     return self;
 }
 
-- (MSIMFlashElem *)flashElem
-{
-    return (MSIMFlashElem *)self.elem;
-}
-
 - (CGSize)contentSize
 {
     return CGSizeMake(200, 200);

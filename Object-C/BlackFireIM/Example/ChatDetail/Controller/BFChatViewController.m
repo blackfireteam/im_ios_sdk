@@ -49,14 +49,14 @@
 }
 
 //将要展示在列表中的每和条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
-- (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMElem *)elem
+- (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMMessage *)message
 {
-    if ([elem isKindOfClass:[MSBusinessElem class]]) {
-        MSBusinessElem *businessElem = (MSBusinessElem *)elem;
-        if (businessElem.type == 11) {
-            BFWinkMessageCellData *winkData = [[BFWinkMessageCellData alloc]initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+    if (message.businessElem) {
+        MSBusinessElem *businessElem = message.businessElem;
+        if (businessElem.businessType == 11) {
+            BFWinkMessageCellData *winkData = [[BFWinkMessageCellData alloc]initWithDirection:(message.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             winkData.showName = YES;
-            winkData.elem = businessElem;
+            winkData.message = message;
             return winkData;
         }
     }
@@ -90,7 +90,7 @@
 }
 
 ///收到对方正在输入消息通知
-- (void)chatController:(MSChatViewController *)controller onRecieveTextingMessage:(MSIMElem *)elem
+- (void)chatController:(MSChatViewController *)controller onRecieveTextingMessage:(MSIMMessage *)message
 {
     self.navigationItem.title = TUILocalizableString(TUIkitMessageTipsTextingMessage);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -103,14 +103,14 @@
 ///点击消息内容回调
 - (void)chatController:(MSChatViewController *)controller onSelectMessageContent:(MSMessageCell *)cell
 {
-    if (cell.messageData.elem.type == MSIM_MSG_TYPE_IMAGE || cell.messageData.elem.type == MSIM_MSG_TYPE_VIDEO) {
+    if (cell.messageData.message.type == MSIM_MSG_TYPE_IMAGE || cell.messageData.message.type == MSIM_MSG_TYPE_VIDEO) {
         NSMutableArray *tempArr = [NSMutableArray array];
         NSInteger defaultIndex = 0;
         for (NSInteger i = 0; i < self.chatController.messageController.uiMsgs.count; i++) {
             MSMessageCellData *data =  self.chatController.messageController.uiMsgs[i];
             MSMessageCell *dataCell = (MSMessageCell *)[self.chatController.messageController.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            if (data.elem.type == MSIM_MSG_TYPE_IMAGE) {
-                MSIMImageElem *imageElem = (MSIMImageElem *)data.elem;
+            if (data.message.type == MSIM_MSG_TYPE_IMAGE) {
+                MSIMImageElem *imageElem = data.message.imageElem;
                 YBIBImageData *imageData = [YBIBImageData new];
                 if ([[NSFileManager defaultManager]fileExistsAtPath:imageElem.path]) {
                     imageData.imagePath = imageElem.path;
@@ -119,8 +119,8 @@
                 }
                 imageData.projectiveView = dataCell.container.subviews.firstObject;
                 [tempArr addObject:imageData];
-            }else if (data.elem.type == MSIM_MSG_TYPE_VIDEO) {
-                MSIMVideoElem *videoElem = (MSIMVideoElem *)data.elem;
+            }else if (data.message.type == MSIM_MSG_TYPE_VIDEO) {
+                MSIMVideoElem *videoElem = data.message.videoElem;
                 YBIBVideoData *videoData = [YBIBVideoData new];
                 if ([[NSFileManager defaultManager]fileExistsAtPath:videoElem.videoPath]) {
                     videoData.videoURL = [NSURL fileURLWithPath:videoElem.videoPath];
@@ -138,13 +138,13 @@
         browser.dataSourceArray = tempArr;
         browser.currentPage = defaultIndex;
         [browser show];
-    } else if (cell.messageData.elem.type == MSIM_MSG_TYPE_FLASH_IMAGE) {// 点击闪图，表示自己已读
-        [[MSIMManager sharedInstance] flashImageRead:cell.messageData.elem.msg_id toReciever:self.partner_id.integerValue successed:^{
+    } else if (cell.messageData.message.type == MSIM_MSG_TYPE_FLASH_IMAGE) {// 点击闪图，表示自己已读
+        [[MSIMManager sharedInstance] flashImageRead:cell.messageData.message.msgID toReciever:self.partner_id successed:^{
             
         } failed:^(NSInteger code, NSString *desc) {
             
         }];
-        MSIMFlashElem *flashElem = (MSIMFlashElem *)cell.messageData.elem;
+        MSIMFlashElem *flashElem = cell.messageData.message.flashElem;
         YBIBImageData *imageData = [YBIBImageData new];
         if ([[NSFileManager defaultManager]fileExistsAtPath:flashElem.path]) {
             imageData.imagePath = flashElem.path;

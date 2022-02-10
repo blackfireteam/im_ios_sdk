@@ -19,15 +19,10 @@
     return self;
 }
 
-- (MSIMVideoElem *)videoElem
-{
-    return (MSIMVideoElem *)self.elem;
-}
-
 - (CGSize)contentSize
 {
    CGSize size = CGSizeZero;
-   size = CGSizeMake(self.videoElem.width, self.videoElem.height);
+   size = CGSizeMake(self.message.videoElem.width, self.message.videoElem.height);
    if(CGSizeEqualToSize(size, CGSizeZero)){
        return CGSizeMake(200, 200);
    }

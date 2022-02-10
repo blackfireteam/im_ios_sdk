@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) BOOL showName;
 
-@property(nonatomic,strong) MSIMElem *elem;
+@property(nonatomic,strong) MSIMMessage *message;
 
 @property(nonatomic,copy,readonly) NSString *reuseId;
 

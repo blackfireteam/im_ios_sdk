@@ -14,11 +14,11 @@ let MAX_MESSAGE_SEP_DLAY: Int = 5 * 60
 public protocol MSMessageControllerDelegate: NSObjectProtocol {
     
     ///每条新消息在进入气泡展示区之前，都会通知给您
-    func prepareForMessage(controller: MSMessageController,elem: MSIMElem) -> MSMessageCellData?
+    func prepareForMessage(controller: MSMessageController,message: MSIMMessage) -> MSMessageCellData?
     ///您可以通过该回调实现：根据传入的 data 初始化消息气泡并进行显示
     func onShowMessageData(controller: MSMessageController,cellData: MSMessageCellData) -> MSMessageCell.Type?
     ///收到信令消息
-    func onRecieveSignalMessage(controller: MSMessageController,elems: [MSIMElem])
+    func onRecieveSignalMessage(controller: MSMessageController,messages: [MSIMMessage])
     ///您可以通过该回调实现：重置 InputControoler，收起键盘
     func didTapInMessageController(controller: MSMessageController)
     ///您可以通过该回调实现：跳转到对应用户的详细信息界面
@@ -58,7 +58,7 @@ public class MSMessageController: UITableViewController {
     
     private var noMoreMsg: Bool = false
     
-    private var msgForDate: MSIMElem?
+    private var msgForDate: MSIMMessage?
     
     private var menuUIMsg: MSMessageCellData?
     
@@ -93,20 +93,14 @@ public class MSMessageController: UITableViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_SignalMessageListener), object: nil, queue: .main) {[weak self] note in
             self?.onSignalMessage(note: note)
         }
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageSendStatusUpdate), object: nil, queue: .main) {[weak self] note in
-            self?.messageStatusUpdate(note: note)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageUpdate), object: nil, queue: .main) {[weak self] note in
+            self?.messageUpdate(note: note)
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_ProfileUpdate), object: nil, queue: .main) {[weak self] note in
             self?.profileUpdate(note: note)
         }
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageRecieveRevoke), object: nil, queue: .main) {[weak self] note in
-            self?.recieveRevokeMessage(note: note)
-        }
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageReceipt), object: nil, queue: .main) {[weak self] note in
             self?.recieveMessageReceipt(note: note)
-        }
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_flashImageRead), object: nil, queue: .main) {[weak self] note in
-            self?.recieveFlashImageRead(note: note)
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -148,14 +142,14 @@ public class MSMessageController: UITableViewController {
         let msgCount: Int32 = 20
         MSIMManager.sharedInstance().getC2CHistoryMessageList(self.partner_id, count: msgCount, lastMsg: self.last_msg_sign) { msgs, isFinished in
             
-            let tempElems = self.deduplicateMessage(elems: msgs)
+            let tempMessages = self.deduplicateMessage(messages: msgs)
             self.tableView.mj_header?.endRefreshing()
-            self.last_msg_sign = msgs.last?.msg_sign ?? 0
+            self.last_msg_sign = msgs.last?.msgSign ?? 0
             if isFinished {
                 self.noMoreMsg = true
                 self.tableView.mj_header?.isHidden = true
             }
-            let results = self.transUIMsgFromIMMsg(elems: tempElems)
+            let results = self.transUIMsgFromIMMsg(messages: tempMessages)
             if results.count != 0 {
                 self.uiMsgs.insert(contentsOf: results, at: 0)
                 self.heightCache.removeAll()
@@ -184,66 +178,59 @@ public class MSMessageController: UITableViewController {
         }
     }
     
-    private func transUIMsgFromIMMsg(elems: [MSIMElem]) -> [MSMessageCellData] {
+    private func transUIMsgFromIMMsg(messages: [MSIMMessage]) -> [MSMessageCellData] {
         
         var uiMsgs: [MSMessageCellData] = []
-        for k in (0..<elems.count).reversed() {
-            let elem = elems[k]
-            let dateMsg = transSystemMsgFromDate(date: elem.msg_sign)
+        for k in (0..<messages.count).reversed() {
+            let message = messages[k]
+            let dateMsg = transSystemMsgFromDate(date: message.msgSign)
             
             var data: MSMessageCellData?
-            if let cellData = self.delegate?.prepareForMessage(controller: self, elem: elem) {
+            if let cellData = self.delegate?.prepareForMessage(controller: self, message: message) {
                 if dateMsg != nil {
-                    self.msgForDate = elem
+                    self.msgForDate = message
                     uiMsgs.append(dateMsg!)
                 }
                 uiMsgs.append(cellData)
                 continue
             }
-            if elem.type == .MSG_TYPE_REVOKE {//撤回的消息
+            if message.type == .MSG_TYPE_REVOKE {//撤回的消息
                 let revoke = MSSystemMessageCellData(direction: .inComing)
-                if elem.isSelf {
+                if message.isSelf {
                     revoke.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
                 }else {
                     revoke.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
                 }
-                revoke.elem = elem
                 data = revoke
-            }else if elem.type == .MSG_TYPE_TEXT {
-                let textElem = elem as! MSIMTextElem
-                let textMsg = MSTextMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_TEXT {
+                let textMsg = MSTextMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 textMsg.showName = true
-                textMsg.content = textElem.text
-                textMsg.elem = textElem
+                textMsg.content = message.textElem?.text
                 data = textMsg
-            }else if elem.type == .MSG_TYPE_IMAGE {
-                let imageMsg = MSImageMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_IMAGE {
+                let imageMsg = MSImageMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 imageMsg.showName = true
-                imageMsg.elem = elem
                 data = imageMsg
-            }else if elem.type == .MSG_TYPE_VIDEO {
-                let videoMsg = MSVideoMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_VIDEO {
+                let videoMsg = MSVideoMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 videoMsg.showName = true
-                videoMsg.elem = elem
                 data = videoMsg
-            }else if elem.type == .MSG_TYPE_VOICE {
-                let voiceMsg = MSVoiceMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_VOICE {
+                let voiceMsg = MSVoiceMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 voiceMsg.showName = true
-                voiceMsg.elem = elem
                 data = voiceMsg
-            }else if elem.type == .MSG_TYPE_FLASH_IMAGE {
-                let flashMsg = MSFlashImageMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_FLASH_IMAGE {
+                let flashMsg = MSFlashImageMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 flashMsg.showName = true
-                flashMsg.elem = elem
                 data = flashMsg
             }else {
                 let unknowData = MSSystemMessageCellData(direction: .inComing)
                 unknowData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsUnknowMessage")
-                unknowData.elem = elem
                 data = unknowData
             }
+            data?.message = message
             if dateMsg != nil {
-                self.msgForDate = elem
+                self.msgForDate = message
                 uiMsgs.append(dateMsg!)
             }
             uiMsgs.append(data!)
@@ -253,7 +240,7 @@ public class MSMessageController: UITableViewController {
     
     private func transSystemMsgFromDate(date: Int) -> MSSystemMessageCellData? {
         
-        if self.msgForDate == nil || labs(date - self.msgForDate!.msg_sign) / 1000 / 1000 > MAX_MESSAGE_SEP_DLAY {
+        if self.msgForDate == nil || labs(date - self.msgForDate!.msgSign) / 1000 / 1000 > MAX_MESSAGE_SEP_DLAY {
             let system = MSSystemMessageCellData(direction: .inComing)
             system.content = Date(timeIntervalSince1970: TimeInterval(date / 1000 / 1000)).ms_messageString()
             return system
@@ -276,9 +263,9 @@ private extension MSMessageController {
     //收到新消息
     func onNewMessage(note: Notification) {
         
-        if let elems = note.object as? [MSIMElem] {
-            let tempElems = deduplicateMessage(elems: elems)
-            let tempMsgs = transUIMsgFromIMMsg(elems: tempElems)
+        if let messages = note.object as? [MSIMMessage] {
+            let tempMessages = deduplicateMessage(messages: messages)
+            let tempMsgs = transUIMsgFromIMMsg(messages: tempMessages)
             if tempMsgs.count > 0 {
                 //当前列表是否停留在底部
                 let isAtBottom = (tableView.contentOffset.y + tableView.height + 20 >= tableView.contentSize.height)
@@ -290,28 +277,28 @@ private extension MSMessageController {
                     self.scrollToBottom(animate: true)
                     self.readedReport(datas: tempMsgs)
                 }else {
-                    self.countTipView?.increaseCount(count: tempElems.count)
+                    self.countTipView?.increaseCount(count: tempMessages.count)
                 }
             }
         }
     }
     
-    func deduplicateMessage(elems: [MSIMElem]) -> [MSIMElem] {
+    func deduplicateMessage(messages: [MSIMMessage]) -> [MSIMMessage] {
         
-        var tempArr: [MSIMElem] = []
-        for elem in elems {
-            if elem.partner_id != self.partner_id {return []}
+        var tempArr: [MSIMMessage] = []
+        for message in messages {
+            if message.partnerID != self.partner_id {return []}
             var isExsit: Bool = false
             for data in self.uiMsgs {
-                if elem.msg_sign == data.elem?.msg_sign {
+                if message.msgSign == data.message.msgSign {
                     isExsit = true
-                    data.elem = elem
+                    data.message = message
                     tableView.reloadData()
                     break
                 }
             }
             if isExsit == false {
-                tempArr.append(elem)
+                tempArr.append(message)
             }
         }
         return tempArr
@@ -319,44 +306,8 @@ private extension MSMessageController {
     
     //收到指令消息
     func onSignalMessage(note: Notification) {
-        if let elems = note.object as? [MSIMElem] {
-            delegate?.onRecieveSignalMessage(controller: self, elems: elems)
-        }
-    }
-    
-    //收到一条对方撤回的消息
-    func recieveRevokeMessage(note: Notification) {
-        if let elem = note.object as? MSIMElem {
-            if elem.partner_id != self.partner_id {return}
-            var revokeData: MSMessageCellData?
-            for data in self.uiMsgs {
-                if data.elem?.msg_id == elem.revoke_msg_id {
-                    revokeData = data
-                }
-            }
-            if revokeData != nil {
-                self.revokeMsg(msg: revokeData!)
-            }
-        }
-    }
-    
-    func revokeMsg(msg: MSMessageCellData) {
-        if let index = self.uiMsgs.firstIndex(of: msg) {
-            self.uiMsgs.remove(at: index)
-            if index < self.heightCache.count {
-                self.heightCache[index] = 0
-            }
-            tableView.beginUpdates()
-            tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
-            let data = MSSystemMessageCellData(direction: .inComing)
-            if msg.elem?.isSelf == true {
-                data.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
-            }else {
-                data.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
-            }
-            self.uiMsgs.insert(data, at: index)
-            tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .fade)
-            tableView.endUpdates()
+        if let messages = note.object as? [MSIMMessage] {
+            delegate?.onRecieveSignalMessage(controller: self, messages: messages)
         }
     }
     
@@ -366,26 +317,48 @@ private extension MSMessageController {
         if let receipt = note.object as? MSIMMessageReceipt {
             if receipt.user_id != self.partner_id {return}
             for data in self.uiMsgs {
-                if let msg_id = data.elem?.msg_id, msg_id <= receipt.msg_id {
-                    data.elem?.readStatus = .MSG_STATUS_READ
+                if data.message.msgID <= receipt.msg_id {
+                    data.message.readStatus = .MSG_STATUS_READ
                 }else {
-                    data.elem?.readStatus = .MSG_STATUS_UNREAD
+                    data.message.readStatus = .MSG_STATUS_UNREAD
                 }
             }
             tableView.reloadData()
         }
     }
     
-    //消息状态发生变化通知
-    func messageStatusUpdate(note: Notification) {
-        if let elem = note.object as? MSIMElem {
-            if elem.partner_id != self.partner_id {return}
+    //消息发生变化通知(包括发送状态变更，撤回等等)
+    func messageUpdate(note: Notification) {
+        guard let message = note.object as? MSIMMessage,message.partnerID == self.partner_id else {return}
+        if message.type == .MSG_TYPE_REVOKE {//撤回消息导致cell高度发生变化，需要更新缓存的高度
             for (index,data) in self.uiMsgs.enumerated() {
-                if data.elem?.msg_sign == elem.msg_sign {
-                    data.elem = elem
-                    let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MSMessageCell
-                    cell?.fillWithData(data: data)
+                if data.message.msgID == message.msgID {
+                    self.uiMsgs.remove(at: index)
+                    if index < self.heightCache.count {
+                        self.heightCache[index] = 0
+                    }
+                    self.tableView.beginUpdates()
+                    self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+                    let sysData = MSSystemMessageCellData(direction: .inComing)
+                    if message.isSelf {
+                        sysData.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
+                    }else {
+                        sysData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
+                    }
+                    sysData.sType = .SYS_REVOKE
+                    self.uiMsgs.insert(sysData, at: index)
+                    self.tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+                    self.tableView.endUpdates()
+                    break
                 }
+            }
+            return
+        }
+        for (index,data) in self.uiMsgs.enumerated() {
+            if data.message.msgSign == message.msgSign {
+                data.message = message
+                let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MSMessageCell
+                cell?.fillWithData(data: data)
             }
         }
     }
@@ -399,25 +372,6 @@ private extension MSMessageController {
                 }
                 if info.user_id == self.partner_id {
                     navigationItem.title = info.nick_name
-                }
-            }
-        }
-    }
-    
-    /// 收到闪照已读的指令消息
-    func recieveFlashImageRead(note: Notification) {
-        if let elem = note.object as? MSIMElem {
-            if elem.partner_id != self.partner_id {return}
-            for (index,data) in self.uiMsgs.enumerated() {
-                if data.elem?.msg_id == elem.revoke_msg_id {
-                    let flashData = data as! MSFlashImageMessageCellData
-                    if flashData.flashElem.fromUid == elem.fromUid {
-                        flashData.flashElem.from_see = true
-                    }else if flashData.flashElem.toUid == elem.fromUid {
-                        flashData.flashElem.to_see = true
-                    }
-                    let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MSMessageCell
-                    cell?.fillWithData(data: data)
                 }
             }
         }
@@ -444,17 +398,22 @@ extension MSMessageController {
     }
     
     public override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var height: CGFloat = 0
+      
         if heightCache.count > indexPath.row {
-            height = heightCache[indexPath.row]
-        }
-        if height > 0 {
+            var height = heightCache[indexPath.row]
+            if height > 0 {
+                return height
+            }
+            let data = self.uiMsgs[indexPath.row]
+            height = data.heightOfWidth(width: UIScreen.width)
+            heightCache[indexPath.row] = height
+            return height
+        }else {
+            let data = self.uiMsgs[indexPath.row]
+            let height = data.heightOfWidth(width: UIScreen.width)
+            heightCache.insert(height, at: indexPath.row)
             return height
         }
-        let data = self.uiMsgs[indexPath.row]
-        height = data.heightOfWidth(width: UIScreen.width)
-        heightCache.insert(height, at: indexPath.row)
-        return height
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -533,7 +492,7 @@ extension MSMessageController: MSMessageCellDelegate {
             if data.isKind(of: MSTextMessageCellData.self) {
                 items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Copy"), action: #selector(onCopyMsg)))
             }
-            if data.elem?.isSelf == true && data.elem?.sendStatus == .MSG_STATUS_SEND_SUCC && data.elem?.type != .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
+            if data.message.isSelf == true && data.message.sendStatus == .MSG_STATUS_SEND_SUCC && data.message.type != .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
                 items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Revoke"), action: #selector(onRevoke)))
             }
             items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Delete"), action: #selector(onDelete)))
@@ -564,8 +523,8 @@ extension MSMessageController: MSMessageCellDelegate {
     }
     
     @objc func onRevoke() {
-        if let msg_id = self.menuUIMsg?.elem?.msg_id,let partner_id = Int(self.partner_id) {
-            MSIMManager.sharedInstance().revokeMessage(msg_id, toReciever: partner_id) {
+        if let msg_id = self.menuUIMsg?.message.msgID {
+            MSIMManager.sharedInstance().revokeMessage(msg_id, toReciever: self.partner_id) {
                 
             } failed: { _, _ in
                 
@@ -574,7 +533,7 @@ extension MSMessageController: MSMessageCellDelegate {
     }
     
     @objc func onDelete() {
-        if let msg_sign = self.menuUIMsg?.elem?.msg_sign {
+        if let msg_sign = self.menuUIMsg?.message.msgSign {
             if MSIMManager.sharedInstance().deleteMessage(msg_sign, user_id: self.partner_id) == true {
                 if let index = self.uiMsgs.firstIndex(of: self.menuUIMsg!) {
                     
@@ -617,12 +576,10 @@ extension MSMessageController: MSMessageCellDelegate {
     
     func resendMessage(data: MSMessageCellData) {
         
-        if let elem = data.elem,let toUid = data.elem?.toUid {
-            MSIMManager.sharedInstance().resendC2CMessage(elem, toReciever: toUid) { msg_id in
-                data.elem?.msg_id = msg_id
-            } failed: { code, desc in
-                MSHelper.showToastFailWithText(text: desc ?? "")
-            }
+        MSIMManager.sharedInstance().resendC2CMessage(data.message, toReciever: data.message.toUid) { msg_id in
+            data.message.msgID = msg_id
+        } failed: { code, desc in
+            MSHelper.showToastFailWithText(text: desc ?? "")
         }
     }
     

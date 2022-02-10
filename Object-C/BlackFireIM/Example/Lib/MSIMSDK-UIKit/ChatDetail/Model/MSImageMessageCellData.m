@@ -18,15 +18,11 @@
     return self;
 }
 
-- (MSIMImageElem *)imageElem
-{
-    return (MSIMImageElem *)self.elem;
-}
 
 - (CGSize)contentSize
 {
    CGSize size = CGSizeZero;
-   size = CGSizeMake(self.imageElem.width, self.imageElem.height);
+   size = CGSizeMake(self.message.imageElem.width, self.message.imageElem.height);
    if(CGSizeEqualToSize(size, CGSizeZero)){
        return CGSizeMake(200, 200);
    }

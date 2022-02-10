@@ -147,17 +147,16 @@ extension BFHomeController: BFSparkCardViewDelegate,BFSparkCardViewDataSource {
     func winkBtnDidClick(cell: BFSparkCardCell) {
         if cell.profile?.user_id != nil && cell.winkBtn.isSelected == false {
             
-            var likeElem = MSBusinessElem()
-            likeElem.type = MSIMMessageType(rawValue: 11)!
+            let likeElem = MSBusinessElem()
+            likeElem.businessType = 11
             likeElem.title = "Like"
-            likeElem = MSIMManager.sharedInstance().createBusinessMessage(likeElem)!
-            MSIMManager.sharedInstance().sendC2CMessage(likeElem, toReciever: cell.profile!.user_id) { msg_id in
+            let message = MSIMManager.sharedInstance().createBusinessMessage(likeElem)
+            MSIMManager.sharedInstance().sendC2CMessage(message!, toReciever: cell.profile!.user_id) { msg_id in
                 
                 cell.winkBtn.isSelected = true
             } failed: { code, desc in
                 MSHelper.showToastFailWithText(text: desc ?? "")
             }
-
         }
     }
     

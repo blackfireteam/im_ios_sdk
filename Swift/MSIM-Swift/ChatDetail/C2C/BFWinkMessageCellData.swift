@@ -11,9 +11,6 @@ import MSIMSDK
 
 class BFWinkMessageCellData: MSMessageCellData {
 
-    var customElem: MSIMCustomElem {
-        return self.elem as! MSIMCustomElem
-    }
     
     override func contentSize() -> CGSize {
         return CGSize(width: 150, height: 150)

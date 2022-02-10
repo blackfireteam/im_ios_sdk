@@ -109,10 +109,10 @@
 "TUIKitMessageTypeVoice" = "[语音]";
 "TUIkitMessageTypeVideo" = "[视频]";
 "TUIkitMessageTypeFile" = "[文件]";
+"TUIkitMessageTypeFlashImage" = "[闪图]";
 "TUIkitMessageTypeVoiceCall" = "[语音电话]";
 "TUIkitMessageTypeVideoCall" = "[视频电话]";
 "TUIKitMessageTypeAnimateEmoji" = "[动画表情]";
-"TUIkitMessageTypeFlashImage" = "[闪图]";
 "TUIKitMessageTipsUnsupportCustomMessage" = "[自定义消息]";
 "TUIKitMessageTypeDraft" = "[草稿]";
 

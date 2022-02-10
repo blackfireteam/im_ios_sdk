@@ -38,14 +38,10 @@
     return self;
 }
 
-- (MSIMVoiceElem *)voiceElem
-{
-    return (MSIMVoiceElem *)self.elem;
-}
 
 - (CGSize)contentSize
 {
-    CGFloat bubbleWidth = TVoiceMessageCell_Back_Width_Min + self.voiceElem.duration / TVoiceMessageCell_Max_Duration * Screen_Width;
+    CGFloat bubbleWidth = TVoiceMessageCell_Back_Width_Min + self.message.voiceElem.duration / TVoiceMessageCell_Max_Duration * Screen_Width;
     if(bubbleWidth > TVoiceMessageCell_Back_Width_Max){
         bubbleWidth = TVoiceMessageCell_Back_Width_Max;
     }
@@ -67,7 +63,7 @@
         return;
     }
     self.isPlaying = YES;
-    NSString *path = self.voiceElem.path;
+    NSString *path = self.message.voiceElem.path;
     if (path && [[NSFileManager defaultManager]fileExistsAtPath:path]) {
         [self playInternal:path];
     }else {
@@ -77,14 +73,14 @@
         //下载
         self.isDownloading = YES;
         WS(weakSelf)
-        NSString *savePath = [[NSFileManager pathForIMVoice] stringByAppendingPathComponent:[self.voiceElem.url lastPathComponent]];
+        NSString *savePath = [[NSFileManager pathForIMVoice] stringByAppendingPathComponent:[self.message.voiceElem.url lastPathComponent]];
         
-        [[MSIMManager sharedInstance].uploadMediator ms_downloadFromUrl:self.voiceElem.url toSavePath:savePath progress:^(CGFloat progress) {
+        [[MSIMManager sharedInstance].uploadMediator ms_downloadFromUrl:self.message.voiceElem.url toSavePath:savePath progress:^(CGFloat progress) {
                     
                 } succ:^(NSString * _Nonnull url) {
                     
                     weakSelf.isDownloading = NO;
-                    weakSelf.voiceElem.path = savePath;
+                    weakSelf.message.voiceElem.path = savePath;
                     [weakSelf playInternal:savePath];
                     
                 } fail:^(NSInteger code, NSString * _Nonnull desc) {

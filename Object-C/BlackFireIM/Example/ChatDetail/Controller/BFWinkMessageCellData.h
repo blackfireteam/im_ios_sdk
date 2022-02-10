@@ -11,8 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BFWinkMessageCellData : MSMessageCellData
 
-@property(nonatomic,strong,readonly) MSBusinessElem *businessElem;
-
 @end
 
 NS_ASSUME_NONNULL_END

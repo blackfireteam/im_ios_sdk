@@ -9,10 +9,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class MSIMFlashElem;
+
 @interface MSFlashImageMessageCellData : MSMessageCellData
 
-@property(nonatomic,strong,readonly) MSIMFlashElem *flashElem;
 
 @end
 

@@ -42,8 +42,8 @@ open class MSVoiceMessageCell: MSBubbleMessageCell {
         super.fillWithData(data: data)
         if let voiceData = data as? MSVoiceMessageCellData {
             self.voiceData = voiceData
-            if voiceData.voiceElem.duration > 0 {
-                durationL.text = String(format: "%ld\"", voiceData.voiceElem.duration)
+            if voiceData.message.voiceElem!.duration > 0 {
+                durationL.text = String(format: "%ld\"", voiceData.message.voiceElem!.duration)
             }else {
                 durationL.text = "1\""
             }

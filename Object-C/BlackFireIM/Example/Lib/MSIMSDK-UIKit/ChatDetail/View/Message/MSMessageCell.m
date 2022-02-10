@@ -74,7 +74,7 @@
 {
     self.messageData = data;
     self.avatarView.image = data.defaultAvatar;
-    NSString *fromUid = data.elem.fromUid;
+    NSString *fromUid = data.message.fromUid;
     if (fromUid) {
         MSProfileInfo *profile = [[MSProfileProvider provider]providerProfileFromLocal:fromUid];
         [self.avatarView sd_setImageWithURL:[NSURL URLWithString:profile.avatar] placeholderImage:data.defaultAvatar];
@@ -85,10 +85,10 @@
     self.avatarView.layer.masksToBounds = YES;
     self.avatarView.layer.cornerRadius = 40 * 0.5;
     
-    if(data.elem.sendStatus == MSIM_MSG_STATUS_SEND_FAIL){
+    if(data.message.sendStatus == MSIM_MSG_STATUS_SEND_FAIL){
         [_indicator stopAnimating];
         self.retryView.image = [UIImage imageNamed:TUIKitResource(@"msg_error")];
-    }else if (data.elem.sendStatus == MSIM_MSG_STATUS_SENDING) {
+    }else if (data.message.sendStatus == MSIM_MSG_STATUS_SENDING) {
         [_indicator startAnimating];
         self.retryView.image = nil;
     }else {
@@ -97,9 +97,9 @@
     }
     if (self.messageData.direction == MsgDirectionOutgoing) {
         self.readReceiptLabel.hidden = NO;
-        if (self.messageData.elem.sendStatus == MSIM_MSG_STATUS_SEND_SUCC) {
-            self.readReceiptLabel.text = self.messageData.elem.readStatus == MSIM_MSG_STATUS_UNREAD ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
-        }else if (self.messageData.elem.sendStatus == MSIM_MSG_STATUS_SENDING) {
+        if (self.messageData.message.sendStatus == MSIM_MSG_STATUS_SEND_SUCC) {
+            self.readReceiptLabel.text = self.messageData.message.readStatus == MSIM_MSG_STATUS_UNREAD ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
+        }else if (self.messageData.message.sendStatus == MSIM_MSG_STATUS_SENDING) {
             self.readReceiptLabel.text = TUILocalizableString(Sending);
         }else {
             self.readReceiptLabel.text = TUILocalizableString(NotDeliveried);
@@ -182,7 +182,7 @@
 
 - (void)onRetryMessage:(UIGestureRecognizer *)recognizer
 {
-    if (_messageData.elem.sendStatus == MSIM_MSG_STATUS_SEND_FAIL)
+    if (_messageData.message.sendStatus == MSIM_MSG_STATUS_SEND_FAIL)
         if (_delegate && [_delegate respondsToSelector:@selector(onRetryMessage:)]) {
             [_delegate onRetryMessage:self];
         }

@@ -21,8 +21,9 @@
 #import "MSVoiceMessageCell.h"
 #import "MSVideoMessageCell.h"
 #import "MSSystemMessageCell.h"
+#import "MSFlashImageMessageCell.h"
 #import "MSNoticeCountView.h"
 #import "MSChatMoreView.h"
-#import "MSFlashImageMessageCell.h"
+
 
 #endif /* MSIMSDK_UIKit_h */

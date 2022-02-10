@@ -14,7 +14,7 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - AgoraRtcEngine_iOS (3.6.1.1)
+  - AgoraRtcEngine_iOS (3.6.1.2)
   - AMap3DMap (9.0.0):
     - AMapFoundation (~> 1.6.9)
   - AMapFoundation (1.6.9)
@@ -23,13 +23,13 @@ PODS:
   - Bugly (2.5.91)
   - lottie-ios (2.5.3)
   - MJRefresh (3.7.5)
-  - MSIMSDK_DE4 (1.2.9)
+  - MSIMSDK_DE4 (1.3.1)
   - QCloudCore/WithoutMTA (6.0.3)
   - QCloudCOSXML/Transfer (6.0.3):
     - QCloudCore/WithoutMTA (= 6.0.3)
-  - SDWebImage (5.12.2):
-    - SDWebImage/Core (= 5.12.2)
-  - SDWebImage/Core (5.12.2)
+  - SDWebImage (5.12.3):
+    - SDWebImage/Core (= 5.12.3)
+  - SDWebImage/Core (5.12.3)
   - SVProgressHUD (2.2.5)
   - TZImagePickerController (3.7.2)
 
@@ -66,17 +66,17 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  AgoraRtcEngine_iOS: b95d48918cbe5ed64b496634316291c89864d244
+  AgoraRtcEngine_iOS: 510e5e3c4d4d92a0d49ab02a8e08b5217e974677
   AMap3DMap: 189a20478751f9b91b830fbb565344b88d3ffebb
   AMapFoundation: 8d8ecbb0b2e9ce5487995360d26c885d94642bfd
   AMapSearch: 5c1cc07429f04b9cc76438fcb2411c66fdbbb178
   Bugly: afe841bba2ea6de6d432a3c125240a5e75949c55
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
-  MSIMSDK_DE4: d4220140e8c8ee679989e82c3cc9fce34b265677
+  MSIMSDK_DE4: e6a7ad3e98bf1ac9acf1838d7e6664bc97367b31
   QCloudCore: aeda29371182fe89e57621b3bae602162440ae9c
   QCloudCOSXML: 4a38d27bc3bb28b6615acabae43945337bfd8091
-  SDWebImage: 240e5c12b592fb1268c1d03b8c90d90e8c2ffe82
+  SDWebImage: 53179a2dba77246efa8a9b85f5c5b21f8f43e38f
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   TZImagePickerController: 0f926234c46362d3c4ed128832b6da59b2d9917e
 

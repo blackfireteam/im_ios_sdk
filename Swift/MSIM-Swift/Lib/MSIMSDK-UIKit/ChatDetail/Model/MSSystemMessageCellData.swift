@@ -28,6 +28,7 @@ open class MSSystemMessageCellData: MSMessageCellData {
         super.init(direction: direction)
         contentFont = .systemFont(ofSize: 13)
         contentColor = UIColor.systemGray
+        message = MSIMMessage()
     }
     
     public override func contentSize() -> CGSize {

@@ -12,10 +12,6 @@ import AVFoundation
 
 open class MSVoiceMessageCellData: MSBubbleMessageCellData {
 
-    public var voiceElem: MSIMVoiceElem {
-        return self.elem! as! MSIMVoiceElem
-    }
-    
     public var voiceAnimationImages: [UIImage] = []
     
     public var voiceImage: UIImage!
@@ -27,20 +23,20 @@ open class MSVoiceMessageCellData: MSBubbleMessageCellData {
     public func playVoiceMessage() {
         if isPlaying {return}
         isPlaying = true
-        guard let path = voiceElem.path else {return}
+        guard let path = message.voiceElem?.path else {return}
         if FileManager.default.fileExists(atPath: path) {
             playInternal(path: path)
         }else {
             if isDownloading {return}
-            if voiceElem.url == nil {return}
+            if message.voiceElem?.url == nil {return}
             isDownloading = true
-            let savePath = FileManager.pathForIMVoice().appendingFormat("/%@", (voiceElem.url! as NSString).lastPathComponent)
-            MSIMManager.sharedInstance().uploadMediator?.ms_download?(fromUrl: voiceElem.url!, toSavePath: savePath, progress: { progress in
+            let savePath = FileManager.pathForIMVoice().appendingFormat("/%@", (message.voiceElem!.url! as NSString).lastPathComponent)
+            MSIMManager.sharedInstance().uploadMediator?.ms_download?(fromUrl: message.voiceElem!.url!, toSavePath: savePath, progress: { progress in
                 
             }, succ: { url in
                 
                 self.isDownloading = false
-                self.voiceElem.path = savePath
+                self.message.voiceElem?.path = savePath
                 self.playInternal(path: savePath)
                 
             }, fail: { code, desc in
@@ -72,7 +68,7 @@ open class MSVoiceMessageCellData: MSBubbleMessageCellData {
     }
     
     public override func contentSize() -> CGSize {
-        var bubbleWidth = MSMcros.TVoiceMessageCell_Back_Width_Min + CGFloat(voiceElem.duration) / MSMcros.TVoiceMessageCell_Max_Duration * UIScreen.width
+        var bubbleWidth = MSMcros.TVoiceMessageCell_Back_Width_Min + CGFloat(message.voiceElem!.duration) / MSMcros.TVoiceMessageCell_Max_Duration * UIScreen.width
         if bubbleWidth > MSMcros.TVoiceMessageCell_Back_Width_Max {
             bubbleWidth = MSMcros.TVoiceMessageCell_Back_Width_Max
         }

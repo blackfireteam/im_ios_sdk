@@ -200,10 +200,10 @@
 {
     if (cell.user.user_id && cell.winkBtn.isSelected == NO) {
         MSBusinessElem *likeElem = [[MSBusinessElem alloc] init];
-        likeElem.type = 11;
+        likeElem.businessType = 11;
         likeElem.title = @"Like";
-        likeElem = [[MSIMManager sharedInstance] createBusinessMessage:likeElem];
-        [[MSIMManager sharedInstance]sendC2CMessage:likeElem toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
+        MSIMMessage *message = [[MSIMManager sharedInstance]createBusinessMessage:likeElem];
+        [[MSIMManager sharedInstance]sendC2CMessage:message toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
                  
              cell.winkBtn.selected = YES;
             
