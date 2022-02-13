@@ -97,12 +97,12 @@ class BFTabBarController: UITabBarController {
     
     private func onSignalMessage(note: Notification) {
         
-        guard let elems = note.object as? [MSIMElem],let customElem = elems.last as? MSIMCustomElem else {return}
+        guard let messages = note.object as? [MSIMMessage],let message = messages.last,let customElem = messages.last?.customElem else {return}
         let dic = (customElem.jsonStr as NSString).el_convertToDictionary()
         if let typeInt = dic["type"] as? Int,let type = MSIMCustomSubType(rawValue: typeInt) {
             if type == .VoiceCall || type == .VideoCall {
                 if let event = dic["event"] as? Int,let eventType = CallAction(rawValue: event),let room_id = dic["room_id"] as? String {
-                    MSCallManager.shared.recieveCall(from: customElem.partner_id, creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (type == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
+                    MSCallManager.shared.recieveCall(from: message.partnerID, creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (type == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
                 }
             }
         }
@@ -110,14 +110,14 @@ class BFTabBarController: UITabBarController {
 
     private func onNewMessage(note: Notification) {
         
-        guard let elems = note.object as? [MSIMElem] else {return}
-        for elem in elems {
-            guard let customElem = elem as? MSIMCustomElem,let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else {continue}
+        guard let messages = note.object as? [MSIMMessage] else {return}
+        for message in messages {
+            guard let customElem = message.customElem,let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else {continue}
             guard let type = dic["type"] as? Int, let callType = MSIMCustomSubType(rawValue: type) else {continue}
             guard let event = dic["event"] as? Int, let eventType = CallAction(rawValue: event) else {continue}
             guard let room_id = dic["room_id"] as? String else {continue}
-            if customElem.fromUid != MSIMTools.sharedInstance().user_id {
-                MSCallManager.shared.recieveCall(from: customElem.partner_id, creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (callType == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
+            if message.fromUid != MSIMTools.sharedInstance().user_id {
+                MSCallManager.shared.recieveCall(from: message.partnerID, creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (callType == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
             }
         }
     }

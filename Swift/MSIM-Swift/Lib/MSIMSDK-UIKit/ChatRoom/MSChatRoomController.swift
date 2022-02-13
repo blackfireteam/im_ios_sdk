@@ -12,13 +12,13 @@ import AVFoundation
 public protocol MSChatRoomControllerDelegate: NSObjectProtocol {
     
     ///发送新消息时的回调
-    func didSendMessage(controller: MSChatRoomController,elem: MSIMElem)
+    func didSendMessage(controller: MSChatRoomController,message: MSIMMessage)
     ///每条新消息在进入气泡展示区之前，都会通知给您
     ///主要用于甄别自定义消息
     ///如果您返回 nil，MSChatViewController 会认为该条消息非自定义消息，会将其按照普通消息的处理流程进行处理。
     ///如果您返回一个 MSMessageCellData 类型的对象，MSChatViewController 会在随后触发的 onShowMessageData() 回调里传入您返回的 cellData 对象。
     ///也就是说，onNewMessage() 负责让您甄别自己的个性化消息，而 onShowMessageData() 回调则负责让您展示这条个性化消息。
-    func prepareForMessage(controller: MSChatRoomController,elem: MSIMElem) -> MSMessageCellData?
+    func prepareForMessage(controller: MSChatRoomController,message: MSIMMessage) -> MSMessageCellData?
     
     ///展示自定义个性化消息
     ///您可以通过重载 onShowMessageData() 改变消息气泡的默认展示逻辑，只需要返回一个自定义的 MSMessageCell 对象即可。
@@ -49,7 +49,7 @@ public class MSChatRoomController: UIViewController {
     
     public private(set) var inputController: MSInputViewController!
     
-    func sendMessage(message: MSIMElem) {
+    func sendMessage(message: MSIMMessage) {
         if self.roomInfo == nil {
             MSHelper.showToastWithText(text: "room_id is nill")
             return
@@ -59,7 +59,7 @@ public class MSChatRoomController: UIViewController {
         } failed: { _, desc in
             MSHelper.showToastFailWithText(text: desc ?? "")
         }
-        delegate?.didSendMessage(controller: self, elem: message)
+        delegate?.didSendMessage(controller: self, message: message)
     }
     
     public override func viewDidLoad() {
@@ -117,14 +117,8 @@ extension MSChatRoomController: MSInputViewControllerDelegate {
         let url = URL(fileURLWithPath: filePath)
         let audioAsset = AVURLAsset(url: url, options: nil)
         let duration = Int(CMTimeGetSeconds(audioAsset.duration))
-        if let length = try? FileManager.default.attributesOfItem(atPath: filePath)[FileAttributeKey.size] as? Int {
-            var voiceElem = MSIMVoiceElem()
-            voiceElem.path = filePath
-            voiceElem.duration = duration
-            voiceElem.dataSize = length
-            voiceElem = MSIMManager.sharedInstance().createVoiceMessage(voiceElem)
-            self.sendMessage(message: voiceElem)
-        }
+        let message = MSIMManager.sharedInstance().createVoiceMessage(filePath, duration: duration)
+        self.sendMessage(message: message)
     }
     
     public func contentDidChanged(inputController: MSInputViewController, text: String) {
@@ -147,12 +141,12 @@ extension MSChatRoomController: MSInputViewControllerDelegate {
 
 // MARK: MSChatRoomMessageControllerDelegate
 extension MSChatRoomController: MSChatRoomMessageControllerDelegate {
-    public func onRecieveSignalMessage(controller: MSChatRoomMessageController, elems: [MSIMElem]) {
+    public func onRecieveSignalMessage(controller: MSChatRoomMessageController, messages: [MSIMMessage]) {
         
     }
     
-    public func prepareForMessage(controller: MSChatRoomMessageController, elem: MSIMElem) -> MSMessageCellData? {
-        if let data = delegate?.prepareForMessage(controller: self, elem: elem) {
+    public func prepareForMessage(controller: MSChatRoomMessageController, message: MSIMMessage) -> MSMessageCellData? {
+        if let data = delegate?.prepareForMessage(controller: self, message: message) {
             return data
         }
         return nil

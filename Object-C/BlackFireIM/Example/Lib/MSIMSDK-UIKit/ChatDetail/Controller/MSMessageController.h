@@ -12,14 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 @class MSMessageController;
 @class MSMessageCell;
 @class MSMessageCellData;
-@class MSIMElem;
+@class MSIMMessage;
 @protocol MSMessageControllerDelegate <NSObject>
 
 
 /**
  *  每条新消息在进入气泡展示区之前，都会通知给您
  */
-- (MSMessageCellData *)messageController:(MSMessageController *)controller prepareForMessage:(MSIMElem *)data;
+- (MSMessageCellData *)messageController:(MSMessageController *)controller prepareForMessage:(MSIMMessage *)data;
 
 /**
  *  显示消息数据委托
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  收到信令消息
  */
-- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMElem *>*)elems;
+- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMMessage *>*)messages;
 
 /**
  *  控制器点击回调

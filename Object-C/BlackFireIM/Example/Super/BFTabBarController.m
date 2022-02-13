@@ -116,32 +116,32 @@
 ///收到新消息
 - (void)onSignalMessage:(NSNotification *)note
 {
-    NSArray *elems = note.object;
-    MSIMElem *elem = elems.lastObject;
-    if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
-    MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+    NSArray *messages = note.object;
+    MSIMMessage *message = messages.lastObject;
+    if (message.customElem == nil) return;
+    MSIMCustomElem *customElem = message.customElem;
     NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
     MSIMCustomSubType type = [dic[@"type"] integerValue];
     if (type == MSIMCustomSubTypeVoiceCall || type == MSIMCustomSubTypeVideoCall) {
         NSInteger event = [dic[@"event"] integerValue];
         NSString *room_id = dic[@"room_id"];
-        [[MSCallManager shareInstance] recieveCall:customElem.partner_id creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
+        [[MSCallManager shareInstance] recieveCall:message.partnerID creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
     }
 }
 
 - (void)onNewMessage:(NSNotification *)note
 {
-    NSArray *elems = note.object;
-    for (MSIMElem *elem in elems) {
-        if ([elem isKindOfClass:[MSIMCustomElem class]]) {
-            MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+    NSArray *messages = note.object;
+    for (MSIMMessage *message in messages) {
+        if (message.customElem != nil) {
+            MSIMCustomElem *customElem = message.customElem;
             NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
             MSIMCustomSubType type = [dic[@"type"] integerValue];
             if (type == MSIMCustomSubTypeVoiceCall || type == MSIMCustomSubTypeVideoCall) {
                 NSInteger event = [dic[@"event"] integerValue];
                 NSString *room_id = dic[@"room_id"];
-                if (![customElem.fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
-                    [[MSCallManager shareInstance] recieveCall:customElem.partner_id creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
+                if (![message.fromUid isEqualToString:[MSIMTools sharedInstance].user_id]) {
+                    [[MSCallManager shareInstance] recieveCall:message.partnerID creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
                 }
             }
         }

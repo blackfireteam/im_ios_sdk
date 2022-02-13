@@ -47,18 +47,18 @@
 - (void)fillWithData:(MSImageMessageCellData *)data
 {
     [super fillWithData:data];
-    NSInteger progress = data.imageElem.progress*100;
+    NSInteger progress = data.message.imageElem.progress*100;
     self.progress.text = [NSString stringWithFormat:@"%zd%%",progress];
     [self.progress setHidden:!(progress > 0 && progress < 100)];
     self.thumb.image = nil;
-    if (data.imageElem.image) {
-        self.thumb.image = data.imageElem.image;
-    }else if ([[NSFileManager defaultManager]fileExistsAtPath:data.imageElem.path]) {
-        UIImage *image = [UIImage imageWithContentsOfFile:data.imageElem.path];
+    if (data.message.imageElem.image) {
+        self.thumb.image = data.message.imageElem.image;
+    }else if ([[NSFileManager defaultManager]fileExistsAtPath:data.message.imageElem.path]) {
+        UIImage *image = [UIImage imageWithContentsOfFile:data.message.imageElem.path];
         self.thumb.image = image;
-        data.imageElem.image = image;
+        data.message.imageElem.image = image;
     }else {
-        NSString *thumbUrl = [NSString stringWithFormat:@"%@?imageMogr2/thumbnail/300x/interlace/0",data.imageElem.url];
+        NSString *thumbUrl = [NSString stringWithFormat:@"%@?imageMogr2/thumbnail/300x/interlace/0",data.message.imageElem.url];
         [self.thumb sd_setImageWithURL:[NSURL URLWithString:thumbUrl] placeholderImage:[UIImage imageNamed:TUIKitResource(@"placeholder_delete")] options:SDWebImageDelayPlaceholder];
     }
 }

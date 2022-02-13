@@ -29,20 +29,20 @@
     return attr;
 }
 
-- (NSString *)getDisplayString:(MSIMElem *)elem
+- (NSString *)getDisplayString:(MSIMMessage *)message
 {
     NSString *str;
-    if (elem.type == MSIM_MSG_TYPE_REVOKE) {
-        if (elem.isSelf) {
+    if (message.type == MSIM_MSG_TYPE_REVOKE) {
+        if (message.isSelf) {
             str = TUILocalizableString(TUIKitMessageTipsYouRecallMessage);
         }else {
             str = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
         }
     }else {
-        switch (elem.type) {
+        switch (message.type) {
             case MSIM_MSG_TYPE_TEXT:
             {
-                str = ((MSIMTextElem *)elem).text;
+                str = message.textElem.text;
             }
                 break;
             case MSIM_MSG_TYPE_IMAGE:
@@ -74,7 +74,7 @@
             case MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL:
             case MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL:
             {
-                str = [self getCustomElemContent:elem];
+                str = [self getCustomElemContent:message];
             }
                 break;
             default:
@@ -88,14 +88,14 @@
 }
 
 ///配置自定义消息在会话中展示的内容
-- (NSString *)getCustomElemContent:(MSIMElem *)elem
+- (NSString *)getCustomElemContent:(MSIMMessage *)message
 {
-    MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+    MSIMCustomElem *customElem = message.customElem;
     NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
     if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {
-        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Voice isSelf:customElem.isSelf];
+        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Voice isSelf:message.isSelf];
     }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {
-        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Video isSelf:customElem.isSelf];
+        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Video isSelf:message.isSelf];
     }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeLike) {
         return @"[Like]";
     }else {

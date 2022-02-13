@@ -249,13 +249,8 @@ extension BFEditProfileController: UITableViewDataSource,UITableViewDelegate {
 extension BFEditProfileController {
     
     private func didPickerAsset(image: UIImage,asset: PHAsset) {
-        let imageElem = MSIMImageElem()
-        imageElem.type = .MSG_TYPE_IMAGE
-        imageElem.image = image
-        imageElem.width = Int(image.size.width)
-        imageElem.height = Int(image.size.height)
-        imageElem.uuid = asset.localIdentifier
-        MSIMManager.sharedInstance().uploadMediator?.ms_upload?(with: imageElem.image!, fileType: .avatar, progress: { progress in
+        
+        MSIMManager.sharedInstance().uploadMediator?.ms_upload?(with: image, fileType: .avatar, progress: { progress in
             
         }, succ: {[weak self] url in
             

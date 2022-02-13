@@ -11,7 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSLocationMessageCellData : MSMessageCellData
 
-@property(nonatomic,strong,readonly) MSIMLocationElem *locationElem;
 
 @end
 

@@ -44,27 +44,27 @@
 
 #pragma mark - MSChatViewControllerDelegate
 
-- (void)chatController:(MSChatViewController *)controller didSendMessage:(MSIMElem *)elem
+- (void)chatController:(MSChatViewController *)controller didSendMessage:(MSIMMessage *)message
 {
     //主动发送的每一条消息都会进入这个回调，你可以在此做一些统计埋点等工作。。。
 }
 
 //将要展示在列表中的每和条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
-- (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMElem *)elem
+- (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMMessage *)message
 {
-    if ([elem isKindOfClass:[MSIMCustomElem class]]) {
-        MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
+    if (message.customElem != nil) {
+        MSIMCustomElem *customElem = message.customElem;
         NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-        if (customElem.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL) {
+        if (message.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL) {
             
-        }else if(customElem.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
+        }else if(message.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
             MSIMCustomSubType subType = [dic[@"type"]integerValue];
             if (subType == MSIMCustomSubTypeVoiceCall || subType == MSIMCustomSubTypeVideoCall) {
-                BFCallMessageCellData *callData = [[BFCallMessageCellData alloc] initWithDirection:(elem.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+                BFCallMessageCellData *callData = [[BFCallMessageCellData alloc] initWithDirection:(message.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
                 callData.callType = (subType == MSIMCustomSubTypeVideoCall ? MSCallType_Video : MSCallType_Voice);
-                callData.notice = [MSCallManager parseToMessageShow:dic callType:(subType == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) isSelf:customElem.isSelf];
+                callData.notice = [MSCallManager parseToMessageShow:dic callType:(subType == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) isSelf:message.isSelf];
                 callData.showName = YES;
-                callData.elem = customElem;
+                callData.message = message;
                 return callData;
             }
         }
@@ -114,14 +114,14 @@
 ///点击消息内容回调
 - (void)chatController:(MSChatViewController *)controller onSelectMessageContent:(MSMessageCell *)cell
 {
-    if (cell.messageData.elem.type == MSIM_MSG_TYPE_IMAGE || cell.messageData.elem.type == MSIM_MSG_TYPE_VIDEO) {
+    if (cell.messageData.message.type == MSIM_MSG_TYPE_IMAGE || cell.messageData.message.type == MSIM_MSG_TYPE_VIDEO) {
         NSMutableArray *tempArr = [NSMutableArray array];
         NSInteger defaultIndex = 0;
         for (NSInteger i = 0; i < self.chatController.messageController.uiMsgs.count; i++) {
             MSMessageCellData *data =  self.chatController.messageController.uiMsgs[i];
             MSMessageCell *dataCell = (MSMessageCell *)[self.chatController.messageController.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            if (data.elem.type == MSIM_MSG_TYPE_IMAGE) {
-                MSIMImageElem *imageElem = (MSIMImageElem *)data.elem;
+            if (data.message.type == MSIM_MSG_TYPE_IMAGE) {
+                MSIMImageElem *imageElem = data.message.imageElem;
                 YBIBImageData *imageData = [YBIBImageData new];
                 if ([[NSFileManager defaultManager]fileExistsAtPath:imageElem.path]) {
                     imageData.imagePath = imageElem.path;
@@ -130,8 +130,8 @@
                 }
                 imageData.projectiveView = dataCell.container.subviews.firstObject;
                 [tempArr addObject:imageData];
-            }else if (data.elem.type == MSIM_MSG_TYPE_VIDEO) {
-                MSIMVideoElem *videoElem = (MSIMVideoElem *)data.elem;
+            }else if (data.message.type == MSIM_MSG_TYPE_VIDEO) {
+                MSIMVideoElem *videoElem = data.message.videoElem;
                 YBIBVideoData *videoData = [YBIBVideoData new];
                 if ([[NSFileManager defaultManager]fileExistsAtPath:videoElem.videoPath]) {
                     videoData.videoURL = [NSURL fileURLWithPath:videoElem.videoPath];
@@ -150,7 +150,7 @@
         browser.currentPage = defaultIndex;
         [browser show];
     }else if ([cell isKindOfClass:[BFCallMessageCell class]]) {
-        MSIMCustomElem *customElem = (MSIMCustomElem *)cell.messageData.elem;
+        MSIMCustomElem *customElem = cell.messageData.message.customElem;
         NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
         MSIMCustomSubType subType = [dic[@"type"]integerValue];
         [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:(subType == MSIMCustomSubTypeVideoCall ? MSCallType_Video : MSCallType_Voice) action:CallAction_Call room_id:nil];

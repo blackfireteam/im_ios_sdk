@@ -11,8 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSVideoMessageCellData : MSMessageCellData
 
-@property(nonatomic,strong,readonly) MSIMVideoElem *videoElem;
-
 @end
 
 NS_ASSUME_NONNULL_END

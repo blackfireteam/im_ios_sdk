@@ -46,9 +46,9 @@
 - (void)fillWithData:(MSLocationMessageCellData *)data
 {
     [super fillWithData:data];
-    self.titleL.text = data.locationElem.title;
-    self.detailL.text = data.locationElem.detail;
-    NSString *mapUrl = [NSString stringWithFormat:@"https://restapi.amap.com/v3/staticmap?location=%f,%f&zoom=%zd&size=550*300&markers=mid,,A:%f,%f&key=%@",data.locationElem.longitude,data.locationElem.latitude,data.locationElem.zoom,data.locationElem.longitude,data.locationElem.latitude,GaodeAPIWebKey];
+    self.titleL.text = data.message.locationElem.title;
+    self.detailL.text = data.message.locationElem.detail;
+    NSString *mapUrl = [NSString stringWithFormat:@"https://restapi.amap.com/v3/staticmap?location=%f,%f&zoom=%zd&size=550*300&markers=mid,,A:%f,%f&key=%@",data.message.locationElem.longitude,data.message.locationElem.latitude,data.message.locationElem.zoom,data.message.locationElem.longitude,data.message.locationElem.latitude,GaodeAPIWebKey];
     [self.mapImageView sd_setImageWithURL:[NSURL URLWithString:mapUrl]];
 }
 

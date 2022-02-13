@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)sendEnotionMessage:(BFFaceCellData *)data;
 
-
 @end
 
 NS_ASSUME_NONNULL_END

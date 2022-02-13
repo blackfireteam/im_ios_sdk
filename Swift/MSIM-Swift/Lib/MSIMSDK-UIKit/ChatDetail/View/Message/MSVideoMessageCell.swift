@@ -66,20 +66,20 @@ open class MSVideoMessageCell: MSMessageCell {
         super.fillWithData(data: data)
         if let videoData = data as? MSVideoMessageCellData {
             self.videoData = videoData
-            self.durationL.text = String(format: "%02zd:%02zd", videoData.videoElem.duration / 60, videoData.videoElem.duration % 60)
+            self.durationL.text = String(format: "%02zd:%02zd", videoData.message.videoElem!.duration / 60, videoData.message.videoElem!.duration % 60)
             self.durationL.sizeToFit()
-            let progress = videoData.videoElem.progress * 100
-            self.progressL.text = String.init(format: "%.1f%%", videoData.videoElem.progress * 100)
+            let progress = videoData.message.videoElem!.progress * 100
+            self.progressL.text = String.init(format: "%.1f%%", videoData.message.videoElem!.progress * 100)
             self.progressL.isHidden = !(progress > 0 && progress < 100)
             thumb.image = nil
-            if videoData.videoElem.coverImage != nil {
-                thumb.image = videoData.videoElem.coverImage
-            }else if videoData.videoElem.coverPath != nil && FileManager.default.fileExists(atPath: videoData.videoElem.coverPath!) {
-                let image = UIImage(contentsOfFile: videoData.videoElem.coverPath!)!
+            if videoData.message.videoElem!.coverImage != nil {
+                thumb.image = videoData.message.videoElem!.coverImage
+            }else if videoData.message.videoElem!.coverPath != nil && FileManager.default.fileExists(atPath: videoData.message.videoElem!.coverPath!) {
+                let image = UIImage(contentsOfFile: videoData.message.videoElem!.coverPath!)!
                 thumb.image = image
-                videoData.videoElem.coverImage = image
-            }else if videoData.videoElem.coverUrl != nil {
-                let thumbUrl = videoData.videoElem.coverUrl! + "?imageMogr2/thumbnail/300x/interlace/0"
+                videoData.message.videoElem!.coverImage = image
+            }else if videoData.message.videoElem!.coverUrl != nil {
+                let thumbUrl = videoData.message.videoElem!.coverUrl! + "?imageMogr2/thumbnail/300x/interlace/0"
                 thumb.kf.setImage(with: URL(string: thumbUrl), options: [KingfisherOptionsInfoItem.onFailureImage(UIImage.bf_imageNamed(name: "placeholder_delete"))])
             }
         }

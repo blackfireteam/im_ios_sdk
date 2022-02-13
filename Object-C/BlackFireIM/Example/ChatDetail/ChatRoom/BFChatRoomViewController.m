@@ -227,13 +227,13 @@
 
 #pragma mark - MSChatRoomControllerDelegate
 
-- (void)chatController:(MSChatRoomController *)controller didSendMessage:(MSIMElem *)elem
+- (void)chatController:(MSChatRoomController *)controller didSendMessage:(MSIMMessage *)message
 {
     //主动发送的每一条消息都会进入这个回调，你可以在此做一些统计埋点等工作。。。
 }
 
 //将要展示在列表中的每和条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
-- (MSMessageCellData *)chatController:(MSChatRoomController *)controller prepareForMessage:(MSIMElem *)elem
+- (MSMessageCellData *)chatController:(MSChatRoomController *)controller prepareForMessage:(MSIMMessage *)message
 {
     return nil;
 }
@@ -259,14 +259,14 @@
 ///点击消息内容回调
 - (void)chatController:(MSChatRoomController *)controller onSelectMessageContent:(MSMessageCell *)cell
 {
-    if (cell.messageData.elem.type == MSIM_MSG_TYPE_IMAGE || cell.messageData.elem.type == MSIM_MSG_TYPE_VIDEO) {
+    if (cell.messageData.message.type == MSIM_MSG_TYPE_IMAGE || cell.messageData.message.type == MSIM_MSG_TYPE_VIDEO) {
         NSMutableArray *tempArr = [NSMutableArray array];
         NSInteger defaultIndex = 0;
         for (NSInteger i = 0; i < self.chatController.messageController.uiMsgs.count; i++) {
             MSMessageCellData *data =  self.chatController.messageController.uiMsgs[i];
             MSMessageCell *dataCell = (MSMessageCell *)[self.chatController.messageController.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            if (data.elem.type == MSIM_MSG_TYPE_IMAGE) {
-                MSIMImageElem *imageElem = (MSIMImageElem *)data.elem;
+            if (data.message.type == MSIM_MSG_TYPE_IMAGE) {
+                MSIMImageElem *imageElem = data.message.imageElem;
                 YBIBImageData *imageData = [YBIBImageData new];
                 if ([[NSFileManager defaultManager]fileExistsAtPath:imageElem.path]) {
                     imageData.imagePath = imageElem.path;
@@ -275,8 +275,8 @@
                 }
                 imageData.projectiveView = dataCell.container.subviews.firstObject;
                 [tempArr addObject:imageData];
-            }else if (data.elem.type == MSIM_MSG_TYPE_VIDEO) {
-                MSIMVideoElem *videoElem = (MSIMVideoElem *)data.elem;
+            }else if (data.message.type == MSIM_MSG_TYPE_VIDEO) {
+                MSIMVideoElem *videoElem = data.message.videoElem;
                 YBIBVideoData *videoData = [YBIBVideoData new];
                 if ([[NSFileManager defaultManager]fileExistsAtPath:videoElem.videoPath]) {
                     videoData.videoURL = [NSURL fileURLWithPath:videoElem.videoPath];
@@ -294,7 +294,7 @@
         browser.dataSourceArray = tempArr;
         browser.currentPage = defaultIndex;
         [browser show];
-    }else if (cell.messageData.elem.type == MSIM_MSG_TYPE_LOCATION) {
+    }else if (cell.messageData.message.type == MSIM_MSG_TYPE_LOCATION) {
         
     }
 }

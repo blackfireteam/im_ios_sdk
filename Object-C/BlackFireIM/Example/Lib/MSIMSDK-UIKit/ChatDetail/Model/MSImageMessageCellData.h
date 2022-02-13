@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSImageMessageCellData : MSMessageCellData
 
-@property(nonatomic,strong,readonly) MSIMImageElem *imageElem;
-
 
 @end
 

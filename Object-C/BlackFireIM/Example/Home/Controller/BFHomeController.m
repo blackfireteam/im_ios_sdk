@@ -203,10 +203,10 @@
 {
     if (cell.user.user_id && cell.winkBtn.isSelected == NO) {
         MSIMEmotionElem *elem = [[MSIMEmotionElem alloc]init];
-        elem.emotionID = @"001";
-        elem.emotionName = @"emotion_01";
-        elem = [[MSIMManager sharedInstance]createEmotionMessage:elem];
-        [[MSIMManager sharedInstance]sendC2CMessage:elem toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
+        elem.emotionID = @"008";
+        elem.emotionName = @"emotion_08";
+        MSIMMessage *message = [[MSIMManager sharedInstance]createEmotionMessage:elem];
+        [[MSIMManager sharedInstance]sendC2CMessage:message toReciever:cell.user.user_id successed:^(NSInteger msg_id) {
                     
              cell.winkBtn.selected = YES;
             [BFAnimationView showAnimation:@"spark_like" size:CGSizeMake(200, 200) isLoop:NO];

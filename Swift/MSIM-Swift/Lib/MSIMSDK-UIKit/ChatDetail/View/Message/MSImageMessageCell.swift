@@ -50,18 +50,18 @@ open class MSImageMessageCell: MSMessageCell {
         super.fillWithData(data: data)
         if let imageData = data as? MSImageMessageCellData {
             self.imageData = imageData
-            let progress = imageData.imageElem.progress * 100
+            let progress = imageData.message.imageElem!.progress * 100
             self.progress.text = "\(progress)%"
             self.progress.isHidden = !(progress > 0 && progress < 100)
             thumb.image = nil
-            if imageData.imageElem.image != nil {
-                thumb.image = imageData.imageElem.image
-            }else if imageData.imageElem.path != nil && FileManager.default.fileExists(atPath: imageData.imageElem.path!) {
-                let image = UIImage(contentsOfFile: imageData.imageElem.path!)!
+            if imageData.message.imageElem!.image != nil {
+                thumb.image = imageData.message.imageElem!.image
+            }else if imageData.message.imageElem!.path != nil && FileManager.default.fileExists(atPath: imageData.message.imageElem!.path!) {
+                let image = UIImage(contentsOfFile: imageData.message.imageElem!.path!)!
                 thumb.image = image
-                imageData.imageElem.image = image
-            }else if imageData.imageElem.url != nil {
-                let thumbUrl = imageData.imageElem.url! + "?imageMogr2/thumbnail/300x/interlace/0"
+                imageData.message.imageElem!.image = image
+            }else if imageData.message.imageElem!.url != nil {
+                let thumbUrl = imageData.message.imageElem!.url! + "?imageMogr2/thumbnail/300x/interlace/0"
                 thumb.kf.setImage(with: URL(string: thumbUrl), options: [KingfisherOptionsInfoItem.onFailureImage(UIImage.bf_imageNamed(name: "placeholder_delete"))])
             }
         }

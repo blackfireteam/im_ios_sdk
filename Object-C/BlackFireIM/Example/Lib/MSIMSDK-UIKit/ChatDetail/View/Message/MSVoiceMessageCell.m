@@ -40,8 +40,8 @@
 - (void)fillWithData:(MSVoiceMessageCellData *)data
 {
     [super fillWithData:data];
-    if (data.voiceElem.duration > 0) {
-        _duration.text = [NSString stringWithFormat:@"%ld\"", (long)data.voiceElem.duration];
+    if (data.message.voiceElem.duration > 0) {
+        _duration.text = [NSString stringWithFormat:@"%ld\"", (long)data.message.voiceElem.duration];
     } else {
         _duration.text = @"1\"";    // 显示0秒容易产生误解
     }

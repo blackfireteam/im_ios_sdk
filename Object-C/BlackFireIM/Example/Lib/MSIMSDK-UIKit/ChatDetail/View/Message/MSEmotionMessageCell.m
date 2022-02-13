@@ -35,7 +35,8 @@
     [super fillWithData:data];
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"TUIKitFace" ofType:@"bundle"];
     NSBundle *resourceBundle = [NSBundle bundleWithPath:bundlePath];
-    [self.animationView setAnimationNamed:[NSString stringWithFormat:@"emotion/%@",data.emotionElem.emotionName] inBundle:resourceBundle];
+    NSString *emotionName = [MSHelper emoteionName:data.message.emotionElem.emotionID];
+    [self.animationView setAnimationNamed:[NSString stringWithFormat:@"emotion/%@",emotionName] inBundle:resourceBundle];
     self.animationView.loopAnimation = YES;
     [self.animationView play];
 }

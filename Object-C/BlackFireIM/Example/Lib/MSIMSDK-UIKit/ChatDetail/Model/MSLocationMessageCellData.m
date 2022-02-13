@@ -10,10 +10,6 @@
 
 @implementation MSLocationMessageCellData
 
-- (MSIMLocationElem *)locationElem
-{
-    return (MSIMLocationElem *)self.elem;
-}
 
 - (CGSize)contentSize
 {

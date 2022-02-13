@@ -79,8 +79,8 @@
 
 - (void)inputController:(MSInputViewController *)inputController didSendTextMessage:(NSString *)msg
 {
-    MSIMTextElem *textElem = [[MSIMManager sharedInstance] createTextMessage:msg];
-    [self sendMessage:textElem];
+    MSIMMessage *message = [[MSIMManager sharedInstance] createTextMessage:msg];
+    [self sendMessage:message];
     _textingFlag = NO;
 }
 
@@ -89,14 +89,9 @@
     NSURL *url = [NSURL fileURLWithPath:filePath];
     AVURLAsset *audioAsset = [AVURLAsset URLAssetWithURL:url options:nil];
     NSInteger duration = (NSInteger)CMTimeGetSeconds(audioAsset.duration);
-    NSInteger length = (NSInteger)[[[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil] fileSize];
-    
-    MSIMVoiceElem *voiceElem = [[MSIMVoiceElem alloc]init];
-    voiceElem.path = filePath;
-    voiceElem.duration = duration;
-    voiceElem.dataSize = length;
-    voiceElem = [[MSIMManager sharedInstance] createVoiceMessage:voiceElem];
-    [self sendMessage:voiceElem];
+
+    MSIMMessage *message = [[MSIMManager sharedInstance] createVoiceMessage:filePath duration:duration];
+    [self sendMessage:message];
 }
 
 - (void)inputControllerDidInputAt:(MSInputViewController *)inputController
@@ -114,12 +109,12 @@
     //1.上一条消息是对方发的消息
     //2.当前时间距离上一条消息间隔在10秒内
     MSMessageCellData *lastData = self.messageController.uiMsgs.lastObject;
-    if (lastData == nil || lastData.elem.fromUid.length == 0) return;
-    NSInteger diff = [MSIMTools sharedInstance].adjustLocalTimeInterval - lastData.elem.msg_sign;
-    if (_textingFlag == NO && lastData.elem.isSelf == NO && diff <= 10*1000*1000) {
+    if (lastData == nil || lastData.message.fromUid.length == 0) return;
+    NSInteger diff = [MSIMTools sharedInstance].adjustLocalTimeInterval - lastData.message.msgSign;
+    if (_textingFlag == NO && lastData.message.isSelf == NO && diff <= 10*1000*1000) {
         NSDictionary *extDic = @{@"type": @(MSIMCustomSubTypeTexting),@"desc": @"我正在输入..."};
-        MSIMCustomElem *customElem = [[MSIMManager sharedInstance] createCustomMessage:[extDic el_convertJsonString] option:IMCUSTOM_SIGNAL pushExt:nil];
-        [[MSIMManager sharedInstance]sendC2CMessage:customElem toReciever:self.partner_id successed:^(NSInteger msg_id) {
+        MSIMMessage *message = [[MSIMManager sharedInstance] createCustomMessage:[extDic el_convertJsonString] option:IMCUSTOM_SIGNAL pushExt:nil];
+        [[MSIMManager sharedInstance]sendC2CMessage:message toReciever:self.partner_id successed:^(NSInteger msg_id) {
 
             } failed:^(NSInteger code, NSString * _Nonnull desc) {
 
@@ -170,15 +165,14 @@
 /**
  收到信令消息
  */
-- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMElem *>*)elems
+- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMMessage *>*)messages
 {
-    for (MSIMElem *elem in elems) {
-        if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
-        MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
-        NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+    for (MSIMMessage *message in messages) {
+        if (message.customElem == nil) return;
+        NSDictionary *dic = [message.customElem.jsonStr el_convertToDictionary];
         if ([dic[@"type"]integerValue] == MSIMCustomSubTypeTexting) {//收到对方正在输入
             if ([self.delegate respondsToSelector:@selector(chatController:onRecieveTextingMessage:)]) {
-                return [self.delegate chatController:self onRecieveTextingMessage:elem];
+                return [self.delegate chatController:self onRecieveTextingMessage:message];
             }
             return;
         }
@@ -188,7 +182,7 @@
 /**
  *  收到新消息的函数委托
  */
-- (MSMessageCellData *)messageController:(MSMessageController *)controller prepareForMessage:(MSIMElem *)data
+- (MSMessageCellData *)messageController:(MSMessageController *)controller prepareForMessage:(MSIMMessage *)data
 {
     if ([self.delegate respondsToSelector:@selector(chatController:prepareForMessage:)]) {
         return [self.delegate chatController:self prepareForMessage:data];
@@ -264,7 +258,7 @@
     [[MSIMManager sharedInstance] setConversationDraft:self.partner_id draftText:draft succ:nil failed:nil];
 }
 
-- (void)sendMessage:(MSIMElem *)message
+- (void)sendMessage:(MSIMMessage *)message
 {
     [[MSIMManager sharedInstance] sendC2CMessage:message toReciever:self.partner_id successed:^(NSInteger msg_id) {
             

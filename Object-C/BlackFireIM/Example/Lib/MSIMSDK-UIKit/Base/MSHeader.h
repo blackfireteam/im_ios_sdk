@@ -175,10 +175,22 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define Record_Margin 8
 
 
+//store
+//#define GaodeAPIKey @"be89a357dfc9e986f1ca53bbab8e4a16"
+//#define GaodeAPIWebKey @"d696e2e8fc6c1685be52faa64b66d318"
+//#define kChatRoomID 1641525634
+//#define kAppID @"100"
+//com.blackfire.im.msim.normal1  bundle_id
+
+//noral
 #define GaodeAPIKey @"28d8663963475a7eb9126c8ebb9c4bc9"
 #define GaodeAPIWebKey @"1db3c63e96dccbe7dd34b6b5150fae90"
 #define kChatRoomID 25
-//1641525634
+#define kAppID @"2"
+//com.blackfire.im.msim.normal  bundle_id
+
+
+
 #define kAppInviteCode @"MSYYDS"
 
 /** 自定义消息分类*/

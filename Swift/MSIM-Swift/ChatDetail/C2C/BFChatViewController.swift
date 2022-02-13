@@ -40,30 +40,30 @@ public class BFChatViewController: BFBaseViewController {
 
 // MARK: - MSChatViewControllerDelegate
 extension BFChatViewController: MSChatViewControllerDelegate {
-    public func didSendMessage(controller: MSChatViewController, elem: MSIMElem) {
+    public func didSendMessage(controller: MSChatViewController, message: MSIMMessage) {
         //主动发送的每一条消息都会进入这个回调，你可以在此做一些统计埋点等工作。。。
     }
     
     //将要展示在列表中的每和条消息都会先进入这个回调，你可以在此针对自定义消息构建数据模型
-    public func prepareForMessage(controller: MSChatViewController, elem: MSIMElem) -> MSMessageCellData? {
+    public func prepareForMessage(controller: MSChatViewController, message: MSIMMessage) -> MSMessageCellData? {
         
-        if let customElem = elem as? MSIMCustomElem {
+        if let customElem = message.customElem {
             guard let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else {return nil}
-            if customElem.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL {
+            if message.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL {
                 if let type = dic["type"] as? Int,type == MSIMCustomSubType.Like.rawValue {
-                    let winkData = BFWinkMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+                    let winkData = BFWinkMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                     winkData.showName = true
-                    winkData.elem = customElem
+                    winkData.message = message
                     return winkData
                 }
-            }else if customElem.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
+            }else if message.type == .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
                 if let type = dic["type"] as? Int,let subType = MSIMCustomSubType(rawValue: type) {
                     if subType == .VoiceCall || subType == .VideoCall {
-                        let callData = BFCallMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+                        let callData = BFCallMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                         callData.callType = (subType == .VideoCall ? .video : .voice)
-                        callData.notice = MSCallManager.parseToMessageShow(customParams: dic, callType: (subType == .VoiceCall ? .voice : .video), isSelf: customElem.isSelf) ?? ""
+                        callData.notice = MSCallManager.parseToMessageShow(customParams: dic, callType: (subType == .VoiceCall ? .voice : .video), isSelf: message.isSelf) ?? ""
                         callData.showName = true
-                        callData.elem = customElem
+                        callData.message = message
                         return callData
                     }
                 }
@@ -109,9 +109,9 @@ extension BFChatViewController: MSChatViewControllerDelegate {
     
     public func onSelectMessageContent(controller: MSChatViewController, cell: MSMessageCell) {
         
-        if cell.messageData?.elem?.type == .MSG_TYPE_IMAGE || cell.messageData?.elem?.type == .MSG_TYPE_VIDEO {
+        if cell.messageData?.message.type == .MSG_TYPE_IMAGE || cell.messageData?.message.type == .MSG_TYPE_VIDEO {
             //将消息列表中的图片和视频都筛出来
-            let tempArr = controller.messageController.uiMsgs.filter { $0.elem?.type == .MSG_TYPE_IMAGE || $0.elem?.type == .MSG_TYPE_VIDEO}
+            let tempArr = controller.messageController.uiMsgs.filter { $0.message.type == .MSG_TYPE_IMAGE || $0.message.type == .MSG_TYPE_VIDEO}
             let defaultIndex = tempArr.firstIndex(of: cell.messageData!)
             let lantern = Lantern()
             lantern.pageIndicator = LanternNumberPageIndicator()
@@ -120,11 +120,11 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             }
             lantern.cellClassAtIndex = { index in
                 let data =  tempArr[index]
-                return data.elem?.type ==  .MSG_TYPE_VIDEO ? VideoZoomCell.self : LanternImageCell.self
+                return data.message.type ==  .MSG_TYPE_VIDEO ? VideoZoomCell.self : LanternImageCell.self
             }
             lantern.reloadCellAtIndex = { context in
                 let data =  tempArr[context.index]
-                if let imageCell = context.cell as? LanternImageCell,let imageElem = data.elem as? MSIMImageElem {
+                if let imageCell = context.cell as? LanternImageCell,let imageElem = data.message.imageElem {
                     
                     if let path = imageElem.path, FileManager.default.fileExists(atPath: path) {
                         imageCell.imageView.kf.setImage(with: URL(fileURLWithPath: path))
@@ -135,7 +135,7 @@ extension BFChatViewController: MSChatViewControllerDelegate {
                     imageCell.longPressedAction = {[weak self] (cell, _) in
                         self?.longPress(elem: imageElem,lantern: cell.lantern)
                     }
-                } else if let videoCell = context.cell as? VideoZoomCell,let videoElem = data.elem as? MSIMVideoElem {
+                } else if let videoCell = context.cell as? VideoZoomCell,let videoElem = data.message.videoElem {
                     
                     if videoElem.coverImage != nil {
                         videoCell.imageView.image = videoElem.coverImage
@@ -179,14 +179,14 @@ extension BFChatViewController: MSChatViewControllerDelegate {
             lantern.pageIndex = defaultIndex ?? 0
             lantern.show()
         }else if cell is BFCallMessageCell {
-            guard let customElem = cell.messageData?.elem as? MSIMCustomElem, let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else { return }
+            guard let customElem = cell.messageData?.message.customElem, let dic = (customElem.jsonStr as NSString).el_convertToDictionary() as? [String: Any] else { return }
             if let typeInt = dic["type"] as? Int,let type = MSIMCustomSubType(rawValue: typeInt) {
                 MSCallManager.shared.callToPartner(partner_id: self.partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: (type == .VideoCall ? .video : .voice), action: .call, room_id: nil)
             }
-        }else if cell.messageData?.elem?.type == .MSG_TYPE_LOCATION {
+        }else if cell.messageData?.message.type == .MSG_TYPE_LOCATION {
             
             if let locationData = cell.messageData as? MSLocationMessageCellData {
-                let locationInfo = MSLocationInfo(locationMsg: locationData.locationElem)
+                let locationInfo = MSLocationInfo(locationMsg: locationData.message.locationElem!)
                 let n_coor = MSLocationManager.shared.gPSCoordinateConvertToAMap(coordinate: CLLocationCoordinate2D(latitude: locationInfo.latitude, longitude: locationInfo.longitude))
                 locationInfo.latitude = n_coor.latitude
                 locationInfo.longitude = n_coor.longitude
@@ -196,7 +196,7 @@ extension BFChatViewController: MSChatViewControllerDelegate {
         }
     }
     
-    public func onRecieveTextingMessage(controller: MSChatViewController, elem: MSIMElem) {
+    public func onRecieveTextingMessage(controller: MSChatViewController, message: MSIMMessage) {
         
         self.navigationItem.title = Bundle.bf_localizedString(key: "TUIkitMessageTipsTextingMessage")
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
@@ -250,14 +250,11 @@ extension BFChatViewController {
     private func didPickerAsset(images: [UIImage],assets: [PHAsset],isPhoto: Bool) {
         if isPhoto {
             for (index,image) in images.enumerated() {
-                var imageElem = MSIMImageElem()
-                imageElem.type = .MSG_TYPE_IMAGE
-                imageElem.image = image
-                imageElem.width = Int(image.size.width)
-                imageElem.height = Int(image.size.height)
-                imageElem.uuid = assets[index].localIdentifier
-                imageElem = MSIMManager.sharedInstance().createImageMessage(imageElem)
-                self.chatController.sendMessage(message: imageElem)
+                let imagePath = FileManager.pathForIMImage() + NSString.uuid() + ".jpg"
+                let imageData = image.pngData()!
+                try? imageData.write(to: URL(fileURLWithPath: imagePath))
+                let message = MSIMManager.sharedInstance().createImageMessage(imagePath, identifierID: assets[index].localIdentifier)
+                self.chatController.sendMessage(message: message)
             }
         }else {
             MSHelper.showToast()
@@ -274,15 +271,11 @@ extension BFChatViewController {
                         switch exportSession?.status {
                         case .completed:
                             count += 1
-                            var videoElem = MSIMVideoElem()
-                            videoElem.type = .MSG_TYPE_VIDEO
-                            videoElem.coverImage = images[index]
-                            videoElem.width = video.pixelWidth
-                            videoElem.height = video.pixelHeight
-                            videoElem.videoPath = localPath
-                            videoElem.duration = Int(video.duration)
-                            videoElem = MSIMManager.sharedInstance().createVideoMessage(videoElem)
-                            self.chatController.sendMessage(message: videoElem)
+                            let coverPath = FileManager.pathForIMVideo() + NSString.uuid() + ".jpg"
+                            let coverData = images[index].pngData()
+                            try? coverData?.write(to: URL(fileURLWithPath: coverPath))
+                            let message = MSIMManager.sharedInstance().createVideoMessage(localPath, type: "mp4", duration: Int(video.duration), snapshotPath: coverPath, identifierID: video.localIdentifier)
+                            self.chatController.sendMessage(message: message)
                             
                         case .failed, .cancelled:
                             count += 1
@@ -371,14 +364,14 @@ extension BFChatViewController {
     private func sendLocationMessage(info: MSLocationInfo) {
         // 为了兼容，先将高德地图坐标转换成gps坐标
         let n_coor = MSLocationManager.shared.AMapCoordinateConvertToGPS(coordinate: CLLocationCoordinate2D(latitude: info.latitude, longitude: info.longitude))
-        var elem = MSIMLocationElem()
+        let elem = MSIMLocationElem()
         elem.title = info.name
         elem.detail = info.detail
         elem.longitude = n_coor.longitude
         elem.latitude = n_coor.latitude
         elem.zoom = info.zoom
-        elem = MSIMManager.sharedInstance().createLocationMessage(elem)
-        MSIMManager.sharedInstance().sendC2CMessage(elem, toReciever: self.partner_id) { _ in
+        let message = MSIMManager.sharedInstance().createLocationMessage(elem)
+        MSIMManager.sharedInstance().sendC2CMessage(message, toReciever: self.partner_id) { _ in
             
         } failed: { _, _ in
             

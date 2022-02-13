@@ -11,7 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSEmotionMessageCellData : MSMessageCellData
 
-@property(nonatomic,strong,readonly) MSIMEmotionElem *emotionElem;
 
 @end
 

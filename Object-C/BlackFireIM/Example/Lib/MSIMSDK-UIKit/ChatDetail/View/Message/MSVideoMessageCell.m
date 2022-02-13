@@ -59,20 +59,20 @@
 - (void)fillWithData:(MSVideoMessageCellData *)data
 {
     [super fillWithData:data];
-    self.durationL.text = [NSString stringWithFormat:@"%02zd:%02zd",data.videoElem.duration/60,data.videoElem.duration%60];
+    self.durationL.text = [NSString stringWithFormat:@"%02zd:%02zd",data.message.videoElem.duration/60,data.message.videoElem.duration%60];
     [self.durationL sizeToFit];
-    NSInteger progress = data.videoElem.progress*100;
+    NSInteger progress = data.message.videoElem.progress*100;
     self.progressL.text = [NSString stringWithFormat:@"%zd%%",progress];
     [self.progressL setHidden:!(progress > 0 && progress < 100)];
     self.thumb.image = nil;
-    if (data.videoElem.coverImage) {
-        self.thumb.image = data.videoElem.coverImage;
-    }else if ([[NSFileManager defaultManager]fileExistsAtPath:data.videoElem.coverPath]) {
-        UIImage *image = [UIImage imageWithContentsOfFile:data.videoElem.coverPath];
+    if (data.message.videoElem.coverImage) {
+        self.thumb.image = data.message.videoElem.coverImage;
+    }else if ([[NSFileManager defaultManager]fileExistsAtPath:data.message.videoElem.coverPath]) {
+        UIImage *image = [UIImage imageWithContentsOfFile:data.message.videoElem.coverPath];
         self.thumb.image = image;
-        data.videoElem.coverImage = image;
+        data.message.videoElem.coverImage = image;
     }else {
-        NSString *thumbUrl = [NSString stringWithFormat:@"%@?imageMogr2/thumbnail/300x/interlace/0",data.videoElem.coverUrl];
+        NSString *thumbUrl = [NSString stringWithFormat:@"%@?imageMogr2/thumbnail/300x/interlace/0",data.message.videoElem.coverUrl];
         [self.thumb sd_setImageWithURL:[NSURL URLWithString:thumbUrl] placeholderImage:[UIImage imageNamed:TUIKitResource(@"placeholder_delete")] options:SDWebImageDelayPlaceholder];
     }
 }

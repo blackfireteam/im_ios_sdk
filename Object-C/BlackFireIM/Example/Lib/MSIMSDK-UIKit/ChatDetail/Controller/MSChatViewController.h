@@ -13,21 +13,21 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class MSChatViewController;
-@class MSIMElem;
+@class MSIMMessage;
 @class MSMessageCellData;
 @class MSMessageCell;
 @class MSInputMoreCell;
 @protocol MSChatViewControllerDelegate <NSObject>
 
 ///发送新消息时的回调
-- (void)chatController:(MSChatViewController *)controller didSendMessage:(MSIMElem *)elem;
+- (void)chatController:(MSChatViewController *)controller didSendMessage:(MSIMMessage *)message;
 
 ///每条新消息在进入气泡展示区之前，都会通知给您
 ///主要用于甄别自定义消息
 ///如果您返回 nil，MSChatViewController 会认为该条消息非自定义消息，会将其按照普通消息的处理流程进行处理。
 ///如果您返回一个 MSMessageCellData 类型的对象，MSChatViewController 会在随后触发的 onShowMessageData() 回调里传入您返回的 cellData 对象。
 ///也就是说，onNewMessage() 负责让您甄别自己的个性化消息，而 onShowMessageData() 回调则负责让您展示这条个性化消息。
-- (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMElem *)elem;
+- (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMMessage *)message;
 
 ///展示自定义个性化消息
 ///您可以通过重载 onShowMessageData() 改变消息气泡的默认展示逻辑，只需要返回一个自定义的 TUIMessageCell 对象即可。
@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)chatController:(MSChatViewController *)controller onSelectMessageContent:(MSMessageCell *)cell;
 
 ///收到对方正在输入消息通知
-- (void)chatController:(MSChatViewController *)controller onRecieveTextingMessage:(MSIMElem *)elem;
+- (void)chatController:(MSChatViewController *)controller onRecieveTextingMessage:(MSIMMessage *)message;
 
 @end
 
@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong,readonly) MSInputViewController *inputController;
 
-- (void)sendMessage:(MSIMElem *)message;
+- (void)sendMessage:(MSIMMessage *)message;
 
 @end
 

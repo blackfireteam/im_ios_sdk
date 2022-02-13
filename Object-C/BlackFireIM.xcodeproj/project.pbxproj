@@ -748,7 +748,6 @@
 				F021EC73279506B400EC2EC5 /* MSSnapChatCellData.h */,
 				F021EC74279506B400EC2EC5 /* MSTextMessageCellData.m */,
 				F021EC75279506B400EC2EC5 /* MSVideoMessageCellData.h */,
-				F021EC76279506B400EC2EC5 /* MSEmotionMessageCellData.h */,
 				F021EC77279506B400EC2EC5 /* MSVoiceMessageCellData.h */,
 				F021EC78279506B400EC2EC5 /* MSMessageCellData.m */,
 				F021EC79279506B400EC2EC5 /* MSImageMessageCellData.h */,
@@ -760,6 +759,7 @@
 				F021EC7F279506B400EC2EC5 /* MSImageMessageCellData.m */,
 				F021EC80279506B400EC2EC5 /* MSMessageCellData.h */,
 				F021EC81279506B400EC2EC5 /* MSVoiceMessageCellData.m */,
+				F021EC76279506B400EC2EC5 /* MSEmotionMessageCellData.h */,
 				F021EC82279506B400EC2EC5 /* MSEmotionMessageCellData.m */,
 				F021EC83279506B400EC2EC5 /* MSVideoMessageCellData.m */,
 			);
@@ -769,13 +769,13 @@
 		F021EC84279506B400EC2EC5 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F021EC85279506B400EC2EC5 /* MSResponderTextView.h */,
 				F021EC86279506B400EC2EC5 /* Face */,
-				F021EC91279506B400EC2EC5 /* MSInputBarView.h */,
 				F021EC92279506B400EC2EC5 /* Message */,
 				F021ECA9279506B400EC2EC5 /* More */,
 				F021ECAE279506B400EC2EC5 /* Voice */,
+				F021EC85279506B400EC2EC5 /* MSResponderTextView.h */,
 				F021ECB1279506B400EC2EC5 /* MSResponderTextView.m */,
+				F021EC91279506B400EC2EC5 /* MSInputBarView.h */,
 				F021ECB2279506B400EC2EC5 /* MSInputBarView.m */,
 				F021ECB3279506B400EC2EC5 /* snapchat */,
 			);
@@ -811,7 +811,6 @@
 				F021EC99279506B400EC2EC5 /* MSSystemMessageCell.m */,
 				F021EC9A279506B400EC2EC5 /* MSLocationMessageCell.m */,
 				F021EC9B279506B400EC2EC5 /* MSImageMessageCell.m */,
-				F021EC9C279506B400EC2EC5 /* MSEmotionMessageCell.h */,
 				F021EC9D279506B400EC2EC5 /* MSBubbleMessageCell.h */,
 				F021EC9E279506B400EC2EC5 /* MSVideoMessageCell.h */,
 				F021EC9F279506B400EC2EC5 /* MSVoiceMessageCell.m */,
@@ -819,6 +818,7 @@
 				F021ECA1279506B400EC2EC5 /* MSNoticeCountView.h */,
 				F021ECA2279506B400EC2EC5 /* MSTextMessageCell.m */,
 				F021ECA3279506B400EC2EC5 /* MSMessageCell.m */,
+				F021EC9C279506B400EC2EC5 /* MSEmotionMessageCell.h */,
 				F021ECA4279506B400EC2EC5 /* MSEmotionMessageCell.m */,
 				F021ECA5279506B400EC2EC5 /* MSImageMessageCell.h */,
 				F021ECA6279506B400EC2EC5 /* MSLocationMessageCell.h */,
@@ -1162,12 +1162,12 @@
 		F0E60CE52797DDEC0072DD68 /* C2C */ = {
 			isa = PBXGroup;
 			children = (
-				F0E60CE62797DDEC0072DD68 /* BFCallMessageCell.m */,
-				F0E60CE72797DDEC0072DD68 /* BFCallMessageCellData.m */,
-				F0E60CE82797DDEC0072DD68 /* BFChatViewController.m */,
-				F0E60CE92797DDEC0072DD68 /* BFCallMessageCellData.h */,
 				F0E60CEA2797DDEC0072DD68 /* BFCallMessageCell.h */,
+				F0E60CE62797DDEC0072DD68 /* BFCallMessageCell.m */,
+				F0E60CE92797DDEC0072DD68 /* BFCallMessageCellData.h */,
+				F0E60CE72797DDEC0072DD68 /* BFCallMessageCellData.m */,
 				F0E60CEB2797DDEC0072DD68 /* BFChatViewController.h */,
+				F0E60CE82797DDEC0072DD68 /* BFChatViewController.m */,
 			);
 			path = C2C;
 			sourceTree = "<group>";

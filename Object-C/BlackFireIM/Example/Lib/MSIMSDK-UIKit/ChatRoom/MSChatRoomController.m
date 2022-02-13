@@ -77,8 +77,8 @@
 
 - (void)inputController:(MSInputViewController *)inputController didSendTextMessage:(NSString *)msg
 {
-    MSIMTextElem *textElem = [[MSIMManager sharedInstance] createTextMessage:msg];
-    [self sendMessage:textElem];
+    MSIMMessage *message = [[MSIMManager sharedInstance] createTextMessage:msg];
+    [self sendMessage:message];
 }
 
 - (void)inputController:(MSInputViewController *)inputController didSendVoiceMessage:(NSString *)filePath
@@ -86,14 +86,15 @@
     NSURL *url = [NSURL fileURLWithPath:filePath];
     AVURLAsset *audioAsset = [AVURLAsset URLAssetWithURL:url options:nil];
     NSInteger duration = (NSInteger)CMTimeGetSeconds(audioAsset.duration);
-    NSInteger length = (NSInteger)[[[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil] fileSize];
-    
-    MSIMVoiceElem *voiceElem = [[MSIMVoiceElem alloc]init];
-    voiceElem.path = filePath;
-    voiceElem.duration = duration;
-    voiceElem.dataSize = length;
-    voiceElem = [[MSIMManager sharedInstance] createVoiceMessage:voiceElem];
-    [self sendMessage:voiceElem];
+
+    MSIMMessage *message = [[MSIMManager sharedInstance] createVoiceMessage:filePath duration:duration];
+    [self sendMessage:message];
+}
+
+/// 点击发送自定义表情
+- (void)inputController:(MSInputViewController *)inputController didSendEmotion:(BFFaceCellData *)data
+{
+    [self sendEnotionMessage:data];
 }
 
 - (void)inputControllerDidInputAt:(MSInputViewController *)inputController
@@ -117,6 +118,12 @@
     
 }
 
+/// 点击阅后即焚模式下的图片
+- (void)inputControllerDidSelectSnapchatImage:(MSInputViewController *)inputController
+{
+    
+}
+
 /// 点击拍照，照片等更多功能
 - (void)inputController:(MSInputViewController *)inputController didSelectMoreCell:(MSInputMoreCell *)cell
 {
@@ -132,31 +139,20 @@
     }
 }
 
-/// 点击发送自定义表情
-- (void)inputController:(MSInputViewController *)inputController didSendEmotion:(BFFaceCellData *)data
-{
-    [self sendEnotionMessage:data];
-}
-
-
 #pragma mark - <MSMessageControllerDelegate>
 
 /**
  收到信令消息
  */
-- (void)messageController:(MSChatRoomMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMElem *>*)elems
+- (void)messageController:(MSChatRoomMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMMessage *>*)messages
 {
-    for (MSIMElem *elem in elems) {
-        if (![elem isKindOfClass:[MSIMCustomElem class]]) return;
-//        MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
-//        NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-    }
+
 }
 
 /**
  *  收到新消息的函数委托
  */
-- (MSMessageCellData *)messageController:(MSChatRoomMessageController *)controller prepareForMessage:(MSIMElem *)data
+- (MSMessageCellData *)messageController:(MSChatRoomMessageController *)controller prepareForMessage:(MSIMMessage *)data
 {
     if ([self.delegate respondsToSelector:@selector(chatController:prepareForMessage:)]) {
         return [self.delegate chatController:self prepareForMessage:data];
@@ -225,7 +221,7 @@
     self.inputController.inputBar.inputTextView.overrideNextResponder = nil;
 }
 
-- (void)sendMessage:(MSIMElem *)message
+- (void)sendMessage:(MSIMMessage *)message
 {
     [[MSIMManager sharedInstance] sendChatRoomMessage:message toRoomID:self.roomInfo.room_id successed:^(NSInteger msg_id) {
         

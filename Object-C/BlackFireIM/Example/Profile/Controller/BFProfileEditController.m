@@ -280,16 +280,9 @@
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto infos:(NSArray<NSDictionary *> *)infos
 {
     UIImage *image = photos.firstObject;
-    PHAsset *asset = assets.firstObject;
-    MSIMImageElem *imageElem = [[MSIMImageElem alloc]init];
-    imageElem.type = MSIM_MSG_TYPE_IMAGE;
-    imageElem.image = image;
-    imageElem.width = image.size.width;
-    imageElem.height = image.size.height;
-    imageElem.uuid = asset.localIdentifier;
     
     WS(weakSelf)
-    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:imageElem.image fileType:MSUploadFileTypeAvatar progress:^(CGFloat progress) {
+    [[MSIMManager sharedInstance].uploadMediator ms_uploadWithObject:image fileType:MSUploadFileTypeAvatar progress:^(CGFloat progress) {
         
     } succ:^(NSString * _Nonnull url) {
         

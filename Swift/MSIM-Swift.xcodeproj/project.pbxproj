@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,9 @@
 		F0404C48277164C400021C71 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0404C47277164C400021C71 /* API.swift */; };
 		F0404C4A277168C900021C71 /* NetWorkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0404C49277168C900021C71 /* NetWorkManager.swift */; };
 		F0404C4C2771761700021C71 /* BFEditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0404C4B2771761700021C71 /* BFEditProfileController.swift */; };
+		F04D2E3227B8AF3E008EC672 /* BFConversationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D2E3127B8AF3E008EC672 /* BFConversationHeaderView.swift */; };
+		F04D2E3427B8C2B0008EC672 /* MSEmotionMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D2E3327B8C2B0008EC672 /* MSEmotionMessageCellData.swift */; };
+		F04D2E3627B8C3EE008EC672 /* MSEmotionMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D2E3527B8C3EE008EC672 /* MSEmotionMessageCell.swift */; };
 		F0684253273A7B5800E0313E /* BFChatRoomEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */; };
 		F0684255273A826700E0313E /* BFEditTodInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684254273A826700E0313E /* BFEditTodInfoController.swift */; };
 		F0684257273A863200E0313E /* BFGroupMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684256273A863200E0313E /* BFGroupMemberCell.swift */; };
@@ -162,6 +165,9 @@
 		F0404C47277164C400021C71 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		F0404C49277168C900021C71 /* NetWorkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorkManager.swift; sourceTree = "<group>"; };
 		F0404C4B2771761700021C71 /* BFEditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFEditProfileController.swift; sourceTree = "<group>"; };
+		F04D2E3127B8AF3E008EC672 /* BFConversationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFConversationHeaderView.swift; sourceTree = "<group>"; };
+		F04D2E3327B8C2B0008EC672 /* MSEmotionMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSEmotionMessageCellData.swift; sourceTree = "<group>"; };
+		F04D2E3527B8C3EE008EC672 /* MSEmotionMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSEmotionMessageCell.swift; sourceTree = "<group>"; };
 		F04F4B5A2717DD8900752952 /* MSIM-Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MSIM-Swift.entitlements"; sourceTree = "<group>"; };
 		F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatRoomEditController.swift; sourceTree = "<group>"; };
 		F0684254273A826700E0313E /* BFEditTodInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFEditTodInfoController.swift; sourceTree = "<group>"; };
@@ -418,6 +424,7 @@
 			children = (
 				F08FBA4326C25C4000613FE0 /* BFConversationListController.swift */,
 				F08FBA4526C25C5E00613FE0 /* BFNaviBarIndicatorView.swift */,
+				F04D2E3127B8AF3E008EC672 /* BFConversationHeaderView.swift */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -701,6 +708,7 @@
 				F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */,
 				F08FBA3426C20FEB00613FE0 /* MSNoticeCountView.swift */,
 				F07A611D2761E9E400C166EA /* MSLocationMessageCell.swift */,
+				F04D2E3527B8C3EE008EC672 /* MSEmotionMessageCell.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -716,6 +724,7 @@
 				F0FF725126BB84DC0005F3CF /* MSVoiceMessageCellData.swift */,
 				F0FF725326BCC2320005F3CF /* MSVideoMessageCellData.swift */,
 				F07A611B2761E82900C166EA /* MSLocationMessageCellData.swift */,
+				F04D2E3327B8C2B0008EC672 /* MSEmotionMessageCellData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -958,6 +967,7 @@
 				F0FF721526B782040005F3CF /* UIDevice+Ext.swift in Sources */,
 				F0FF71FF26B178720005F3CF /* BFSignInStepTwoController.swift in Sources */,
 				F0FF724126BA1E630005F3CF /* MSInputBarView.swift in Sources */,
+				F04D2E3427B8C2B0008EC672 /* MSEmotionMessageCellData.swift in Sources */,
 				F07A611E2761E9E400C166EA /* MSLocationMessageCell.swift in Sources */,
 				F0CED8A12702E88600C31B65 /* MSVideoCallView.swift in Sources */,
 				F0E565BB26FD783D00C3424D /* LanternCell.swift in Sources */,
@@ -1015,10 +1025,12 @@
 				F0CED8A32702F27200C31B65 /* MSCallViewController.swift in Sources */,
 				F0E565C326FD783D00C3424D /* LanternSmoothZoomAnimator.swift in Sources */,
 				F0FF71E326B0F2530005F3CF /* UIView+Ext.swift in Sources */,
+				F04D2E3227B8AF3E008EC672 /* BFConversationHeaderView.swift in Sources */,
 				F0FF721126B2D2600005F3CF /* BFSparkCardView.swift in Sources */,
 				F0E565C226FD783D00C3424D /* LanternImageCell.swift in Sources */,
 				F0FEA34126DF1B3300BCF4B6 /* BFChatViewController.swift in Sources */,
 				F0FF725C26BCD20F0005F3CF /* MSImageMessageCell.swift in Sources */,
+				F04D2E3627B8C3EE008EC672 /* MSEmotionMessageCell.swift in Sources */,
 				F08FBA3126C20A3600613FE0 /* MSVoiceMessageCell.swift in Sources */,
 				F0FF71E526B0FA870005F3CF /* UIScreen+Ext.swift in Sources */,
 				F0FF723826B91F3C0005F3CF /* MSMenuView.swift in Sources */,

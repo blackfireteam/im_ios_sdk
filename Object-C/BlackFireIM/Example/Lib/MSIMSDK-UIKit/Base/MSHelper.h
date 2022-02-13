@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)dismissToast;
 
+/// 通过表情查找表情名称
++ (NSString *)emoteionName:(NSString *)emotion_id;
+
 @end
 
 NS_ASSUME_NONNULL_END

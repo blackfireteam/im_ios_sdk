@@ -40,4 +40,29 @@
 }
 
 
+static NSArray *emotionResources() {
+    static NSArray *resource;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"TUIKitFace" ofType:@"bundle"];
+        NSBundle *resourceBundle = [NSBundle bundleWithPath:bundlePath];
+        NSString *filePath = [resourceBundle pathForResource:@"/emotion/emotion" ofType:@"plist"];
+        resource = [NSArray arrayWithContentsOfFile:filePath];
+    });
+    return resource;
+}
+
+/// 通过表情查找表情名称
++ (NSString *)emoteionName:(NSString *)emotion_id
+{
+    for (NSDictionary *dic in emotionResources()) {
+        NSString *e_id = dic[@"id"];
+        if ([e_id isEqualToString:emotion_id]) {
+            return dic[@"lottie"];
+        }
+    }
+    return @"";
+}
+
+
 @end

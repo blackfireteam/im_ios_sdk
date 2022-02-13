@@ -15,6 +15,8 @@ class BFConversationListController: BFBaseViewController {
     
     lazy var conVC: MSUIConversationListController = MSUIConversationListController()
     
+    lazy var convHeader: BFConversationHeaderView = BFConversationHeaderView(frame: CGRect(x: 0, y: 0, width: UIScreen.width, height: 103))
+    
     var networkBarView: UIView?
     
     override func viewDidLoad() {
@@ -23,7 +25,11 @@ class BFConversationListController: BFBaseViewController {
         addChild(conVC)
         view.addSubview(conVC.view)
         setupNavigation()
-        setupChatRoomBtn()
+        
+        self.conVC.tableView.tableHeaderView = self.convHeader
+        let tap = UITapGestureRecognizer(target: self, action: #selector(chatRoomTap))
+        self.convHeader.addGestureRecognizer(tap)
+        self.convHeader.reloadData()
         
         /// 当前的连接状态
         let status = MSIMManager.sharedInstance().connStatus
@@ -49,15 +55,6 @@ class BFConversationListController: BFBaseViewController {
         navigationItem.titleView = titleView
         updateTitleView(status: MSIMManager.sharedInstance().connStatus)
     }
-    
-    private func setupChatRoomBtn() {
-        let chatRoomBtn = UIButton(type: .custom)
-        chatRoomBtn.setImage(UIImage(named: "chat_btn"), for: .normal)
-        chatRoomBtn.frame = CGRect(x: UIScreen.width - 10 - 100, y: UIScreen.height - UIScreen.tabBarHeight - UIScreen.safeAreaBottomHeight - 10 - 100, width: 100, height: 100)
-        chatRoomBtn.addTarget(self, action: #selector(chatRoomBtnClick), for: .touchUpInside)
-        view.addSubview(chatRoomBtn)
-        
-    }
 
     private func addNotifications() {
         
@@ -66,6 +63,10 @@ class BFConversationListController: BFBaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(conversationSyncStart), name: NSNotification.Name.init(rawValue: MSUIKitNotification_ConversationSyncStart), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(conversationSyncFinish), name: NSNotification.Name.init(rawValue: MSUIKitNotification_ConversationSyncFinish), object: nil)
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(rawValue: MSUIKitNotification_ChatRoomConv_update), object: nil, queue: .main) {[weak self] note in
+            self?.onChatRoomConvUpdate(note: note)
+        }
     }
     
     private func updateTitleView(status: MSIMNetStatus) {
@@ -130,9 +131,13 @@ class BFConversationListController: BFBaseViewController {
     }
     
     /// 进入聊天室
-    @objc func chatRoomBtnClick() {
+    @objc func chatRoomTap() {
         let vc = BFChatRoomViewController()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func onChatRoomConvUpdate(note: Notification) {
+        self.convHeader.reloadData()
     }
 }
 

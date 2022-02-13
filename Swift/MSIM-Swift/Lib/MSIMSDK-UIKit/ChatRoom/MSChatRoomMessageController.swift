@@ -12,11 +12,11 @@ import MSIMSDK
 public protocol MSChatRoomMessageControllerDelegate: NSObjectProtocol {
     
     ///每条新消息在进入气泡展示区之前，都会通知给您
-    func prepareForMessage(controller: MSChatRoomMessageController,elem: MSIMElem) -> MSMessageCellData?
+    func prepareForMessage(controller: MSChatRoomMessageController,message: MSIMMessage) -> MSMessageCellData?
     ///您可以通过该回调实现：根据传入的 data 初始化消息气泡并进行显示
     func onShowMessageData(controller: MSChatRoomMessageController,cellData: MSMessageCellData) -> MSMessageCell.Type?
     ///收到信令消息
-    func onRecieveSignalMessage(controller: MSChatRoomMessageController,elems: [MSIMElem])
+    func onRecieveSignalMessage(controller: MSChatRoomMessageController,messages: [MSIMMessage])
     ///您可以通过该回调实现：重置 InputControoler，收起键盘
     func didTapInMessageController(controller: MSChatRoomMessageController)
     ///您可以通过该回调实现：跳转到对应用户的详细信息界面
@@ -46,6 +46,7 @@ public class MSChatRoomMessageController: UITableViewController {
     
     public func addSystemTips(text: String) {
         let system = MSSystemMessageCellData(direction: .inComing)
+        system.message = MSIMMessage()
         system.content = text
         system.sType = .SYS_OTHER
         let isAtBottom = (tableView.contentOffset.y + tableView.height + 20 >= tableView.contentSize.height)
@@ -64,7 +65,7 @@ public class MSChatRoomMessageController: UITableViewController {
     
     private var isShowKeyboard: Bool = false
     
-    private var msgForDate: MSIMElem?
+    private var msgForDate: MSIMMessage?
     
     private var menuUIMsg: MSMessageCellData?
     
@@ -77,6 +78,17 @@ public class MSChatRoomMessageController: UITableViewController {
         loadMessages()
     }
 
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let msgID = self.uiMsgs.last?.message.msgID {
+            MSIMManager.sharedInstance().markChatRoomMessage(asRead: msgID) {
+                
+            } failed: { _, _ in
+                
+            }
+        }
+    }
+    
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if countTipView.superview == nil {
@@ -94,14 +106,11 @@ public class MSChatRoomMessageController: UITableViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_ChatRoom_MessageListener), object: nil, queue: .main) {[weak self] note in
             self?.onNewMessage(note: note)
         }
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_ChatRoom_MessageSendStatusUpdate), object: nil, queue: .main) {[weak self] note in
-            self?.messageStatusUpdate(note: note)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_ChatRoom_MessageUpdate), object: nil, queue: .main) {[weak self] note in
+            self?.messageUpdate(note: note)
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageRecieveDelete), object: nil, queue: .main) {[weak self] note in
             self?.recieveMessageDelete(note: note)
-        }
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_ChatroomMessageRecieveRevoke), object: nil, queue: .main) {[weak self] note in
-            self?.recieveRevokeMessage(note: note)
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -109,8 +118,8 @@ public class MSChatRoomMessageController: UITableViewController {
     }
     
     private func loadMessages() {
-        if let msgs = MSChatRoomManager.sharedInstance().messages as? [MSIMElem] {
-            let uiMsgs = self.transUIMsgFromIMMsg(elems: msgs)
+        if let msgs = MSChatRoomManager.sharedInstance().messages as? [MSIMMessage] {
+            let uiMsgs = self.transUIMsgFromIMMsg(messages: msgs)
             self.uiMsgs.append(contentsOf: uiMsgs)
             self.tableView.reloadData()
         }
@@ -137,63 +146,62 @@ public class MSChatRoomMessageController: UITableViewController {
         countTipView.delegate = self
     }
     
-    private func transUIMsgFromIMMsg(elems: [MSIMElem]) -> [MSMessageCellData] {
+    private func transUIMsgFromIMMsg(messages: [MSIMMessage]) -> [MSMessageCellData] {
     
         var uiMsgs: [MSMessageCellData] = []
-        for k in (0..<elems.count).reversed() {
-            let elem = elems[k]
-            let dateMsg = transSystemMsgFromDate(date: elem.msg_sign)
+        for k in (0..<messages.count).reversed() {
+            let message = messages[k]
+            let dateMsg = transSystemMsgFromDate(date: message.msgSign)
             
             var data: MSMessageCellData?
-            if let cellData = self.delegate?.prepareForMessage(controller: self, elem: elem) {
+            if let cellData = self.delegate?.prepareForMessage(controller: self, message: message) {
                 if dateMsg != nil {
-                    self.msgForDate = elem
+                    self.msgForDate = message
                     uiMsgs.append(dateMsg!)
                 }
                 uiMsgs.append(cellData)
                 continue
             }
-            if elem.type == .MSG_TYPE_REVOKE {//撤回的消息
+            if message.type == .MSG_TYPE_REVOKE {//撤回的消息
                 let revoke = MSSystemMessageCellData(direction: .inComing)
-                if elem.isSelf {
+                if message.isSelf {
                     revoke.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
                 }else {
                     revoke.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
                 }
                 revoke.sType = .SYS_REVOKE
-                revoke.elem = elem
+                revoke.message = message
                 data = revoke
-            }else if elem.type == .MSG_TYPE_TEXT {
-                let textElem = elem as! MSIMTextElem
-                let textMsg = MSTextMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_TEXT {
+                let textMsg = MSTextMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 textMsg.showName = true
-                textMsg.content = textElem.text
-                textMsg.elem = textElem
+                textMsg.content = message.textElem?.text
+                textMsg.message = message
                 data = textMsg
-            }else if elem.type == .MSG_TYPE_IMAGE {
-                let imageMsg = MSImageMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_IMAGE {
+                let imageMsg = MSImageMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 imageMsg.showName = true
-                imageMsg.elem = elem
+                imageMsg.message = message
                 data = imageMsg
-            }else if elem.type == .MSG_TYPE_VIDEO {
-                let videoMsg = MSVideoMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_VIDEO {
+                let videoMsg = MSVideoMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 videoMsg.showName = true
-                videoMsg.elem = elem
+                videoMsg.message = message
                 data = videoMsg
-            }else if elem.type == .MSG_TYPE_VOICE {
-                let voiceMsg = MSVoiceMessageCellData(direction: elem.isSelf ? .outGoing : .inComing)
+            }else if message.type == .MSG_TYPE_VOICE {
+                let voiceMsg = MSVoiceMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
                 voiceMsg.showName = true
-                voiceMsg.elem = elem
+                voiceMsg.message = message
                 data = voiceMsg
             }else {
                 let unknowData = MSSystemMessageCellData(direction: .inComing)
                 unknowData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsUnknowMessage")
-                unknowData.elem = elem
+                unknowData.message = message
                 unknowData.sType = .SYS_UNKNOWN
                 data = unknowData
             }
             if dateMsg != nil {
-                self.msgForDate = elem
+                self.msgForDate = message
                 uiMsgs.append(dateMsg!)
             }
             uiMsgs.append(data!)
@@ -203,8 +211,9 @@ public class MSChatRoomMessageController: UITableViewController {
     
     private func transSystemMsgFromDate(date: Int) -> MSSystemMessageCellData? {
         
-        if self.msgForDate == nil || labs(date - self.msgForDate!.msg_sign) / 1000 / 1000 > MAX_MESSAGE_SEP_DLAY {
+        if self.msgForDate == nil || labs(date - self.msgForDate!.msgSign) / 1000 / 1000 > MAX_MESSAGE_SEP_DLAY {
             let system = MSSystemMessageCellData(direction: .inComing)
+            system.message = MSIMMessage()
             system.content = Date(timeIntervalSince1970: TimeInterval(date / 1000 / 1000)).ms_messageString()
             system.sType = .SYS_TIME
             return system
@@ -219,9 +228,9 @@ private extension MSChatRoomMessageController {
     //收到新消息
     func onNewMessage(note: Notification) {
         
-        if let elems = note.object as? [MSIMElem] {
-            let tempElems = deduplicateMessage(elems: elems)
-            let tempMsgs = transUIMsgFromIMMsg(elems: tempElems)
+        if let messages = note.object as? [MSIMMessage] {
+            let tempMessages = deduplicateMessage(messages: messages)
+            let tempMsgs = transUIMsgFromIMMsg(messages: tempMessages)
             if tempMsgs.count > 0 {
                 //当前列表是否停留在底部
                 let isAtBottom = (tableView.contentOffset.y + tableView.height + 20 >= tableView.contentSize.height)
@@ -232,56 +241,76 @@ private extension MSChatRoomMessageController {
                 if isAtBottom || self.isShowKeyboard {
                     self.scrollToBottom(animate: true)
                 }else {
-                    self.countTipView?.increaseCount(count: tempElems.count)
+                    self.countTipView?.increaseCount(count: tempMessages.count)
                 }
             }
         }
     }
     
-    func deduplicateMessage(elems: [MSIMElem]) -> [MSIMElem] {
+    func deduplicateMessage(messages: [MSIMMessage]) -> [MSIMMessage] {
         
-        var tempArr: [MSIMElem] = []
-        for elem in elems {
-            if elem.chatType != .MSIM_CHAT_TYPE_CHATROOM {
+        var tempArr: [MSIMMessage] = []
+        for message in messages {
+            if message.chatType != .MSIM_CHAT_TYPE_CHATROOM {
                 continue
             }
-            if elem.toUid != self.roomInfo.room_id {
+            if message.groupID != self.roomInfo.room_id {
                 continue
             }
             var isExsit: Bool = false
             for data in self.uiMsgs {
-                if elem.msg_sign == data.elem?.msg_sign {
+                if message.msgSign == data.message.msgSign {
                     isExsit = true
-                    data.elem = elem
+                    data.message = message
                     tableView.reloadData()
                     break
                 }
-                if elem.msg_id > 0 && elem.msg_id == data.elem?.msg_id {
+                if message.msgID > 0 && message.msgID == data.message.msgID {
                     isExsit = true
                     break
                 }
             }
             if isExsit == false {
-                tempArr.append(elem)
+                tempArr.append(message)
             }
         }
         return tempArr
     }
     
     //消息状态发生变化通知
-    func messageStatusUpdate(note: Notification) {
-        if let elem = note.object as? MSIMElem {
-            if elem.chatType != .MSIM_CHAT_TYPE_CHATROOM {
-                return
-            }
-            if elem.toUid != self.roomInfo.room_id {
-                return
-            }
+    func messageUpdate(note: Notification) {
+        
+        guard let message = note.object as? MSIMMessage, message.chatType == .MSIM_CHAT_TYPE_CHATROOM, message.groupID == self.roomInfo.room_id else {return}
+        if message.type == .MSG_TYPE_REVOKE {//撤回消息导致cell高度发生变化，需要更新缓存的高度
             for (index,data) in self.uiMsgs.enumerated() {
-                if data.elem?.msg_sign == elem.msg_sign {
-                    data.elem = elem
-                    let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MSMessageCell
-                    cell?.fillWithData(data: data)
+                if data.message.msgID == message.msgID {
+                    self.uiMsgs.remove(at: index)
+                    if index < self.heightCache.count {
+                        self.heightCache[index] = 0
+                    }
+                    self.tableView.beginUpdates()
+                    self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+                    let sysData = MSSystemMessageCellData(direction: .inComing)
+                    sysData.message = MSIMMessage()
+                    if message.isSelf == true {
+                        sysData.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
+                    }else {
+                        sysData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
+                    }
+                    sysData.sType = .SYS_REVOKE
+                    self.uiMsgs.insert(sysData, at: index)
+                    self.tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+                    self.tableView.endUpdates()
+                    break
+                }
+            }
+            return
+        }
+        for (index,data) in self.uiMsgs.enumerated() {
+            if data.message.msgSign == message.msgSign {
+                data.message = message
+                if let cell = self.tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? MSMessageCell {
+                    cell.fillWithData(data: data)
                 }
             }
         }
@@ -292,43 +321,6 @@ private extension MSChatRoomMessageController {
         
 //        guard let msg_ids = note.object as? [Int] else {return}
         //TO DO
-    }
-    
-    //收到一条对方撤回的消息
-    func recieveRevokeMessage(note: Notification) {
-        if let elem = note.object as? MSIMElem {
-            if elem.toUid != self.roomInfo.room_id {return}
-            var revokeData: MSMessageCellData?
-            for data in self.uiMsgs {
-                if data.elem?.msg_id == elem.revoke_msg_id {
-                    revokeData = data
-                }
-            }
-            if revokeData != nil {
-                self.revokeMsg(msg: revokeData!)
-            }
-        }
-    }
-    
-    func revokeMsg(msg: MSMessageCellData) {
-        if let index = self.uiMsgs.firstIndex(of: msg) {
-            self.uiMsgs.remove(at: index)
-            if index < self.heightCache.count {
-                self.heightCache[index] = 0
-            }
-            tableView.beginUpdates()
-            tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
-            let data = MSSystemMessageCellData(direction: .inComing)
-            if msg.elem?.isSelf == true {
-                data.content = Bundle.bf_localizedString(key: "TUIKitMessageTipsYouRecallMessage")
-            }else {
-                data.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
-            }
-            data.sType = .SYS_REVOKE
-            self.uiMsgs.insert(data, at: index)
-            tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .fade)
-            tableView.endUpdates()
-        }
     }
     
     @objc func keyboardWillShow() {
@@ -435,7 +427,7 @@ extension MSChatRoomMessageController: MSMessageCellDelegate {
             if data.isKind(of: MSTextMessageCellData.self) {
                 items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Copy"), action: #selector(onCopyMsg)))
             }
-            if data.elem?.isSelf == true && data.elem?.sendStatus == .MSG_STATUS_SEND_SUCC && data.elem?.type != .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
+            if data.message.isSelf == true && data.message.sendStatus == .MSG_STATUS_SEND_SUCC && data.message.type != .MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL {
                 items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Revoke"), action: #selector(onRevoke)))
             }
             items.append(UIMenuItem(title: Bundle.bf_localizedString(key: "Delete"), action: #selector(onDelete)))
@@ -467,7 +459,7 @@ extension MSChatRoomMessageController: MSMessageCellDelegate {
     
     @objc func onRevoke() {
         
-        if let msg_id = self.menuUIMsg?.elem?.msg_id {
+        if let msg_id = self.menuUIMsg?.message.msgID {
             MSIMManager.sharedInstance().chatRoomRevokeMessage(msg_id, fromRoomID: self.roomInfo.room_id) {
                 
                 print("撤回成功")
@@ -480,7 +472,7 @@ extension MSChatRoomMessageController: MSMessageCellDelegate {
     @objc func onDelete() {
         
         //删除消息有权限要求，管理员才能删除
-        if self.roomInfo.action_del_msg == false && self.menuUIMsg?.elem?.sendStatus == .MSG_STATUS_SEND_SUCC {
+        if self.roomInfo.action_del_msg == false && self.menuUIMsg?.message.sendStatus == .MSG_STATUS_SEND_SUCC {
             MSHelper.showToastFailWithText(text: "You have no permission to do this!")
             return
         }
@@ -510,7 +502,7 @@ extension MSChatRoomMessageController: MSMessageCellDelegate {
             tableView.endUpdates()
             
             // 通知服务器删除
-            if let msg_id = self.menuUIMsg?.elem?.msg_id {
+            if let msg_id = self.menuUIMsg?.message.msgID {
                 MSIMManager.sharedInstance().deleteChatroomMsgs(self.roomInfo.room_id, msgIDs: [NSNumber(value: msg_id)]) {
                     
                 } failed: { _, _ in
@@ -532,12 +524,10 @@ extension MSChatRoomMessageController: MSMessageCellDelegate {
     
     func resendMessage(data: MSMessageCellData) {
         
-        if let elem = data.elem {
-            MSIMManager.sharedInstance().resendChatRoomMessage(elem, toRoomID: self.roomInfo.room_id) { msg_id in
-                data.elem?.msg_id = msg_id
-            } failed: { code, desc in
-                MSHelper.showToastFailWithText(text: desc ?? "")
-            }
+        MSIMManager.sharedInstance().resendChatRoomMessage(data.message, toRoomID: self.roomInfo.room_id) { msg_id in
+            data.message.msgID = msg_id
+        } failed: { code, desc in
+            MSHelper.showToastFailWithText(text: desc ?? "")
         }
     }
     

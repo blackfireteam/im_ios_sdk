@@ -172,11 +172,11 @@ public class BFChatRoomViewController: BFBaseViewController {
 }
 
 extension BFChatRoomViewController: MSChatRoomControllerDelegate {
-    public func didSendMessage(controller: MSChatRoomController, elem: MSIMElem) {
+    public func didSendMessage(controller: MSChatRoomController, message: MSIMMessage) {
         
     }
     
-    public func prepareForMessage(controller: MSChatRoomController, elem: MSIMElem) -> MSMessageCellData? {
+    public func prepareForMessage(controller: MSChatRoomController, message: MSIMMessage) -> MSMessageCellData? {
         return nil
     }
     
@@ -198,9 +198,9 @@ extension BFChatRoomViewController: MSChatRoomControllerDelegate {
     }
     
     public func onSelectMessageContent(controller: MSChatRoomController, cell: MSMessageCell) {
-        if cell.messageData?.elem?.type == .MSG_TYPE_IMAGE || cell.messageData?.elem?.type == .MSG_TYPE_VIDEO {
+        if cell.messageData?.message.type == .MSG_TYPE_IMAGE || cell.messageData?.message.type == .MSG_TYPE_VIDEO {
             //将消息列表中的图片和视频都筛出来
-            let tempArr = controller.messageController.uiMsgs.filter { $0.elem?.type == .MSG_TYPE_IMAGE || $0.elem?.type == .MSG_TYPE_VIDEO}
+            let tempArr = controller.messageController.uiMsgs.filter { $0.message.type == .MSG_TYPE_IMAGE || $0.message.type == .MSG_TYPE_VIDEO}
             let defaultIndex = tempArr.firstIndex(of: cell.messageData!)
             let lantern = Lantern()
             lantern.pageIndicator = LanternNumberPageIndicator()
@@ -209,11 +209,11 @@ extension BFChatRoomViewController: MSChatRoomControllerDelegate {
             }
             lantern.cellClassAtIndex = { index in
                 let data =  tempArr[index]
-                return data.elem?.type ==  .MSG_TYPE_VIDEO ? VideoZoomCell.self : LanternImageCell.self
+                return data.message.type ==  .MSG_TYPE_VIDEO ? VideoZoomCell.self : LanternImageCell.self
             }
             lantern.reloadCellAtIndex = { context in
                 let data =  tempArr[context.index]
-                if let imageCell = context.cell as? LanternImageCell,let imageElem = data.elem as? MSIMImageElem {
+                if let imageCell = context.cell as? LanternImageCell,let imageElem = data.message.imageElem {
                     
                     if let path = imageElem.path, FileManager.default.fileExists(atPath: path) {
                         imageCell.imageView.kf.setImage(with: URL(fileURLWithPath: path))
@@ -224,7 +224,7 @@ extension BFChatRoomViewController: MSChatRoomControllerDelegate {
                     imageCell.longPressedAction = {[weak self] (cell, _) in
                         self?.longPress(elem: imageElem,lantern: cell.lantern)
                     }
-                } else if let videoCell = context.cell as? VideoZoomCell,let videoElem = data.elem as? MSIMVideoElem {
+                } else if let videoCell = context.cell as? VideoZoomCell,let videoElem = data.message.videoElem {
                     
                     if videoElem.coverImage != nil {
                         videoCell.imageView.image = videoElem.coverImage
@@ -315,14 +315,12 @@ extension BFChatRoomViewController {
     private func didPickerAsset(images: [UIImage],assets: [PHAsset],isPhoto: Bool) {
         if isPhoto {
             for (index,image) in images.enumerated() {
-                var imageElem = MSIMImageElem()
-                imageElem.type = .MSG_TYPE_IMAGE
-                imageElem.image = image
-                imageElem.width = Int(image.size.width)
-                imageElem.height = Int(image.size.height)
-                imageElem.uuid = assets[index].localIdentifier
-                imageElem = MSIMManager.sharedInstance().createImageMessage(imageElem)
-                self.chatController.sendMessage(message: imageElem)
+                
+                let imagePath = FileManager.pathForIMImage() + NSString.uuid() + ".jpg"
+                let imageData = image.pngData()
+                try? imageData?.write(to: URL(fileURLWithPath: imagePath))
+                let message = MSIMManager.sharedInstance().createImageMessage(imagePath, identifierID: assets[index].localIdentifier)
+                self.chatController.sendMessage(message: message)
             }
         }else {
             MSHelper.showToast()
@@ -339,15 +337,11 @@ extension BFChatRoomViewController {
                         switch exportSession?.status {
                         case .completed:
                             count += 1
-                            var videoElem = MSIMVideoElem()
-                            videoElem.type = .MSG_TYPE_VIDEO
-                            videoElem.coverImage = images[index]
-                            videoElem.width = video.pixelWidth
-                            videoElem.height = video.pixelHeight
-                            videoElem.videoPath = localPath
-                            videoElem.duration = Int(video.duration)
-                            videoElem = MSIMManager.sharedInstance().createVideoMessage(videoElem)
-                            self.chatController.sendMessage(message: videoElem)
+                            let coverPath = FileManager.pathForIMVideo() + NSString.uuid() + ".jpg"
+                            let coverData = images[index].pngData()
+                            try? coverData?.write(to: URL(fileURLWithPath: coverPath))
+                            let message = MSIMManager.sharedInstance().createVideoMessage(localPath, type: "mp4", duration: Int(video.duration), snapshotPath: coverPath, identifierID: nil)
+                            self.chatController.sendMessage(message: message)
                             
                         case .failed, .cancelled:
                             count += 1

@@ -1,18 +1,18 @@
 //
-//  MSLocationMessageCellData.swift
+//  MSEmotionMessageCellData.swift
 //  MSIM-Swift
 //
-//  Created by benny wang on 2021/12/9.
+//  Created by benny wang on 2022/2/13.
 //
 
 import UIKit
 import MSIMSDK
 
 
-open class MSLocationMessageCellData: MSMessageCellData {
+open class MSEmotionMessageCellData: MSMessageCellData {
 
     public override func contentSize() -> CGSize {
-        return CGSize(width: MSMcros.TLocationMessageCell_Width, height: MSMcros.TLocationMessageCell_Height)
+        return MSMcros.TEmotionMessageCell_Container_Size
     }
     
     public override func heightOfWidth(width: CGFloat) -> CGFloat {
@@ -30,6 +30,6 @@ open class MSLocationMessageCellData: MSMessageCellData {
     }
     
     public override var reUseId: String {
-        return MSMcros.TLocationMessageCell_ReuseId
+        return MSMcros.TEmotionMessageCell_ReuseId
     }
 }

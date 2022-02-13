@@ -50,9 +50,9 @@ open class MSLocationMessageCell: MSMessageCell {
         super.fillWithData(data: data)
         if let data = data as? MSLocationMessageCellData {
             self.locationData = data
-            self.titleL.text = data.locationElem.title
-            self.detailL.text = data.locationElem.detail
-            let mapUrl = "https://restapi.amap.com/v3/staticmap?location=\(data.locationElem.longitude),\(data.locationElem.latitude)&zoom=\(data.locationElem.zoom)&size=550*300&markers=mid,,A:\(data.locationElem.longitude),\(data.locationElem.latitude)&key=\(MSMcros.GaodeAPIWebKey)"
+            self.titleL.text = data.message.locationElem!.title
+            self.detailL.text = data.message.locationElem!.detail
+            let mapUrl = "https://restapi.amap.com/v3/staticmap?location=\(data.message.locationElem!.longitude),\(data.message.locationElem!.latitude)&zoom=\(data.message.locationElem!.zoom)&size=550*300&markers=mid,,A:\(data.message.locationElem!.longitude),\(data.message.locationElem!.latitude)&key=\(MSMcros.GaodeAPIWebKey)"
             mapImageView.kf.setImage(with: URL(string: mapUrl))
         }
     }

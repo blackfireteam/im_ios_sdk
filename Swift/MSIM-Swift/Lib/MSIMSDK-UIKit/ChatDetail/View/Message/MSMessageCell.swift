@@ -42,18 +42,16 @@ open class MSMessageCell: UITableViewCell {
     public func fillWithData(data: MSMessageCellData) {
         self.messageData = data
         avatarView.image = data.defaultAvatar
-        if let fromUid = data.elem?.fromUid {
-            let profile = MSProfileProvider.shared().providerProfile(fromLocal: fromUid)
-            avatarView.kf.setImage(with: URL(string: profile?.avatar ?? ""),placeholder: data.defaultAvatar)
-            nameLabel.text = profile?.nick_name
-        }
+        let profile = MSProfileProvider.shared().providerProfile(fromLocal: data.message.fromUid)
+        avatarView.kf.setImage(with: URL(string: profile?.avatar ?? ""),placeholder: data.defaultAvatar)
+        nameLabel.text = profile?.nick_name
         avatarView.layer.masksToBounds = true
         avatarView.layer.cornerRadius = 40 * 0.5
         
-        if data.elem?.sendStatus == .MSG_STATUS_SEND_FAIL {
+        if data.message.sendStatus == .MSG_STATUS_SEND_FAIL {
             indicator.stopAnimating()
             retryView.image = UIImage.bf_imageNamed(name: "msg_error")
-        }else if data.elem?.sendStatus == .MSG_STATUS_SENDING {
+        }else if data.message.sendStatus == .MSG_STATUS_SENDING {
             indicator.startAnimating()
             retryView.image = nil
         }else {
@@ -62,13 +60,13 @@ open class MSMessageCell: UITableViewCell {
         }
         if data.direction == .outGoing {
             readReceiptLabel.isHidden = false
-            if data.elem?.sendStatus == .MSG_STATUS_SEND_SUCC {
-                if data.elem?.chatType == .MSIM_CHAT_TYPE_C2C {
-                    readReceiptLabel.text = data.elem?.readStatus == .MSG_STATUS_UNREAD ? Bundle.bf_localizedString(key: "Deliveried") : Bundle.bf_localizedString(key: "Read")
+            if data.message.sendStatus == .MSG_STATUS_SEND_SUCC {
+                if data.message.chatType == .MSIM_CHAT_TYPE_C2C {
+                    readReceiptLabel.text = data.message.readStatus == .MSG_STATUS_UNREAD ? Bundle.bf_localizedString(key: "Deliveried") : Bundle.bf_localizedString(key: "Read")
                 }else {
                     readReceiptLabel.text = Bundle.bf_localizedString(key: "Deliveried")
                 }
-            }else if data.elem?.sendStatus == .MSG_STATUS_SENDING {
+            }else if data.message.sendStatus == .MSG_STATUS_SENDING {
                 readReceiptLabel.text = Bundle.bf_localizedString(key: "Sending")
             }else {
                 readReceiptLabel.text = Bundle.bf_localizedString(key: "NotDeliveried")
@@ -191,7 +189,7 @@ private extension MSMessageCell {
     }
     
     @objc func onRetryMessage() {
-        if messageData?.elem?.sendStatus == .MSG_STATUS_SEND_FAIL {
+        if messageData?.message.sendStatus == .MSG_STATUS_SEND_FAIL {
             delegate?.onRetryMessage(cell: self)
         }
     }

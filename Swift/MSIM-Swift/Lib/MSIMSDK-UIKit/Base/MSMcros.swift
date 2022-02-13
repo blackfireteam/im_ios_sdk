@@ -40,11 +40,6 @@ public struct MSMcros {
     static let TSystemMessageCell_Text_Width_Max: CGFloat = UIScreen.width * 0.5
     static let TSystemMessageCell_Margin: CGFloat = 5
 
-    //joinGroup cell 继承自 system cell
-    static let TJoinGroupMessageCell_ReuseId: String = "TJoinGroupMessageCell"
-    static let TJoinGroupMessageCell_Text_Width_Max: CGFloat = UIScreen.width * 0.5
-    static let TJoinGroupMessageCell_Margin: CGFloat = 5
-
     //image cell
     static let TImageMessageCell_ReuseId: String = "TImageMessageCell"
     static let TImageMessageCell_Image_Width_Max: CGFloat = UIScreen.width * 0.4

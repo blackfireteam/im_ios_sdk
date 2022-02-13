@@ -10,14 +10,10 @@ import MSIMSDK
 
 
 open class MSImageMessageCellData: MSMessageCellData {
-
-    public var imageElem: MSIMImageElem {
-        return self.elem! as! MSIMImageElem
-    }
     
     public override func contentSize() -> CGSize {
         var size: CGSize = .zero
-        size = CGSize(width: imageElem.width, height: imageElem.height)
+        size = CGSize(width: message.imageElem!.width, height: message.imageElem!.height)
         if size == .zero {
             return CGSize(width: 200, height: 200)
         }

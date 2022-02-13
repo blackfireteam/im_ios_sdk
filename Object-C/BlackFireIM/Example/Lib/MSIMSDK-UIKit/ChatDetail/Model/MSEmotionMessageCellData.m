@@ -18,11 +18,6 @@
     return self;
 }
 
-- (MSIMEmotionElem *)emotionElem
-{
-    return (MSIMEmotionElem *)self.elem;
-}
-
 - (CGSize)contentSize
 {
    return TEmotionMessageCell_Container_Size;

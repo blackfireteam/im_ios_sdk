@@ -70,7 +70,7 @@
     MSUIConversationCellData *convData = [[MSUIConversationCellData alloc]init];
     MSIMConversation *conv = [[MSIMConversation alloc]init];
     conv.show_msg = MSChatRoomManager.sharedInstance.last_show_msg;
-    conv.time = MSChatRoomManager.sharedInstance.last_show_msg.msg_sign;
+    conv.time = MSChatRoomManager.sharedInstance.last_show_msg.msgSign;
     convData.conv = conv;
     self.subTitleLabel.attributedText = convData.subTitle;
     self.timeLabel.text = [convData.time ms_messageString];

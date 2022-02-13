@@ -12,13 +12,13 @@ import AVFoundation
 public protocol MSChatViewControllerDelegate: NSObjectProtocol {
     
     ///发送新消息时的回调
-    func didSendMessage(controller: MSChatViewController,elem: MSIMElem)
+    func didSendMessage(controller: MSChatViewController,message: MSIMMessage)
     ///每条新消息在进入气泡展示区之前，都会通知给您
     ///主要用于甄别自定义消息
     ///如果您返回 nil，MSChatViewController 会认为该条消息非自定义消息，会将其按照普通消息的处理流程进行处理。
     ///如果您返回一个 MSMessageCellData 类型的对象，MSChatViewController 会在随后触发的 onShowMessageData() 回调里传入您返回的 cellData 对象。
     ///也就是说，onNewMessage() 负责让您甄别自己的个性化消息，而 onShowMessageData() 回调则负责让您展示这条个性化消息。
-    func prepareForMessage(controller: MSChatViewController,elem: MSIMElem) -> MSMessageCellData?
+    func prepareForMessage(controller: MSChatViewController,message: MSIMMessage) -> MSMessageCellData?
     
     ///展示自定义个性化消息
     ///您可以通过重载 onShowMessageData() 改变消息气泡的默认展示逻辑，只需要返回一个自定义的 MSMessageCell 对象即可。
@@ -34,7 +34,7 @@ public protocol MSChatViewControllerDelegate: NSObjectProtocol {
     func onSelectMessageContent(controller: MSChatViewController,cell: MSMessageCell)
     
     ///收到对方正在输入消息通知
-    func onRecieveTextingMessage(controller: MSChatViewController,elem: MSIMElem)
+    func onRecieveTextingMessage(controller: MSChatViewController,message: MSIMMessage)
     
 }
 
@@ -49,13 +49,13 @@ public class MSChatViewController: UIViewController {
     
     public private(set) var inputController: MSInputViewController!
     
-    func sendMessage(message: MSIMElem) {
+    func sendMessage(message: MSIMMessage) {
         MSIMManager.sharedInstance().sendC2CMessage(message, toReciever: self.partner_id) { _ in
             
         } failed: { _, desc in
             MSHelper.showToastFailWithText(text: desc ?? "")
         }
-        delegate?.didSendMessage(controller: self, elem: message)
+        delegate?.didSendMessage(controller: self, message: message)
     }
     
     private var _textingFlag: Bool = false
@@ -118,8 +118,8 @@ extension MSChatViewController: MSInputViewControllerDelegate {
     }
     
     public func didSendTextMessage(inputController: MSInputViewController, msg: String) {
-        let textElem = MSIMManager.sharedInstance().createTextMessage(msg)
-        self.sendMessage(message: textElem)
+        let message = MSIMManager.sharedInstance().createTextMessage(msg)
+        self.sendMessage(message: message)
         _textingFlag = false
     }
     
@@ -128,14 +128,8 @@ extension MSChatViewController: MSInputViewControllerDelegate {
         let url = URL(fileURLWithPath: filePath)
         let audioAsset = AVURLAsset(url: url, options: nil)
         let duration = Int(CMTimeGetSeconds(audioAsset.duration))
-        if let length = try? FileManager.default.attributesOfItem(atPath: filePath)[FileAttributeKey.size] as? Int {
-            var voiceElem = MSIMVoiceElem()
-            voiceElem.path = filePath
-            voiceElem.duration = duration
-            voiceElem.dataSize = length
-            voiceElem = MSIMManager.sharedInstance().createVoiceMessage(voiceElem)
-            self.sendMessage(message: voiceElem)
-        }
+        let message = MSIMManager.sharedInstance().createVoiceMessage(filePath, duration: duration)
+        self.sendMessage(message: message)
     }
     
     //处理正在输入消息逻辑
@@ -144,14 +138,14 @@ extension MSChatViewController: MSInputViewControllerDelegate {
     //2.当前时间距离上一条消息间隔在10秒内
     public func contentDidChanged(inputController: MSInputViewController, text: String) {
         
-        guard let lastData = messageController.uiMsgs.last,let fromUid = lastData.elem?.fromUid,fromUid.count > 0 else {
+        guard let lastData = messageController.uiMsgs.last,lastData.message.fromUid.count > 0 else {
             return
         }
-        let diff = MSIMTools.sharedInstance().adjustLocalTimeInterval - lastData.elem!.msg_sign
-        if _textingFlag == false && lastData.elem!.isSelf == false && diff <= 10 * 1000 * 1000 {
+        let diff = MSIMTools.sharedInstance().adjustLocalTimeInterval - lastData.message.msgSign
+        if _textingFlag == false && lastData.message.isSelf == false && diff <= 10 * 1000 * 1000 {
             let extDic: NSDictionary = ["type": MSIMCustomSubType.Texting.rawValue,"desc": "我正在输入..."] as NSDictionary
-            let customElem = MSIMManager.sharedInstance().createCustomMessage(extDic.el_convertJsonString(), option: .IMCUSTOM_SIGNAL, pushExt: nil)
-            MSIMManager.sharedInstance().sendC2CMessage(customElem, toReciever: self.partner_id) { _ in
+            let message = MSIMManager.sharedInstance().createCustomMessage(extDic.el_convertJsonString(), option: .IMCUSTOM_SIGNAL, pushExt: nil)
+            MSIMManager.sharedInstance().sendC2CMessage(message, toReciever: self.partner_id) { _ in
                 
             } failed: { _, _ in
                 
@@ -176,8 +170,8 @@ extension MSChatViewController: MSInputViewControllerDelegate {
 
 // MARK: MSMessageControllerDelegate
 extension MSChatViewController: MSMessageControllerDelegate {
-    public func prepareForMessage(controller: MSMessageController, elem: MSIMElem) -> MSMessageCellData? {
-        if let data = delegate?.prepareForMessage(controller: self, elem: elem) {
+    public func prepareForMessage(controller: MSMessageController, message: MSIMMessage) -> MSMessageCellData? {
+        if let data = delegate?.prepareForMessage(controller: self, message: message) {
             return data
         }
         return nil
@@ -191,13 +185,13 @@ extension MSChatViewController: MSMessageControllerDelegate {
         return nil
     }
     
-    public func onRecieveSignalMessage(controller: MSMessageController, elems: [MSIMElem]) {
+    public func onRecieveSignalMessage(controller: MSMessageController, messages: [MSIMMessage]) {
         
-        for elem in elems {
-            if let customElem = elem as? MSIMCustomElem {
+        for message in messages {
+            if let customElem = message.customElem {
                 let dic = (customElem.jsonStr as NSString).el_convertToDictionary()
                 if let type = dic["type"] as? Int,type == MSIMCustomSubType.Texting.rawValue {
-                    delegate?.onRecieveTextingMessage(controller: self, elem: elem)
+                    delegate?.onRecieveTextingMessage(controller: self, message: message)
                     return
                 }
             }

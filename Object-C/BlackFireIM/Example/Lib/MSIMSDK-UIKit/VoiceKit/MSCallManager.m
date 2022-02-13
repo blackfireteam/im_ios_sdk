@@ -269,8 +269,8 @@
         push.body = [NSString stringWithFormat:@"%@ Call declined by user",attachExt];
         push.sound = @"default";
     }
-    MSIMCustomElem *custom = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertJsonString] option:option pushExt:push];
-    [[MSIMManager sharedInstance]sendC2CMessage:custom toReciever:reciever successed:^(NSInteger msg_id) {
+    MSIMMessage *message = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertJsonString] option:option pushExt:push];
+    [[MSIMManager sharedInstance]sendC2CMessage:message toReciever:reciever successed:^(NSInteger msg_id) {
         
             } failed:^(NSInteger code, NSString *desc) {
                 MSLog(@"%@",desc);
