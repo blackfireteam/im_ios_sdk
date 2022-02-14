@@ -7,6 +7,8 @@
 
 import UIKit
 import MSIMSDK
+import CallKit
+
 
 enum CallAction: Int {
     case error = -1        //系统错误
@@ -34,6 +36,14 @@ enum CallState {
 class MSCallManager: NSObject {
 
     static let shared: MSCallManager = MSCallManager()
+    
+    override init() {
+        callManager = CXCallController(queue: .main)
+        provider = CXProvider(configuration: MSCallManager.providerConfiguration)
+        
+        super.init()
+        provider.setDelegate(self, queue: .main)
+    }
     
     func callToPartner(partner_id: String,
                        creator: String,
@@ -124,10 +134,11 @@ class MSCallManager: NSObject {
             if self.room_id != room_id {
                 self.isOnCallingWithUid = from
                 self.callType = callType
-                self.callVC = MSCallViewController(callType: self.callType, sponsor: from, invitee: MSIMTools.sharedInstance().user_id!, room_id: room_id!)
-                self.callVC?.modalPresentationStyle = .fullScreen
-                let appdelegate = UIApplication.shared.delegate as? AppDelegate
-                appdelegate?.window?.rootViewController?.present(self.callVC!, animated: true, completion: nil)
+//                self.callVC = MSCallViewController(callType: self.callType, sponsor: from, invitee: MSIMTools.sharedInstance().user_id!, room_id: room_id!)
+//                self.callVC?.modalPresentationStyle = .fullScreen
+//                let appdelegate = UIApplication.shared.delegate as? AppDelegate
+//                appdelegate?.window?.rootViewController?.present(self.callVC!, animated: true, completion: nil)
+                self.reportIncomingCall(title: "MS IM", sid: room_id!)
             }
             
         case .cancel:
@@ -254,6 +265,12 @@ class MSCallManager: NSObject {
     
     private var room_id: String = ""
     
+    private let callManager: CXCallController
+    
+    private let provider: CXProvider
+    
+    private var uuid: UUID?
+    
     private func inviteTimerAction(room_id: String, toReciever: String) {
         
         self.sendMessage(action: .call, option: .IMCUSTOM_SIGNAL, room_id: room_id, toReciever: toReciever)
@@ -313,5 +330,52 @@ class MSCallManager: NSObject {
         } failed: { _, desc in
             debugPrint("\(desc ?? "")")
         }
+    }
+}
+
+
+extension MSCallManager: CXProviderDelegate {
+    
+    static var providerConfiguration: CXProviderConfiguration = {
+        let providerConfiguration = CXProviderConfiguration(localizedName: "MSIM")
+        providerConfiguration.supportsVideo = true
+        providerConfiguration.maximumCallsPerCallGroup = 1
+        providerConfiguration.supportedHandleTypes = [.phoneNumber]
+        return providerConfiguration
+    }()
+    
+    func reportIncomingCall(title: String, sid: String) {
+        let update = CXCallUpdate()
+        update.supportsDTMF = false
+        update.supportsHolding = false
+        update.supportsUngrouping = false
+        update.supportsGrouping = false
+        update.hasVideo = false
+        update.remoteHandle = CXHandle(type: .generic, value: sid)
+        update.localizedCallerName = title
+        self.uuid = UUID()
+        //弹出电话界面
+        self.provider.reportNewIncomingCall(with: self.uuid!, update: update) { err in
+            if err != nil {
+                print(err!)
+            }
+        }
+    }
+    
+    func endCallAction() {
+        let endCallAction = CXEndCallAction(call: self.uuid!)
+        let transaction = CXTransaction()
+        transaction.addAction(endCallAction)
+        //关闭通话界面
+        self.callManager.request(transaction) {[weak self] error in
+            self?.uuid = nil
+            if error != nil {
+                print(error!)
+            }
+        }
+    }
+    
+    func providerDidReset(_ provider: CXProvider) {
+        
     }
 }
