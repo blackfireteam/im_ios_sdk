@@ -65,6 +65,23 @@
         _readReceiptLabel.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_readReceiptLabel];
         
+        _snapBg = [[UIVisualEffectView alloc]initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
+        _snapBg.layer.cornerRadius = 5;
+        _snapBg.layer.masksToBounds = YES;
+        [self.container addSubview:_snapBg];
+        
+        _snapIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:TUIKitResource(@"snap_icon")]];
+        [_snapBg.contentView addSubview:_snapIcon];
+        
+        _countDownL = [[UILabel alloc]init];
+        _countDownL.textColor = [UIColor whiteColor];
+        _countDownL.font = [UIFont systemFontOfSize:12];
+        _countDownL.textAlignment = NSTextAlignmentCenter;
+        _countDownL.backgroundColor = [UIColor redColor];
+        _countDownL.layer.cornerRadius = 10;
+        _countDownL.layer.masksToBounds = YES;
+        [self.contentView addSubview:_countDownL];
+        
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
@@ -81,6 +98,10 @@
         self.nameLabel.text = [NSString stringWithFormat:@"%@",profile.nick_name];
 //        self.nameLabel.text = [NSString stringWithFormat:@"%@--%zd",profile.nick_name,data.elem.msg_id];
     }
+    self.snapBg.hidden = !data.message.isSnapChat || (data.message.isSnapChat && data.snapCount > 0);
+    self.snapIcon.hidden = !data.message.isSnapChat || (data.message.isSnapChat && data.snapCount > 0);
+    self.countDownL.hidden = data.snapCount <= 0;
+    self.countDownL.text = [NSString stringWithFormat:@"%zd",data.snapCount];
     
     self.avatarView.layer.masksToBounds = YES;
     self.avatarView.layer.cornerRadius = 40 * 0.5;
@@ -124,7 +145,6 @@
         self.avatarView.y = 5;
         self.avatarView.width = 40;
         self.avatarView.height = 40;
-        
         
         if (self.messageData.showName) {
             self.nameLabel.frame = CGRectMake(self.avatarView.maxX+5, self.avatarView.y, nameSize.width, 20);
@@ -171,6 +191,10 @@
         
         self.readReceiptLabel.frame = CGRectMake(self.container.maxX-80, self.container.maxY+3, 80, 12);
     }
+    [self.container bringSubviewToFront:self.snapBg];
+    self.snapBg.frame = self.container.bounds;
+    self.snapIcon.frame = CGRectMake(self.snapBg.frame.size.width * 0.5 - 25 * 0.5, self.snapBg.frame.size.height * 0.5 - 25 * 0.5, 25, 25);
+    self.countDownL.frame = CGRectMake(self.container.maxX + 8, self.container.centerY - 10, 20, 20);
 }
 
 
@@ -207,7 +231,8 @@
     }
 }
 
-- (void)prepareForReuse{
+- (void)prepareForReuse
+{
     [super prepareForReuse];
     //今后任何关于复用产生的 UI 问题，都可以在此尝试编码解决。
 }

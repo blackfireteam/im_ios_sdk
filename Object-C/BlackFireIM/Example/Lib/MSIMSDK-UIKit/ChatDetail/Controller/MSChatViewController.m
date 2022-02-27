@@ -80,6 +80,7 @@
 - (void)inputController:(MSInputViewController *)inputController didSendTextMessage:(NSString *)msg
 {
     MSIMMessage *message = [[MSIMManager sharedInstance] createTextMessage:msg];
+    message.isSnapChat = inputController.inputBar.isNapChat;
     [self sendMessage:message];
     _textingFlag = NO;
 }
@@ -91,6 +92,7 @@
     NSInteger duration = (NSInteger)CMTimeGetSeconds(audioAsset.duration);
 
     MSIMMessage *message = [[MSIMManager sharedInstance] createVoiceMessage:filePath duration:duration];
+    message.isSnapChat = inputController.inputBar.isNapChat;
     [self sendMessage:message];
 }
 
@@ -229,6 +231,13 @@
 - (void)messageController:(MSMessageController *)controller onSelectMessageContent:(MSMessageCell *)cell
 {
     [self.inputController reset];
+    //如果点击的是阅后即焚的消息，全屏查看倒记时
+    if (cell.messageData.message.isSnapChat) {
+        //阅后即焚消息已读
+        [[MSIMManager sharedInstance]readSnapchat:cell.messageData.message successed:nil failed:nil];
+        [self showSnapDetailView: cell.messageData];
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(chatController:onSelectMessageContent:)]) {
         [self.delegate chatController:self onSelectMessageContent:cell];
     }

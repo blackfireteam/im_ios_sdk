@@ -247,7 +247,7 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
     }
 }
 
-- (void)inputBar:(MSInputBarView *)textView didSendText:(NSString *)text
+- (void)inputBar:(MSInputBarView *_Nonnull)textView didSendText:(NSString *_Nullable)text
 {
     if(_delegate && [_delegate respondsToSelector:@selector(inputController:didSendTextMessage:)]){
         [_delegate inputController:self didSendTextMessage:text];

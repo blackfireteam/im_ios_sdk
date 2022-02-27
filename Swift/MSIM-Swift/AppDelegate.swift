@@ -23,8 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = .white
         window?.makeKeyAndVisible()
         
-        pushRegistry.delegate = self
-        pushRegistry.desiredPushTypes = [.voIP]
+//        pushRegistry.delegate = self
+//        pushRegistry.desiredPushTypes = [.voIP]
         
         /// im sdk初始化
         let imConfig = IMSDKConfig.default()
@@ -85,29 +85,29 @@ extension AppDelegate: PKPushRegistryDelegate {
         print("\(#function) token is: \(deviceToken)")
     }
     
-    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
-        
-        print("\(#function) incoming voip notfication: \(payload.dictionaryPayload)")
-        if let uuidString = payload.dictionaryPayload["UUID"] as? String,
-            let handle = payload.dictionaryPayload["handle"] as? String,
-            let uuid = UUID(uuidString: uuidString) {
-            
-//            OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance())
-                
-            // display incoming call UI when receiving incoming voip notification
-            let backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
-            self.displayIncomingCall(uuid: uuid, handle: handle, hasVideo: false) { _ in
-                UIApplication.shared.endBackgroundTask(backgroundTaskIdentifier)
-            }
-        }
-    }
+//    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
+//
+//        print("\(#function) incoming voip notfication: \(payload.dictionaryPayload)")
+//        if let uuidString = payload.dictionaryPayload["UUID"] as? String,
+//            let handle = payload.dictionaryPayload["handle"] as? String,
+//            let uuid = UUID(uuidString: uuidString) {
+//
+////            OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance())
+//
+//            // display incoming call UI when receiving incoming voip notification
+//            let backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+//            self.displayIncomingCall(uuid: uuid, handle: handle, hasVideo: false) { _ in
+//                UIApplication.shared.endBackgroundTask(backgroundTaskIdentifier)
+//            }
+//        }
+//    }
     
-    func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
-        print("\(#function) token invalidated")
-    }
+//    func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
+//        print("\(#function) token invalidated")
+//    }
         
     /// Display the incoming call to the user
-    func displayIncomingCall(uuid: UUID, handle: String, hasVideo: Bool = false, completion: ((NSError?) -> Void)? = nil) {
-//        providerDelegate?.reportIncomingCall(uuid: uuid, handle: handle, hasVideo: hasVideo, completion: completion)
-    }
+//    func displayIncomingCall(uuid: UUID, handle: String, hasVideo: Bool = false, completion: ((NSError?) -> Void)? = nil) {
+////        providerDelegate?.reportIncomingCall(uuid: uuid, handle: handle, hasVideo: hasVideo, completion: completion)
+//    }
 }

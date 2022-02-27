@@ -90,6 +90,7 @@
 "TUIkitMessageTipsOthersRecallMessage" = "The other user recalled a message.";
 "TUIkitMessageTipsUnknowMessage" = "Unsupport message,please update SDK";
 "TUIkitMessageTipsTextingMessage" = "Other is texting...";
+"TUIkitMessageTipsSnapChatMessage" = "[snapchat]";
 
 "TUIKitSignalingFinishGroupChat" = "End Group Chat";
 "TUIKitSignalingVoiceCallEnd" = "call Duration: %02zd:%02zd";

@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 在阅后即焚模式下选择图片
 - (void)selectImageInSnapchatMode;
 
+/// 全局查看阅后即焚
+- (void)showSnapDetailView:(MSMessageCellData *)messageData;
 
 @end
 

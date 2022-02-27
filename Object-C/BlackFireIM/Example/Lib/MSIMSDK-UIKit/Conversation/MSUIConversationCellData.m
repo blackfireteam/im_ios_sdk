@@ -38,6 +38,8 @@
         }else {
             str = TUILocalizableString(TUIkitMessageTipsOthersRecallMessage);
         }
+    }else if (message.isSnapChat) {
+        str = TUILocalizableString(TUIkitMessageTipsSnapChatMessage);
     }else {
         switch (message.type) {
             case MSIM_MSG_TYPE_TEXT:

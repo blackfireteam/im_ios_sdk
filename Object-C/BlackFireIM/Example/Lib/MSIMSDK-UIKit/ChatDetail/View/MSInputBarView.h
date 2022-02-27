@@ -184,6 +184,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,weak) id<MSInputBarViewDelegate> delegate;
 
+@property(nonatomic,assign,readonly) BOOL isNapChat;
+
 /**
  *  添加表情
  *  用于实现在当前文本输入框中输入 emoji

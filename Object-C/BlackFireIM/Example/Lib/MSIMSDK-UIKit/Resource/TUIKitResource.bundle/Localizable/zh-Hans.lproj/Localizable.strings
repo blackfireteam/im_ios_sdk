@@ -89,6 +89,7 @@
 "TUIkitMessageTipsOthersRecallMessage" = "对方撤回了一条消息";
 "TUIkitMessageTipsUnknowMessage" = "不支持的消息类型，请升级SDK查看";
 "TUIkitMessageTipsTextingMessage" = "对方正在输入...";
+"TUIkitMessageTipsSnapChatMessage" = "[阅后即焚]";
 
 "TUIKitSignalingFinishGroupChat" = "结束群聊";
 "TUIKitSignalingVoiceCallEnd" = "通话时长: %02zd:%02zd";

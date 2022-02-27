@@ -93,6 +93,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong) UILabel *readReceiptLabel;
 
+/** 阅后即焚蒙层*/
+@property(nonatomic, strong) UIVisualEffectView *snapBg;
+
+@property(nonatomic, strong) UIImageView *snapIcon;
+
+@property(nonatomic,strong) UILabel *countDownL;
+
 /**
  *  协议委托
  *  负责实现 TMessageCellDelegate 协议中的功能。

@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,copy,readonly) NSString *reuseId;
 
+/** 阅后即焚倒记时数*/
+@property(nonatomic,assign) NSInteger snapCount;
+
 /**
  *  内容大小
  *  返回一个气泡内容的视图大小。

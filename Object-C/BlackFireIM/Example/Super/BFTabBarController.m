@@ -32,37 +32,32 @@
         self.tabBar.standardAppearance = appearance;
         self.tabBar.scrollEdgeAppearance = appearance;
     }
-    self.tabBar.unselectedItemTintColor = [UIColor grayColor];
-    self.tabBar.tintColor = [UIColor darkGrayColor];
-    UITabBarItem *item = [UITabBarItem appearance];
-    [item setTitleTextAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} forState:UIControlStateNormal];
-    [item setTitleTextAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} forState:UIControlStateSelected];
 
     BFHomeController *homeVC = [[BFHomeController alloc]init];
     homeVC.tabBarItem.title = TUILocalizableString(Home_tab);
-    homeVC.tabBarItem.image = [[UIImage imageNamed:@"home_tab_nor"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    homeVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"home_tab_sel"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    homeVC.tabBarItem.image = [UIImage imageNamed:@"home_tab_nor"];
+    homeVC.tabBarItem.selectedImage = [UIImage imageNamed:@"home_tab_sel"];
     BFNavigationController *homeNav = [[BFNavigationController alloc]initWithRootViewController:homeVC];
     [self addChildViewController:homeNav];
     
     BFDiscoveryController *tactVC = [[BFDiscoveryController alloc]init];
     tactVC.tabBarItem.title = TUILocalizableString(Discovery_tab);
-    tactVC.tabBarItem.image = [[UIImage imageNamed:@"contact_normal"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tactVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"contact_selected"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tactVC.tabBarItem.image = [UIImage imageNamed:@"contact_normal"];
+    tactVC.tabBarItem.selectedImage = [UIImage imageNamed:@"contact_selected"];
     BFNavigationController *tactNav = [[BFNavigationController alloc]initWithRootViewController:tactVC];
     [self addChildViewController:tactNav];
     
     BFConversationListController *convVC = [[BFConversationListController alloc]init];
     convVC.tabBarItem.title = TUILocalizableString(Message_tab);
-    convVC.tabBarItem.image = [[UIImage imageNamed:@"session_normal"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    convVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"session_selected"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    convVC.tabBarItem.image = [UIImage imageNamed:@"session_normal"];
+    convVC.tabBarItem.selectedImage = [UIImage imageNamed:@"session_selected"];
     BFNavigationController *convNav = [[BFNavigationController alloc]initWithRootViewController:convVC];
     [self addChildViewController:convNav];
     
     BFProfileViewController *profileVC = [[BFProfileViewController alloc]init];
     profileVC.tabBarItem.title = TUILocalizableString(Profile_tab);
-    profileVC.tabBarItem.image = [[UIImage imageNamed:@"myself_normal"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    profileVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"myself_selected"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    profileVC.tabBarItem.image = [UIImage imageNamed:@"myself_normal"];
+    profileVC.tabBarItem.selectedImage = [UIImage imageNamed:@"myself_selected"];
     BFNavigationController *profileNav = [[BFNavigationController alloc]initWithRootViewController:profileVC];
     [self addChildViewController:profileNav];
     

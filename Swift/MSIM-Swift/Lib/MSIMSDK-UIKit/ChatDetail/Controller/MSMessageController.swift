@@ -58,8 +58,6 @@ public class MSMessageController: UITableViewController {
     
     private var noMoreMsg: Bool = false
     
-    private var msgForDate: MSIMMessage?
-    
     private var menuUIMsg: MSMessageCellData?
     
     private var last_msg_sign: Int = 0
@@ -101,6 +99,9 @@ public class MSMessageController: UITableViewController {
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageReceipt), object: nil, queue: .main) {[weak self] note in
             self?.recieveMessageReceipt(note: note)
+        }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.init(MSUIKitNotification_MessageRecieveDelete), object: nil, queue: .main) {[weak self] note in
+            self?.recieveMessageDelete(note: note)
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -150,7 +151,8 @@ public class MSMessageController: UITableViewController {
                 self.noMoreMsg = true
                 self.tableView.mj_header?.isHidden = true
             }
-            let results = self.transUIMsgFromIMMsg(messages: tempMessages)
+            let tempUimsgs = self.transUIMsgFromIMMsg(messages: tempMessages)
+            let results = self.calculateMessageInterval(msgDatas: tempUimsgs)
             if results.count != 0 {
                 self.uiMsgs.insert(contentsOf: results, at: 0)
                 self.heightCache.removeAll()
@@ -184,17 +186,13 @@ public class MSMessageController: UITableViewController {
         var uiMsgs: [MSMessageCellData] = []
         for k in (0..<messages.count).reversed() {
             let message = messages[k]
-            let dateMsg = transSystemMsgFromDate(date: message.msgSign)
             
             var data: MSMessageCellData?
             if let cellData = self.delegate?.prepareForMessage(controller: self, message: message) {
-                if dateMsg != nil {
-                    self.msgForDate = message
-                    uiMsgs.append(dateMsg!)
-                }
                 uiMsgs.append(cellData)
                 continue
             }
+            var showName = true
             if message.type == .MSG_TYPE_REVOKE {//撤回的消息
                 let revoke = MSSystemMessageCellData(direction: .inComing)
                 if message.isSelf {
@@ -202,60 +200,63 @@ public class MSMessageController: UITableViewController {
                 }else {
                     revoke.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
                 }
-                revoke.message = message
+                showName = false
                 data = revoke
             }else if message.type == .MSG_TYPE_TEXT {
                 let textMsg = MSTextMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
-                textMsg.showName = true
                 textMsg.content = message.textElem?.text
-                textMsg.message = message
                 data = textMsg
             }else if message.type == .MSG_TYPE_IMAGE {
                 let imageMsg = MSImageMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
-                imageMsg.showName = true
-                imageMsg.message = message
                 data = imageMsg
             }else if message.type == .MSG_TYPE_VIDEO {
                 let videoMsg = MSVideoMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
-                videoMsg.showName = true
-                videoMsg.message = message
                 data = videoMsg
             }else if message.type == .MSG_TYPE_VOICE {
                 let voiceMsg = MSVoiceMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
-                voiceMsg.showName = true
-                voiceMsg.message = message
                 data = voiceMsg
             }else if message.type == .MSG_TYPE_LOCATION {
                 let locationMsg = MSLocationMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
-                locationMsg.showName = true
-                locationMsg.message = message
                 data = locationMsg
             }else if message.type == .MSG_TYPE_EMOTION {
                 let emotionMsg = MSEmotionMessageCellData(direction: message.isSelf ? .outGoing : .inComing)
-                emotionMsg.showName = true
-                emotionMsg.message = message
                 data = emotionMsg
             }else {
                 let unknowData = MSSystemMessageCellData(direction: .inComing)
                 unknowData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsUnknowMessage")
-                unknowData.message = message
+                showName = false
                 data = unknowData
             }
-            if dateMsg != nil {
-                self.msgForDate = message
-                uiMsgs.append(dateMsg!)
-            }
+            data?.showName = showName
+            data?.message = message
             uiMsgs.append(data!)
         }
         return uiMsgs
     }
     
-    private func transSystemMsgFromDate(date: Int) -> MSSystemMessageCellData? {
+    /// 在消息之前插入合适的时间
+    private func calculateMessageInterval(msgDatas: [MSMessageCellData]) -> [MSMessageCellData] {
+        if msgDatas.count == 0 {return []}
+        var arr: [MSMessageCellData] = []
+        var msgTime: Int = 0
+        for data in msgDatas {
+            let timeData = self.transSystemMsgFromDate(fromDate: data.message.msgSign, toDate: msgTime)
+            if (timeData != nil) {
+                arr.append(timeData!)
+            }
+            arr.append(data)
+            msgTime = data.message.msgSign
+        }
+        return arr
+    }
+    
+    private func transSystemMsgFromDate(fromDate: Int,toDate: Int) -> MSSystemMessageCellData? {
         
-        if self.msgForDate == nil || labs(date - self.msgForDate!.msgSign) / 1000 / 1000 > MAX_MESSAGE_SEP_DLAY {
+        if labs(fromDate - toDate) / 1000 / 1000 > MAX_MESSAGE_SEP_DLAY {
             let system = MSSystemMessageCellData(direction: .inComing)
+            system.sType = .SYS_TIME
+            system.content = Date(timeIntervalSince1970: TimeInterval(fromDate / 1000 / 1000)).ms_messageString()
             system.message = MSIMMessage()
-            system.content = Date(timeIntervalSince1970: TimeInterval(date / 1000 / 1000)).ms_messageString()
             return system
         }
         return nil
@@ -282,7 +283,15 @@ private extension MSMessageController {
             if tempMsgs.count > 0 {
                 //当前列表是否停留在底部
                 let isAtBottom = (tableView.contentOffset.y + tableView.height + 20 >= tableView.contentSize.height)
-                self.uiMsgs.append(contentsOf: tempMsgs)
+                for data in tempMsgs {
+                    let timeData = self.transSystemMsgFromDate(fromDate: data.message.msgSign, toDate: self.uiMsgs.last?.message.msgSign ?? 0)
+                    if timeData != nil {
+                        self.heightCache.append(0)
+                        self.uiMsgs.append(timeData!)
+                    }
+                    self.heightCache.append(0)
+                    self.uiMsgs.append(data)
+                }
                 tableView.reloadData()
                 //当列表没有停留在底部时，不自动滚动显示出新消息。会在底部显示未读数，点击滚动到底部。
                 //适当增加些容错
@@ -331,9 +340,7 @@ private extension MSMessageController {
             for (index,data) in self.uiMsgs.enumerated() {
                 if data.message.msgID == message.msgID {
                     self.uiMsgs.remove(at: index)
-                    if index < self.heightCache.count {
-                        self.heightCache[index] = 0
-                    }
+                    self.heightCache.remove(at: index)
                     self.tableView.beginUpdates()
                     self.tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
                     let sysData = MSSystemMessageCellData(direction: .inComing)
@@ -344,6 +351,7 @@ private extension MSMessageController {
                         sysData.content = Bundle.bf_localizedString(key: "TUIkitMessageTipsOthersRecallMessage")
                     }
                     sysData.sType = .SYS_REVOKE
+                    self.heightCache.insert(0, at: index)
                     self.uiMsgs.insert(sysData, at: index)
                     self.tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .fade)
                     self.tableView.endUpdates()
@@ -375,6 +383,50 @@ private extension MSMessageController {
                 }
             }
             tableView.reloadData()
+        }
+    }
+    
+    /// 收到消息被删除
+    func recieveMessageDelete(note: Notification) {
+        if let arr = note.object as? [Int] {
+            self.removeMessageWithMessageIDs(msg_ids: arr)
+        }
+    }
+    
+    /// 通过msg_id删除某条消息
+    private func removeMessageWithMessageIDs(msg_ids: [Int]) {
+        
+        var deleteArr: [IndexPath] = []
+        for msg_id in msg_ids {
+            var delData: MSMessageCellData?
+            var delIndex: Int = 0
+            for (index,data) in self.uiMsgs.enumerated() {
+                if data.message.msgID == msg_id {
+                    delData = data
+                    delIndex = index
+                    break
+                }
+            }
+            if delData != nil {
+                let preData = delIndex >= 1 ? self.uiMsgs[delIndex - 1] : nil
+                let nextData = delIndex < self.uiMsgs.count - 1 ? self.uiMsgs[delIndex + 1] : nil
+                
+                self.uiMsgs.remove(at: delIndex)
+                self.heightCache.remove(at: delIndex)
+                deleteArr.append(IndexPath(row: delIndex, section: 0))
+                if let preData = preData as? MSSystemMessageCellData,preData.sType == .SYS_TIME {
+                    if let nextD = nextData as? MSSystemMessageCellData,nextD.sType == .SYS_TIME || nextData == nil {
+                        self.uiMsgs.remove(at: delIndex - 1)
+                        self.heightCache.remove(at: delIndex - 1)
+                        deleteArr.append(IndexPath(row: delIndex - 1, section: 0))
+                    }
+                }
+            }
+        }
+        if deleteArr.count > 0 {
+            self.tableView.beginUpdates()
+            self.tableView.deleteRows(at: deleteArr, with: .fade)
+            self.tableView.endUpdates()
         }
     }
     
@@ -548,33 +600,39 @@ extension MSMessageController: MSMessageCellDelegate {
     }
     
     @objc func onDelete() {
-        if let msg_sign = self.menuUIMsg?.message.msgSign {
-            if MSIMManager.sharedInstance().deleteMessage(msg_sign, user_id: self.partner_id) == true {
-                if let index = self.uiMsgs.firstIndex(of: self.menuUIMsg!) {
-                    
-                    var deleteArr: [IndexPath] = []
-                    let preData: MSMessageCellData? = index >= 1 ? self.uiMsgs[index - 1] : nil
-                    let nextData: MSMessageCellData? = index < self.uiMsgs.count - 1 ? self.uiMsgs[index + 1] : nil
-                    
-                    self.uiMsgs.remove(at: index)
-                    deleteArr.append(IndexPath(row: index, section: 0))
-                    if index < self.heightCache.count {
-                        self.heightCache[index] = 0
-                    }
-                    //时间显示的处理
-                    if (preData?.isKind(of: MSSystemMessageCellData.self) == true && nextData?.isKind(of: MSSystemMessageCellData.self) == true) || (preData?.isKind(of: MSSystemMessageCellData.self) == true && nextData == nil) {
-                        if let preIndex = self.uiMsgs.firstIndex(of: preData!) {
-                            self.uiMsgs.remove(at: preIndex)
-                            if preIndex < self.heightCache.count {
-                                self.heightCache[preIndex] = 0
-                            }
-                            deleteArr.append(IndexPath(row: preIndex, section: 0))
-                        }
-                    }
-                    tableView.beginUpdates()
-                    tableView.deleteRows(at: deleteArr, with: .fade)
-                    tableView.endUpdates()
+        guard let message = self.menuUIMsg?.message else {return}
+        MSIMManager.sharedInstance().deleteMessage(fromLocal: message)
+        let msg_sign = message.msgSign
+        var delData: MSMessageCellData?
+        var delIndex: Int = 0
+        var deleteArr: [IndexPath] = []
+        
+        for (index,data) in self.uiMsgs.enumerated() {
+            if data.message.msgSign == msg_sign {
+                delData = data
+                delIndex = index
+                break
+            }
+        }
+        
+        if delData != nil {
+            let preData = delIndex >= 1 ? self.uiMsgs[delIndex - 1] : nil
+            let nextData = delIndex < self.uiMsgs.count - 1 ? self.uiMsgs[delIndex + 1] : nil
+            
+            self.uiMsgs.remove(at: delIndex)
+            self.heightCache.remove(at: delIndex)
+            deleteArr.append(IndexPath(row: delIndex, section: 0))
+            if let preData = preData as? MSSystemMessageCellData,preData.sType == .SYS_TIME {
+                if let nextD = nextData as? MSSystemMessageCellData,nextD.sType == .SYS_TIME || nextData == nil {
+                    self.uiMsgs.remove(at: delIndex - 1)
+                    self.heightCache.remove(at: delIndex - 1)
+                    deleteArr.append(IndexPath(row: delIndex - 1, section: 0))
                 }
+            }
+            if deleteArr.count > 0 {
+                self.tableView.beginUpdates()
+                self.tableView.deleteRows(at: deleteArr, with: .fade)
+                self.tableView.endUpdates()
             }
         }
     }

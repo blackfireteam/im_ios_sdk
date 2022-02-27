@@ -10,6 +10,9 @@
 #import <TZImagePickerController.h>
 #import <MSIMSDK/MSIMSDK.h>
 #import "MSLocationManager.h"
+#import "MSSnapTextPreview.h"
+#import "MSSnapImagePreview.h"
+
 
 @interface MSChatViewController()<TZImagePickerControllerDelegate>
 
@@ -76,6 +79,7 @@
                     NSData *imageData = UIImagePNGRepresentation(photo);
                     [imageData writeToFile:imagePath atomically:YES];
                     MSIMMessage *message = [[MSIMManager sharedInstance]createImageMessage:imagePath identifierID:asset.localIdentifier];
+                    message.isSnapChat = self.inputController.inputBar.isNapChat;
                     [self sendMessage:message];
                 }
             }];
@@ -88,6 +92,7 @@
             NSData *imageData = UIImagePNGRepresentation(image);
             [imageData writeToFile:imagePath atomically:YES];
             MSIMMessage *message = [[MSIMManager sharedInstance]createImageMessage:imagePath identifierID:asset.localIdentifier];
+            message.isSnapChat = self.inputController.inputBar.isNapChat;
             [self sendMessage:message];
         }
     }
@@ -102,6 +107,7 @@
         NSData *coverData = UIImagePNGRepresentation(coverImage);
         [coverData writeToFile:coverPath atomically:YES];
         MSIMMessage *message = [[MSIMManager sharedInstance]createVideoMessage:outputPath type:@"mp4" duration:asset.duration snapshotPath:coverPath identifierID:asset.localIdentifier];
+        message.isSnapChat = self.inputController.inputBar.isNapChat;
         [self sendMessage:message];
         [MSHelper dismissToast];
         [picker dismissViewControllerAnimated:YES completion:nil];
@@ -139,6 +145,25 @@
     picker.allowPickingVideo = NO;
     picker.allowPickingImage = YES;
     [self presentViewController:picker animated:YES completion:nil];
+}
+
+/// 全局查看阅后即焚
+- (void)showSnapDetailView:(MSMessageCellData *)messageData
+{
+    if (messageData.message.type == MSIM_MSG_TYPE_VOICE) {
+        NSInteger count = [[MSSnapChatTimerManager defaultManager]startCountDownWithMessage:messageData.message];
+        messageData.snapCount = count;
+        [self.messageController.tableView reloadData];
+        return;
+    }
+    MSSnapPreview *preview;
+    if (messageData.message.type == MSIM_MSG_TYPE_TEXT) {
+        preview = [[MSSnapTextPreview alloc]init];
+    }else if (messageData.message.type == MSIM_MSG_TYPE_IMAGE) {
+        preview = [[MSSnapImagePreview alloc]init];
+    }
+    [preview reloadMessage:messageData.message];
+    [preview showWithAnimation:YES];
 }
 
 @end

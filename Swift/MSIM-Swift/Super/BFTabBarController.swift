@@ -19,38 +19,32 @@ class BFTabBarController: UITabBarController {
             tabBar.standardAppearance = appearance
             tabBar.scrollEdgeAppearance = appearance
         }
-        tabBar.unselectedItemTintColor = .gray
-        tabBar.tintColor = .darkGray
-        
-        let item = UITabBarItem.appearance()
-        item.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], for: .normal)
-        item.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], for: .selected)
         
         let homeVC = BFHomeController()
         homeVC.tabBarItem.title = Bundle.bf_localizedString(key: "Home_tab")
-        homeVC.tabBarItem.image = UIImage(named: "home_tab_nor")?.withRenderingMode(.alwaysOriginal)
-        homeVC.tabBarItem.selectedImage = UIImage(named: "home_tab_sel")?.withRenderingMode(.alwaysOriginal)
+        homeVC.tabBarItem.image = UIImage(named: "home_tab_nor")
+        homeVC.tabBarItem.selectedImage = UIImage(named: "home_tab_sel")
         let homeNav = BFNavigationController(rootViewController: homeVC)
         addChild(homeNav)
         
         let tactVC = BFDiscoveryController()
         tactVC.tabBarItem.title = Bundle.bf_localizedString(key: "Discovery_tab")
-        tactVC.tabBarItem.image = UIImage(named: "contact_normal")?.withRenderingMode(.alwaysOriginal)
-        tactVC.tabBarItem.selectedImage = UIImage(named: "contact_selected")?.withRenderingMode(.alwaysOriginal)
+        tactVC.tabBarItem.image = UIImage(named: "contact_normal")
+        tactVC.tabBarItem.selectedImage = UIImage(named: "contact_selected")
         let tactNav = BFNavigationController(rootViewController: tactVC)
         addChild(tactNav)
         
         let convVC = BFConversationListController()
         convVC.tabBarItem.title = Bundle.bf_localizedString(key: "Message_tab")
-        convVC.tabBarItem.image = UIImage(named: "session_normal")?.withRenderingMode(.alwaysOriginal)
-        convVC.tabBarItem.selectedImage = UIImage(named: "session_selected")?.withRenderingMode(.alwaysOriginal)
+        convVC.tabBarItem.image = UIImage(named: "session_normal")
+        convVC.tabBarItem.selectedImage = UIImage(named: "session_selected")
         let convNav = BFNavigationController(rootViewController: convVC)
         addChild(convNav)
         
         let profileVC = BFEditProfileController()
         profileVC.tabBarItem.title = Bundle.bf_localizedString(key: "Profile_tab")
-        profileVC.tabBarItem.image = UIImage(named: "myself_normal")?.withRenderingMode(.alwaysOriginal)
-        profileVC.tabBarItem.selectedImage = UIImage(named: "myself_selected")?.withRenderingMode(.alwaysOriginal)
+        profileVC.tabBarItem.image = UIImage(named: "myself_normal")
+        profileVC.tabBarItem.selectedImage = UIImage(named: "myself_selected")
         let profileNav = BFNavigationController(rootViewController: profileVC)
         addChild(profileNav)
         
