@@ -299,15 +299,15 @@ typedef NS_ENUM(NSUInteger, InputStatus) {
         photoData.title = TUILocalizableString(TUIKitMoreCamera);
         photoData.image = [UIImage bf_imageNamed:@"more_camera"];
         
-//        MSInputMoreCellData *voiceData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VOICE_CALL];
-//        voiceData.title = TUILocalizableString(TUIKitMoreVoiceCall);
-//        voiceData.image = [UIImage bf_imageNamed:@"more_voice_call"];
-//
-//        MSInputMoreCellData *videoData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VIDEO_CALL];
-//        videoData.title = TUILocalizableString(TUIKitMoreVideoCall);
-//        videoData.image = [UIImage bf_imageNamed:@"more_video_call"];
-//
-        [_moreView setData:@[cameraData,photoData]];
+        MSInputMoreCellData *voiceData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VOICE_CALL];
+        voiceData.title = TUILocalizableString(TUIKitMoreVoiceCall);
+        voiceData.image = [UIImage bf_imageNamed:@"more_voice_call"];
+
+        MSInputMoreCellData *videoData = [[MSInputMoreCellData alloc]initWithType:MSIM_MORE_VIDEO_CALL];
+        videoData.title = TUILocalizableString(TUIKitMoreVideoCall);
+        videoData.image = [UIImage bf_imageNamed:@"more_video_call"];
+
+        [_moreView setData:@[cameraData,photoData,voiceData,videoData]];
     }
     return _moreView;
 }

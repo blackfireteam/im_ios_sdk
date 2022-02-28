@@ -101,6 +101,10 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 #define TVideoMessageCell_Play_Size CGSizeMake(35, 35)
 #define TVideoMessageCell_Progress_Color  RGBA(0, 0, 0, 0.5)
 
+//location cell
+#define TLocationMessageCell_ReuseId @"TLocationMessageCell"
+#define TLocationMessageCell_Width (Screen_Width * 0.65)
+#define TLocationMessageCell_Height TLocationMessageCell_Width * 0.65
 
 //voice cell
 #define TVoiceMessageCell_ReuseId @"TVoiceMessaageCell"

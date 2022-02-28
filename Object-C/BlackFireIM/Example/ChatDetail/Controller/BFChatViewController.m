@@ -11,6 +11,8 @@
 #import "YBIBVideoData.h"
 #import "BFWinkMessageCell.h"
 #import "BFWinkMessageCellData.h"
+#import "BFCallMessageCell.h"
+#import "BFCallMessageCellData.h"
 
 
 @interface BFChatViewController ()<MSChatViewControllerDelegate>
@@ -43,7 +45,7 @@
 
 #pragma mark - MSChatViewControllerDelegate
 
-- (void)chatController:(MSChatViewController *)controller didSendMessage:(MSIMElem *)elem
+- (void)chatController:(MSChatViewController *)controller didSendMessage:(MSIMMessage *)message
 {
     //主动发送的每一条消息都会进入这个回调，你可以在此做一些统计埋点等工作。。。
 }
@@ -52,12 +54,27 @@
 - (MSMessageCellData *)chatController:(MSChatViewController *)controller prepareForMessage:(MSIMMessage *)message
 {
     if (message.businessElem) {
-        MSBusinessElem *businessElem = message.businessElem;
-        if (businessElem.businessType == 11) {
+        if (message.type == 11) {
             BFWinkMessageCellData *winkData = [[BFWinkMessageCellData alloc]initWithDirection:(message.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
             winkData.showName = YES;
             winkData.message = message;
             return winkData;
+        }
+    }else if (message.customElem) {
+        MSIMCustomElem *customElem = message.customElem;
+        NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+        if (message.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_RECAL) {
+            
+        }else if(message.type == MSIM_MSG_TYPE_CUSTOM_UNREADCOUNT_NO_RECALL) {
+            MSIMCustomSubType subType = [dic[@"type"]integerValue];
+            if (subType == MSIMCustomSubTypeVoiceCall || subType == MSIMCustomSubTypeVideoCall) {
+                BFCallMessageCellData *callData = [[BFCallMessageCellData alloc] initWithDirection:(message.isSelf ? MsgDirectionOutgoing : MsgDirectionIncoming)];
+                callData.callType = (subType == MSIMCustomSubTypeVideoCall ? MSCallType_Video : MSCallType_Voice);
+                callData.notice = [MSCallManager parseToMessageShow:dic callType:(subType == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) isSelf:message.isSelf];
+                callData.showName = YES;
+                callData.message = message;
+                return callData;
+            }
         }
     }
     return nil;
@@ -68,6 +85,8 @@
     //你可以自定义消息气泡的UI,对基本消息类型你可以直接返回nil，采用默认样式
     if ([cellData isKindOfClass:[BFWinkMessageCellData class]]) {
         return [BFWinkMessageCell class];
+    }else if ([cellData isKindOfClass:[BFCallMessageCellData class]]) {
+        return [BFCallMessageCell class];
     }
     return nil;
 }
@@ -77,9 +96,11 @@
 {
     if (cell.data.tye == MSIM_MORE_VOICE_CALL) {//语音通话
         
+        [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Voice action:CallAction_Call room_id:nil];
         
     }else if (cell.data.tye == MSIM_MORE_VIDEO_CALL) {//视频通话
         
+        [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Video action:CallAction_Call room_id:nil];
     }
 }
 
@@ -93,7 +114,7 @@
 - (void)chatController:(MSChatViewController *)controller onRecieveTextingMessage:(MSIMMessage *)message
 {
     self.navigationItem.title = TUILocalizableString(TUIkitMessageTipsTextingMessage);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[MSProfileProvider provider] providerProfile:self.partner_id complete:^(MSProfileInfo * _Nonnull profile) {
                 self.navigationItem.title = profile.nick_name;
         }];
@@ -110,12 +131,11 @@
             MSMessageCellData *data =  self.chatController.messageController.uiMsgs[i];
             MSMessageCell *dataCell = (MSMessageCell *)[self.chatController.messageController.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             if (data.message.type == MSIM_MSG_TYPE_IMAGE) {
-                MSIMImageElem *imageElem = data.message.imageElem;
                 YBIBImageData *imageData = [YBIBImageData new];
-                if ([[NSFileManager defaultManager]fileExistsAtPath:imageElem.path]) {
-                    imageData.imagePath = imageElem.path;
+                if ([[NSFileManager defaultManager]fileExistsAtPath: data.message.imageElem.path]) {
+                    imageData.imagePath = data.message.imageElem.path;
                 }else {
-                    imageData.imageURL = [NSURL URLWithString:imageElem.url];
+                    imageData.imageURL = [NSURL URLWithString: data.message.imageElem.url];
                 }
                 imageData.projectiveView = dataCell.container.subviews.firstObject;
                 [tempArr addObject:imageData];
@@ -138,7 +158,7 @@
         browser.dataSourceArray = tempArr;
         browser.currentPage = defaultIndex;
         [browser show];
-    } else if (cell.messageData.message.type == MSIM_MSG_TYPE_FLASH_IMAGE) {// 点击闪图，表示自己已读
+    }else if (cell.messageData.message.type == MSIM_MSG_TYPE_FLASH_IMAGE) {// 点击闪图，表示自己已读
         [[MSIMManager sharedInstance] flashImageRead:cell.messageData.message.msgID toReciever:self.partner_id successed:^{
             
         } failed:^(NSInteger code, NSString *desc) {
@@ -156,6 +176,11 @@
         browser.dataSourceArray = @[imageData];
         browser.currentPage = 0;
         [browser show];
+    }else if ([cell isKindOfClass:[BFCallMessageCell class]]) {
+        MSIMCustomElem *customElem = cell.messageData.message.customElem;
+        NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+        MSIMCustomSubType subType = [dic[@"type"]integerValue];
+        [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:(subType == MSIMCustomSubTypeVideoCall ? MSCallType_Video : MSCallType_Voice) action:CallAction_Call room_id:nil];
     }
 }
 

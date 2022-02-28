@@ -24,6 +24,6 @@
 #import "MSFlashImageMessageCell.h"
 #import "MSNoticeCountView.h"
 #import "MSChatMoreView.h"
-
+#import "MSCallManager.h"
 
 #endif /* MSIMSDK_UIKit_h */

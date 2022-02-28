@@ -97,16 +97,15 @@
 ///配置自定义消息在会话中展示的内容
 - (NSString *)getCustomElemContent:(MSIMMessage *)message
 {
-//    MSIMCustomElem *customElem = (MSIMCustomElem *)elem;
-//    NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
-//    if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {
-//        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Voice isSelf:customElem.isSelf];
-//    }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {
-//        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Video isSelf:customElem.isSelf];
-//    }else {
-//        return TUILocalizableString(TUIKitMessageTipsUnsupportCustomMessage);
-//    }
-    return TUILocalizableString(TUIKitMessageTipsUnsupportCustomMessage);
+    MSIMCustomElem *customElem = message.customElem;
+    NSDictionary *dic = [customElem.jsonStr el_convertToDictionary];
+    if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVoiceCall) {
+        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Voice isSelf:message.isSelf];
+    }else if ([dic[@"type"]integerValue] == MSIMCustomSubTypeVideoCall) {
+        return [MSCallManager parseToConversationShow:dic callType:MSCallType_Video isSelf:message.isSelf];
+    }else {
+        return TUILocalizableString(TUIKitMessageTipsUnsupportCustomMessage);
+    }
 }
 
 - (NSString *)title

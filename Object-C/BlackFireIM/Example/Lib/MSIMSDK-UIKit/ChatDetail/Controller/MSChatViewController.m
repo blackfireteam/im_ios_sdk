@@ -150,14 +150,14 @@
 /**
  收到信令消息
  */
-- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMMessage *>*)elems
+- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMMessage *>*)messages
 {
-    for (MSIMMessage *elem in elems) {
-        if (elem.customElem == nil) return;
-        NSDictionary *dic = [elem.customElem.jsonStr el_convertToDictionary];
+    for (MSIMMessage *message in messages) {
+        if (message.customElem == nil) return;
+        NSDictionary *dic = [message.customElem.jsonStr el_convertToDictionary];
         if ([dic[@"type"]integerValue] == MSIMCustomSubTypeTexting) {//收到对方正在输入
             if ([self.delegate respondsToSelector:@selector(chatController:onRecieveTextingMessage:)]) {
-                return [self.delegate chatController:self onRecieveTextingMessage:elem];
+                return [self.delegate chatController:self onRecieveTextingMessage:message];
             }
             return;
         }
