@@ -533,33 +533,32 @@ extension MSMessageController: MSMessageCellDelegate {
     }
     
     @objc func onDelete() {
-        if let msg_sign = self.menuUIMsg?.message.msgSign {
-            if MSIMManager.sharedInstance().deleteMessage(msg_sign, user_id: self.partner_id) == true {
-                if let index = self.uiMsgs.firstIndex(of: self.menuUIMsg!) {
-                    
-                    var deleteArr: [IndexPath] = []
-                    let preData: MSMessageCellData? = index >= 1 ? self.uiMsgs[index - 1] : nil
-                    let nextData: MSMessageCellData? = index < self.uiMsgs.count - 1 ? self.uiMsgs[index + 1] : nil
-                    
-                    self.uiMsgs.remove(at: index)
-                    deleteArr.append(IndexPath(row: index, section: 0))
-                    if index < self.heightCache.count {
-                        self.heightCache[index] = 0
-                    }
-                    //时间显示的处理
-                    if (preData?.isKind(of: MSSystemMessageCellData.self) == true && nextData?.isKind(of: MSSystemMessageCellData.self) == true) || (preData?.isKind(of: MSSystemMessageCellData.self) == true && nextData == nil) {
-                        if let preIndex = self.uiMsgs.firstIndex(of: preData!) {
-                            self.uiMsgs.remove(at: preIndex)
-                            if preIndex < self.heightCache.count {
-                                self.heightCache[preIndex] = 0
-                            }
-                            deleteArr.append(IndexPath(row: preIndex, section: 0))
-                        }
-                    }
-                    tableView.beginUpdates()
-                    tableView.deleteRows(at: deleteArr, with: .fade)
-                    tableView.endUpdates()
+        if let message = self.menuUIMsg?.message {
+            MSIMManager.sharedInstance().deleteMessage(fromLocal: message)
+            if let index = self.uiMsgs.firstIndex(of: self.menuUIMsg!) {
+                
+                var deleteArr: [IndexPath] = []
+                let preData: MSMessageCellData? = index >= 1 ? self.uiMsgs[index - 1] : nil
+                let nextData: MSMessageCellData? = index < self.uiMsgs.count - 1 ? self.uiMsgs[index + 1] : nil
+                
+                self.uiMsgs.remove(at: index)
+                deleteArr.append(IndexPath(row: index, section: 0))
+                if index < self.heightCache.count {
+                    self.heightCache[index] = 0
                 }
+                //时间显示的处理
+                if (preData?.isKind(of: MSSystemMessageCellData.self) == true && nextData?.isKind(of: MSSystemMessageCellData.self) == true) || (preData?.isKind(of: MSSystemMessageCellData.self) == true && nextData == nil) {
+                    if let preIndex = self.uiMsgs.firstIndex(of: preData!) {
+                        self.uiMsgs.remove(at: preIndex)
+                        if preIndex < self.heightCache.count {
+                            self.heightCache[preIndex] = 0
+                        }
+                        deleteArr.append(IndexPath(row: preIndex, section: 0))
+                    }
+                }
+                tableView.beginUpdates()
+                tableView.deleteRows(at: deleteArr, with: .fade)
+                tableView.endUpdates()
             }
         }
     }

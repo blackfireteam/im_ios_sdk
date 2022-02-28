@@ -642,8 +642,8 @@
 				F0FF71A826B0E9CE0005F3CF /* Sources */,
 				F0FF71A926B0E9CE0005F3CF /* Frameworks */,
 				F0FF71AA26B0E9CE0005F3CF /* Resources */,
-				5568807E1961F01EC897DB7A /* [CP] Embed Pods Frameworks */,
-				A000C7F75E6E230462FE3227 /* [CP] Copy Pods Resources */,
+				8C688F6796C8D2EDFE3BE1A3 /* [CP] Embed Pods Frameworks */,
+				2F56DD1184E7133E71041609 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -769,21 +769,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5568807E1961F01EC897DB7A /* [CP] Embed Pods Frameworks */ = {
+		2F56DD1184E7133E71041609 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		88D4061319BA3B5A23292582 /* [CP] Check Pods Manifest.lock */ = {
@@ -808,21 +808,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A000C7F75E6E230462FE3227 /* [CP] Copy Pods Resources */ = {
+		8C688F6796C8D2EDFE3BE1A3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MSIM-Swift/Pods-MSIM-Swift-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
