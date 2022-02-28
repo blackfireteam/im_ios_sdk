@@ -677,33 +677,31 @@
 
 - (void)onDelete:(id)sender
 {
-    BOOL isOK = [[MSIMManager sharedInstance]deleteMessage:self.menuUIMsg.message.msgSign user_id:self.partner_id];
-    if (isOK) {
-        NSInteger index = [self.uiMsgs indexOfObject:self.menuUIMsg];
-        if (index == NSNotFound) return;
-        NSMutableArray *deleteArr = [NSMutableArray array];
-        MSMessageCellData *preData = index >= 1 ? self.uiMsgs[index-1] : nil;
-        MSMessageCellData *nextData = index < self.uiMsgs.count-1 ? self.uiMsgs[index+1] : nil;
-        
-        [self.uiMsgs removeObject:self.menuUIMsg];
-        [deleteArr addObject:[NSIndexPath indexPathForRow:index inSection:0]];
-        
-        if (index < self.heightCache.count) {
-            [self.heightCache replaceObjectAtIndex:index withObject:@(0)];
-        }
-        //时间显示的处理
-        if (([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME  && [nextData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)nextData).type == SYS_TIME) ||([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME && nextData == nil)) {
-            NSInteger preIndex = [self.uiMsgs indexOfObject:preData];
-            [self.uiMsgs removeObject:preData];
-            if (preIndex < self.heightCache.count) {
-                [self.heightCache replaceObjectAtIndex:preIndex withObject:@(0)];
-            }
-            [deleteArr addObject:[NSIndexPath indexPathForRow:preIndex inSection:0]];
-        }
-        [self.tableView beginUpdates];
-        [self.tableView deleteRowsAtIndexPaths:deleteArr withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
+    [[MSIMManager sharedInstance]deleteMessageFromLocal:self.menuUIMsg.message];
+    NSInteger index = [self.uiMsgs indexOfObject:self.menuUIMsg];
+    if (index == NSNotFound) return;
+    NSMutableArray *deleteArr = [NSMutableArray array];
+    MSMessageCellData *preData = index >= 1 ? self.uiMsgs[index-1] : nil;
+    MSMessageCellData *nextData = index < self.uiMsgs.count-1 ? self.uiMsgs[index+1] : nil;
+    
+    [self.uiMsgs removeObject:self.menuUIMsg];
+    [deleteArr addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+    
+    if (index < self.heightCache.count) {
+        [self.heightCache replaceObjectAtIndex:index withObject:@(0)];
     }
+    //时间显示的处理
+    if (([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME  && [nextData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)nextData).type == SYS_TIME) ||([preData isKindOfClass:[MSSystemMessageCellData class]] && ((MSSystemMessageCellData *)preData).type == SYS_TIME && nextData == nil)) {
+        NSInteger preIndex = [self.uiMsgs indexOfObject:preData];
+        [self.uiMsgs removeObject:preData];
+        if (preIndex < self.heightCache.count) {
+            [self.heightCache replaceObjectAtIndex:preIndex withObject:@(0)];
+        }
+        [deleteArr addObject:[NSIndexPath indexPathForRow:preIndex inSection:0]];
+    }
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:deleteArr withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 #pragma mark - MSNoticeCountViewDelegate
