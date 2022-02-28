@@ -146,7 +146,7 @@
 + (NSString *)postUrl
 {
     BOOL serverType = [[NSUserDefaults standardUserDefaults]boolForKey:@"ms_Test"];
-    NSString *host = serverType ? @"https://im.ekfree.com:18788" : @"https://msim1.ekfree.com:18788";
+    NSString *host = serverType ? @"https://imtest.ekfree.com:18788" : @"https://msim1.ekfree.com:18788";
     return host;
 }
 

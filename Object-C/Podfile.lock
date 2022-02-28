@@ -45,7 +45,7 @@ PODS:
   - Bugly (2.5.91)
   - lottie-ios (2.5.3)
   - MJRefresh (3.7.5)
-  - MSIMSDK_DE4 (1.3.3)
+  - MSIMSDK_DE4 (1.3.4)
   - QCloudCore/WithoutMTA (6.0.5)
   - QCloudCOSXML/Transfer (6.0.5):
     - QCloudCore/WithoutMTA (= 6.0.5)
@@ -95,7 +95,7 @@ SPEC CHECKSUMS:
   Bugly: afe841bba2ea6de6d432a3c125240a5e75949c55
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
-  MSIMSDK_DE4: 0fc29ac1b5c72a5dfb811e7ea1f96f9013605cde
+  MSIMSDK_DE4: 6fa76b79b9e1be524f31184568283001ed8d746a
   QCloudCore: 7772bc67f29df165fa021bf0be39409e8029938c
   QCloudCOSXML: acf6786452249fa681a64dc0615cbc839658f14d
   SDWebImage: 53179a2dba77246efa8a9b85f5c5b21f8f43e38f

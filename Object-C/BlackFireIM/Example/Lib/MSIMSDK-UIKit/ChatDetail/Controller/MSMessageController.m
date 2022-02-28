@@ -695,7 +695,7 @@
 
 - (void)onDelete:(id)sender
 {
-    [[MSIMManager sharedInstance]deleteMessage:self.menuUIMsg.message.msgSign user_id:self.partner_id];
+    [[MSIMManager sharedInstance]deleteMessageFromLocal:self.menuUIMsg.message];
     NSInteger msg_sign = self.menuUIMsg.message.msgSign;
     MSMessageCellData *delData;
     NSInteger delIndex = 0;
