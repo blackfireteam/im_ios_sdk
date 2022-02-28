@@ -21,7 +21,6 @@
 		F012709627CCC3E100EE84F5 /* MSCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F012701E27CCC3E000EE84F5 /* MSCallViewController.m */; };
 		F012709727CCC3E100EE84F5 /* MSChatViewController+More.m in Sources */ = {isa = PBXBuildFile; fileRef = F012702227CCC3E000EE84F5 /* MSChatViewController+More.m */; };
 		F012709827CCC3E100EE84F5 /* MSChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F012702527CCC3E000EE84F5 /* MSChatViewController.m */; };
-		F012709927CCC3E100EE84F5 /* MSInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F012702827CCC3E000EE84F5 /* MSInputViewController.m */; };
 		F012709A27CCC3E100EE84F5 /* MSMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = F012702927CCC3E000EE84F5 /* MSMessageController.m */; };
 		F012709B27CCC3E100EE84F5 /* MSSystemMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F012702B27CCC3E000EE84F5 /* MSSystemMessageCellData.m */; };
 		F012709C27CCC3E100EE84F5 /* MSBubbleMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F012702D27CCC3E000EE84F5 /* MSBubbleMessageCellData.m */; };
@@ -75,6 +74,7 @@
 		F01270CC27CCC3E100EE84F5 /* MSUIConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F012709027CCC3E100EE84F5 /* MSUIConversationCell.m */; };
 		F01270D127CCC43700EE84F5 /* BFCallMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F01270CD27CCC43600EE84F5 /* BFCallMessageCell.m */; };
 		F01270D227CCC43700EE84F5 /* BFCallMessageCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = F01270CF27CCC43700EE84F5 /* BFCallMessageCellData.m */; };
+		F0B3C98927CD136900E81CE8 /* MSInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B3C98727CD136900E81CE8 /* MSInputViewController.m */; };
 		F0E60E5C27994CD10072DD68 /* YBIBVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E60D8927994CD00072DD68 /* YBIBVideoCell.m */; };
 		F0E60E5D27994CD10072DD68 /* YBIBVideoData.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E60D8A27994CD00072DD68 /* YBIBVideoData.m */; };
 		F0E60E5E27994CD10072DD68 /* YBIBVideoTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E60D8B27994CD00072DD68 /* YBIBVideoTopBar.m */; };
@@ -197,12 +197,10 @@
 		F012701E27CCC3E000EE84F5 /* MSCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSCallViewController.m; sourceTree = "<group>"; };
 		F012701F27CCC3E000EE84F5 /* MSCallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSCallManager.h; sourceTree = "<group>"; };
 		F012702227CCC3E000EE84F5 /* MSChatViewController+More.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSChatViewController+More.m"; sourceTree = "<group>"; };
-		F012702327CCC3E000EE84F5 /* MSMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMessageController.h; sourceTree = "<group>"; };
 		F012702427CCC3E000EE84F5 /* MSInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSInputViewController.h; sourceTree = "<group>"; };
 		F012702527CCC3E000EE84F5 /* MSChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSChatViewController.m; sourceTree = "<group>"; };
 		F012702627CCC3E000EE84F5 /* MSChatViewController+More.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSChatViewController+More.h"; sourceTree = "<group>"; };
 		F012702727CCC3E000EE84F5 /* MSChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSChatViewController.h; sourceTree = "<group>"; };
-		F012702827CCC3E000EE84F5 /* MSInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSInputViewController.m; sourceTree = "<group>"; };
 		F012702927CCC3E000EE84F5 /* MSMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSMessageController.m; sourceTree = "<group>"; };
 		F012702B27CCC3E000EE84F5 /* MSSystemMessageCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSystemMessageCellData.m; sourceTree = "<group>"; };
 		F012702C27CCC3E000EE84F5 /* MSFlashImageMessageCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSFlashImageMessageCellData.h; sourceTree = "<group>"; };
@@ -303,6 +301,8 @@
 		F01270CF27CCC43700EE84F5 /* BFCallMessageCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFCallMessageCellData.m; sourceTree = "<group>"; };
 		F01270D027CCC43700EE84F5 /* BFCallMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFCallMessageCell.h; sourceTree = "<group>"; };
 		F042C8522679E00D0067547E /* BlackFireIM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlackFireIM.entitlements; sourceTree = "<group>"; };
+		F0B3C98727CD136900E81CE8 /* MSInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSInputViewController.m; sourceTree = "<group>"; };
+		F0B3C98827CD136900E81CE8 /* MSMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSMessageController.h; sourceTree = "<group>"; };
 		F0E60D8927994CD00072DD68 /* YBIBVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YBIBVideoCell.m; sourceTree = "<group>"; };
 		F0E60D8A27994CD00072DD68 /* YBIBVideoData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YBIBVideoData.m; sourceTree = "<group>"; };
 		F0E60D8B27994CD00072DD68 /* YBIBVideoTopBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YBIBVideoTopBar.m; sourceTree = "<group>"; };
@@ -581,12 +581,12 @@
 			isa = PBXGroup;
 			children = (
 				F012702227CCC3E000EE84F5 /* MSChatViewController+More.m */,
-				F012702327CCC3E000EE84F5 /* MSMessageController.h */,
 				F012702427CCC3E000EE84F5 /* MSInputViewController.h */,
 				F012702527CCC3E000EE84F5 /* MSChatViewController.m */,
 				F012702627CCC3E000EE84F5 /* MSChatViewController+More.h */,
+				F0B3C98727CD136900E81CE8 /* MSInputViewController.m */,
+				F0B3C98827CD136900E81CE8 /* MSMessageController.h */,
 				F012702727CCC3E000EE84F5 /* MSChatViewController.h */,
-				F012702827CCC3E000EE84F5 /* MSInputViewController.m */,
 				F012702927CCC3E000EE84F5 /* MSMessageController.m */,
 			);
 			path = Controller;
@@ -1160,8 +1160,8 @@
 				F011D57725E736BD0061F9D6 /* Resources */,
 				F0D2990526295BE300F485CC /* ShellScript */,
 				F0865012265BF30B00EE917D /* Embed Frameworks */,
-				DE89DF47796B0318F16C5F40 /* [CP] Embed Pods Frameworks */,
-				59B04DC1AA2C2BF06B6ACF97 /* [CP] Copy Pods Resources */,
+				7FA4ED6D16F33D9987048E75 /* [CP] Embed Pods Frameworks */,
+				DDF7469F0EA86F9AC38904E8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1286,21 +1286,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		59B04DC1AA2C2BF06B6ACF97 /* [CP] Copy Pods Resources */ = {
+		7FA4ED6D16F33D9987048E75 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A314BAD49F9E5992DB9E8A9D /* [CP] Check Pods Manifest.lock */ = {
@@ -1325,21 +1325,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DE89DF47796B0318F16C5F40 /* [CP] Embed Pods Frameworks */ = {
+		DDF7469F0EA86F9AC38904E8 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlackFireIM/Pods-BlackFireIM-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F0D2990526295BE300F485CC /* ShellScript */ = {
@@ -1376,7 +1376,6 @@
 				F0E60E8027994CD10072DD68 /* YYImageCoder.m in Sources */,
 				F0E60E6B27994CD10072DD68 /* YBIBToastView.m in Sources */,
 				F0E60E6727994CD10072DD68 /* YBIBImageScrollView.m in Sources */,
-				F012709927CCC3E100EE84F5 /* MSInputViewController.m in Sources */,
 				F0E60EDB27994D1E0072DD68 /* BFNavigationController.m in Sources */,
 				F01270B427CCC3E100EE84F5 /* MSInputBarView.m in Sources */,
 				F01270A327CCC3E100EE84F5 /* MSMenuView.m in Sources */,
@@ -1443,6 +1442,7 @@
 				F0E60E6A27994CD10072DD68 /* YBIBImageData.m in Sources */,
 				F01270BD27CCC3E100EE84F5 /* UIView+BFExtension.m in Sources */,
 				F012709527CCC3E100EE84F5 /* MSCallManager.m in Sources */,
+				F0B3C98927CD136900E81CE8 /* MSInputViewController.m in Sources */,
 				F0E60E6327994CD10072DD68 /* YBImageBrowser.m in Sources */,
 				F0E60E6027994CD10072DD68 /* YBIBVideoActionBar.m in Sources */,
 				F01270A527CCC3E100EE84F5 /* MSFaceUtil.m in Sources */,
