@@ -8,6 +8,8 @@
 import UIKit
 import MSIMSDK
 import PushKit
+import CallKit
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,9 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = .white
         window?.makeKeyAndVisible()
         
-//        pushRegistry.delegate = self
-//        pushRegistry.desiredPushTypes = [.voIP]
-        
         /// im sdk初始化
         let imConfig = IMSDKConfig.default()
         imConfig.logEnable = true
@@ -40,7 +39,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         MSPushMediator.shared.applicationDidFinishLaunchingWithOptions(launchOptions: launchOptions)
         MSPushMediator.shared.delegate = self
+        
+        self.voipRegistration()
         return true
+    }
+    
+    func voipRegistration() {
+        let voipRegistry: PKPushRegistry = PKPushRegistry(queue: .main)
+        voipRegistry.delegate = self
+        voipRegistry.desiredPushTypes = [.voIP]
     }
     
     ///** 请求APNs建立连接并获得deviceToken*/
@@ -85,29 +92,33 @@ extension AppDelegate: PKPushRegistryDelegate {
         print("\(#function) token is: \(deviceToken)")
     }
     
-//    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
+    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
+
+        print("\(#function) incoming voip notfication: \(payload.dictionaryPayload)")
+        if let uuidString = payload.dictionaryPayload["UUID"] as? String,
+            let identifier = payload.dictionaryPayload["identifier"] as? String,
+            let uuid = UUID(uuidString: uuidString)
+        {
+//            let update = CXCallUpdate()
+//            update.callerIdentifier = identifier
 //
-//        print("\(#function) incoming voip notfication: \(payload.dictionaryPayload)")
-//        if let uuidString = payload.dictionaryPayload["UUID"] as? String,
-//            let handle = payload.dictionaryPayload["handle"] as? String,
-//            let uuid = UUID(uuidString: uuidString) {
-//
-////            OTAudioDeviceManager.setAudioDevice(OTDefaultAudioDevice.sharedInstance())
-//
-//            // display incoming call UI when receiving incoming voip notification
-//            let backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
-//            self.displayIncomingCall(uuid: uuid, handle: handle, hasVideo: false) { _ in
-//                UIApplication.shared.endBackgroundTask(backgroundTaskIdentifier)
+//            provider.reportNewIncomingCall(with: uuid, update: update) { error in
+//                // …
 //            }
-//        }
-//    }
+        }
+    }
     
-//    func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
-//        print("\(#function) token invalidated")
-//    }
+    func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
+        // configure audio session
+        action.fulfill()
+    }
+    
+    func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
+        print("\(#function) token invalidated")
+    }
         
-    /// Display the incoming call to the user
-//    func displayIncomingCall(uuid: UUID, handle: String, hasVideo: Bool = false, completion: ((NSError?) -> Void)? = nil) {
-////        providerDelegate?.reportIncomingCall(uuid: uuid, handle: handle, hasVideo: hasVideo, completion: completion)
-//    }
+    // Display the incoming call to the user
+    func displayIncomingCall(uuid: UUID, handle: String, hasVideo: Bool = false, completion: ((NSError?) -> Void)? = nil) {
+//        providerDelegate?.reportIncomingCall(uuid: uuid, handle: handle, hasVideo: hasVideo, completion: completion)
+    }
 }

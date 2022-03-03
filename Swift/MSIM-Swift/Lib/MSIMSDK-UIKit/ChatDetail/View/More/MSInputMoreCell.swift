@@ -20,14 +20,14 @@ open class MSInputMoreCell: UICollectionViewCell {
         image.image = data?.image
         title.text = data?.title
         
-        let menuSize = CGSize(width: 65, height: 65)
-        image.frame = CGRect(x: 0, y: 0, width: menuSize.width, height: menuSize.height)
-        title.frame = CGRect(x: 0, y: image.top + image.height + 5, width: image.width, height: 20)
+        let menuSize = CGSize(width: 50, height: 50)
+        image.frame = CGRect(x: 7.5, y: 7.5, width: menuSize.width, height: menuSize.height)
+        title.frame = CGRect(x: 0, y: image.top + image.height + 10, width: image.width + 15, height: 20)
     }
     
     static func getSize() -> CGSize {
-        let menuSize = CGSize(width: 65, height: 65)
-        return CGSize(width: menuSize.width, height: menuSize.height + 25)
+        let menuSize = CGSize(width: 50, height: 50)
+        return CGSize(width: menuSize.width, height: menuSize.height + 40)
     }
     
     override init(frame: CGRect) {

@@ -15,7 +15,7 @@ pod 'TZImagePickerController'
 pod 'QCloudCOSXML/Transfer'
 pod 'Bugly'
 
-pod 'MSIMSDK'
+pod 'MSIMSDK','1.2.5'
 
 ## 高德地图
 pod 'AMap3DMap'
