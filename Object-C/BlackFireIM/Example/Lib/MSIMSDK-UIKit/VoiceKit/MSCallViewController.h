@@ -24,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)recieveHangup:(MSCallType)callType room_id:(NSString *)room_id;
 
+- (void)acceptBtnDidClick:(MSCallType)type;
+
+- (void)rejectBtnDidClick:(MSCallType)type;
+
+- (void)hangupBtnDidClick:(MSCallType)type;
+
 @end
 
 NS_ASSUME_NONNULL_END

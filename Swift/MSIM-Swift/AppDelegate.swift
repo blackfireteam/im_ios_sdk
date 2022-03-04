@@ -62,7 +62,7 @@ extension AppDelegate: MSPushMediatorDelegate {
     /** 点击推送消息进入的app,可以做些跳转操作*/
     func didReceiveNotificationResponse(userInfo: [String : Any]) {
         
-        guard let _ = userInfo["data"] as? [String: Any] else { return}
+        guard let _ = userInfo["msim"] as? [String: Any] else { return}
         guard let _ = MSIMTools.sharedInstance().user_id else {return}
         if let tabbar = window?.rootViewController as? BFTabBarController {
             tabbar.selectedIndex = 2

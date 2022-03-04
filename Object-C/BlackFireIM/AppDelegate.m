@@ -68,7 +68,7 @@
 /** 点击推送消息进入的app,可以做些跳转操作*/
 - (void)didReceiveNotificationResponse:(NSDictionary *)userInfo
 {
-    NSDictionary *data = userInfo[@"data"];
+    NSDictionary *data = userInfo[@"msim"];
     if (data == nil) return;
     if ([MSIMTools sharedInstance].user_id) {
         

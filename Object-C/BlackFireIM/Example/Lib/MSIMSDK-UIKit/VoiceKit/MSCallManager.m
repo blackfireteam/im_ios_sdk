@@ -9,6 +9,8 @@
 #import "MSCallViewController.h"
 #import "MSIMSDK-UIKit.h"
 
+
+
 @interface MSCallManager()
 
 @property(nonatomic,copy) NSString *isOnCallingWithUid;
@@ -269,7 +271,7 @@
         push.body = [NSString stringWithFormat:@"%@ Call declined by user",attachExt];
         push.sound = @"default";
     }
-    MSIMMessage *message = [[MSIMManager sharedInstance]createCustomMessage:[extDic el_convertJsonString] option:option pushExt:push];
+    MSIMMessage *message = [[MSIMManager sharedInstance]createVoipMessage:[extDic el_convertJsonString] option:option pushExt:push];
     [[MSIMManager sharedInstance]sendC2CMessage:message toReciever:reciever successed:^(NSInteger msg_id) {
         
             } failed:^(NSInteger code, NSString *desc) {
@@ -323,6 +325,27 @@
         return arr[1];
     }
     return @"";
+}
+
+- (void)acceptBtnDidClick:(MSCallType)type
+{
+    if (self.callVC) {
+        [self.callVC acceptBtnDidClick: type];
+    }
+}
+
+- (void)rejectBtnDidClick:(MSCallType)type
+{
+    if (self.callVC) {
+        [self.callVC rejectBtnDidClick: type];
+    }
+}
+
+- (void)hangupBtnDidClick:(MSCallType)type
+{
+    if (self.callVC) {
+        [self.callVC hangupBtnDidClick: type];
+    }
 }
 
 @end

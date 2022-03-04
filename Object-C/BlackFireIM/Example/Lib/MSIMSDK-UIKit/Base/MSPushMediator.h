@@ -9,6 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class IMSDKConfig;
 @protocol MSPushMediatorDelegate<NSObject>
 
 /** 点击推送消息进入的app,可以做些跳转操作*/
@@ -21,9 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,weak) id<MSPushMediatorDelegate> delegate;
 
-@property(nonatomic,copy) NSString *device_token;
-
-- (void)applicationDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
+- (void)applicationDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions imConfig: (IMSDKConfig *)config;
 
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
 
