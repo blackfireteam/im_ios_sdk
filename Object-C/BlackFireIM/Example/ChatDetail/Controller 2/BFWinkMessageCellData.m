@@ -1,15 +1,14 @@
 //
-//  MSFlashImageMessageCellData.m
+//  BFCustomMessageCellData.m
 //  BlackFireIM
 //
-//  Created by benny wang on 2022/1/25.
+//  Created by benny wang on 2021/4/13.
 //
 
-#import "MSFlashImageMessageCellData.h"
-#import "MSIMSDK-UIKit.h"
+#import "BFWinkMessageCellData.h"
 
 
-@implementation MSFlashImageMessageCellData
+@implementation BFWinkMessageCellData
 
 - (instancetype)init
 {
@@ -19,9 +18,10 @@
     return self;
 }
 
+
 - (CGSize)contentSize
 {
-    return CGSizeMake(200, 200);
+   return CGSizeMake(150, 150);
 }
 
 - (CGFloat)heightOfWidth:(CGFloat)width
@@ -41,7 +41,7 @@
 
 - (NSString *)reuseId
 {
-    return TFlashImageMessageCell_ReuseId;
+    return @"TWinkMessageCell";
 }
 
 @end

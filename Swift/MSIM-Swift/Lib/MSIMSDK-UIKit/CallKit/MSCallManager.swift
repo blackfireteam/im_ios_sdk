@@ -7,7 +7,6 @@
 
 import UIKit
 import MSIMSDK
-//import CallKit
 
 
 enum CallAction: Int {
@@ -36,14 +35,6 @@ enum CallState {
 class MSCallManager: NSObject {
 
     static let shared: MSCallManager = MSCallManager()
-    
-//    override init() {
-//        callManager = CXCallController(queue: .main)
-//        provider = CXProvider(configuration: MSCallManager.providerConfiguration)
-//
-//        super.init()
-//        provider.setDelegate(self, queue: .main)
-//    }
     
     func callToPartner(partner_id: String,
                        creator: String,
@@ -138,7 +129,6 @@ class MSCallManager: NSObject {
                 self.callVC?.modalPresentationStyle = .fullScreen
                 let appdelegate = UIApplication.shared.delegate as? AppDelegate
                 appdelegate?.window?.rootViewController?.present(self.callVC!, animated: true, completion: nil)
-//                self.reportIncomingCall(title: "MS IM", sid: room_id!)
             }
             
         case .cancel:
@@ -251,6 +241,30 @@ class MSCallManager: NSObject {
         return nil
     }
     
+    func acceptBtnDidClick(type: MSCallType) {
+        if self.callVC != nil {
+            self.callVC?.acceptBtnDidClick(type: type)
+        }
+    }
+    
+    func rejectBtnDidClick(type: MSCallType) {
+        if self.callVC != nil {
+            self.callVC?.rejectBtnDidClick(type: type)
+        }
+    }
+    
+    func hangupBtnDidClick(type: MSCallType) {
+        if self.callVC != nil {
+            self.callVC?.hangupBtnDidClick(type: type)
+        }
+    }
+    
+    func setMuTeCall(isMute: Bool) {
+        if self.callVC != nil {
+            self.callVC?.setMute(isMute: isMute)
+        }
+    }
+    
     private var isOnCallingWithUid: String?
     
     private var callVC: MSCallViewController?
@@ -264,12 +278,6 @@ class MSCallManager: NSObject {
     private var timerCount: Int = 0
     
     private var room_id: String = ""
-    
-//    private let callManager: CXCallController
-//
-//    private let provider: CXProvider
-//
-//    private var uuid: UUID?
     
     private func inviteTimerAction(room_id: String, toReciever: String) {
         
@@ -324,7 +332,7 @@ class MSCallManager: NSObject {
             push?.body = String(format: "%@ Call declined by user", attachExt)
             push?.sound = "default"
         }
-        let custom = MSIMManager.sharedInstance().createCustomMessage(extDic.bf_convertJsonString(), option: option, pushExt: push)
+        let custom = MSIMManager.sharedInstance().createVoipMessage(extDic.bf_convertJsonString(), option: option, pushExt: push)
         MSIMManager.sharedInstance().sendC2CMessage(custom, toReciever: toReciever) { _ in
             
         } failed: { _, desc in
@@ -332,50 +340,3 @@ class MSCallManager: NSObject {
         }
     }
 }
-
-
-//extension MSCallManager: CXProviderDelegate {
-//
-//    static var providerConfiguration: CXProviderConfiguration = {
-//        let providerConfiguration = CXProviderConfiguration(localizedName: "MSIM")
-//        providerConfiguration.supportsVideo = true
-//        providerConfiguration.maximumCallsPerCallGroup = 1
-//        providerConfiguration.supportedHandleTypes = [.phoneNumber]
-//        return providerConfiguration
-//    }()
-//
-//    func reportIncomingCall(title: String, sid: String) {
-//        let update = CXCallUpdate()
-//        update.supportsDTMF = false
-//        update.supportsHolding = false
-//        update.supportsUngrouping = false
-//        update.supportsGrouping = false
-//        update.hasVideo = false
-//        update.remoteHandle = CXHandle(type: .generic, value: sid)
-//        update.localizedCallerName = title
-//        self.uuid = UUID()
-//        //弹出电话界面
-//        self.provider.reportNewIncomingCall(with: self.uuid!, update: update) { err in
-//            if err != nil {
-//                print(err!)
-//            }
-//        }
-//    }
-//
-//    func endCallAction() {
-//        let endCallAction = CXEndCallAction(call: self.uuid!)
-//        let transaction = CXTransaction()
-//        transaction.addAction(endCallAction)
-//        //关闭通话界面
-//        self.callManager.request(transaction) {[weak self] error in
-//            self?.uuid = nil
-//            if error != nil {
-//                print(error!)
-//            }
-//        }
-//    }
-//
-//    func providerDidReset(_ provider: CXProvider) {
-//
-//    }
-//}

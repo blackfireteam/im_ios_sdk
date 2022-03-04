@@ -12,6 +12,7 @@
 #import "MSVoiceCallView.h"
 #import "MSVideoCallView.h"
 #import "MSCallModel.h"
+#import "MSVoipCenter.h"
 
 
 @interface MSCallViewController ()<AgoraRtcEngineDelegate,MSVoiceCallViewDelegate,MSVideoCallViewDelegate>
@@ -196,6 +197,7 @@
 {
     if (![room_id isEqualToString:self.room_id]) return;
     [self stopDurationTimer];
+    [[MSVoipCenter shareInstance] hangupBtnDidClick:callType room_id:room_id];
 }
 
 #pragma mark -timer
@@ -241,6 +243,41 @@
     return _videoCallView;
 }
 
+- (void)acceptBtnDidClick:(MSCallType)type
+{
+    if (type == MSCallType_Voice) {
+        [self voice_acceptBtnDidClick];
+    }else {
+        [self video_acceptBtnDidClick];
+    }
+}
+
+- (void)rejectBtnDidClick:(MSCallType)type
+{
+    if (type == MSCallType_Voice) {
+        [self voice_rejectBtnDidClick];
+    }else {
+        [self video_rejectBtnDidClick];
+    }
+}
+
+- (void)hangupBtnDidClick:(MSCallType)type
+{
+    if (type == MSCallType_Voice) {
+        [self voice_hangupBtnDidClick];
+    }else {
+        [self video_hangupBtnDidClick];
+    }
+}
+
+- (void)setMute:(BOOL)isMute
+{
+    if (self.callType == MSCallType_Voice) {
+        self.voiceCallView.micBtn.selected = !isMute;
+        [self.agoraKit adjustRecordingSignalVolume:isMute ? 0 : 100];
+    }
+}
+
 #pragma mark - 响铃
 
 - (void)playAlerm
@@ -261,6 +298,7 @@
 - (void)voice_cancelBtnDidClick
 {
     [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Voice action:CallAction_Cancel room_id:self.room_id];
+    [[MSVoipCenter shareInstance] cancelBtnDidClick:MSCallType_Voice room_id:self.room_id];
 }
 
 - (void)voice_mickBtnDidClick
@@ -276,13 +314,15 @@
 - (void)voice_handFreeBtnDidClick
 {
     self.voiceCallView.handFreeBtn.selected = !self.voiceCallView.handFreeBtn.selected;
-    [self.agoraKit setEnableSpeakerphone:self.voiceCallView.handFreeBtn.isSelected];
+    int code = [self.agoraKit setEnableSpeakerphone:self.voiceCallView.handFreeBtn.isSelected];
+    MSLog(@"code = %d",code);
 }
 
 - (void)voice_rejectBtnDidClick
 {
     [[MSCallManager shareInstance] callToPartner:self.partner_id creator:self.partner_id callType:MSCallType_Voice action:CallAction_Reject room_id:self.room_id];
     [self stopDurationTimer];
+    [[MSVoipCenter shareInstance] rejectBtnDidClick:MSCallType_Voice room_id:self.room_id];
 }
 
 - (void)voice_acceptBtnDidClick
@@ -300,12 +340,14 @@
     self.curState = CallState_Calling;
     [self needToJoinChannel];
     [self stopAlerm];
+    [[MSVoipCenter shareInstance] acceptBtnDidClick:MSCallType_Voice room_id:self.room_id];
 }
 
 - (void)voice_hangupBtnDidClick
 {
     [[MSCallManager shareInstance] callToPartner:self.partner_id creator:(self.isCreator ? [MSIMTools sharedInstance].user_id : self.partner_id) callType:MSCallType_Voice action:CallAction_End room_id:self.room_id];
     [self stopDurationTimer];
+    [[MSVoipCenter shareInstance] hangupBtnDidClick:MSCallType_Voice room_id:self.room_id];
 }
 
 ///根据场景需要，如结束通话、关闭 app 或 app 切换至后台时，调用 leaveChannel 离开当前通话频道。
@@ -320,6 +362,7 @@
 - (void)video_cancelBtnDidClick
 {
     [[MSCallManager shareInstance] callToPartner:self.partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Video action:CallAction_Cancel room_id:self.room_id];
+    [[MSVoipCenter shareInstance] cancelBtnDidClick:MSCallType_Voice room_id:self.room_id];
 }
 
 - (void)video_cameraBtnDidClick
@@ -331,6 +374,7 @@
 {
     [[MSCallManager shareInstance] callToPartner:self.partner_id creator:self.partner_id callType:MSCallType_Video action:CallAction_Reject room_id:self.room_id];
     [self stopDurationTimer];
+    [[MSVoipCenter shareInstance] rejectBtnDidClick:MSCallType_Video room_id:self.room_id];
 }
 
 - (void)video_acceptBtnDidClick
@@ -350,12 +394,14 @@
     self.curState = CallState_Calling;
     [self needToJoinChannel];
     [self stopAlerm];
+    [[MSVoipCenter shareInstance] acceptBtnDidClick:MSCallType_Video room_id:self.room_id];
 }
 
 - (void)video_hangupBtnDidClick
 {
     [[MSCallManager shareInstance] callToPartner:self.partner_id creator:(self.isCreator ? [MSIMTools sharedInstance].user_id : self.partner_id) callType:MSCallType_Video action:CallAction_End room_id:self.room_id];
     [self stopDurationTimer];
+    [[MSVoipCenter shareInstance] hangupBtnDidClick:MSCallType_Video room_id:self.room_id];
 }
 
 - (void)video_remoteViewDidTap

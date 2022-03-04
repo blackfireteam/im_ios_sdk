@@ -157,6 +157,7 @@
     NSInteger count = [[MSConversationProvider provider]allUnreadCount];
     dispatch_async(dispatch_get_main_queue(), ^{
         self.tabBarItem.badgeValue = count ? [NSString stringWithFormat:@"%zd",count] : nil;
+        [[UIApplication sharedApplication]setApplicationIconBadgeNumber:count];
     });
 }
 

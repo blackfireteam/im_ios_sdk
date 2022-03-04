@@ -45,7 +45,7 @@ PODS:
   - Bugly (2.5.91)
   - lottie-ios (2.5.3)
   - MJRefresh (3.7.5)
-  - MSIMSDK (1.2.5)
+  - MSIMSDK (1.3.3)
   - QCloudCore/WithoutMTA (6.0.5)
   - QCloudCOSXML/Transfer (6.0.5):
     - QCloudCore/WithoutMTA (= 6.0.5)
@@ -53,7 +53,7 @@ PODS:
     - SDWebImage/Core (= 5.12.3)
   - SDWebImage/Core (5.12.3)
   - SVProgressHUD (2.2.5)
-  - TZImagePickerController (3.7.3)
+  - TZImagePickerController (3.7.6)
 
 DEPENDENCIES:
   - AFNetworking
@@ -63,7 +63,7 @@ DEPENDENCIES:
   - Bugly
   - lottie-ios (= 2.5.3)
   - MJRefresh
-  - MSIMSDK (= 1.2.5)
+  - MSIMSDK (= 1.3.3)
   - QCloudCOSXML/Transfer
   - SDWebImage
   - SVProgressHUD
@@ -95,13 +95,13 @@ SPEC CHECKSUMS:
   Bugly: afe841bba2ea6de6d432a3c125240a5e75949c55
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
-  MSIMSDK: 88861cff713c6b90497527b42c1d49a661e24264
+  MSIMSDK: eac29b6dfe134a415f4d1f7c1c4cc13daebcff0a
   QCloudCore: 7772bc67f29df165fa021bf0be39409e8029938c
   QCloudCOSXML: acf6786452249fa681a64dc0615cbc839658f14d
   SDWebImage: 53179a2dba77246efa8a9b85f5c5b21f8f43e38f
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  TZImagePickerController: d8c57e56fe6990a961d03134121a091c31015aa5
+  TZImagePickerController: fb446ac06ae9c217bc849185646a68465bcd0dd4
 
-PODFILE CHECKSUM: 68a2dc4ed61522b23c68049940d498f42e9ab1ff
+PODFILE CHECKSUM: 8b28e9363fa892c34badbe302e9b2b1ae1baf7a1
 
 COCOAPODS: 1.11.2

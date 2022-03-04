@@ -36,7 +36,7 @@ PODS:
     - Moya/Core (= 15.0.0)
   - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
-  - MSIMSDK (1.3.1)
+  - MSIMSDK (1.3.3)
   - QCloudCore/WithoutMTA (6.0.5)
   - QCloudCOSXML/Transfer (6.0.5):
     - QCloudCore/WithoutMTA (= 6.0.5)
@@ -55,7 +55,7 @@ DEPENDENCIES:
   - lottie-ios
   - MJRefresh
   - Moya
-  - MSIMSDK
+  - MSIMSDK (= 1.3.3)
   - QCloudCOSXML/Transfer
   - SnapKit
   - SVProgressHUD
@@ -91,13 +91,13 @@ SPEC CHECKSUMS:
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
-  MSIMSDK: 293f29a60188de830b1e7c0ab1a445560145b6e7
+  MSIMSDK: eac29b6dfe134a415f4d1f7c1c4cc13daebcff0a
   QCloudCore: 7772bc67f29df165fa021bf0be39409e8029938c
   QCloudCOSXML: acf6786452249fa681a64dc0615cbc839658f14d
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   ZLPhotoBrowser: a7aa41a674e67a86c1728a3d9d73a471d5650a82
 
-PODFILE CHECKSUM: 324623539e5ff2e87651dddbdb1da55249adb03c
+PODFILE CHECKSUM: fafe807156092f9902e3243c1c67217761aca941
 
 COCOAPODS: 1.11.2

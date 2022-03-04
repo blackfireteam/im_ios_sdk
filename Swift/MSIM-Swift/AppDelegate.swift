@@ -7,8 +7,6 @@
 
 import UIKit
 import MSIMSDK
-import PushKit
-import CallKit
 
 
 @main
@@ -16,8 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 
     var window: UIWindow?
-
-    let pushRegistry = PKPushRegistry(queue: .main)
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -37,19 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.rootViewController = BFNavigationController(rootViewController: BFLoginController())
         }
         
-        MSPushMediator.shared.applicationDidFinishLaunchingWithOptions(launchOptions: launchOptions)
+        MSPushMediator.shared.applicationDidFinishLaunchingWithOptions(launchOptions: launchOptions,imConfig: imConfig)
         MSPushMediator.shared.delegate = self
         
-        self.voipRegistration()
         return true
     }
-    
-    func voipRegistration() {
-        let voipRegistry: PKPushRegistry = PKPushRegistry(queue: .main)
-        voipRegistry.delegate = self
-        voipRegistry.desiredPushTypes = [.voIP]
-    }
-    
+
     ///** 请求APNs建立连接并获得deviceToken*/
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
@@ -74,7 +63,7 @@ extension AppDelegate: MSPushMediatorDelegate {
     /** 点击推送消息进入的app,可以做些跳转操作*/
     func didReceiveNotificationResponse(userInfo: [String : Any]) {
         
-        guard let _ = userInfo["data"] as? [String: Any] else { return}
+        guard let _ = userInfo["msim"] as? [String: Any] else { return}
         guard let _ = MSIMTools.sharedInstance().user_id else {return}
         if let tabbar = window?.rootViewController as? BFTabBarController {
             tabbar.selectedIndex = 2
@@ -82,43 +71,3 @@ extension AppDelegate: MSPushMediatorDelegate {
     }
 }
 
-
-extension AppDelegate: PKPushRegistryDelegate {
-    
-    func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
-        
-        
-        let deviceToken = pushCredentials.token.map { String(format: "%02.2hhx", $0) }.joined()
-        print("\(#function) token is: \(deviceToken)")
-    }
-    
-    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
-
-        print("\(#function) incoming voip notfication: \(payload.dictionaryPayload)")
-        if let uuidString = payload.dictionaryPayload["UUID"] as? String,
-            let identifier = payload.dictionaryPayload["identifier"] as? String,
-            let uuid = UUID(uuidString: uuidString)
-        {
-//            let update = CXCallUpdate()
-//            update.callerIdentifier = identifier
-//
-//            provider.reportNewIncomingCall(with: uuid, update: update) { error in
-//                // …
-//            }
-        }
-    }
-    
-    func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
-        // configure audio session
-        action.fulfill()
-    }
-    
-    func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
-        print("\(#function) token invalidated")
-    }
-        
-    // Display the incoming call to the user
-    func displayIncomingCall(uuid: UUID, handle: String, hasVideo: Bool = false, completion: ((NSError?) -> Void)? = nil) {
-//        providerDelegate?.reportIncomingCall(uuid: uuid, handle: handle, hasVideo: hasVideo, completion: completion)
-    }
-}

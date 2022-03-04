@@ -56,6 +56,14 @@ typedef NS_ENUM(NSInteger, CallState) {
 
 + (NSString *)getCreatorFrom:(NSString *)room_id;
 
+- (void)acceptBtnDidClick:(MSCallType)type;
+
+- (void)rejectBtnDidClick:(MSCallType)type;
+
+- (void)hangupBtnDidClick:(MSCallType)type;
+
+- (void)setMuTeCall:(BOOL)isMute;
+
 @end
 
 NS_ASSUME_NONNULL_END

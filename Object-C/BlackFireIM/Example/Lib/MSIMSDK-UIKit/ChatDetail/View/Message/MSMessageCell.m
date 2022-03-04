@@ -71,7 +71,7 @@
         [self.container addSubview:_snapBg];
         
         _snapIcon = [[UIImageView alloc]initWithImage:[UIImage imageNamed:TUIKitResource(@"snap_icon")]];
-        [_snapBg.contentView addSubview:_snapIcon];
+        [self.container addSubview:_snapIcon];
         
         _countDownL = [[UILabel alloc]init];
         _countDownL.textColor = [UIColor whiteColor];
@@ -98,8 +98,13 @@
         self.nameLabel.text = [NSString stringWithFormat:@"%@",profile.nick_name];
 //        self.nameLabel.text = [NSString stringWithFormat:@"%@--%zd",profile.nick_name,data.elem.msg_id];
     }
-    self.snapBg.hidden = !data.message.isSnapChat || (data.message.isSnapChat && data.snapCount > 0);
-    self.snapIcon.hidden = !data.message.isSnapChat || (data.message.isSnapChat && data.snapCount > 0);
+    if (!data.message.isSnapChat || data.message.isSelf || data.snapCount > 0 || data.message.type == MSIM_MSG_TYPE_VOICE) {
+        self.snapBg.hidden = YES;
+        self.snapIcon.hidden = !data.message.isSnapChat;
+    }else {
+        self.snapBg.hidden = NO;
+        self.snapIcon.hidden = NO;
+    }
     self.countDownL.hidden = data.snapCount <= 0;
     self.countDownL.text = [NSString stringWithFormat:@"%zd",data.snapCount];
     
@@ -122,7 +127,7 @@
             if (self.messageData.message.chatType == MSIM_CHAT_TYPE_CHATROOM) {
                 self.readReceiptLabel.text = TUILocalizableString(Deliveried);
             }else {
-                self.readReceiptLabel.text = self.messageData.message.readStatus == MSIM_MSG_STATUS_UNREAD ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
+                self.readReceiptLabel.text = (self.messageData.message.readStatus == MSIM_MSG_STATUS_UNREAD || self.messageData.message.isSnapChat) ? TUILocalizableString(Deliveried) : TUILocalizableString(Read);
             }
         }else if (self.messageData.message.sendStatus == MSIM_MSG_STATUS_SENDING) {
             self.readReceiptLabel.text = TUILocalizableString(Sending);
@@ -192,8 +197,13 @@
         self.readReceiptLabel.frame = CGRectMake(self.container.maxX-80, self.container.maxY+3, 80, 12);
     }
     [self.container bringSubviewToFront:self.snapBg];
+    [self.container bringSubviewToFront:self.snapIcon];
     self.snapBg.frame = self.container.bounds;
-    self.snapIcon.frame = CGRectMake(self.snapBg.frame.size.width * 0.5 - 25 * 0.5, self.snapBg.frame.size.height * 0.5 - 25 * 0.5, 25, 25);
+    if (self.messageData.direction == MsgDirectionIncoming) {
+        self.snapIcon.frame = CGRectMake(self.container.width - 12, - 8, 20, 20);
+    }else {
+        self.snapIcon.frame = CGRectMake(- 8, - 8, 20, 20);
+    }
     self.countDownL.frame = CGRectMake(self.container.maxX + 8, self.container.centerY - 10, 20, 20);
 }
 

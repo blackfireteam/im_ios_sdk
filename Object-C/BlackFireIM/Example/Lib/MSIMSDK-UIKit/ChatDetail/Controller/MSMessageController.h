@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  收到信令消息
  */
-- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMMessage *>*)elems;
+- (void)messageController:(MSMessageController *)controller onRecieveSignalMessage:(NSArray <MSIMMessage *>*)messages;
 
 /**
  *  控制器点击回调

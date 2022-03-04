@@ -30,12 +30,17 @@
     [super reloadMessage:message];
     if (message.imageElem.image) {
         self.showImageView.image = message.imageElem.image;
+        [self startToCountDown];
     }else if ([[NSFileManager defaultManager]fileExistsAtPath:message.imageElem.path]) {
         UIImage *image = [UIImage imageWithContentsOfFile:message.imageElem.path];
         self.showImageView.image = image;
         message.imageElem.image = image;
+        [self startToCountDown];
     }else {
-        [self.showImageView sd_setImageWithURL:[NSURL URLWithString:message.imageElem.url] placeholderImage:[UIImage imageNamed:TUIKitResource(@"placeholder_delete")] options:SDWebImageDelayPlaceholder];
+        WS(weakSelf)
+        [self.showImageView sd_setImageWithURL:[NSURL URLWithString:message.imageElem.url] placeholderImage:[UIImage imageNamed:TUIKitResource(@"place_holder")] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+            [weakSelf startToCountDown];
+        }];
     }
 }
 

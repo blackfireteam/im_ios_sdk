@@ -50,9 +50,13 @@
 - (void)reloadMessage:(MSIMMessage *)message
 {
     _message = message;
-    if (message.isSelf == NO) {
+}
+
+- (void)startToCountDown
+{
+    if (self.message.isSelf == NO) {
         self.countL.hidden = NO;
-        NSInteger count = [[MSSnapChatTimerManager defaultManager]startCountDownWithMessage:message];
+        NSInteger count = [[MSSnapChatTimerManager defaultManager]startCountDownWithMessage:self.message];
         self.countL.text = [NSString stringWithFormat:@"%zd",count];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(snapCountChanged:) name:SNAPCHAT_COUNTDOWN_CHANGED object:nil];
     }else {

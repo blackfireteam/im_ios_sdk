@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)reloadMessage:(MSIMMessage *)message;
 
+- (void)startToCountDown;
+
 - (void)showWithAnimation:(BOOL)animate;
 
 - (void)dismissWithAnimation:(BOOL)animate;

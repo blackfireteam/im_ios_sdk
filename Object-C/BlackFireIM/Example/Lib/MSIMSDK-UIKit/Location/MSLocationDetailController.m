@@ -215,6 +215,7 @@
     [self.mapView removeAnnotation:self.annotation];
     self.annotation = [[MAPointAnnotation alloc] init];
     self.annotation.coordinate = CLLocationCoordinate2DMake(self.locationInfo.latitude, self.locationInfo.longitude);
+    self.annotation.title = @"pointReuseIndentifier";
     [self.mapView addAnnotation:self.annotation];
 }
 
@@ -229,7 +230,7 @@
 
 - (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation
 {
-    if ([annotation isKindOfClass:[MAPointAnnotation class]]) {
+    if ([annotation.title isEqualToString:@"pointReuseIndentifier"]) {
         static NSString *pointReuseIndentifier = @"pointReuseIndentifier";
         MAPinAnnotationView *annotationView = (MAPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndentifier];
         if (annotationView == nil) {

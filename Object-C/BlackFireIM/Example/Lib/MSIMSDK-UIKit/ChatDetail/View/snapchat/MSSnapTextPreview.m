@@ -32,6 +32,7 @@
 {
     [super reloadMessage:message];
     self.contentL.text = message.textElem.text;
+    [self startToCountDown];
 }
 
 - (void)layoutSubviews

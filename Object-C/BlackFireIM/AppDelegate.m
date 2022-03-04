@@ -30,6 +30,7 @@
     
     IMSDKConfig *imConfig = [IMSDKConfig defaultConfig];
     imConfig.logEnable = YES; // 打印日志
+    imConfig.voipEnable = YES;
     imConfig.uploadMediator = [MSUploadManager sharedInstance];  // 附件上传插件，用户可以自定义
     [[MSIMKit sharedInstance] initWithConfig:imConfig];
     
@@ -42,7 +43,7 @@
     [Bugly startWithAppId:@"f8db8c69b8" config:config];
     
     //推送相关配置
-    [[MSPushMediator sharedInstance] applicationDidFinishLaunchingWithOptions:launchOptions];
+    [[MSPushMediator sharedInstance] applicationDidFinishLaunchingWithOptions:launchOptions imConfig: imConfig];
     [MSPushMediator sharedInstance].delegate = self;
     return YES;
 }
@@ -70,7 +71,7 @@
 /** 点击推送消息进入的app,可以做些跳转操作*/
 - (void)didReceiveNotificationResponse:(NSDictionary *)userInfo
 {
-    NSDictionary *data = userInfo[@"data"];
+    NSDictionary *data = userInfo[@"msim"];
     if (data == nil) return;
     if ([MSIMTools sharedInstance].user_id) {
         

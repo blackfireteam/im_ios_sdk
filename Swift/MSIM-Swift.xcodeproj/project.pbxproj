@@ -20,6 +20,7 @@
 		F04D2E3227B8AF3E008EC672 /* BFConversationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D2E3127B8AF3E008EC672 /* BFConversationHeaderView.swift */; };
 		F04D2E3427B8C2B0008EC672 /* MSEmotionMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D2E3327B8C2B0008EC672 /* MSEmotionMessageCellData.swift */; };
 		F04D2E3627B8C3EE008EC672 /* MSEmotionMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04D2E3527B8C3EE008EC672 /* MSEmotionMessageCell.swift */; };
+		F065D6C027D2051F00324857 /* MSVoipCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F065D6BF27D2051F00324857 /* MSVoipCenter.swift */; };
 		F0684253273A7B5800E0313E /* BFChatRoomEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */; };
 		F0684255273A826700E0313E /* BFEditTodInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684254273A826700E0313E /* BFEditTodInfoController.swift */; };
 		F0684257273A863200E0313E /* BFGroupMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0684256273A863200E0313E /* BFGroupMemberCell.swift */; };
@@ -169,6 +170,7 @@
 		F04D2E3327B8C2B0008EC672 /* MSEmotionMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSEmotionMessageCellData.swift; sourceTree = "<group>"; };
 		F04D2E3527B8C3EE008EC672 /* MSEmotionMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSEmotionMessageCell.swift; sourceTree = "<group>"; };
 		F04F4B5A2717DD8900752952 /* MSIM-Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MSIM-Swift.entitlements"; sourceTree = "<group>"; };
+		F065D6BF27D2051F00324857 /* MSVoipCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoipCenter.swift; sourceTree = "<group>"; };
 		F0684252273A7B5800E0313E /* BFChatRoomEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFChatRoomEditController.swift; sourceTree = "<group>"; };
 		F0684254273A826700E0313E /* BFEditTodInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFEditTodInfoController.swift; sourceTree = "<group>"; };
 		F0684256273A863200E0313E /* BFGroupMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BFGroupMemberCell.swift; sourceTree = "<group>"; };
@@ -375,6 +377,7 @@
 				F0CED8A02702E88600C31B65 /* MSVideoCallView.swift */,
 				F0CED8A22702F27200C31B65 /* MSCallViewController.swift */,
 				F0CED8A42702F38B00C31B65 /* MSCallManager.swift */,
+				F065D6BF27D2051F00324857 /* MSVoipCenter.swift */,
 			);
 			path = CallKit;
 			sourceTree = "<group>";
@@ -740,8 +743,8 @@
 				F0FF71A826B0E9CE0005F3CF /* Sources */,
 				F0FF71A926B0E9CE0005F3CF /* Frameworks */,
 				F0FF71AA26B0E9CE0005F3CF /* Resources */,
-				64311FF45809EB6D072A3A89 /* [CP] Embed Pods Frameworks */,
-				FE121A6DFB7B75AC9AF27F46 /* [CP] Copy Pods Resources */,
+				0995F7BC565555DCDE680C8B /* [CP] Embed Pods Frameworks */,
+				90B9F159294410DC8725CA13 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -867,7 +870,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		64311FF45809EB6D072A3A89 /* [CP] Embed Pods Frameworks */ = {
+		0995F7BC565555DCDE680C8B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -906,7 +909,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FE121A6DFB7B75AC9AF27F46 /* [CP] Copy Pods Resources */ = {
+		90B9F159294410DC8725CA13 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1022,6 +1025,7 @@
 				F0FF724826BA88050005F3CF /* MSMessageCellData.swift in Sources */,
 				F08FBA3D26C2205000613FE0 /* MSUIConversationCell.swift in Sources */,
 				F0CED8A52702F38B00C31B65 /* MSCallManager.swift in Sources */,
+				F065D6C027D2051F00324857 /* MSVoipCenter.swift in Sources */,
 				F0CED8A32702F27200C31B65 /* MSCallViewController.swift in Sources */,
 				F0E565C326FD783D00C3424D /* LanternSmoothZoomAnimator.swift in Sources */,
 				F0FF71E326B0F2530005F3CF /* UIView+Ext.swift in Sources */,

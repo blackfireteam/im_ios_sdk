@@ -127,6 +127,7 @@ class BFConversationListController: BFBaseViewController {
         let count = MSConversationProvider.shared().allUnreadCount()
         DispatchQueue.main.async {
             self.tabBarItem.badgeValue = count > 0 ? "\(count)" : nil
+            UIApplication.shared.applicationIconBadgeNumber = count
         }
     }
     
