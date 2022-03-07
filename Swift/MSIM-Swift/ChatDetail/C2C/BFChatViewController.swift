@@ -102,6 +102,16 @@ extension BFChatViewController: MSChatViewControllerDelegate {
         }
     }
     
+    ///点击自定义表情，应该直接发送自定义表情消息
+    public func onDidSelectEmotionItem(controller: MSChatViewController,data: MSFaceCellData) {
+        
+        let emotionElem = MSIMEmotionElem()
+        emotionElem.emotionID = data.e_id ?? ""
+        emotionElem.emotionName = data.name
+        let message = MSIMManager.sharedInstance().createEmotionMessage(emotionElem)
+        controller.sendMessage(message: message)
+    }
+    
     public func onSelectMessageAvatar(controller: MSChatViewController, cell: MSMessageCell) {
         
         print("点击头像...")

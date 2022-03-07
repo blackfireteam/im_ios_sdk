@@ -185,7 +185,7 @@ __strong typeof(weakSelf) strongSelf = weakSelf;
 //noral
 //#define GaodeAPIKey @"28d8663963475a7eb9126c8ebb9c4bc9"
 //#define GaodeAPIWebKey @"1db3c63e96dccbe7dd34b6b5150fae90"
-//#define kChatRoomID 25
+//#define kChatRoomID 1646637677
 //#define kAppID @"2"
 //com.blackfire.im.msim.normal  bundle_id
 

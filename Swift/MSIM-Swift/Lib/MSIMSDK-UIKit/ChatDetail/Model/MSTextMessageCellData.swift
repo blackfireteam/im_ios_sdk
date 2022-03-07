@@ -68,18 +68,17 @@ open class MSTextMessageCellData: MSBubbleMessageCellData {
             return attributedString
         }
         let resultArray = re.matches(in: content, options: [], range: NSRange(location: 0, length: content.count))
-        let group = MSFaceUtil.shared.defaultFace.first
+        let group = MSFaceUtil.shared.defaultEmojiGroup
         var imageArray: [[String: Any]] = []
         
         for match in resultArray {
             let range = match.range
             let subStr = (content as NSString).substring(with: range)
             for face in group!.faces {
-                let beginIndex = face.name!.index(face.name!.startIndex, offsetBy: "emoji/".count)
-                let faceName = face.name![beginIndex..<face.name!.endIndex]
+                let faceName = face.name!
                 if faceName == subStr {
                     let textAttachment = NSTextAttachment()
-                    textAttachment.image = UIImage.bf_emoji(name: face.name!)
+                    textAttachment.image = UIImage(named: face.facePath!)
                     let imageSize = textAttachment.image!.size
                     textAttachment.bounds = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
                     let imageStr = NSAttributedString(attachment: textAttachment)

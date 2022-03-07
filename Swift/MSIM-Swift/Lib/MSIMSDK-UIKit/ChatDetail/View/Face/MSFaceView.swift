@@ -49,7 +49,7 @@ open class MSFaceView: UIView {
     
     public weak var delegate: MSFaceViewDelegate?
     
-    private var faceGroups: [BFFaceGroup] = []
+    public private(set) var faceGroups: [MSFaceGroup] = []
     
     private var sectionIndexInGroup: [Int] = []
     
@@ -89,7 +89,7 @@ open class MSFaceView: UIView {
      *
      *  @param data 需要设置的数据（BFFaceGroup）。在此 NSMutableArray 中存放的对象为 BFFaceGroup，即表情组。
      */
-    public func setData(data: [BFFaceGroup]) {
+    public func setData(data: [MSFaceGroup]) {
         
         faceGroups = data
         defaultLayout()
@@ -100,7 +100,7 @@ open class MSFaceView: UIView {
             let group = faceGroups[groupIndex]
             sectionIndexInGroup.append(sectionIndex)
             let itemCount = group.rowCount * group.itemCountPerRow
-            let sectionCount = ceilf(Float(group.faces.count / (itemCount - (group.needBackDelete ? 1 : 0))))
+            let sectionCount = ceil(Float(group.faces.count) / Float(itemCount - (group.needBackDelete ? 1 : 0)))
             pageCountInGroup.append(Int(sectionCount))
             for _ in 0..<Int(sectionCount) {
                 groupIndexInSection.append(groupIndex)
@@ -119,7 +119,7 @@ open class MSFaceView: UIView {
                 let row = itemIndex % face.rowCount
                 let column = itemIndex / face.rowCount
                 let reIndex = face.itemCountPerRow * row + column + groupSection * itemCount
-                itemIndexs[IndexPath(row: itemIndex, section: curSection)] = reIndex
+                itemIndexs[IndexPath(item: itemIndex, section: curSection)] = reIndex
             }
         }
         curGroupIndex = 0
@@ -200,8 +200,9 @@ extension MSFaceView: UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         let group = faceGroups[groupIndex]
         let itemCount = group.rowCount * group.itemCountPerRow
         if indexPath.row == itemCount - 1 && group.needBackDelete {
-            let data = BFFaceCellData()
+            let data = MSFaceCellData()
             data.name = "del_normal"
+            data.facePath = MSMcros.TUIKitFace(name: "") + data.name!
             cell.setData(data: data)
         }else {
             let index = itemIndexs[indexPath]!
@@ -253,23 +254,49 @@ extension MSFaceView: UICollectionViewDelegate,UICollectionViewDataSource,UIColl
         }
         pageControl.currentPage = curSection - startSection
     }
-    
-    
 }
 
-open class BFFaceGroup: NSObject {
+open class MSFaceGroup: NSObject {
     
+    /**
+     *  表情组索引号，从0开始。
+     */
     var groupIndex: Int = 0
     
+    /**
+     *  表情组路径
+     *  用于保存表情组在系统中存放的路径。
+     */
     var groupPath: String?
     
+    /**
+     *  表情组总行数
+     *  用于计算表情总数，进而定位每一个表情。
+     */
     var rowCount: Int = 0
     
+    /**
+     *  每行所包含的表情数
+     *  用于计算表情总数，进而定位每一个表情。
+     */
     var itemCountPerRow: Int = 0
     
-    var faces: [BFFaceCellData] = []
+    /**
+     *  表情信息组
+     *  存储各个表情的 cellData
+     */
+    var faces: [MSFaceCellData] = []
     
-    var needBackDelete: Bool = true
+    /**
+     *  删除标志位
+     *  对于需要“删除”按钮的表情组，该位为 YES，否则为 NO。
+     *  当该位为 YES 时，FaceView 会在表情视图右下角中显示一个“删除”图标，使您无需呼出键盘即可进行表情的删除操作。
+     */
+    var needBackDelete: Bool = false
     
-    var menuPath: String?
+    var needSendBtn: Bool = false
+    
+    var menuNormalPath: String?
+    
+    var menuSelectPath: String?
 }

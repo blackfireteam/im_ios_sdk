@@ -143,6 +143,7 @@
     if(indexPath.row == itemCount - 1 && group.needBackDelete){
         BFFaceCellData *data = [[BFFaceCellData alloc] init];
         data.name = @"del_normal";
+        data.facePath = [TUIKitFace(@"") stringByAppendingPathComponent:data.name];
         [cell setData:data];
     }else{
         NSNumber *index = [_itemIndexs objectForKey:indexPath];

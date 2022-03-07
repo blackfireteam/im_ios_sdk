@@ -135,7 +135,7 @@
     NSString *radom = [NSString stringWithFormat:@"%u",arc4random_uniform(1000000)];
     NSString *time = [NSString stringWithFormat:@"%zd",[MSIMTools sharedInstance].adjustLocalTimeInterval/1000/1000];
     NSString *sign = [[NSString stringWithFormat:@"%@%@%@",secret,radom,time] bf_sh1];
-    NSDictionary *header = @{@"nonce":radom,@"timestamp":time,@"sig":sign,@"appid":@"2"};
+    NSDictionary *header = @{@"nonce":radom,@"timestamp":time,@"sig":sign,@"appid":kAppID};
     return header;
 }
 

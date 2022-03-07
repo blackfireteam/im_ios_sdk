@@ -30,6 +30,7 @@
 		F07A611A2761D9E300C166EA /* MSLocationDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A61192761D9E300C166EA /* MSLocationDetailController.swift */; };
 		F07A611C2761E82900C166EA /* MSLocationMessageCellData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A611B2761E82900C166EA /* MSLocationMessageCellData.swift */; };
 		F07A611E2761E9E400C166EA /* MSLocationMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07A611D2761E9E400C166EA /* MSLocationMessageCell.swift */; };
+		F07FF7D627D5958800555C19 /* MSMenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07FF7D527D5958800555C19 /* MSMenuCollectionViewCell.swift */; };
 		F08FBA2F26C2064E00613FE0 /* MSVideoMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */; };
 		F08FBA3126C20A3600613FE0 /* MSVoiceMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */; };
 		F08FBA3326C20E9A00613FE0 /* MSSystemMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */; };
@@ -180,6 +181,7 @@
 		F07A61192761D9E300C166EA /* MSLocationDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationDetailController.swift; sourceTree = "<group>"; };
 		F07A611B2761E82900C166EA /* MSLocationMessageCellData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationMessageCellData.swift; sourceTree = "<group>"; };
 		F07A611D2761E9E400C166EA /* MSLocationMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSLocationMessageCell.swift; sourceTree = "<group>"; };
+		F07FF7D527D5958800555C19 /* MSMenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSMenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		F08FBA2E26C2064E00613FE0 /* MSVideoMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVideoMessageCell.swift; sourceTree = "<group>"; };
 		F08FBA3026C20A3600613FE0 /* MSVoiceMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVoiceMessageCell.swift; sourceTree = "<group>"; };
 		F08FBA3226C20E9A00613FE0 /* MSSystemMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSSystemMessageCell.swift; sourceTree = "<group>"; };
@@ -678,6 +680,7 @@
 				F0FF723326B8E2DB0005F3CF /* MSFaceView.swift */,
 				F0FF723526B8EBEC0005F3CF /* MSFaceCollectionCell.swift */,
 				F0FF723726B91F3C0005F3CF /* MSMenuView.swift */,
+				F07FF7D527D5958800555C19 /* MSMenuCollectionViewCell.swift */,
 			);
 			path = Face;
 			sourceTree = "<group>";
@@ -947,6 +950,7 @@
 				F0FEA33A26DCC37A00BCF4B6 /* MSInputViewController.swift in Sources */,
 				F01CC21E273110B9002EF5B2 /* MSChatRoomController.swift in Sources */,
 				F0FF724E26BB822A0005F3CF /* MSImageMessageCellData.swift in Sources */,
+				F07FF7D627D5958800555C19 /* MSMenuCollectionViewCell.swift in Sources */,
 				F0E565C026FD783D00C3424D /* LanternZoomSupportedCell.swift in Sources */,
 				F0FF724C26BB6FA80005F3CF /* MSTextMessageCellData.swift in Sources */,
 				F0FF722D26B8D0510005F3CF /* MSPushMediator.swift in Sources */,

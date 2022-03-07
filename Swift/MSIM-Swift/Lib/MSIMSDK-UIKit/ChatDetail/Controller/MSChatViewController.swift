@@ -36,6 +36,8 @@ public protocol MSChatViewControllerDelegate: NSObjectProtocol {
     ///收到对方正在输入消息通知
     func onRecieveTextingMessage(controller: MSChatViewController,message: MSIMMessage)
     
+    ///点击自定义表情，应该直接发送自定义表情消息
+    func onDidSelectEmotionItem(controller: MSChatViewController,data: MSFaceCellData)
 }
 
 public class MSChatViewController: UIViewController {
@@ -165,6 +167,11 @@ extension MSChatViewController: MSInputViewControllerDelegate {
     public func didSelectMoreCell(inputController: MSInputViewController, cell: MSInputMoreCell) {
         
         delegate?.onSelectMoreCell(controller: self, cell: cell)
+    }
+    
+    public func didSendEmotion(inputController: MSInputViewController, data: MSFaceCellData) {
+        
+        delegate?.onDidSelectEmotionItem(controller: self, data: data)
     }
 }
 

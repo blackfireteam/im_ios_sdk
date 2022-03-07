@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MSFaceCollectionCell: UICollectionViewCell {
+public class MSFaceCollectionCell: UICollectionViewCell {
     
     var face: UIImageView!
     
@@ -24,9 +24,9 @@ class MSFaceCollectionCell: UICollectionViewCell {
         face.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
     }
     
-    func setData(data: BFFaceCellData?) {
-        if data == nil {return}
-        face.image = UIImage(named: MSMcros.TUIKitFace(name: data!.name!))
+    func setData(data: MSFaceCellData?) {
+
+        face.image = UIImage(named: data?.facePath ?? "")
         defaultLayout()
     }
     
@@ -35,7 +35,11 @@ class MSFaceCollectionCell: UICollectionViewCell {
     }
 }
 
-class BFFaceCellData: NSObject {
+public class MSFaceCellData: NSObject {
     
     var name: String?
+    
+    var e_id: String?
+    
+    var facePath: String?
 }

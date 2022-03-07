@@ -30,9 +30,30 @@ open class MSEmotionMessageCell: MSMessageCell {
         super.fillWithData(data: data)
         if let bundlePath = Bundle.main.path(forResource: "TUIKitFace", ofType: "bundle"), let resourceBundle = Bundle(path: bundlePath) {
             let emotionName = MSHelper.emotionName(emotion_id: data.message.emotionElem!.emotionID)
-            self.animationView.animation = Animation.named("emotion/\(emotionName)", bundle: resourceBundle, subdirectory: nil, animationCache: nil)
+            self.animationView.animation = Animation.named("emotion/\(emotionName)", bundle: resourceBundle, subdirectory: nil, animationCache: LottieCacheProvider.provider)
             self.animationView.loopMode = .loop
             self.animationView.play(completion: nil)
         }
     }
 }
+
+class LottieCacheProvider: AnimationCacheProvider {
+    
+    static let provider = LottieCacheProvider()
+    
+    private init(){}
+    
+    var caches: [String: Animation] = [:]
+    func animation(forKey: String) -> Animation? {
+        return caches[forKey]
+    }
+
+    func setAnimation(_ animation: Animation, forKey: String) {
+        caches[forKey] = animation
+    }
+
+    func clearCache() {
+        caches.removeAll()
+    }
+}
+

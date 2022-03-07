@@ -25,7 +25,8 @@ public protocol MSInputViewControllerDelegate: NSObjectProtocol {
     func didDeleteAt(inputController: MSInputViewController,atText: String)
     ///点击拍照，照片等更多功能
     func didSelectMoreCell(inputController: MSInputViewController,cell: MSInputMoreCell)
-    
+    /// 点击发送自定义表情
+    func didSendEmotion(inputController: MSInputViewController,data: MSFaceCellData)
 }
 
 enum InputStatus {
@@ -35,11 +36,58 @@ public class MSInputViewController: UIViewController {
 
     var inputBar: MSInputBarView!
     
-    var faceView: MSFaceView!
+    lazy var faceView: MSFaceView = {
+        let faceView = MSFaceView(frame: CGRect(x: 0, y: inputBar.top + inputBar.height, width: view.width, height: 180))
+        faceView.delegate = self
+        faceView.setData(data: MSFaceUtil.shared.faceGroups)
+        return faceView
+    }()
     
-    var menuView: MSMenuView!
+    lazy var menuView: MSMenuView = {
+        let menuView = MSMenuView(frame: CGRect(x: 0, y: faceView.top + faceView.height, width: view.width, height: 40))
+        menuView.delegate = self
+        var menus: [MSMenuCellData] = []
+        for (index,group) in MSFaceUtil.shared.faceGroups.enumerated() {
+            let data = MSMenuCellData()
+            data.normalPath = group.menuNormalPath
+            data.selectPath = group.menuSelectPath
+            data.isSelected = index == 0
+            menus.append(data)
+        }
+        menuView.data = menus
+        return menuView
+    }()
     
-    var moreView: MSChatMoreView!
+    lazy var moreView: MSChatMoreView = {
+        let moreView = MSChatMoreView(frame: CGRect(x: 0, y: inputBar.top + inputBar.height, width: view.width, height: 0))
+        moreView.delegate = self
+        var cameraData = MSInputMoreCellData(type: .photo)
+        cameraData.title = Bundle.bf_localizedString(key: "TUIKitMorePhoto")
+        cameraData.image = UIImage.bf_imageNamed(name: "more_picture")
+        
+        var photoData = MSInputMoreCellData(type: .video)
+        photoData.title = Bundle.bf_localizedString(key: "TUIKitMoreVideo")
+        photoData.image = UIImage.bf_imageNamed(name: "more_camera")
+        
+        var voiceData = MSInputMoreCellData(type: .voiceCall)
+        voiceData.title = Bundle.bf_localizedString(key: "TUIKitMoreVoiceCall")
+        voiceData.image = UIImage.bf_imageNamed(name: "more_voice_call")
+        
+        var videoData = MSInputMoreCellData(type: .videoCall)
+        videoData.title = Bundle.bf_localizedString(key: "TUIKitMoreVideoCall")
+        videoData.image = UIImage.bf_imageNamed(name: "more_video_call")
+        
+        var locationData = MSInputMoreCellData(type: .location)
+        locationData.title = Bundle.bf_localizedString(key: "TUIKitMoreLocation")
+        locationData.image = UIImage.bf_imageNamed(name: "more_location")
+        
+        if self.type == .MSIM_CHAT_TYPE_C2C {
+            moreView.setData(data: [cameraData,photoData,voiceData,videoData,locationData])
+        }else {
+            moreView.setData(data: [cameraData,photoData])
+        }
+        return moreView
+    }()
     
     private weak var delegate: MSInputViewControllerDelegate?
     
@@ -97,42 +145,6 @@ public class MSInputViewController: UIViewController {
         inputBar = MSInputBarView(frame: CGRect(x: 0, y: 0, width: view.width, height: MSMcros.TTextView_Height))
         inputBar.delegate = self
         view.addSubview(inputBar)
-        
-        moreView = MSChatMoreView(frame: CGRect(x: 0, y: inputBar.top + inputBar.height, width: view.width, height: 0))
-        moreView.delegate = self
-        var cameraData = MSInputMoreCellData(type: .photo)
-        cameraData.title = Bundle.bf_localizedString(key: "TUIKitMorePhoto")
-        cameraData.image = UIImage.bf_imageNamed(name: "more_picture")
-        
-        var photoData = MSInputMoreCellData(type: .video)
-        photoData.title = Bundle.bf_localizedString(key: "TUIKitMoreVideo")
-        photoData.image = UIImage.bf_imageNamed(name: "more_camera")
-        
-        var voiceData = MSInputMoreCellData(type: .voiceCall)
-        voiceData.title = Bundle.bf_localizedString(key: "TUIKitMoreVoiceCall")
-        voiceData.image = UIImage.bf_imageNamed(name: "more_voice_call")
-        
-        var videoData = MSInputMoreCellData(type: .videoCall)
-        videoData.title = Bundle.bf_localizedString(key: "TUIKitMoreVideoCall")
-        videoData.image = UIImage.bf_imageNamed(name: "more_video_call")
-        
-        var locationData = MSInputMoreCellData(type: .location)
-        locationData.title = Bundle.bf_localizedString(key: "TUIKitMoreLocation")
-        locationData.image = UIImage.bf_imageNamed(name: "more_location")
-        
-        if self.type == .MSIM_CHAT_TYPE_C2C {
-            moreView.setData(data: [cameraData,photoData,voiceData,videoData,locationData])
-        }else {
-            moreView.setData(data: [cameraData,photoData])
-        }
-        
-        faceView = MSFaceView(frame: CGRect(x: 0, y: inputBar.top + inputBar.height, width: view.width, height: 180))
-        faceView.delegate = self
-        faceView.setData(data: MSFaceUtil.shared.defaultFace)
-        
-        menuView = MSMenuView(frame: CGRect(x: 0, y: faceView.top + faceView.height, width: view.width, height: 40))
-        menuView.delegate = self
-        
     }
 }
 
@@ -322,6 +334,7 @@ extension MSInputViewController: MSInputBarViewDelegate {
 
 
 extension MSInputViewController: MSChatMoreViewDelegate,MSFaceViewDelegate,MSMenuViewDelegate {
+    
     public func faceViewDidBackDelete(faceView: MSFaceView) {
         inputBar.backDelete()
     }
@@ -332,18 +345,16 @@ extension MSInputViewController: MSChatMoreViewDelegate,MSFaceViewDelegate,MSMen
     }
     
     public func scrollToFaceGroup(faceVeiw: MSFaceView, index: Int) {
-        
+        menuView.scrollToMenu(at: index, in: faceVeiw.faceGroups[index])
     }
     
     public func didSelectItem(faceView: MSFaceView, indexPath: IndexPath) {
-        let group = MSFaceUtil.shared.defaultFace[indexPath.section]
+        let group = MSFaceUtil.shared.faceGroups[indexPath.section]
         let face = group.faces[indexPath.row]
         if indexPath.section == 0 {
-            let faceName = NSString(string: face.name!).substring(from: "emoji/".count)
-            inputBar.addEmoji(emoji: String(faceName))
+            inputBar.addEmoji(emoji: face.name!)
         }else {
-            //直接发送
-            // to do
+            self.delegate?.didSendEmotion(inputController: self, data: face)
         }
     }
     
@@ -353,5 +364,10 @@ extension MSInputViewController: MSChatMoreViewDelegate,MSFaceViewDelegate,MSMen
         if text.count == 0 {return}
         inputBar.clearInput()
         delegate?.didSendTextMessage(inputController: self, msg: text)
+    }
+    
+    func menuViewDidSelectItemAtIndex(index: Int) {
+        
+        self.faceView.scrollToFaceGroup(index: index)
     }
 }

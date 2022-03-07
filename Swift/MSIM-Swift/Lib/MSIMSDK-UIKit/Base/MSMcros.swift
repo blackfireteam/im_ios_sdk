@@ -87,6 +87,15 @@ public struct MSMcros {
     static let TVoiceMessageCell_Back_Width_Min: CGFloat = 60
     static let TVoiceMessageCell_Duration_Size: CGSize = CGSize(width: 33, height: 33)
 
+    //menu item cell
+    static let TMenuCell_ReuseId: String = "TMenuCell"
+    static let TMenuCell_Margin: CGFloat = 6
+    static let TMenuCell_Line_ReuseId: String = "TMenuLineCell"
+    static let TMenuCell_Background_Color: UIColor = #colorLiteral(red: 0.9647058824, green: 0.9647058824, blue: 0.9647058824, alpha: 1)
+    static let TMenuCell_Background_Color_Dark: UIColor = #colorLiteral(red: 0.1176470588, green: 0.1176470588, blue: 0.1176470588, alpha: 1)
+    static let TMenuCell_Selected_Background_Color: UIColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    static let TMenuCell_Selected_Background_Color_Dark: UIColor = #colorLiteral(red: 0.1607843137, green: 0.1607843137, blue: 0.1607843137, alpha: 1)
+    
     //group_live
     static let TGroupLiveMessageCell_ReuseId: String = "TGroupLiveMessageCell"
 
@@ -135,11 +144,20 @@ public struct MSMcros {
     static let Record_Title_Background_Color: UIColor = #colorLiteral(red: 0.7294117647, green: 0.2352941176, blue: 0.2549019608, alpha: 1)
     static let Record_Margin: CGFloat = 8
     
+    //store
+//    static let GaodeAPIKey: String = "be89a357dfc9e986f1ca53bbab8e4a16"
+//    static let GaodeAPIWebKey: String = "d696e2e8fc6c1685be52faa64b66d318"
+//    static let kChatRoomID: Int = 1641525634
+//    static let kAppID: String = "100"
+    //com.blackfire.im.msim.normal1  bundle_id
+
+    //noral
     static let GaodeAPIKey: String = "28d8663963475a7eb9126c8ebb9c4bc9"
     static let GaodeAPIWebKey: String = "1db3c63e96dccbe7dd34b6b5150fae90"
-    static let kChatRoomID: Int = 25
-    static let kAppInviteCode: String = "MSYYDS"
-//    1641525634
+    static let kChatRoomID: Int = 1646637677
+    static let kAppID: String = "2"
+    //com.blackfire.im.msim.normal  bundle_id
+
 }
 
 /** 自定义消息分类*/

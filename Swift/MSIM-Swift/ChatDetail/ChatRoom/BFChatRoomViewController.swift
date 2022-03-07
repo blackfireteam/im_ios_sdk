@@ -193,6 +193,16 @@ extension BFChatRoomViewController: MSChatRoomControllerDelegate {
         }
     }
     
+    ///点击自定义表情，应该直接发送自定义表情消息
+    public func onDidSelectEmotionItem(controller: MSChatRoomController,data: MSFaceCellData) {
+        
+        let emotionElem = MSIMEmotionElem()
+        emotionElem.emotionID = data.e_id ?? ""
+        emotionElem.emotionName = data.name
+        let message = MSIMManager.sharedInstance().createEmotionMessage(emotionElem)
+        controller.sendMessage(message: message)
+    }
+    
     public func onSelectMessageAvatar(controller: MSChatRoomController, cell: MSMessageCell) {
         
     }
