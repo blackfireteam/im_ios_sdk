@@ -886,18 +886,18 @@
 		F065D5D027D1FFB100324857 /* VoiceKit */ = {
 			isa = PBXGroup;
 			children = (
-				F065D5D127D1FFB100324857 /* MSVoiceCallView.m */,
-				F065D5D227D1FFB100324857 /* MSVoipCenter.m */,
-				F065D5D327D1FFB100324857 /* MSCallModel.m */,
-				F065D5D427D1FFB100324857 /* MSVideoCallView.m */,
 				F065D5D527D1FFB100324857 /* MSCallViewController.h */,
-				F065D5D627D1FFB100324857 /* MSCallManager.m */,
-				F065D5D727D1FFB100324857 /* MSVideoCallView.h */,
-				F065D5D827D1FFB100324857 /* MSCallModel.h */,
-				F065D5D927D1FFB100324857 /* MSVoiceCallView.h */,
-				F065D5DA27D1FFB100324857 /* MSVoipCenter.h */,
 				F065D5DB27D1FFB100324857 /* MSCallViewController.m */,
+				F065D5D927D1FFB100324857 /* MSVoiceCallView.h */,
+				F065D5D127D1FFB100324857 /* MSVoiceCallView.m */,
+				F065D5D727D1FFB100324857 /* MSVideoCallView.h */,
+				F065D5D427D1FFB100324857 /* MSVideoCallView.m */,
+				F065D5DA27D1FFB100324857 /* MSVoipCenter.h */,
+				F065D5D227D1FFB100324857 /* MSVoipCenter.m */,
+				F065D5D827D1FFB100324857 /* MSCallModel.h */,
+				F065D5D327D1FFB100324857 /* MSCallModel.m */,
 				F065D5DC27D1FFB100324857 /* MSCallManager.h */,
+				F065D5D627D1FFB100324857 /* MSCallManager.m */,
 			);
 			path = VoiceKit;
 			sourceTree = "<group>";

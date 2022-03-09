@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /// im sdk初始化
         let imConfig = IMSDKConfig.default()
         imConfig.logEnable = true
+        imConfig.voipEnable = true
         imConfig.uploadMediator = MSUploadManager.shared // im内部用到的上传服务，用户可以自定义
         MSIMKit.sharedInstance().initWith(imConfig)
         
@@ -55,6 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         completionHandler(UIBackgroundFetchResult.newData)
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        return true
     }
 }
 

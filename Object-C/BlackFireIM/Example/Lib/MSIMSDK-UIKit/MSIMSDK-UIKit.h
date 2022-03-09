@@ -30,5 +30,6 @@
 #import "MSNoticeCountView.h"
 #import "MSChatMoreView.h"
 #import "MSCallManager.h"
+#import "MSVoipCenter.h"
 
 #endif /* MSIMSDK_UIKit_h */

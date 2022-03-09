@@ -59,37 +59,6 @@ class MSCallViewController: UIViewController {
         self.stopDurationTimer()
     }
     
-    func acceptBtnDidClick(type: MSCallType) {
-        if type == .voice {
-            self.voice_acceptBtnDidClick()
-        }else {
-            self.video_acceptBtnDidClick()
-        }
-    }
-    
-    func rejectBtnDidClick(type: MSCallType) {
-        if type == .voice {
-            self.voice_rejectBtnDidClick()
-        }else {
-            self.video_rejectBtnDidClick()
-        }
-    }
-    
-    func hangupBtnDidClick(type: MSCallType) {
-        if type == .voice {
-            self.voice_hangupBtnDidClick()
-        }else {
-            self.video_hangupBtnDidClick()
-        }
-    }
-    
-    func setMute(isMute: Bool) {
-        if self.callType == .voice {
-            self.voiceCallView.micBtn.isSelected = !isMute
-            self.agoraKit?.adjustRecordingSignalVolume(isMute ? 0 : 100)
-        }
-    }
-    
     private var agoraKit: AgoraRtcEngineKit?
     
     private var partner_id: String!

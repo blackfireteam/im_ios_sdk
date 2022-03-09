@@ -9,6 +9,7 @@ import UIKit
 import MSIMSDK
 import PushKit
 import CallKit
+import AVFoundation
 
 
 protocol MSPushMediatorDelegate: NSObjectProtocol {
@@ -76,12 +77,14 @@ class MSPushMediator: NSObject, UNUserNotificationCenterDelegate {
             let config = CXProviderConfiguration()
             config.maximumCallsPerCallGroup = 1
             config.supportsVideo = true
+            config.supportedHandleTypes = Set([.generic,.phoneNumber])
             self.voipProvider = CXProvider.init(configuration: config)
             self.voipProvider?.setDelegate(self, queue: .main)
         } else {
             let config = CXProviderConfiguration.init(localizedName: "voipCall")
             config.maximumCallsPerCallGroup = 1
             config.supportsVideo = true
+            config.supportedHandleTypes = Set([.generic,.phoneNumber])
             self.voipProvider = CXProvider.init(configuration: config)
             self.voipProvider?.setDelegate(self, queue: .main)
         }
@@ -188,8 +191,8 @@ extension MSPushMediator: PKPushRegistryDelegate {
                 self.voipProvider?.reportNewIncomingCall(with: UUID(uuidString: uuid)!, update: update, completion: { _ in
                     
                 });
-            }else if action == CallAction.cancel.rawValue {
-                MSVoipCenter.shared.cancelBtnDidClick(type: callType, room_id: room_id)
+            }else if action == CallAction.cancel.rawValue || action == CallAction.end.rawValue {
+                NotificationCenter.default.post(name: NSNotification.Name.init("kRecieveNeedToDismissVoipView"), object: nil)
             }
         }
     }
@@ -205,7 +208,7 @@ extension MSPushMediator: CXProviderDelegate {
     }
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
-        MSVoipCenter.shared.startCallWithUuid(uuid: action.callUUID.uuidString)
+        MSVoipCenter.shared.acceptCallWithUuid(uuid: action.callUUID.uuidString)
         action.fulfill()
     }
     
@@ -219,9 +222,27 @@ extension MSPushMediator: CXProviderDelegate {
     }
     
     func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
-        MSVoipCenter.shared.muteCall(isMute: action.isMuted)
+        MSVoipCenter.shared.muteCall(isMute: action.isMuted,uuid: action.callUUID.uuidString)
         action.fulfill()
     }
     
+    func provider(_ provider: CXProvider, perform action: CXPlayDTMFCallAction) {
+        action.fulfill()
+    }
     
+    func provider(_ provider: CXProvider, perform action: CXSetGroupCallAction) {
+        action.fulfill()
+    }
+    
+    func provider(_ provider: CXProvider, timedOutPerforming action: CXAction) {
+        action.fail()
+    }
+    
+    func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
+        MSVoipCenter.shared.didActivateAudioSession()
+    }
+    
+    func provider(_ provider: CXProvider, didDeactivate audioSession: AVAudioSession) {
+        
+    }
 }

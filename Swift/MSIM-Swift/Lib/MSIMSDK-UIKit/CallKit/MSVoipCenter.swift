@@ -7,6 +7,8 @@
 
 import UIKit
 import CallKit
+import AgoraRtcKit
+import MSIMSDK
 
 
 struct CallItem {
@@ -14,14 +16,22 @@ struct CallItem {
     var from: String
     var call_type: MSCallType
 }
-class MSVoipCenter: NSObject {
+class MSVoipCenter: NSObject,AgoraRtcEngineDelegate {
     
     static let shared: MSVoipCenter = MSVoipCenter()
     
     var callVC: CXCallController?
     
+    var agoraKit: AgoraRtcEngineKit?
+    
     var uuids: [String: CallItem] = [:]
     
+    private(set) var currentCalling: String?
+    
+    private override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(recieveNeedToDismissVoipView), name: NSNotification.Name.init("kRecieveNeedToDismissVoipView"), object: nil)
+    }
     
     func createUUIDWithRoomID(room_id: String,fromUid: String,callType: MSCallType) -> String {
         
@@ -31,63 +41,62 @@ class MSVoipCenter: NSObject {
         return uuid
     }
     
-    func startCallWithUuid(uuid: String) {
+    func acceptCallWithUuid(uuid: String) {
         if let item = self.uuids[uuid] {
-            let creator = MSCallManager.getCreatorFrom(room_id: item.room_id)
-            MSCallManager.shared.recieveCall(from: item.from, creator: creator!, callType: item.call_type, action: .call, room_id: item.room_id)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            MSCallManager.shared.acceptBtnDidClick(type: item.call_type)
+            if item.call_type == .voice {
+                self.currentCalling = uuid
+                MSCallManager.shared.sendMessage(action: .accept, option: .IMCUSTOM_SIGNAL, room_id: item.room_id, toReciever: item.from)
+                self.startToVoice(room_id: item.room_id)
             }
         }
     }
     
     func endCallWithUuid(uuid: String) {
         if let item = self.uuids[uuid] {
-            let creator = MSCallManager.getCreatorFrom(room_id: item.room_id)
-            MSCallManager.shared.callToPartner(partner_id: item.from, creator: creator!, callType: item.call_type, action: .reject, room_id: item.room_id)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                MSCallManager.shared.rejectBtnDidClick(type: item.call_type)
+            MSCallManager.shared.sendMessage(action: .reject, option: .IMCUSTOM_SIGNAL, room_id: item.room_id, toReciever: item.from)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
             }
         }
     }
     
-    func muteCall(isMute: Bool) {
-        MSCallManager.shared.setMuTeCall(isMute: isMute)
-    }
-    
-    func hangupBtnDidClick(type: MSCallType,room_id: String) {
-        var session: UUID?
-        for(key,value) in self.uuids {
-            if value.room_id == room_id {
-                session = UUID(uuidString: key)
-                break
+    func muteCall(isMute: Bool, uuid: String) {
+        if let item = self.uuids[uuid] {
+            if item.call_type == .voice {
+                self.agoraKit?.adjustRecordingSignalVolume(isMute ? 0 : 100)
             }
         }
-        if session != nil {
-            self.uuids.removeValue(forKey: session!.uuidString)
-            let action = CXEndCallAction(call: session!)
-            let transation = CXTransaction(action: action)
-            self.callVC?.request(transation, completion: { _ in
+    }
+    
+    private func startToVoice(room_id: String) {
+        MSIMManager.sharedInstance().getAgoraToken(room_id) { app_id, token in
+            
+            self.agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: app_id, delegate: self)
+            self.agoraKit?.joinChannel(byToken: token, channelId: room_id, info: nil, uid: UInt(MSIMTools.sharedInstance().user_id ?? "")!, joinSuccess: nil)
+            
+        } failed: { _, _ in
+            
+        }
+    }
+    
+    @objc func recieveNeedToDismissVoipView(note: Notification) {
+        
+        self.currentCalling = nil
+        for uuid in self.uuids.keys {
+            let action = CXEndCallAction.init(call: UUID(uuidString: uuid)!)
+            let transaction = CXTransaction(action: action)
+            self.callVC?.request(transaction, completion: { _ in
                 
             })
         }
+        self.uuids.removeAll()
+        self.agoraKit?.leaveChannel(nil)
+        AgoraRtcEngineKit.destroy()
     }
     
-    func cancelBtnDidClick(type: MSCallType,room_id: String) {
-        var session: UUID?
-        for(key,value) in self.uuids {
-            if value.room_id == room_id {
-                session = UUID(uuidString: key)
-                break
-            }
-        }
-        if session != nil {
-            self.uuids.removeValue(forKey: session!.uuidString)
-            let action = CXEndCallAction(call: session!)
-            let transation = CXTransaction(action: action)
-            self.callVC?.request(transation, completion: { _ in
-                
-            })
-        }
+    func didActivateAudioSession() {
+        self.agoraKit?.enableAudio()
+        self.agoraKit?.setEnableSpeakerphone(false)
+        self.agoraKit?.enable(inEarMonitoring: true)
     }
 }

@@ -10,7 +10,6 @@
 #import "MSIMSDK-UIKit.h"
 
 
-
 @interface MSCallManager()
 
 @property(nonatomic,copy) NSString *isOnCallingWithUid;
@@ -80,7 +79,7 @@
                 [self.timer invalidate];
                 self.timer = nil;
                 self.timerCount = 0;
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
             }
         }
             break;
@@ -89,7 +88,7 @@
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id] == NO) {
                 /// 作为被邀请方，点击拒绝，结束通话。补一条拒绝的指令消息
                 [self sendMessageType:CallAction_Reject option:IMCUSTOM_SIGNAL room_id:self.room_id toReciever:partner_id];
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
             }
         }
             break;
@@ -98,11 +97,11 @@
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id]) {
                 /// 自己是邀请方主动挂断，结束通话同时补发一条结束的普通消息
                 [self sendMessageType:CallAction_End option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:self.room_id toReciever:partner_id];
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
             }else {
                 ///自己是被邀请方主动挂断，结束通话同时补发一条结束的指令消息
                 [self sendMessageType:CallAction_End option:IMCUSTOM_SIGNAL room_id:self.room_id toReciever:partner_id];
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
             }
         }
             break;
@@ -152,7 +151,7 @@
         {
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id] == NO) {
                 /// 作为被邀请方收到对方取消通话消息，结束通话
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
             }
         }
             break;
@@ -160,7 +159,7 @@
         {
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id] == NO) {
                 /// 作为被邀请方，收到对方超时消息，结束通话
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
             }
         }
             break;
@@ -173,7 +172,7 @@
                 self.timerCount = 0;
                 [self sendMessageType:CallAction_Reject option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:room_id toReciever:from];
             }
-            [self destroyCallVC];
+            [self destroyCallVC: room_id];
         }
             break;
         case CallAction_End:
@@ -181,11 +180,11 @@
             if ([creator isEqualToString:[MSIMTools sharedInstance].user_id]) {
                 /// 作为邀请方，收到对方挂断指令，会结束通话。同时发一条结束的普通消息
                 [self sendMessageType:CallAction_End option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:room_id toReciever:from];
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
             }else {
                 /// 作为被邀请方，收到对方挂断的消息，会结束通话
                 [self.callVC recieveHangup:callType room_id:room_id];
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
             }
         }
             break;
@@ -196,7 +195,7 @@
                 [self.timer invalidate];
                 self.timer = nil;
                 self.timerCount = 0;
-                [self destroyCallVC];
+                [self destroyCallVC: room_id];
                 [self sendMessageType:CallAction_Linebusy option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:room_id toReciever:from];
             }
         }
@@ -225,13 +224,13 @@
         [self.timer invalidate];
         self.timer = nil;
         self.timerCount = 0;
-        [self destroyCallVC];
+        [self destroyCallVC: room_id];
         [self sendMessageType:CallAction_Timeout option:IMCUSTOM_UNREADCOUNT_NO_RECALL room_id:room_id toReciever:reciever];
     }
     self.timerCount++;
 }
 
-- (void)destroyCallVC
+- (void)destroyCallVC:(NSString *)room_id
 {
     if (self.callVC) {
         [UIDevice stopPlaySystemSound];
@@ -240,6 +239,7 @@
         self.isOnCallingWithUid = nil;
         self.action = CallAction_Unknown;
     }
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"kRecieveNeedToDismissVoipView" object:room_id];
 }
 
 - (void)sendMessageType:(CallAction)action option:(MSIMCustomOption)option room_id:(NSString *)room_id toReciever:(NSString *)reciever
@@ -325,34 +325,6 @@
         return arr[1];
     }
     return @"";
-}
-
-- (void)acceptBtnDidClick:(MSCallType)type
-{
-    if (self.callVC) {
-        [self.callVC acceptBtnDidClick: type];
-    }
-}
-
-- (void)rejectBtnDidClick:(MSCallType)type
-{
-    if (self.callVC) {
-        [self.callVC rejectBtnDidClick: type];
-    }
-}
-
-- (void)hangupBtnDidClick:(MSCallType)type
-{
-    if (self.callVC) {
-        [self.callVC hangupBtnDidClick: type];
-    }
-}
-
-- (void)setMuTeCall:(BOOL)isMute
-{
-    if (self.callVC) {
-        [self.callVC setMute:isMute];
-    }
 }
 
 @end

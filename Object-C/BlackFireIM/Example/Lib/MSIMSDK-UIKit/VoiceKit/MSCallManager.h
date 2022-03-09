@@ -6,6 +6,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MSIMSDK/MSIMConst.h>
+
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -54,15 +57,9 @@ typedef NS_ENUM(NSInteger, CallState) {
 /// 根据自定义参数解析出在会话中展示的内容
 + (NSString *)parseToConversationShow:(NSDictionary *)customParams callType:(MSCallType)callType isSelf:(BOOL)isSelf;
 
+- (void)sendMessageType:(CallAction)action option:(MSIMCustomOption)option room_id:(NSString *)room_id toReciever:(NSString *)reciever;
+
 + (NSString *)getCreatorFrom:(NSString *)room_id;
-
-- (void)acceptBtnDidClick:(MSCallType)type;
-
-- (void)rejectBtnDidClick:(MSCallType)type;
-
-- (void)hangupBtnDidClick:(MSCallType)type;
-
-- (void)setMuTeCall:(BOOL)isMute;
 
 @end
 

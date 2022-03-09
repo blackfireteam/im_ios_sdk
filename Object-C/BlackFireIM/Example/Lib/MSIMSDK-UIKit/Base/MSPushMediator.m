@@ -11,7 +11,6 @@
 #import "MSIMSDK-UIKit.h"
 #import <PushKit/PushKit.h>
 #import <CallKit/CallKit.h>
-#import "MSVoipCenter.h"
 
 
 @interface MSPushMediator()<UNUserNotificationCenterDelegate,PKPushRegistryDelegate,CXProviderDelegate>
@@ -35,6 +34,7 @@ static MSPushMediator *_manager;
 
 - (void)applicationDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions imConfig: (IMSDKConfig *)config
 {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
     center.delegate = self;
     [center requestAuthorizationWithOptions:(UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert) completionHandler:^(BOOL granted, NSError * _Nullable error) {
@@ -85,6 +85,7 @@ static MSPushMediator *_manager;
     CXProviderConfiguration *config = [[CXProviderConfiguration alloc]initWithLocalizedName:@"voipCall"];
     config.maximumCallsPerCallGroup = 1;
     config.supportsVideo = YES;
+    config.supportedHandleTypes = [[NSSet alloc]initWithObjects:[NSNumber numberWithInt:CXHandleTypeGeneric],[NSNumber numberWithInt:CXHandleTypePhoneNumber], nil];
     self.voipProvider = [[CXProvider alloc]initWithConfiguration:config];
     [self.voipProvider setDelegate:self queue:dispatch_get_main_queue()];
 }
@@ -179,11 +180,15 @@ static MSPushMediator *_manager;
 //}
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion
 {
+    NSData *data = [NSJSONSerialization dataWithJSONObject:payload.dictionaryPayload options:NSJSONWritingFragmentsAllowed error:nil];
+    [data writeToFile:[NSString stringWithFormat:@"%@/test.text",NSFileManager.pathForIMVoice] atomically:YES];
     NSDictionary *apsDic = payload.dictionaryPayload[@"aps"];
     NSDictionary *alertDic = apsDic[@"alert"];
     NSString *title = alertDic[@"title"];
     NSDictionary *msimDic = payload.dictionaryPayload[@"msim"];
     NSString *fromUid = [NSString stringWithFormat:@"%@",msimDic[@"from"]];
+//    NSString *toUid = [NSString stringWithFormat:@"%@",msimDic[@"to"]];
+//    MSIMMessageType mType = [msimDic[@"mtype"]integerValue] - 8;
     NSString *bodyJson = msimDic[@"body"];
     NSDictionary *bodyDic = [bodyJson el_convertToDictionary];
     MSIMCustomSubType subType = [bodyDic[@"type"] integerValue];
@@ -209,8 +214,8 @@ static MSPushMediator *_manager;
                     MSLog(@"error: %@",error);
                 }
             }];
-        }else if (action == CallAction_Cancel) {
-            [[MSVoipCenter shareInstance]cancelBtnDidClick:(subType == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) room_id:room_id];
+        }else if (action == CallAction_Cancel || action == CallAction_End) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"kRecieveNeedToDismissVoipView" object:room_id];
         }
     }
 }
@@ -248,21 +253,17 @@ static MSPushMediator *_manager;
 - (void)provider:(CXProvider *)provider performAnswerCallAction:(CXAnswerCallAction *)action
 {
     if (action.callUUID.UUIDString.length > 0) {
-        [[MSVoipCenter shareInstance] startCallWithUuid:action.callUUID.UUIDString];
-        [action fulfill];
-    }else {
-        [action fail];
+        [[MSVoipCenter shareInstance] acceptCallWithUuid:action.callUUID.UUIDString];
     }
+    [action fulfill];
 }
 
 - (void)provider:(CXProvider *)provider performEndCallAction:(CXEndCallAction *)action
 {
     if (action.callUUID.UUIDString.length > 0) {
         [[MSVoipCenter shareInstance] endCallWithUuid:action.callUUID.UUIDString];
-        [action fulfill];
-    }else {
-        [action fail];
     }
+    [action fulfill];
 }
 
 - (void)provider:(CXProvider *)provider performSetHeldCallAction:(CXSetHeldCallAction *)action
@@ -273,11 +274,9 @@ static MSPushMediator *_manager;
 - (void)provider:(CXProvider *)provider performSetMutedCallAction:(CXSetMutedCallAction *)action
 {
     if (action.callUUID.UUIDString.length > 0) {
-        [[MSVoipCenter shareInstance] muteCall:action.muted];
-        [action fulfill];
-    }else {
-        [action fail];
+        [[MSVoipCenter shareInstance] muteCall:action.muted uuid: action.callUUID.UUIDString];
     }
+    [action fulfill];
 }
 
 - (void)provider:(CXProvider *)provider performSetGroupCallAction:(CXSetGroupCallAction *)action
@@ -299,7 +298,7 @@ static MSPushMediator *_manager;
 /// Called when the provider's audio session activation state changes.
 - (void)provider:(CXProvider *)provider didActivateAudioSession:(AVAudioSession *)audioSession
 {
-    
+    [[MSVoipCenter shareInstance]didActivateAudioSession];
 }
 
 - (void)provider:(CXProvider *)provider didDeactivateAudioSession:(AVAudioSession *)audioSession

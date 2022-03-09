@@ -15,22 +15,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shareInstance;
 
+/// 记录正在通话的calling
+@property(nonatomic,copy,readonly) NSString *currentCalling;
+
 - (NSString *)createUUIDWithRoomID:(NSString *)room_id fromUid:(NSString *)fromUid subType:(MSCallType)callType;
 
+- (NSString *)roomIDWithUUID:(NSString *)uuid;
 
-- (void)startCallWithUuid:(NSString *)uuid;
+- (void)acceptCallWithUuid:(NSString *)uuid;
 
 - (void)endCallWithUuid:(NSString *)uuid;
 
-- (void)muteCall:(BOOL)isMute;
+- (void)muteCall:(BOOL)isMute uuid:(NSString *)uuid;
 
-- (void)acceptBtnDidClick:(MSCallType)type room_id:(NSString *)room_id;
+- (void)didActivateAudioSession;
 
-- (void)rejectBtnDidClick:(MSCallType)type room_id:(NSString *)room_id;
-
-- (void)hangupBtnDidClick:(MSCallType)type room_id:(NSString *)room_id;
-
-- (void)cancelBtnDidClick:(MSCallType)type room_id:(NSString *)room_id;
 
 @end
 

@@ -241,30 +241,6 @@ class MSCallManager: NSObject {
         return nil
     }
     
-    func acceptBtnDidClick(type: MSCallType) {
-        if self.callVC != nil {
-            self.callVC?.acceptBtnDidClick(type: type)
-        }
-    }
-    
-    func rejectBtnDidClick(type: MSCallType) {
-        if self.callVC != nil {
-            self.callVC?.rejectBtnDidClick(type: type)
-        }
-    }
-    
-    func hangupBtnDidClick(type: MSCallType) {
-        if self.callVC != nil {
-            self.callVC?.hangupBtnDidClick(type: type)
-        }
-    }
-    
-    func setMuTeCall(isMute: Bool) {
-        if self.callVC != nil {
-            self.callVC?.setMute(isMute: isMute)
-        }
-    }
-    
     private var isOnCallingWithUid: String?
     
     private var callVC: MSCallViewController?
@@ -301,9 +277,10 @@ class MSCallManager: NSObject {
             self.isOnCallingWithUid = nil
             self.action = .unknown
         }
+        NotificationCenter.default.post(name: NSNotification.Name.init("kRecieveNeedToDismissVoipView"), object: self.room_id);
     }
     
-    private func sendMessage(action: CallAction, option: MSIMCustomOption, room_id: String, toReciever: String) {
+    func sendMessage(action: CallAction, option: MSIMCustomOption, room_id: String, toReciever: String) {
         
         let extDic = ["room_id": room_id, "type": (self.callType == .voice ? MSIMCustomSubType.VoiceCall.rawValue : MSIMCustomSubType.VideoCall.rawValue), "event": action.rawValue, "duration": self.callVC!.duration] as [String : Any]
         var push: MSIMPushInfo?

@@ -66,6 +66,13 @@
   completionHandler(UIBackgroundFetchResultNewData);
 }
 
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+//    userActivity.i
+//    NSLog(@"%@",userActivity);
+    return YES;
+}
+
 #pragma mark-- MSPushMediatorDelegate<NSObject>
 
 /** 点击推送消息进入的app,可以做些跳转操作*/
