@@ -112,13 +112,13 @@
 {
     self.currentCalling = nil;
     for (NSString *uuid in self.uuids.allKeys) {
+        [self.uuids removeObjectForKey:uuid];
         CXEndCallAction *action = [[CXEndCallAction alloc]initWithCallUUID:[[NSUUID alloc]initWithUUIDString:uuid]];
         CXTransaction *transaction = [[CXTransaction alloc]initWithAction:action];
         [self.callVC requestTransaction:transaction completion:^(NSError * _Nullable error) {
             MSLog(@"error: %@",error);
         }];
     }
-    [self.uuids removeAllObjects];
     [self.agoraKit leaveChannel:nil];
     [AgoraRtcEngineKit destroy];
 }

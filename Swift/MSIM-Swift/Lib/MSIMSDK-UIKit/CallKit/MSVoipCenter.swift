@@ -83,13 +83,13 @@ class MSVoipCenter: NSObject,AgoraRtcEngineDelegate {
         
         self.currentCalling = nil
         for uuid in self.uuids.keys {
+            self.uuids.removeValue(forKey: uuid)
             let action = CXEndCallAction.init(call: UUID(uuidString: uuid)!)
             let transaction = CXTransaction(action: action)
             self.callVC?.request(transaction, completion: { _ in
                 
             })
         }
-        self.uuids.removeAll()
         self.agoraKit?.leaveChannel(nil)
         AgoraRtcEngineKit.destroy()
     }
