@@ -133,7 +133,10 @@
     voiceFrame.origin.y = originY;
     _micButton.frame = voiceFrame;
 
-
+    CGRect keyboardFrame = _keyboardButton.frame;
+    keyboardFrame.origin.y = originY;
+    _keyboardButton.frame = keyboardFrame;
+    
     if(_delegate && [_delegate respondsToSelector:@selector(inputBar:didChangeInputHeight:)]){
         [_delegate inputBar:self didChangeInputHeight:offset];
     }
@@ -148,10 +151,10 @@
     _faceButton.hidden = NO;
     [_inputTextView resignFirstResponder];
     [self layoutButton:TTextView_Height];
+    _keyboardButton.frame = _micButton.frame;
     if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchMore:)]){
         [_delegate inputBarDidTouchVoice:self];
     }
-    _keyboardButton.frame = _micButton.frame;
 }
 
 - (void)clickKeyboardBtn:(UIButton *)sender
@@ -175,6 +178,7 @@
         _keyboardButton.hidden = YES;
         _recordButton.hidden = YES;
         _inputTextView.hidden = NO;
+        [self layoutButton:_inputTextView.frame.size.height + 2 * TTextView_Margin];
         _keyboardButton.frame = _faceButton.frame;
         if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchSnapImage:)]){
             [_delegate inputBarDidTouchSnapImage:self];
@@ -185,6 +189,7 @@
         _keyboardButton.hidden = NO;
         _recordButton.hidden = YES;
         _inputTextView.hidden = NO;
+        [self layoutButton:_inputTextView.frame.size.height + 2 * TTextView_Margin];
         _keyboardButton.frame = _faceButton.frame;
         if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchFace:)]){
             [_delegate inputBarDidTouchFace:self];
@@ -199,6 +204,7 @@
     _keyboardButton.hidden = YES;
     _recordButton.hidden = YES;
     _inputTextView.hidden = NO;
+    [self layoutButton:_inputTextView.frame.size.height + 2 * TTextView_Margin];
     if (self.isNapChat) {
         if(_delegate && [_delegate respondsToSelector:@selector(inputBarDidTouchExitSnap:)]){
             [_delegate inputBarDidTouchExitSnap:self];
@@ -367,6 +373,7 @@
                     int c = (int)[textView.text characterAtIndex:location];     // 将字符转换成ascii码，复制给int  避免越界
                     if (c == left) {
                         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
+                        [self textViewDidChange:_inputTextView];
                         return NO;
                     }
                     else if (c == right) {
@@ -387,9 +394,17 @@
                         if (self.delegate && [self.delegate respondsToSelector:@selector(inputBar:didDeleteAt:)]) {
                             [self.delegate inputBar:self didDeleteAt:atText];
                         }
+                        [self textViewDidChange:_inputTextView];
                         return NO;
                     }
                 }
+                textView.text = [self subStringWith:textView.text ToIndex:range.location];
+                [self textViewDidChange:_inputTextView];
+                return NO;
+            }else {
+                textView.text = [self subStringWith:textView.text ToIndex:range.location];
+                [self textViewDidChange:_inputTextView];
+                return NO;
             }
         }
     }else if ([text isEqualToString:@"@"]) {// 监听 @ 字符的输入
@@ -398,6 +413,16 @@
         }
     }
     return YES;
+}
+
+- (NSString *)subStringWith:(NSString *)string ToIndex:(NSInteger)index
+{
+    NSString *result = string;
+    if (result.length > index) {
+        NSRange rangeIndex = [result rangeOfComposedCharacterSequenceAtIndex:index];
+        result = [result substringToIndex:(rangeIndex.location)];
+    }
+    return result;
 }
 
 - (void)clearInput

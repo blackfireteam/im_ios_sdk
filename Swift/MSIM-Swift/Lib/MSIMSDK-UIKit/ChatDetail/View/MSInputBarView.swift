@@ -233,6 +233,10 @@ private extension MSInputBarView {
         voiceFrame.origin.y = originY
         micButton.frame = voiceFrame
         
+        var keyboardFrame = keyboardButton.frame
+        keyboardFrame.origin.y = originY
+        keyboardButton.frame = keyboardFrame
+        
         delegate?.inputBarDidChangeInputHeight(textView: self, offset: offset)
     }
     
@@ -245,9 +249,8 @@ private extension MSInputBarView {
         faceButton.isHidden = false
         inputTextView.resignFirstResponder()
         layoutButton(height: MSMcros.TTextView_Height)
-        
-        delegate?.inputBarDidTouchVoice(textView: self)
         keyboardButton.frame = micButton.frame
+        delegate?.inputBarDidTouchVoice(textView: self)
     }
     
     @objc func clickKeyboardBtn(sender: UIButton) {
@@ -258,6 +261,7 @@ private extension MSInputBarView {
         inputTextView.isHidden = false
         faceButton.isHidden = false
         layoutButton(height: inputTextView.height + 2 * MSMcros.TTextView_Margin)
+        keyboardButton.frame = faceButton.frame
         delegate?.inputBarDidTouchKeyboard(textView: self)
     }
     
@@ -268,11 +272,13 @@ private extension MSInputBarView {
         keyboardButton.isHidden = false
         recordButton.isHidden = true
         inputTextView.isHidden = false
-        delegate?.inputBarDidTouchFace(textView: self)
+        layoutButton(height: inputTextView.height + 2 * MSMcros.TTextView_Margin)
         keyboardButton.frame = faceButton.frame
+        delegate?.inputBarDidTouchFace(textView: self)
     }
     
     @objc func clickMoreBtn(sender: UIButton) {
+        layoutButton(height: inputTextView.height + 2 * MSMcros.TTextView_Margin)
         delegate?.inputBarDidTouchMore(textView: self)
     }
     
@@ -412,6 +418,7 @@ extension MSInputBarView: UITextViewDelegate {
                         let c = content.subString(from: location, to: location)
                         if c == "[" {
                             textView.text = (content as NSString).replacingCharacters(in: NSRange(location: location, length: length), with: "")
+                            self.textViewDidChange(inputTextView)
                             return false
                         }
                         location -= 1
@@ -427,11 +434,19 @@ extension MSInputBarView: UITextViewDelegate {
                             let atText = content.subString(from: location, to: location + length - 1)
                             textView.text = (content as NSString).replacingCharacters(in: NSRange(location: location, length: length), with: "")
                             delegate?.inputBarDidDeleteAt(textView: self, text: atText)
+                            self.textViewDidChange(inputTextView)
                             return false
                         }
                         location -= 1
                         length += 1
                     }
+                    textView.text = self.subStringToIndex(text: textView.text, toIndex: range.location)
+                    self.textViewDidChange(inputTextView)
+                    return false
+                }else {
+                    textView.text = self.subStringToIndex(text: textView.text, toIndex: range.location)
+                    self.textViewDidChange(inputTextView)
+                    return false
                 }
             }
         }else if text == "@" {// 监听 @ 字符的输入
@@ -440,6 +455,15 @@ extension MSInputBarView: UITextViewDelegate {
         return true
     }
     
+    private func subStringToIndex(text: String,toIndex: Int) -> String {
+        
+        var result = text as NSString
+        if result.length > toIndex {
+            let rangeIndex = result.rangeOfComposedCharacterSequence(at: toIndex)
+            result = result.substring(to: rangeIndex.location) as NSString
+        }
+        return result as String
+    }
 }
 
 /// 录音相关

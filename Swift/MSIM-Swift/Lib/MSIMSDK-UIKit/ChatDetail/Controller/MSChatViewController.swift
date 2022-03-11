@@ -89,6 +89,7 @@ public class MSChatViewController: UIViewController {
         if let conv = MSConversationProvider.shared().providerConversation(self.partner_id),conv.draftText.count > 0 {
             inputController.inputBar.inputTextView.text = conv.draftText
             inputController.inputBar.inputTextView.becomeFirstResponder()
+            inputController.inputBar.updateTextViewFrame()
         }
     }
     

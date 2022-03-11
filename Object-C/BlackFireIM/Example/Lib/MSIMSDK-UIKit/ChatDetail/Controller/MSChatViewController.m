@@ -54,6 +54,7 @@
     if (conv.draftText.length > 0) {
         self.inputController.inputBar.inputTextView.text = conv.draftText;
         [self.inputController.inputBar.inputTextView becomeFirstResponder];
+        [self.inputController.inputBar updateTextViewFrame];
     }
 }
 
