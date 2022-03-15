@@ -183,6 +183,8 @@ static MSPushMediator *_manager;
 //}
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion
 {
+    [self startBgTask];
+    
     NSDictionary *apsDic = payload.dictionaryPayload[@"aps"];
     NSDictionary *alertDic = apsDic[@"alert"];
     NSString *title = alertDic[@"title"];
@@ -220,6 +222,16 @@ static MSPushMediator *_manager;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"kRecieveNeedToDismissVoipView" object:room_id];
     }
     if (completion) completion();
+}
+
+// 开启后台延时
+- (void)startBgTask
+{
+    UIApplication *application = [UIApplication sharedApplication];
+    __block UIBackgroundTaskIdentifier bgTask;
+    bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+        [application endBackgroundTask:bgTask];
+    }];
 }
 
 #pragma mark - CXProviderDelegate
