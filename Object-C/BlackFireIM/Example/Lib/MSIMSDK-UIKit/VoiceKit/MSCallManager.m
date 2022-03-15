@@ -8,7 +8,7 @@
 #import "MSCallManager.h"
 #import "MSCallViewController.h"
 #import "MSIMSDK-UIKit.h"
-
+#import "AppDelegate.h"
 
 @interface MSCallManager()
 
@@ -25,6 +25,8 @@
 @property(nonatomic,assign) NSInteger timerCount;
 
 @property(nonatomic,copy) NSString *room_id;
+
+@property(nonatomic,assign) BOOL autoAcceptCall;
 
 @end
 @implementation MSCallManager
@@ -59,7 +61,8 @@
             self.callType = callType;
             self.callVC = [[MSCallViewController alloc]initWithCallType:self.callType sponsor:creator invitee:partner_id room_id:self.room_id];
             self.callVC.modalPresentationStyle = UIModalPresentationFullScreen;
-            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.callVC animated:YES completion:nil];
+            AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            [del.window.rootViewController presentViewController:self.callVC animated:YES completion:nil];
             
             WS(weakSelf)
             self.timerCount = 0;
@@ -143,7 +146,11 @@
                 self.callType = callType;
                 self.callVC = [[MSCallViewController alloc]initWithCallType:self.callType sponsor:from invitee:[MSIMTools sharedInstance].user_id room_id:room_id];
                 self.callVC.modalPresentationStyle = UIModalPresentationFullScreen;
-                [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:self.callVC animated:YES completion:nil];
+                AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [del.window.rootViewController presentViewController:self.callVC animated:YES completion:nil];
+                if (self.autoAcceptCall) {
+                    [self.callVC recieveVoipAccept:callType room_id:room_id];
+                }
             }
         }
             break;
@@ -230,15 +237,24 @@
     self.timerCount++;
 }
 
-- (void)destroyCallVC:(NSString *)room_id
+- (void)autoAcceptVoipCall:(MSCallType)callType room_id:(NSString *)room_id
 {
     if (self.callVC) {
-        [UIDevice stopPlaySystemSound];
-        [self.callVC dismissViewControllerAnimated:YES completion:nil];
-        self.callVC = nil;
-        self.isOnCallingWithUid = nil;
-        self.action = CallAction_Unknown;
+        [self.callVC recieveVoipAccept:callType room_id:room_id];
+    }else {
+        self.autoAcceptCall = YES;
     }
+}
+
+- (void)destroyCallVC:(NSString *)room_id
+{
+    [UIDevice stopPlaySystemSound];
+    [self.callVC dismissViewControllerAnimated:YES completion:nil];
+    self.callVC = nil;
+    self.isOnCallingWithUid = nil;
+    self.room_id = nil;
+    self.action = CallAction_Unknown;
+    self.autoAcceptCall = NO;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"kRecieveNeedToDismissVoipView" object:room_id];
 }
 

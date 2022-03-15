@@ -24,6 +24,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)recieveHangup:(MSCallType)callType room_id:(NSString *)room_id;
 
+- (void)recieveVoipAccept:(MSCallType)callType room_id:(NSString *)room_id;
+
+- (void)recieveVoipReject:(MSCallType)callType room_id:(NSString *)room_id;
+
+- (void)recieveVoipEnd:(MSCallType)callType room_id:(NSString *)room_id;
+
+- (void)didActivateAudioSession;
 
 @end
 

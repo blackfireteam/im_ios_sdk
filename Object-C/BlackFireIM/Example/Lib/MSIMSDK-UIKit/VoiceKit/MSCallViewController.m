@@ -44,6 +44,8 @@
 
 @property(nonatomic,assign) BOOL mainLocal;
 
+@property(nonatomic,assign) BOOL needToJoin;
+
 @end
 
 @implementation MSCallViewController
@@ -96,7 +98,7 @@
             videoCanvas.view = self.videoCallView.localView;
             [self.agoraKit setupLocalVideo:videoCanvas];
         }
-        if (self.curState == CallState_Dailing) {
+        if (self.curState == CallState_Dailing || self.needToJoin) {
             [self joinChannel];
         }
     } failed:^(NSInteger code, NSString *desc) {
@@ -121,24 +123,45 @@
         [self joinChannel];
         return;
     }
-    [[MSIMManager sharedInstance] getAgoraToken:self.room_id succ:^(NSString * _Nonnull app_id, NSString * _Nonnull token) {
-        self.token = token;
-        [AgoraRtcEngineKit destroy];
-        self.agoraKit = [AgoraRtcEngineKit sharedEngineWithAppId:app_id delegate:self];
-        if (self.callType == MSCallType_Voice) {
-            [self.agoraKit enableAudio];
-        }else {
-            [self.agoraKit enableVideo];
-            AgoraRtcVideoCanvas *videoCanvas = [[AgoraRtcVideoCanvas alloc]init];
-            videoCanvas.uid = 0;
-            videoCanvas.renderMode = AgoraVideoRenderModeHidden;
-            videoCanvas.view = self.videoCallView.localView;
-            [self.agoraKit setupLocalVideo:videoCanvas];
-        }
-        [self joinChannel];
-    } failed:^(NSInteger code, NSString *desc) {
-        MSLog(@"请求声网token失败：%zd--%@",code,desc);
-    }];
+    self.needToJoin = YES;
+}
+
+- (void)recieveVoipAccept:(MSCallType)callType room_id:(NSString *)room_id
+{
+    if (callType == MSCallType_Voice) {
+        [self voice_acceptBtnDidClick];
+    }else {
+        [self video_acceptBtnDidClick];
+    }
+}
+
+- (void)recieveVoipReject:(MSCallType)callType room_id:(NSString *)room_id
+{
+    if (callType == MSCallType_Voice) {
+        [self voice_rejectBtnDidClick];
+    }else {
+        [self video_rejectBtnDidClick];
+    }
+}
+
+- (void)recieveVoipEnd:(MSCallType)callType room_id:(NSString *)room_id
+{
+    if (callType == MSCallType_Voice) {
+        [self voice_hangupBtnDidClick];
+    }else {
+        [self video_hangupBtnDidClick];
+    }
+}
+
+- (void)didActivateAudioSession
+{
+    if (self.callType == MSCallType_Voice) {
+        [self.agoraKit enableAudio];
+        [self.agoraKit setDefaultAudioRouteToSpeakerphone:NO];
+        [self.agoraKit enableInEarMonitoring:YES];//开启耳返
+    }else {
+        [self.agoraKit enableVideo];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -245,6 +268,7 @@
 
 - (void)playAlerm
 {
+    if (self.curState == CallState_Calling) return;
     if (self.callType == MSCallType_Voice) {
         [UIDevice playShortSound:@"00" soundExtension:@"caf"];
     }else {

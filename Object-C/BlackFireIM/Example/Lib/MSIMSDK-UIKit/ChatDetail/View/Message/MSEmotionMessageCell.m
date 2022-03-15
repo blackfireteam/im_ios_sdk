@@ -36,6 +36,9 @@
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"TUIKitFace" ofType:@"bundle"];
     NSBundle *resourceBundle = [NSBundle bundleWithPath:bundlePath];
     NSString *emotionName = [MSHelper emoteionName:data.message.emotionElem.emotionID];
+    if (emotionName.length == 0) {//如果本地不存在，加载一个占位Lottie
+        emotionName = @"emotion_empty";
+    }
     [self.animationView setAnimationNamed:[NSString stringWithFormat:@"emotion/%@",emotionName] inBundle:resourceBundle];
     self.animationView.loopAnimation = YES;
     [self.animationView play];

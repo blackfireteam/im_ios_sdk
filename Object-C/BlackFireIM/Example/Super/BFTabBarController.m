@@ -120,6 +120,7 @@
     if (type == MSIMCustomSubTypeVoiceCall || type == MSIMCustomSubTypeVideoCall) {
         NSInteger event = [dic[@"event"] integerValue];
         NSString *room_id = dic[@"room_id"];
+        if ([MSVoipCenter shareInstance].currentCalling) return;
         [[MSCallManager shareInstance] recieveCall:message.partnerID creator:[MSCallManager getCreatorFrom:room_id] callType:(type == MSIMCustomSubTypeVoiceCall ? MSCallType_Voice : MSCallType_Video) action:event room_id:room_id];
     }
 }

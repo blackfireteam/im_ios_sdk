@@ -9,12 +9,9 @@
 #import <MSIMSDK/MSIMSDK.h>
 #import "MSCallManager.h"
 #import <CallKit/CallKit.h>
-#import <AgoraRtcKit/AgoraRtcEngineKit.h>
+#import "MSCallViewController.h"
 
-
-@interface MSVoipCenter()<AgoraRtcEngineDelegate>
-
-@property(nonatomic,strong) AgoraRtcEngineKit *agoraKit;
+@interface MSVoipCenter()
 
 @property(nonatomic,strong) NSMutableDictionary *uuids;
 
@@ -66,21 +63,26 @@
     if (dic == nil) return;
     MSCallType type = [dic[@"call_type"]integerValue];
     NSString *room_id = dic[@"room_id"];
-    if (type == MSCallType_Voice) {
-        self.currentCalling = uuid;
-        [[MSCallManager shareInstance] sendMessageType:CallAction_Accept option:IMCUSTOM_SIGNAL room_id:room_id toReciever:dic[@"from"]];
-        [self startToVoice:dic[@"room_id"]];
-    }
+    self.currentCalling = uuid;
+    [[MSCallManager shareInstance] recieveCall:dic[@"from"] creator:dic[@"from"] callType:type action:CallAction_Call room_id:room_id];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[MSCallManager shareInstance]autoAcceptVoipCall:type room_id:room_id];
+    });
 }
 
 - (void)endCallWithUuid:(NSString *)uuid
 {
-    self.currentCalling = nil;
     if (uuid.length == 0) return;
     NSDictionary *dic = self.uuids[uuid];
     if (dic == nil) return;
+    MSCallType type = [dic[@"call_type"]integerValue];
     NSString *room_id = dic[@"room_id"];
-    [[MSCallManager shareInstance] sendMessageType:CallAction_Reject option:IMCUSTOM_SIGNAL room_id:room_id toReciever:dic[@"from"]];
+    if (self.currentCalling == nil) {
+        [[MSCallManager shareInstance] sendMessageType:CallAction_Reject option:IMCUSTOM_SIGNAL room_id:room_id toReciever:dic[@"from"]];
+    }else {
+        [[MSCallManager shareInstance].callVC recieveVoipEnd:type room_id:room_id];
+    }
+    self.currentCalling = nil;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil];
     });
@@ -91,21 +93,7 @@
     if (uuid.length == 0) return;
     NSDictionary *dic = self.uuids[uuid];
     if (dic == nil) return;
-    MSCallType type = [dic[@"call_type"]integerValue];
-    if (type == MSCallType_Voice) {
-        [self.agoraKit adjustRecordingSignalVolume:isMute ? 0 : 100];
-    }
-}
-
-- (void)startToVoice:(NSString *)room_id
-{
-    [[MSIMManager sharedInstance] getAgoraToken:room_id succ:^(NSString * _Nonnull app_id, NSString * _Nonnull token) {
- 
-        self.agoraKit = [AgoraRtcEngineKit sharedEngineWithAppId:app_id delegate:self];
-        [self.agoraKit joinChannelByToken:token channelId:room_id info:nil uid:[MSIMTools sharedInstance].user_id.integerValue joinSuccess:nil];
-    } failed:^(NSInteger code, NSString *desc) {
-        MSLog(@"请求声网token失败：%zd--%@",code,desc);
-    }];
+//    MSCallType type = [dic[@"call_type"]integerValue];
 }
 
 - (void)recieveNeedToDismissVoipView:(NSNotification *)note
@@ -119,15 +107,11 @@
             MSLog(@"error: %@",error);
         }];
     }
-    [self.agoraKit leaveChannel:nil];
-    [AgoraRtcEngineKit destroy];
 }
 
 - (void)didActivateAudioSession
 {
-    [self.agoraKit enableAudio];
-    [self.agoraKit setEnableSpeakerphone:NO];
-    [self.agoraKit enableInEarMonitoring:YES];//开启耳返
+    [[MSCallManager shareInstance].callVC didActivateAudioSession];
 }
 
 @end

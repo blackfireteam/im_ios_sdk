@@ -58,9 +58,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         completionHandler(UIBackgroundFetchResult.newData)
     }
     
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return true
-    }
+//    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+//        let intraction = userActivity.interaction
+//            let startAudioCallIntent = intraction?.intent as? INStartAudioCallIntent
+//            let contact = startAudioCallIntent?.contacts?[0]
+//            let contactHandle = contact?.personHandle
+//            if let phoneNumber = contactHandle?.value {
+//               print(phoneNumber)
+//            }
+//            return true
+//    }
 }
 
 extension AppDelegate: MSPushMediatorDelegate {

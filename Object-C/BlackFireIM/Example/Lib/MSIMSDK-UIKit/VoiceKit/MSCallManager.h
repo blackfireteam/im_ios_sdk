@@ -9,7 +9,7 @@
 #import <MSIMSDK/MSIMConst.h>
 
 
-
+@class MSCallViewController;
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger,CallAction) {
@@ -39,6 +39,8 @@ typedef NS_ENUM(NSInteger, CallState) {
 
 + (instancetype)shareInstance;
 
+@property(nonatomic,strong,readonly) MSCallViewController *callVC;
+
 - (void)callToPartner:(NSString *)partner_id
               creator:(NSString *)creator
              callType:(MSCallType)callType
@@ -60,6 +62,9 @@ typedef NS_ENUM(NSInteger, CallState) {
 - (void)sendMessageType:(CallAction)action option:(MSIMCustomOption)option room_id:(NSString *)room_id toReciever:(NSString *)reciever;
 
 + (NSString *)getCreatorFrom:(NSString *)room_id;
+
+- (void)autoAcceptVoipCall:(MSCallType)callType room_id:(NSString *)room_id;
+
 
 @end
 
