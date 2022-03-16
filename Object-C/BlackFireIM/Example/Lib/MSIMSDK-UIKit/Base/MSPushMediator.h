@@ -26,9 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)applicationDidFinishLaunchingWithOptions:(NSDictionary *)launchOptions imConfig: (IMSDKConfig *)config;
 
+- (void)applicationContinueUserActivity:(NSUserActivity *)userActivity;
+
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
 
 - (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
+
 
 @end
 
