@@ -96,6 +96,7 @@ class BFTabBarController: UITabBarController {
         if let typeInt = dic["type"] as? Int,let type = MSIMCustomSubType(rawValue: typeInt) {
             if type == .VoiceCall || type == .VideoCall {
                 if let event = dic["event"] as? Int,let eventType = CallAction(rawValue: event),let room_id = dic["room_id"] as? String {
+                    if MSVoipCenter.shared.currentCalling != nil {return}
                     MSCallManager.shared.recieveCall(from: message.partnerID, creator: MSCallManager.getCreatorFrom(room_id: room_id) ?? "", callType: (type == .VoiceCall ? MSCallType.voice : MSCallType.video), action: eventType, room_id: room_id)
                 }
             }

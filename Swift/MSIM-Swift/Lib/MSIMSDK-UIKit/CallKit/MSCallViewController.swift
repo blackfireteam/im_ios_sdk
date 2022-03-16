@@ -59,6 +59,40 @@ class MSCallViewController: UIViewController {
         self.stopDurationTimer()
     }
     
+    func recieveVoipAccept(type: MSCallType,room_id: String) {
+        if type == .voice {
+            self.voice_acceptBtnDidClick()
+        }else {
+            self.video_acceptBtnDidClick()
+        }
+    }
+    
+    func recieveVoipReject(type: MSCallType,room_id: String) {
+        if type == .voice {
+            self.voice_rejectBtnDidClick()
+        }else {
+            self.video_rejectBtnDidClick()
+        }
+    }
+    
+    func recieveVoipEnd(type: MSCallType,room_id: String) {
+        if type == .voice {
+            self.voice_hangupBtnDidClick()
+        }else {
+            self.video_hangupBtnDidClick()
+        }
+    }
+    
+    func didActivateAudioSession() {
+        if self.callType == .voice {
+            self.agoraKit?.enableAudio()
+            self.agoraKit?.setDefaultAudioRouteToSpeakerphone(false)
+            self.agoraKit?.enable(inEarMonitoring: true)
+        }else {
+            self.agoraKit?.enableVideo()
+        }
+    }
+    
     private var agoraKit: AgoraRtcEngineKit?
     
     private var partner_id: String!

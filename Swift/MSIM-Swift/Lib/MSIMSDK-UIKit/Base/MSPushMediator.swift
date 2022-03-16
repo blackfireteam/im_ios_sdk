@@ -10,7 +10,7 @@ import MSIMSDK
 import PushKit
 import CallKit
 import AVFoundation
-
+import Intents
 
 protocol MSPushMediatorDelegate: NSObjectProtocol {
     
@@ -65,6 +65,8 @@ class MSPushMediator: NSObject, UNUserNotificationCenterDelegate {
         }
         if imConfig.voipEnable {
             registerForVoIPPushes()
+        }else {
+            UserDefaults.standard.removeObject(forKey: kVoipTokenKey)
         }
     }
     
@@ -85,6 +87,7 @@ class MSPushMediator: NSObject, UNUserNotificationCenterDelegate {
             config.maximumCallsPerCallGroup = 1
             config.supportsVideo = true
             config.supportedHandleTypes = Set([.generic,.phoneNumber])
+            config.iconTemplateImageData = UIImage.pngData(UIImage(named: "live_broadcast_camera_on") ?? UIImage())()!
             self.voipProvider = CXProvider.init(configuration: config)
             self.voipProvider?.setDelegate(self, queue: .main)
         }
@@ -119,6 +122,20 @@ class MSPushMediator: NSObject, UNUserNotificationCenterDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.delegate?.didReceiveNotificationResponse(userInfo: userInfo)
             }
+        }
+    }
+    func applicationContinueUserActivity(userActivity: NSUserActivity) {
+        
+        if MSIMTools.sharedInstance().user_id == nil {
+            return
+        }
+        guard let intent = userActivity.interaction?.intent as? INStartCallIntent else {return}
+        guard let room_id = intent.contacts?.first?.personHandle?.value else {return}
+        guard let partner_id = MSCallManager.getCreatorFrom(room_id: room_id) else {return}
+        if (intent.callCapability == .audioCall) {//语音通话
+            MSCallManager.shared.callToPartner(partner_id: partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: .voice, action: .call, room_id: nil)
+        }else if (intent.callCapability == .videoCall) {//视频通话
+            MSCallManager.shared.callToPartner(partner_id: partner_id, creator: MSIMTools.sharedInstance().user_id!, callType: .video, action: .call, room_id: nil)
         }
     }
 }
@@ -160,6 +177,7 @@ extension MSPushMediator: PKPushRegistryDelegate {
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
         
+        self.startBgTask()
         guard let apsDic = payload.dictionaryPayload["aps"] as? [String: Any],
               let alertDic = apsDic["alert"] as? [String: Any],
               let title = alertDic["title"] as? String,
@@ -173,27 +191,35 @@ extension MSPushMediator: PKPushRegistryDelegate {
                   return
               }
                 
-        if subType == MSIMCustomSubType.VoiceCall.rawValue || subType == MSIMCustomSubType.VideoCall.rawValue {
+        let callType: MSCallType = (subType == MSIMCustomSubType.VoiceCall.rawValue ? .voice : .video)
+        if action == CallAction.call.rawValue {
+            let uuid = MSVoipCenter.shared.createUUIDWithRoomID(room_id: room_id, fromUid: String(fromUid), callType: callType)
             
-            let callType: MSCallType = (subType == MSIMCustomSubType.VoiceCall.rawValue ? .voice : .video)
-            if action == CallAction.call.rawValue {
-                let uuid = MSVoipCenter.shared.createUUIDWithRoomID(room_id: room_id, fromUid: String(fromUid), callType: callType)
+            let update = CXCallUpdate()
+            update.localizedCallerName = title
+            update.supportsGrouping = false
+            update.supportsDTMF = false
+            update.supportsHolding = false
+            update.hasVideo = callType == .video
+            let handle = CXHandle.init(type: .phoneNumber, value: room_id)
+            update.remoteHandle = handle
+            
+            self.voipProvider?.reportNewIncomingCall(with: UUID(uuidString: uuid)!, update: update, completion: { _ in
                 
-                let update = CXCallUpdate()
-                update.localizedCallerName = title
-                update.supportsGrouping = false
-                update.supportsDTMF = false
-                update.supportsHolding = false
-                update.hasVideo = callType == .video
-                let handle = CXHandle.init(type: .phoneNumber, value: room_id)
-                update.remoteHandle = handle
-                
-                self.voipProvider?.reportNewIncomingCall(with: UUID(uuidString: uuid)!, update: update, completion: { _ in
-                    
-                });
-            }else if action == CallAction.cancel.rawValue || action == CallAction.end.rawValue {
-                NotificationCenter.default.post(name: NSNotification.Name.init("kRecieveNeedToDismissVoipView"), object: nil)
-            }
+            });
+        }
+        if action == CallAction.cancel.rawValue || action == CallAction.end.rawValue || action == CallAction.timeout.rawValue {
+            NotificationCenter.default.post(name: NSNotification.Name.init("kRecieveNeedToDismissVoipView"), object: nil)
+        }
+        completion()
+    }
+    
+    // 开启后台延时
+    private func startBgTask() {
+        let application = UIApplication.shared
+        var taskID: UIBackgroundTaskIdentifier?
+        taskID = UIApplication.shared.beginBackgroundTask {
+            application.endBackgroundTask(taskID!)
         }
     }
 }

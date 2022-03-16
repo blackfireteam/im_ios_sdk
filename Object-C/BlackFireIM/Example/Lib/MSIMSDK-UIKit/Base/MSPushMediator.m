@@ -12,6 +12,8 @@
 #import <PushKit/PushKit.h>
 #import <CallKit/CallKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <Intents/Intents.h>
+
 
 @interface MSPushMediator()<UNUserNotificationCenterDelegate,PKPushRegistryDelegate,CXProviderDelegate>
 
@@ -232,6 +234,24 @@ static MSPushMediator *_manager;
     bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
         [application endBackgroundTask:bgTask];
     }];
+}
+
+
+- (void)applicationContinueUserActivity:(NSUserActivity *)userActivity
+{
+    if ([MSIMTools sharedInstance].user_id == nil) return;
+    if ([userActivity.interaction.intent isKindOfClass:[INStartAudioCallIntent class]]) {//语音通话
+        INStartAudioCallIntent *audioIntent = (INStartAudioCallIntent *)userActivity.interaction.intent;
+        NSString *room_id = audioIntent.contacts.firstObject.personHandle.value;
+        NSString *partner_id = [MSCallManager getCreatorFrom:room_id];
+        [[MSCallManager shareInstance] callToPartner:partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Voice action:CallAction_Call room_id:nil];
+        
+    }else if ([userActivity.interaction.intent isKindOfClass:[INStartVideoCallIntent class]]) {//视频通话
+        INStartVideoCallIntent *videoIntent = (INStartVideoCallIntent *)userActivity.interaction.intent;
+        NSString *room_id = videoIntent.contacts.firstObject.personHandle.value;
+        NSString *partner_id = [MSCallManager getCreatorFrom:room_id];
+        [[MSCallManager shareInstance] callToPartner:partner_id creator:[MSIMTools sharedInstance].user_id callType:MSCallType_Video action:CallAction_Call room_id:nil];
+    }
 }
 
 #pragma mark - CXProviderDelegate

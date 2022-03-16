@@ -129,6 +129,9 @@ class MSCallManager: NSObject {
                 self.callVC?.modalPresentationStyle = .fullScreen
                 let appdelegate = UIApplication.shared.delegate as? AppDelegate
                 appdelegate?.window?.rootViewController?.present(self.callVC!, animated: true, completion: nil)
+                if self.autoAcceptCall {
+                    self.callVC.recieveVoipAccept(type: callType,room_id: room_id)
+                }
             }
             
         case .cancel:
@@ -255,6 +258,8 @@ class MSCallManager: NSObject {
     
     private var room_id: String = ""
     
+    private var autoAcceptCall: Bool = false
+    
     private func inviteTimerAction(room_id: String, toReciever: String) {
         
         self.sendMessage(action: .call, option: .IMCUSTOM_SIGNAL, room_id: room_id, toReciever: toReciever)
@@ -270,13 +275,12 @@ class MSCallManager: NSObject {
     }
     
     private func destroyCallVC() {
-        if self.callVC != nil {
-            UIDevice.stopPlaySystemSound()
-            self.callVC?.dismiss(animated: true, completion: nil)
-            self.callVC = nil
-            self.isOnCallingWithUid = nil
-            self.action = .unknown
-        }
+        UIDevice.stopPlaySystemSound()
+        self.callVC?.dismiss(animated: true, completion: nil)
+        self.callVC = nil
+        self.isOnCallingWithUid = nil
+        self.action = .unknown
+        self.autoAcceptCall = false
         NotificationCenter.default.post(name: NSNotification.Name.init("kRecieveNeedToDismissVoipView"), object: self.room_id);
     }
     
@@ -314,6 +318,15 @@ class MSCallManager: NSObject {
             
         } failed: { _, desc in
             debugPrint("\(desc ?? "")")
+        }
+    }
+    
+    func autoAcceptVoipCall(type: MSCallType,room_id: String) {
+        
+        if self.callVC != nil {
+            self.callVC.recieveVoipAccept(type: callType,room_id: room_id)
+        }else {
+            self.autoAcceptCall = true
         }
     }
 }

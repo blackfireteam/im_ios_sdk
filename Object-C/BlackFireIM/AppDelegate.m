@@ -68,8 +68,7 @@
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
-//    userActivity.i
-//    NSLog(@"%@",userActivity);
+    [[MSPushMediator sharedInstance] applicationContinueUserActivity:userActivity];
     return YES;
 }
 

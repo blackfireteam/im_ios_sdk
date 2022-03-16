@@ -22,8 +22,6 @@ class MSVoipCenter: NSObject,AgoraRtcEngineDelegate {
     
     var callVC: CXCallController?
     
-    var agoraKit: AgoraRtcEngineKit?
-    
     var uuids: [String: CallItem] = [:]
     
     private(set) var currentCalling: String?
@@ -43,17 +41,23 @@ class MSVoipCenter: NSObject,AgoraRtcEngineDelegate {
     
     func acceptCallWithUuid(uuid: String) {
         if let item = self.uuids[uuid] {
-            if item.call_type == .voice {
-                self.currentCalling = uuid
-                MSCallManager.shared.sendMessage(action: .accept, option: .IMCUSTOM_SIGNAL, room_id: item.room_id, toReciever: item.from)
-                self.startToVoice(room_id: item.room_id)
+            self.currentCalling = uuid
+            MSCallManager.shared.recieveCall(from: item.from, creator: item.from, callType: item.call_type, action: .call, room_id: item.room_id)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                MSCallManager.shared.autoAcceptVoipCall(type: item.call_type,room_id: item.room_id)
             }
         }
     }
     
     func endCallWithUuid(uuid: String) {
         if let item = self.uuids[uuid] {
-            MSCallManager.shared.sendMessage(action: .reject, option: .IMCUSTOM_SIGNAL, room_id: item.room_id, toReciever: item.from)
+            if self.currentCalling == nil {
+                MSCallManager.shared.callToPartner(partner_id: item.from, creator: item.from, callType: item.call_type, action: .reject, room_id: item.room_id)
+            }else {
+                MSCallManager.shared.callVC.recieveVoipEnd(type: item.call_type,room_id: item.room_id)
+            }
+            self.currentCalling = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
             }
@@ -61,22 +65,7 @@ class MSVoipCenter: NSObject,AgoraRtcEngineDelegate {
     }
     
     func muteCall(isMute: Bool, uuid: String) {
-        if let item = self.uuids[uuid] {
-            if item.call_type == .voice {
-                self.agoraKit?.adjustRecordingSignalVolume(isMute ? 0 : 100)
-            }
-        }
-    }
-    
-    private func startToVoice(room_id: String) {
-        MSIMManager.sharedInstance().getAgoraToken(room_id) { app_id, token in
-            
-            self.agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: app_id, delegate: self)
-            self.agoraKit?.joinChannel(byToken: token, channelId: room_id, info: nil, uid: UInt(MSIMTools.sharedInstance().user_id ?? "")!, joinSuccess: nil)
-            
-        } failed: { _, _ in
-            
-        }
+        
     }
     
     @objc func recieveNeedToDismissVoipView(note: Notification) {
@@ -90,13 +79,9 @@ class MSVoipCenter: NSObject,AgoraRtcEngineDelegate {
                 
             })
         }
-        self.agoraKit?.leaveChannel(nil)
-        AgoraRtcEngineKit.destroy()
     }
     
     func didActivateAudioSession() {
-        self.agoraKit?.enableAudio()
-        self.agoraKit?.setEnableSpeakerphone(false)
-        self.agoraKit?.enable(inEarMonitoring: true)
+        MSCallManager.shared.callVC.didActivateAudioSession()
     }
 }
